@@ -1,0 +1,135 @@
+﻿@model Web_IT_HELPDESK.Seal_Using
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+ <div class="page-content">
+<div class="row">
+		  
+	<div class="col-md-10">
+	<div class="content-box-large">
+<div class="panel-heading">
+   <div class="panel-body">
+
+<h2>Create</h2>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm("Create", "SealUsing", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <fieldset>
+        <legend>Seal_Using</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Plant)    -  /Plant/
+        </div>
+        <div class="editor-field">
+            @Html.TextBox("Plant", (string)ViewBag.Plant,new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()", @style="background-color:#DEDEDE;" })
+            @Html.ValidationMessageFor(model => model.Plant)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Date)  -  /Ngày tạo/
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Date, new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()" , @style="background-color:#DEDEDE;"})
+            @Html.ValidationMessageFor(model => model.Date)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Employee_name)  -  /Tên người đăng ký/
+        </div>
+        <div class="editor-field">
+            @Html.TextBox("Employee_name", (string)ViewBag.User_name)
+            @Html.ValidationMessageFor(model => model.Employee_name)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DepartmentId)    -  /Mã phòng ban/
+        </div>
+        <div class="editor-field">
+            @Html.TextBox("DepartmentId", (string)ViewBag.DepartmentId,new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()", @style="background-color:#DEDEDE;" })
+            @Html.ValidationMessageFor(model => model.DepartmentId)
+        </div>
+
+         <div class="editor-label">
+            DepartmentName    -  /Tên phòng ban/
+        </div>
+        <div class="editor-field">
+            @Html.TextBox("DepartmentName", (string)ViewBag.DepartmentName,new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()", @style="background-color:#DEDEDE;" })
+        </div>
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.Type_document)  -  /Loại văn bản/
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Type_document)
+            @Html.ValidationMessageFor(model => model.Type_document)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Code_number)  -  /Số hiệu văn bản/
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Code_number)
+            @Html.ValidationMessageFor(model => model.Code_number)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Context)  -  /Nội dung văn bản/
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Context)
+            @Html.ValidationMessageFor(model => model.Context)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Place_Recipient)  -  /Nơi nhận/
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Place_Recipient)
+            @Html.ValidationMessageFor(model => model.Place_Recipient)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Period_date)  -  /Ngày hiệu lực/
+        </div>
+        <div class="editor-field">
+            @Html.TextBox("Period_date", null, new { id = "add confirm", type = "datetime", required = "required" })
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Date_signature)  -  /Ngày ký văn bản/
+        </div>
+        <div class="editor-field">
+           @Html.TextBox("Date_signature", null, new { id = "add confirm", type = "datetime", required = "required" })
+        </div>
+
+          <div class="editor-label">
+            @Html.LabelFor(model => model.Name_signature)  -  /Người ký văn bản/
+        </div>
+        <div class="editor-field">
+           @Html.TextBox("Name_signature", null, new { id = "add confirm", type = "string", required = "required" })
+        </div>
+
+        <p>
+            <input type="submit" value="Submit" />
+        </p>
+        
+    </fieldset>
+}
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+       </div>
+    </div>
+            </div>
+    </div>
+        </div>
+    </div>

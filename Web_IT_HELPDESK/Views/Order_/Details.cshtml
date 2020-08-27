@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+@using (Html.BeginForm("OrderPrint", "Order_", FormMethod.Post))
+{
+<div>
+    <input type="radio" name="reportid" value="PDF"/ checked="checked"> <label>PDF Report</label>
+    <input type="radio" name="reportid" value="Excel"/> <label>Excel Report</label>
+    <input type="radio" name="reportid" value="Word"/> <label>Word Report</label>
+    <input type="radio" name="reportid" value="Image"/> <label>Image Report</label>
+</div>
+<input type="submit" value="Print" /> 
+}
+
+@using (Html.BeginForm("", "", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    int j = 1;
+    int oderId=Convert.ToInt32(Session["OrderId"].ToString());
+<table>
+    <tr>
+        <th>
+        </th>      
+        <th>
+            OrderId - Mã đơn hàng
+        </th>
+        <th>
+            Item - Tên Sản phẩm
+        </th>
+        <th>
+            Quantity - Số lượng
+        </th>
+         <th>
+            Note - Ghi chú
+        </th>
+    </tr>
+@foreach (var item in new Web_IT_HELPDESK.Web_IT_HELPDESKEntities().OrderDetails.Where(i => i.OrderId == oderId))
+{
+    <tr>
+        <td>
+              @Html.Hidden("orderdetails.Index", (@j+10))
+              @Html.TextBox("orderdetails[" + (@j + 10) + "].OrderDetailId", item.OrderDetailId, new {@readonly="readonly",@hidden="hidden"})
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Album.Title)
+        </td>
+        <td>
+             @Html.DisplayFor(modelItem =>item.Quantity)        
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem =>item.Note)     
+        </td>
+        <!--<td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.OrderDetailId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.OrderDetailId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.OrderDetailId })
+        </td>-->
+    </tr>
+    j = (Int16)j + 1;
+}
+
+</table>
+}

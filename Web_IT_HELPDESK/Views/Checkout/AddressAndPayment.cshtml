@@ -1,0 +1,27 @@
+﻿@model Web_IT_HELPDESK.Order_
+
+@{
+    ViewBag.Title = "ServiceConfirm";
+}
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm()) {
+    
+    <h2>Serverice Confirm</h2>
+    <fieldset>
+        <legend>Information - /Ghi chú và xác nhận để hoàn tất thủ tục/</legend>
+        <!--@Html.EditorForModel()-->
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.Note)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Note,new { cols = 50, @rows = 10 })
+            @Html.ValidationMessageFor(model => model.Note)
+        </div>
+
+    </fieldset>
+    <input type="submit" value="Submit Order" />
+}

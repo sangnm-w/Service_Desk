@@ -1,0 +1,2517 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Web_IT_HELPDESKModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Album">
+          <Key>
+            <PropertyRef Name="AlbumId" />
+          </Key>
+          <Property Name="AlbumId" Type="int" Nullable="false" />
+          <Property Name="AlbumTypeId" Type="int" />
+          <Property Name="Title" Type="nvarchar" MaxLength="160" />
+          <Property Name="Price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="AlbumArtUrl" Type="nvarchar" MaxLength="1024" />
+          <Property Name="Unit" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="AlbumType">
+          <Key>
+            <PropertyRef Name="AlbumTypeId" />
+          </Key>
+          <Property Name="AlbumTypeId" Type="int" Nullable="false" />
+          <Property Name="AlbumType" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="BIZ_TRIP">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="EMPNO" Type="nvarchar" MaxLength="50" />
+          <Property Name="NAME" Type="nvarchar(max)" />
+          <Property Name="DEPT" Type="nvarchar" MaxLength="50" />
+          <Property Name="DESCRIPTION" Type="nvarchar(max)" />
+          <Property Name="VEHICLE" Type="nvarchar(max)" />
+          <Property Name="CONTACT_COMPANY" Type="nvarchar(max)" />
+          <Property Name="CONTACT_PERSON" Type="nvarchar(max)" />
+          <Property Name="CONTACT_DEPT" Type="nvarchar(max)" />
+          <Property Name="DATE" Type="datetime" />
+          <Property Name="FROM_DATE" Type="datetime" />
+          <Property Name="TO_DATE" Type="datetime" />
+          <Property Name="USED_EQUIPMENT" Type="bit" />
+          <Property Name="REMARK" Type="nchar" MaxLength="10" />
+          <Property Name="PLANT" Type="nvarchar" MaxLength="50" />
+          <Property Name="DEPT_CONFIRM" Type="bit" />
+          <Property Name="DEPT_CONFIRM_IMAGE" Type="varbinary(max)" />
+          <Property Name="HR_CONFIRM" Type="bit" />
+          <Property Name="HR_CONFIRM_IMAGE" Type="varbinary(max)" />
+          <Property Name="DEL" Type="bit" />
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="NO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IT_CONFIRM" Type="bit" />
+        </EntityType>
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="RecordId" />
+          </Key>
+          <Property Name="RecordId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CartId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AlbumId" Type="int" />
+          <Property Name="Count" Type="int" />
+          <Property Name="DateCreated" Type="datetime" />
+          <Property Name="Note" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="CONTRACT">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="VENDOR" Type="nvarchar" MaxLength="200" />
+          <Property Name="PERIODID" Type="nvarchar" MaxLength="50" />
+          <Property Name="ADREES" Type="nvarchar" MaxLength="200" />
+          <Property Name="PHONE" Type="nvarchar" MaxLength="50" />
+          <Property Name="REPRESENTATION" Type="nvarchar" MaxLength="200" />
+          <Property Name="DATE" Type="datetime" />
+          <Property Name="DATE_CREATE" Type="datetime" />
+          <Property Name="CONTRACTNAME" Type="nvarchar" MaxLength="50" />
+          <Property Name="CONTENT" Type="varbinary(max)" />
+          <Property Name="NOTE" Type="nvarchar" MaxLength="250" />
+          <Property Name="USER_CREATE" Type="nvarchar" MaxLength="50" />
+          <Property Name="DEPARMENTID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DEL" Type="bit" />
+          <Property Name="MONTHS" Type="int" />
+          <Property Name="CONTRACT_TYPE_ID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DATE_MATURITY" Type="datetime" />
+          <Property Name="PLANT" Type="nvarchar" MaxLength="4" />
+          <Property Name="CONTRACT_TYPE_DT_ID" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="CONTRACT_SUB">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CONTRACTID" Type="uniqueidentifier" />
+          <Property Name="SUBNAME" Type="nvarchar" MaxLength="200" />
+          <Property Name="CONTENT" Type="varbinary(max)" />
+          <Property Name="PERIODID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DATE" Type="datetime" />
+          <Property Name="USER_CREATE" Type="nvarchar" MaxLength="50" />
+          <Property Name="NOTE" Type="nvarchar(max)" />
+          <Property Name="DEL" Type="bit" />
+          <Property Name="PLANT" Type="nvarchar" MaxLength="4" />
+        </EntityType>
+        <EntityType Name="CONTRACT_TYPE">
+          <Key>
+            <PropertyRef Name="CONTRACT_TYPE_ID" />
+          </Key>
+          <Property Name="CONTRACT_TYPE_ID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CONTRACT_TYPE_NAME" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="CONTRACT_TYPE_DETAIL">
+          <Key>
+            <PropertyRef Name="CONTRACT_TYPE_DT_ID" />
+          </Key>
+          <Property Name="CONTRACT_TYPE_DT_ID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CONTRACT_TYPE_NAME" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="DepartmentId" />
+            <PropertyRef Name="Plant" />
+          </Key>
+          <Property Name="DepartmentId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Plant" Type="nvarchar" MaxLength="4" Nullable="false" />
+          <Property Name="DepartmentName" Type="nvarchar" MaxLength="500" />
+          <Property Name="Del" Type="bit" />
+          <Property Name="Manager_Email" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Document">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="50" />
+          <Property Name="FileContext" Type="varbinary(max)" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="200" />
+          <Property Name="DocumentTypeId" Type="nvarchar" MaxLength="50" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="Del" Type="bit" />
+        </EntityType>
+        <EntityType Name="DocumentType">
+          <Key>
+            <PropertyRef Name="DocumentTypeId" />
+          </Key>
+          <Property Name="DocumentTypeId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DocumentTypeName" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Drinking_Request">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="Unit" Type="nvarchar" MaxLength="50" />
+          <Property Name="Note" Type="nvarchar(max)" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="Department_confirm" Type="bit" Nullable="false" />
+          <Property Name="Department_note" Type="nvarchar(max)" />
+          <Property Name="Department_confirm_date" Type="datetime" />
+          <Property Name="HR_confirm" Type="bit" Nullable="false" />
+          <Property Name="HR_note" Type="nvarchar(max)" />
+          <Property Name="HR_confirm_date" Type="datetime" />
+          <Property Name="Del" Type="bit" Nullable="false" />
+          <Property Name="DepartmentId" Type="nvarchar" MaxLength="50" />
+          <Property Name="Employee_name" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="EMP_ANSWER">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="QUESTION_ID" Type="uniqueidentifier" />
+          <Property Name="EMPLOYEEID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DATE" Type="datetime" />
+          <Property Name="ANSWERID" Type="int" />
+          <Property Name="NOTE" Type="nvarchar(max)" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Web_IT_HELPDESK.dbo.EMP_ANSWER_bk20190826' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="EMP_ANSWER_bk20190826">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="QUESTION_ID" Type="uniqueidentifier" />
+          <Property Name="EMPLOYEEID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DATE" Type="datetime" />
+          <Property Name="ANSWERID" Type="int" />
+          <Property Name="NOTE" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="EmployeeName" Type="nvarchar" MaxLength="100" />
+          <Property Name="Position" Type="nvarchar" MaxLength="100" />
+          <Property Name="IDNumber" Type="nvarchar" MaxLength="10" />
+          <Property Name="Others" Type="nvarchar" MaxLength="100" />
+          <Property Name="Job" Type="nvarchar" MaxLength="100" />
+          <Property Name="Status_marry" Type="nvarchar" MaxLength="50" />
+          <Property Name="Birthday" Type="datetime" />
+          <Property Name="datetimeBegin" Type="datetime" />
+          <Property Name="CellPhone" Type="nvarchar" MaxLength="10" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="Notes" Type="nvarchar" MaxLength="100" />
+          <Property Name="SearchField" Type="nvarchar" MaxLength="200" />
+          <Property Name="Del" Type="bit" />
+          <Property Name="DepatmentId" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
+          <Property Name="Plant" Type="nvarchar" MaxLength="4" />
+          <Property Name="administrator" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Web_IT_HELPDESK.dbo.employee_bk20190826' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="employee_bk20190826">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="EmployeeName" Type="nvarchar" MaxLength="100" />
+          <Property Name="Position" Type="nvarchar" MaxLength="100" />
+          <Property Name="IDNumber" Type="nvarchar" MaxLength="10" />
+          <Property Name="Others" Type="nvarchar" MaxLength="100" />
+          <Property Name="Job" Type="nvarchar" MaxLength="100" />
+          <Property Name="Status_marry" Type="nvarchar" MaxLength="50" />
+          <Property Name="Birthday" Type="datetime" />
+          <Property Name="datetimeBegin" Type="datetime" />
+          <Property Name="CellPhone" Type="nvarchar" MaxLength="10" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="Notes" Type="nvarchar" MaxLength="100" />
+          <Property Name="SearchField" Type="nvarchar" MaxLength="200" />
+          <Property Name="Del" Type="bit" />
+          <Property Name="DepatmentId" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
+          <Property Name="Plant" Type="nvarchar" MaxLength="4" />
+          <Property Name="administrator" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Employee_Screen">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ScreenId" Type="int" />
+          <Property Name="EmployeeId" Type="nvarchar" MaxLength="50" />
+          <Property Name="Use" Type="bit" />
+          <Property Name="Read" Type="bit" />
+        </EntityType>
+        <EntityType Name="EmployeeInfo">
+          <Key>
+            <PropertyRef Name="EMPNO" />
+          </Key>
+          <Property Name="EMPNO" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DEPT_NAME" Type="nvarchar" MaxLength="200" />
+          <Property Name="FULL_NAME" Type="nvarchar" MaxLength="200" />
+          <Property Name="GRADE" Type="nchar" MaxLength="10" />
+          <Property Name="POSITION_NAME" Type="nvarchar" MaxLength="200" />
+          <Property Name="JOB_NAME" Type="nvarchar" MaxLength="200" />
+          <Property Name="EMP_STATUS" Type="nvarchar" MaxLength="200" />
+          <Property Name="BIRTHDAY" Type="nchar" MaxLength="10" />
+          <Property Name="HIRE_DATE" Type="nchar" MaxLength="10" />
+          <Property Name="PHONE" Type="nvarchar" MaxLength="50" />
+          <Property Name="EXTENSION" Type="nvarchar" MaxLength="50" />
+          <Property Name="REMARK" Type="nvarchar" MaxLength="200" />
+          <Property Name="DE" Type="bit" />
+          <Property Name="DEPT" Type="nchar" MaxLength="4" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="Plant" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Web_IT_HELPDESK.dbo.EmployeeInfo_bk20190826' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="EmployeeInfo_bk20190826">
+          <Key>
+            <PropertyRef Name="EMPNO" />
+          </Key>
+          <Property Name="EMPNO" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DEPT_NAME" Type="nvarchar" MaxLength="200" />
+          <Property Name="FULL_NAME" Type="nvarchar" MaxLength="200" />
+          <Property Name="GRADE" Type="nchar" MaxLength="10" />
+          <Property Name="POSITION_NAME" Type="nvarchar" MaxLength="200" />
+          <Property Name="JOB_NAME" Type="nvarchar" MaxLength="200" />
+          <Property Name="EMP_STATUS" Type="nvarchar" MaxLength="200" />
+          <Property Name="BIRTHDAY" Type="nchar" MaxLength="10" />
+          <Property Name="HIRE_DATE" Type="nchar" MaxLength="10" />
+          <Property Name="PHONE" Type="nvarchar" MaxLength="50" />
+          <Property Name="EXTENSION" Type="nvarchar" MaxLength="50" />
+          <Property Name="REMARK" Type="nvarchar" MaxLength="200" />
+          <Property Name="DE" Type="bit" />
+          <Property Name="DEPT" Type="nchar" MaxLength="4" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="Plant" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Web_IT_HELPDESK.dbo.Event' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Event">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="TITLE" Type="nvarchar" MaxLength="50" />
+          <Property Name="START" Type="datetime" />
+          <Property Name="END" Type="datetime" />
+          <Property Name="STATUS" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Web_IT_HELPDESK.dbo.hr_emp_infor' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="hr_emp_infor">
+          <Key>
+            <PropertyRef Name="Employee_Id" />
+          </Key>
+          <Property Name="Employee_Id" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Employee_Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="DepartmentId" Type="nvarchar" MaxLength="50" />
+          <Property Name="Note" Type="nvarchar(max)" />
+          <Property Name="Del" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Web_IT_HELPDESK.dbo.hr_emp_meal' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="hr_emp_meal">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Num" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Num" Type="int" Nullable="false" />
+          <Property Name="EMPNO" Type="nvarchar" MaxLength="10" />
+          <Property Name="IMAGE" Type="varbinary(max)" />
+          <Property Name="Note" Type="nvarchar(max)" />
+          <Property Name="DateTime" Type="datetime" />
+          <Property Name="Del" Type="bit" />
+          <Property Name="TypeMeal" Type="nvarchar" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="Incidents">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="50" />
+          <Property Name="datetime" Type="datetime" />
+          <Property Name="StatusId" Type="nvarchar" MaxLength="50" />
+          <Property Name="LevelId" Type="nvarchar" MaxLength="50" />
+          <Property Name="Reply" Type="nvarchar" MaxLength="200" />
+          <Property Name="User_create" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="User_resolve" Type="nvarchar" MaxLength="50" />
+          <Property Name="Note" Type="nvarchar" MaxLength="200" />
+          <Property Name="FileAttched" Type="varbinary(max)" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="100" />
+          <Property Name="Del" Type="bit" />
+          <Property Name="DepartmentId" Type="nvarchar" MaxLength="50" />
+          <Property Name="Solved" Type="bit" />
+          <Property Name="Solve_datetime" Type="datetime" />
+          <Property Name="Plant" Type="nvarchar" MaxLength="4" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Web_IT_HELPDESK.dbo.Incidents_Log' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Incidents_Log">
+          <Property Name="Id" Type="uniqueidentifier" />
+          <Property Name="Code" Type="nvarchar" MaxLength="50" />
+          <Property Name="datetime" Type="datetime" />
+          <Property Name="StatusId" Type="nvarchar" MaxLength="50" />
+          <Property Name="LevelId" Type="nvarchar" MaxLength="50" />
+          <Property Name="Reply" Type="nvarchar" MaxLength="200" />
+          <Property Name="User_create" Type="nvarchar" MaxLength="50" />
+          <Property Name="User_resolve" Type="nvarchar" MaxLength="50" />
+          <Property Name="Note" Type="nvarchar" MaxLength="200" />
+          <Property Name="FileAttched" Type="varbinary(max)" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="100" />
+          <Property Name="DepartmentId" Type="bit" />
+          <Property Name="datetime_log" Type="datetime" />
+        </EntityType>-->
+        <EntityType Name="Level">
+          <Key>
+            <PropertyRef Name="LevelId" />
+          </Key>
+          <Property Name="LevelId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LevelName" Type="nvarchar" MaxLength="200" />
+          <Property Name="datetime_rate" Type="int" />
+          <Property Name="Del" Type="bit" />
+        </EntityType>
+        <EntityType Name="Order_">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderDate" Type="datetime" />
+          <Property Name="Total" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="Note" Type="nvarchar" MaxLength="150" />
+          <Property Name="Confirmed" Type="bit" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+          <Property Name="Employee_Name" Type="nvarchar" MaxLength="150" />
+          <Property Name="Del" Type="bit" />
+          <Property Name="Plant" Type="nvarchar" MaxLength="4" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Web_IT_HELPDESK.dbo.ORDER_VIEW' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="ORDER_VIEW">
+          <Property Name="ORDER_VIEW_ID" Type="bigint" />
+          <Property Name="TITLE" Type="nvarchar" MaxLength="160" />
+          <Property Name="UNIT" Type="nvarchar" MaxLength="50" />
+          <Property Name="HR" Type="numeric" Precision="38" Scale="2" />
+          <Property Name="ACCOUNTING" Type="numeric" Precision="38" Scale="2" />
+          <Property Name="ANIMAL" Type="numeric" Precision="38" Scale="2" />
+          <Property Name="AQUA" Type="numeric" Precision="38" Scale="2" />
+          <Property Name="HSE" Type="numeric" Precision="38" Scale="2" />
+          <Property Name="LOGISTIC" Type="numeric" Precision="38" Scale="2" />
+          <Property Name="MARKETING" Type="numeric" Precision="38" Scale="2" />
+          <Property Name="MAINTANANCE" Type="numeric" Precision="38" Scale="2" />
+          <Property Name="PURCHASING" Type="numeric" Precision="38" Scale="2" />
+          <Property Name="QC" Type="numeric" Precision="38" Scale="2" />
+          <Property Name="R&amp;D" Type="numeric" Precision="38" Scale="2" />
+          <Property Name="SALES SUPPORT" Type="numeric" Precision="38" Scale="2" />
+        </EntityType>-->
+        <EntityType Name="OrderDetail">
+          <Key>
+            <PropertyRef Name="OrderDetailId" />
+          </Key>
+          <Property Name="OrderDetailId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderId" Type="int" />
+          <Property Name="AlbumId" Type="int" />
+          <Property Name="Quantity" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="Note" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="PERIOD">
+          <Key>
+            <PropertyRef Name="PERIOD_ID" />
+          </Key>
+          <Property Name="PERIOD_ID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PERIOD_NAME" Type="nvarchar" MaxLength="200" />
+          <Property Name="MONTHS" Type="int" />
+          <Property Name="DEL" Type="bit" />
+        </EntityType>
+        <EntityType Name="QUESTION">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="NO" Type="nvarchar" MaxLength="50" />
+          <Property Name="QUESTION_CONTENT" Type="nvarchar(max)" />
+          <Property Name="ANSWER_ID" Type="int" />
+          <Property Name="NOTE" Type="nvarchar(max)" />
+          <Property Name="DEL" Type="bit" />
+        </EntityType>
+        <EntityType Name="Screen">
+          <Key>
+            <PropertyRef Name="ScreenId" />
+          </Key>
+          <Property Name="ScreenId" Type="int" Nullable="false" />
+          <Property Name="ScreenName" Type="nvarchar(max)" />
+          <Property Name="HTMLcode" Type="nvarchar(max)" />
+          <Property Name="Note" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Seal_Using">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="Employee_name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Type_document" Type="nvarchar" MaxLength="100" />
+          <Property Name="DepartmentId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Code_number" Type="nvarchar" MaxLength="50" />
+          <Property Name="Context" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Place_Recipient" Type="nvarchar" MaxLength="500" />
+          <Property Name="Period_date" Type="datetime" />
+          <Property Name="Employee_Seal_keep" Type="datetime" />
+          <Property Name="Department_confirm" Type="bit" Nullable="false" />
+          <Property Name="Employee_Seal_keep_confrim" Type="bit" Nullable="false" />
+          <Property Name="Del" Type="bit" Nullable="false" />
+          <Property Name="Department_note" Type="nvarchar" MaxLength="500" />
+          <Property Name="Department_confirm_date" Type="datetime" />
+          <Property Name="Employee_Seal_keep_note" Type="nvarchar" MaxLength="250" />
+          <Property Name="Date_signature" Type="datetime" />
+          <Property Name="Name_signature" Type="nvarchar" MaxLength="250" />
+          <Property Name="Plant" Type="nvarchar" MaxLength="4" />
+        </EntityType>
+        <EntityType Name="Status">
+          <Key>
+            <PropertyRef Name="StatusId" />
+          </Key>
+          <Property Name="StatusId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="StatusName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Del" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Web_IT_HELPDESK.dbo.sysdiagrams' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="name" />
+            <PropertyRef Name="principal_id" />
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="UserLogon">
+          <Key>
+            <PropertyRef Name="UserLogIn" />
+          </Key>
+          <Property Name="UserLogIn" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DepatmentId" Type="nvarchar" MaxLength="50" />
+          <Property Name="Del" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="ORDER_TYPE_VIEW">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="int" Nullable="false" />
+          <Property Name="OrderDate" Type="datetime" />
+          <Property Name="Total" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="Note" Type="nvarchar" MaxLength="150" />
+          <Property Name="Confirmed" Type="bit" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+          <Property Name="Employee_Name" Type="nvarchar" MaxLength="150" />
+          <Property Name="Del" Type="bit" />
+          <Property Name="Plant" Type="nvarchar" MaxLength="4" />
+          <Property Name="AlbumTypeId" Type="int" />
+        </EntityType>
+        <Association Name="FK_Album_AlbumType">
+          <End Role="AlbumType" Type="Self.AlbumType" Multiplicity="0..1" />
+          <End Role="Album" Type="Self.Album" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AlbumType">
+              <PropertyRef Name="AlbumTypeId" />
+            </Principal>
+            <Dependent Role="Album">
+              <PropertyRef Name="AlbumTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BIZ_TRIP_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="BIZ_TRIP" Type="Self.BIZ_TRIP" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="BIZ_TRIP">
+              <PropertyRef Name="EMPNO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cart_Album">
+          <End Role="Album" Type="Self.Album" Multiplicity="0..1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Album">
+              <PropertyRef Name="AlbumId" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="AlbumId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CONTRACT_CONTRACT_TYPE">
+          <End Role="CONTRACT_TYPE" Type="Self.CONTRACT_TYPE" Multiplicity="0..1" />
+          <End Role="CONTRACT" Type="Self.CONTRACT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CONTRACT_TYPE">
+              <PropertyRef Name="CONTRACT_TYPE_ID" />
+            </Principal>
+            <Dependent Role="CONTRACT">
+              <PropertyRef Name="CONTRACT_TYPE_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CONTRACT_CONTRACT_TYPE_DETAIL">
+          <End Role="CONTRACT_TYPE_DETAIL" Type="Self.CONTRACT_TYPE_DETAIL" Multiplicity="0..1" />
+          <End Role="CONTRACT" Type="Self.CONTRACT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CONTRACT_TYPE_DETAIL">
+              <PropertyRef Name="CONTRACT_TYPE_DT_ID" />
+            </Principal>
+            <Dependent Role="CONTRACT">
+              <PropertyRef Name="CONTRACT_TYPE_DT_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CONTRACT_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="CONTRACT" Type="Self.CONTRACT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="CONTRACT">
+              <PropertyRef Name="USER_CREATE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CONTRACT_PERIOD">
+          <End Role="PERIOD" Type="Self.PERIOD" Multiplicity="0..1" />
+          <End Role="CONTRACT" Type="Self.CONTRACT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PERIOD">
+              <PropertyRef Name="PERIOD_ID" />
+            </Principal>
+            <Dependent Role="CONTRACT">
+              <PropertyRef Name="PERIODID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CONTRACT_SUB_CONTRACT">
+          <End Role="CONTRACT" Type="Self.CONTRACT" Multiplicity="0..1" />
+          <End Role="CONTRACT_SUB" Type="Self.CONTRACT_SUB" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CONTRACT">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CONTRACT_SUB">
+              <PropertyRef Name="CONTRACTID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CONTRACT_SUB_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="CONTRACT_SUB" Type="Self.CONTRACT_SUB" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="CONTRACT_SUB">
+              <PropertyRef Name="USER_CREATE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CONTRACT_SUB_PERIOD">
+          <End Role="PERIOD" Type="Self.PERIOD" Multiplicity="0..1" />
+          <End Role="CONTRACT_SUB" Type="Self.CONTRACT_SUB" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PERIOD">
+              <PropertyRef Name="PERIOD_ID" />
+            </Principal>
+            <Dependent Role="CONTRACT_SUB">
+              <PropertyRef Name="PERIODID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Document_DocumentType">
+          <End Role="DocumentType" Type="Self.DocumentType" Multiplicity="0..1" />
+          <End Role="Document" Type="Self.Document" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DocumentType">
+              <PropertyRef Name="DocumentTypeId" />
+            </Principal>
+            <Dependent Role="Document">
+              <PropertyRef Name="DocumentTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Document_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Document" Type="Self.Document" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="Document">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EMP_ANSWER_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="EMP_ANSWER" Type="Self.EMP_ANSWER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="EMP_ANSWER">
+              <PropertyRef Name="EMPLOYEEID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EMP_ANSWER_QUESTION">
+          <End Role="QUESTION" Type="Self.QUESTION" Multiplicity="0..1" />
+          <End Role="EMP_ANSWER" Type="Self.EMP_ANSWER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QUESTION">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EMP_ANSWER">
+              <PropertyRef Name="QUESTION_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employee_Screen_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Employee_Screen" Type="Self.Employee_Screen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="Employee_Screen">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employee_Screen_Screen">
+          <End Role="Screen" Type="Self.Screen" Multiplicity="0..1" />
+          <End Role="Employee_Screen" Type="Self.Employee_Screen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Screen">
+              <PropertyRef Name="ScreenId" />
+            </Principal>
+            <Dependent Role="Employee_Screen">
+              <PropertyRef Name="ScreenId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order__Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Order_" Type="Self.Order_" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="Order_">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetail_Album">
+          <End Role="Album" Type="Self.Album" Multiplicity="0..1" />
+          <End Role="OrderDetail" Type="Self.OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Album">
+              <PropertyRef Name="AlbumId" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="AlbumId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetail_Order_">
+          <End Role="Order_" Type="Self.Order_" Multiplicity="0..1" />
+          <End Role="OrderDetail" Type="Self.OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order_">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserLogon_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="UserLogon" Type="Self.UserLogon" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="UserLogon">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="FUNC_CHECK_EMPNO_MEAL" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
+          <Parameter Name="V_EMPNO" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="FUNC_ORDER" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="v_fromdate" Type="datetime" Mode="In" />
+          <Parameter Name="v_todate" Type="datetime" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="ID" Type="int" />
+                <Property Name="TITLE" Type="nvarchar" MaxLength="200" />
+                <Property Name="UNIT" Type="nvarchar" MaxLength="50" />
+                <Property Name="HR" Type="int" />
+                <Property Name="ACCOUNTING" Type="int" />
+                <Property Name="ANIMAL" Type="int" />
+                <Property Name="AQUA" Type="int" />
+                <Property Name="HSE" Type="int" />
+                <Property Name="LOGISTIC" Type="int" />
+                <Property Name="MARKETING" Type="int" />
+                <Property Name="MAINTANANCE" Type="int" />
+                <Property Name="PURCHASING" Type="int" />
+                <Property Name="QC" Type="int" />
+                <Property Name="R_D" Type="int" />
+                <Property Name="SALES_SUPPORT" Type="int" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="func_report_detail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="v_fromdate" Type="datetime" Mode="In" />
+          <Parameter Name="v_todate" Type="datetime" Mode="In" />
+          <Parameter Name="v_plant" Type="nvarchar" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="ID" Type="int" />
+                <Property Name="TITLE" Type="nvarchar" MaxLength="200" />
+                <Property Name="UNIT" Type="nvarchar" MaxLength="50" />
+                <Property Name="HR" Type="int" />
+                <Property Name="ACCOUNTING" Type="int" />
+                <Property Name="ANIMAL" Type="int" />
+                <Property Name="AQUA" Type="int" />
+                <Property Name="HSE" Type="int" />
+                <Property Name="LOGISTIC" Type="int" />
+                <Property Name="MARKETING" Type="int" />
+                <Property Name="MAINTANANCE" Type="int" />
+                <Property Name="PURCHASING" Type="int" />
+                <Property Name="QC" Type="int" />
+                <Property Name="R_D" Type="int" />
+                <Property Name="SALES_SUPPORT" Type="int" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="PRO_INSERT_HR_MEAL" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="V_EMPNO" Type="nvarchar" Mode="In" />
+          <Parameter Name="V_IMAGE" Type="varbinary(max)" Mode="In" />
+          <Parameter Name="V_Note" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <EntityContainer Name="Web_IT_HELPDESKModelStoreContainer">
+          <EntitySet Name="Album" EntityType="Self.Album" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AlbumType" EntityType="Self.AlbumType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BIZ_TRIP" EntityType="Self.BIZ_TRIP" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CONTRACT" EntityType="Self.CONTRACT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CONTRACT_SUB" EntityType="Self.CONTRACT_SUB" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CONTRACT_TYPE" EntityType="Self.CONTRACT_TYPE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CONTRACT_TYPE_DETAIL" EntityType="Self.CONTRACT_TYPE_DETAIL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Document" EntityType="Self.Document" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DocumentType" EntityType="Self.DocumentType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Drinking_Request" EntityType="Self.Drinking_Request" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EMP_ANSWER" EntityType="Self.EMP_ANSWER" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee_Screen" EntityType="Self.Employee_Screen" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeeInfo" EntityType="Self.EmployeeInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Incidents" EntityType="Self.Incidents" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Level" EntityType="Self.Level" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order_" EntityType="Self.Order_" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderDetail" EntityType="Self.OrderDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PERIOD" EntityType="Self.PERIOD" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="QUESTION" EntityType="Self.QUESTION" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Screen" EntityType="Self.Screen" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Seal_Using" EntityType="Self.Seal_Using" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Status" EntityType="Self.Status" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserLogon" EntityType="Self.UserLogon" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EMP_ANSWER_bk20190826" EntityType="Self.EMP_ANSWER_bk20190826" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[EMP_ANSWER_bk20190826].[ID] AS [ID], 
+[EMP_ANSWER_bk20190826].[QUESTION_ID] AS [QUESTION_ID], 
+[EMP_ANSWER_bk20190826].[EMPLOYEEID] AS [EMPLOYEEID], 
+[EMP_ANSWER_bk20190826].[DATE] AS [DATE], 
+[EMP_ANSWER_bk20190826].[ANSWERID] AS [ANSWERID], 
+[EMP_ANSWER_bk20190826].[NOTE] AS [NOTE]
+FROM [dbo].[EMP_ANSWER_bk20190826] AS [EMP_ANSWER_bk20190826]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="employee_bk20190826" EntityType="Self.employee_bk20190826" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[employee_bk20190826].[EmployeeID] AS [EmployeeID], 
+[employee_bk20190826].[EmployeeName] AS [EmployeeName], 
+[employee_bk20190826].[Position] AS [Position], 
+[employee_bk20190826].[IDNumber] AS [IDNumber], 
+[employee_bk20190826].[Others] AS [Others], 
+[employee_bk20190826].[Job] AS [Job], 
+[employee_bk20190826].[Status_marry] AS [Status_marry], 
+[employee_bk20190826].[Birthday] AS [Birthday], 
+[employee_bk20190826].[datetimeBegin] AS [datetimeBegin], 
+[employee_bk20190826].[CellPhone] AS [CellPhone], 
+[employee_bk20190826].[Email] AS [Email], 
+[employee_bk20190826].[Notes] AS [Notes], 
+[employee_bk20190826].[SearchField] AS [SearchField], 
+[employee_bk20190826].[Del] AS [Del], 
+[employee_bk20190826].[DepatmentId] AS [DepatmentId], 
+[employee_bk20190826].[Password] AS [Password], 
+[employee_bk20190826].[Plant] AS [Plant], 
+[employee_bk20190826].[administrator] AS [administrator]
+FROM [dbo].[employee_bk20190826] AS [employee_bk20190826]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="EmployeeInfo_bk20190826" EntityType="Self.EmployeeInfo_bk20190826" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[EmployeeInfo_bk20190826].[EMPNO] AS [EMPNO], 
+[EmployeeInfo_bk20190826].[DEPT_NAME] AS [DEPT_NAME], 
+[EmployeeInfo_bk20190826].[FULL_NAME] AS [FULL_NAME], 
+[EmployeeInfo_bk20190826].[GRADE] AS [GRADE], 
+[EmployeeInfo_bk20190826].[POSITION_NAME] AS [POSITION_NAME], 
+[EmployeeInfo_bk20190826].[JOB_NAME] AS [JOB_NAME], 
+[EmployeeInfo_bk20190826].[EMP_STATUS] AS [EMP_STATUS], 
+[EmployeeInfo_bk20190826].[BIRTHDAY] AS [BIRTHDAY], 
+[EmployeeInfo_bk20190826].[HIRE_DATE] AS [HIRE_DATE], 
+[EmployeeInfo_bk20190826].[PHONE] AS [PHONE], 
+[EmployeeInfo_bk20190826].[EXTENSION] AS [EXTENSION], 
+[EmployeeInfo_bk20190826].[REMARK] AS [REMARK], 
+[EmployeeInfo_bk20190826].[DE] AS [DE], 
+[EmployeeInfo_bk20190826].[DEPT] AS [DEPT], 
+[EmployeeInfo_bk20190826].[Email] AS [Email], 
+[EmployeeInfo_bk20190826].[Plant] AS [Plant]
+FROM [dbo].[EmployeeInfo_bk20190826] AS [EmployeeInfo_bk20190826]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Event" EntityType="Self.Event" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[Event].[ID] AS [ID], 
+[Event].[TITLE] AS [TITLE], 
+[Event].[START] AS [START], 
+[Event].[END] AS [END], 
+[Event].[STATUS] AS [STATUS]
+FROM [dbo].[Event] AS [Event]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="hr_emp_infor" EntityType="Self.hr_emp_infor" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[hr_emp_infor].[Employee_Id] AS [Employee_Id], 
+[hr_emp_infor].[Employee_Name] AS [Employee_Name], 
+[hr_emp_infor].[DepartmentId] AS [DepartmentId], 
+[hr_emp_infor].[Note] AS [Note], 
+[hr_emp_infor].[Del] AS [Del]
+FROM [dbo].[hr_emp_infor] AS [hr_emp_infor]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="hr_emp_meal" EntityType="Self.hr_emp_meal" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[hr_emp_meal].[Id] AS [Id], 
+[hr_emp_meal].[Num] AS [Num], 
+[hr_emp_meal].[EMPNO] AS [EMPNO], 
+[hr_emp_meal].[IMAGE] AS [IMAGE], 
+[hr_emp_meal].[Note] AS [Note], 
+[hr_emp_meal].[DateTime] AS [DateTime], 
+[hr_emp_meal].[Del] AS [Del], 
+[hr_emp_meal].[TypeMeal] AS [TypeMeal]
+FROM [dbo].[hr_emp_meal] AS [hr_emp_meal]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[sysdiagrams].[name] AS [name], 
+[sysdiagrams].[principal_id] AS [principal_id], 
+[sysdiagrams].[diagram_id] AS [diagram_id], 
+[sysdiagrams].[version] AS [version], 
+[sysdiagrams].[definition] AS [definition]
+FROM [dbo].[sysdiagrams] AS [sysdiagrams]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="ORDER_TYPE_VIEW" EntityType="Self.ORDER_TYPE_VIEW" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[ORDER_TYPE_VIEW].[OrderId] AS [OrderId], 
+[ORDER_TYPE_VIEW].[OrderDate] AS [OrderDate], 
+[ORDER_TYPE_VIEW].[Total] AS [Total], 
+[ORDER_TYPE_VIEW].[Note] AS [Note], 
+[ORDER_TYPE_VIEW].[Confirmed] AS [Confirmed], 
+[ORDER_TYPE_VIEW].[EmployeeID] AS [EmployeeID], 
+[ORDER_TYPE_VIEW].[Employee_Name] AS [Employee_Name], 
+[ORDER_TYPE_VIEW].[Del] AS [Del], 
+[ORDER_TYPE_VIEW].[Plant] AS [Plant], 
+[ORDER_TYPE_VIEW].[AlbumTypeId] AS [AlbumTypeId]
+FROM [dbo].[ORDER_TYPE_VIEW] AS [ORDER_TYPE_VIEW]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Album_AlbumType" Association="Self.FK_Album_AlbumType">
+            <End Role="AlbumType" EntitySet="AlbumType" />
+            <End Role="Album" EntitySet="Album" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BIZ_TRIP_Employee" Association="Self.FK_BIZ_TRIP_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="BIZ_TRIP" EntitySet="BIZ_TRIP" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cart_Album" Association="Self.FK_Cart_Album">
+            <End Role="Album" EntitySet="Album" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CONTRACT_CONTRACT_TYPE" Association="Self.FK_CONTRACT_CONTRACT_TYPE">
+            <End Role="CONTRACT_TYPE" EntitySet="CONTRACT_TYPE" />
+            <End Role="CONTRACT" EntitySet="CONTRACT" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CONTRACT_CONTRACT_TYPE_DETAIL" Association="Self.FK_CONTRACT_CONTRACT_TYPE_DETAIL">
+            <End Role="CONTRACT_TYPE_DETAIL" EntitySet="CONTRACT_TYPE_DETAIL" />
+            <End Role="CONTRACT" EntitySet="CONTRACT" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CONTRACT_Employee" Association="Self.FK_CONTRACT_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="CONTRACT" EntitySet="CONTRACT" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CONTRACT_PERIOD" Association="Self.FK_CONTRACT_PERIOD">
+            <End Role="PERIOD" EntitySet="PERIOD" />
+            <End Role="CONTRACT" EntitySet="CONTRACT" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CONTRACT_SUB_CONTRACT" Association="Self.FK_CONTRACT_SUB_CONTRACT">
+            <End Role="CONTRACT" EntitySet="CONTRACT" />
+            <End Role="CONTRACT_SUB" EntitySet="CONTRACT_SUB" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CONTRACT_SUB_Employee" Association="Self.FK_CONTRACT_SUB_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="CONTRACT_SUB" EntitySet="CONTRACT_SUB" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CONTRACT_SUB_PERIOD" Association="Self.FK_CONTRACT_SUB_PERIOD">
+            <End Role="PERIOD" EntitySet="PERIOD" />
+            <End Role="CONTRACT_SUB" EntitySet="CONTRACT_SUB" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Document_DocumentType" Association="Self.FK_Document_DocumentType">
+            <End Role="DocumentType" EntitySet="DocumentType" />
+            <End Role="Document" EntitySet="Document" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Document_Employee" Association="Self.FK_Document_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Document" EntitySet="Document" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EMP_ANSWER_Employee" Association="Self.FK_EMP_ANSWER_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="EMP_ANSWER" EntitySet="EMP_ANSWER" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EMP_ANSWER_QUESTION" Association="Self.FK_EMP_ANSWER_QUESTION">
+            <End Role="QUESTION" EntitySet="QUESTION" />
+            <End Role="EMP_ANSWER" EntitySet="EMP_ANSWER" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_Screen_Employee" Association="Self.FK_Employee_Screen_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Employee_Screen" EntitySet="Employee_Screen" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_Screen_Screen" Association="Self.FK_Employee_Screen_Screen">
+            <End Role="Screen" EntitySet="Screen" />
+            <End Role="Employee_Screen" EntitySet="Employee_Screen" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order__Employee" Association="Self.FK_Order__Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Order_" EntitySet="Order_" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetail_Album" Association="Self.FK_OrderDetail_Album">
+            <End Role="Album" EntitySet="Album" />
+            <End Role="OrderDetail" EntitySet="OrderDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetail_Order_" Association="Self.FK_OrderDetail_Order_">
+            <End Role="Order_" EntitySet="Order_" />
+            <End Role="OrderDetail" EntitySet="OrderDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserLogon_Employee" Association="Self.FK_UserLogon_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="UserLogon" EntitySet="UserLogon" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Web_IT_HELPDESKModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="Web_IT_HELPDESKEntities" p1:LazyLoadingEnabled="true">
+          <FunctionImport Name="FUNC_ORDER" IsComposable="true" ReturnType="Collection(Web_IT_HELPDESKModel.FUNC_ORDER_Result)">
+            <Parameter Name="v_fromdate" Mode="In" Type="DateTime" />
+            <Parameter Name="v_todate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="PRO_INSERT_HR_MEAL">
+            <Parameter Name="V_EMPNO" Mode="In" Type="String" />
+            <Parameter Name="V_IMAGE" Mode="In" Type="Binary" />
+            <Parameter Name="V_Note" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="func_report_detail" IsComposable="true" ReturnType="Collection(Web_IT_HELPDESKModel.func_report_detail_Result)">
+            <Parameter Name="v_fromdate" Mode="In" Type="DateTime" />
+            <Parameter Name="v_todate" Mode="In" Type="DateTime" />
+            <Parameter Name="v_plant" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="Albums" EntityType="Web_IT_HELPDESKModel.Album" />
+          <EntitySet Name="AlbumTypes" EntityType="Web_IT_HELPDESKModel.AlbumType" />
+          <EntitySet Name="BIZ_TRIP" EntityType="Web_IT_HELPDESKModel.BIZ_TRIP" />
+          <EntitySet Name="Carts" EntityType="Web_IT_HELPDESKModel.Cart" />
+          <EntitySet Name="CONTRACT_TYPE" EntityType="Web_IT_HELPDESKModel.CONTRACT_TYPE" />
+          <EntitySet Name="Departments" EntityType="Web_IT_HELPDESKModel.Department" />
+          <EntitySet Name="Documents" EntityType="Web_IT_HELPDESKModel.Document" />
+          <EntitySet Name="DocumentTypes" EntityType="Web_IT_HELPDESKModel.DocumentType" />
+          <EntitySet Name="Drinking_Request" EntityType="Web_IT_HELPDESKModel.Drinking_Request" />
+          <EntitySet Name="EMP_ANSWER" EntityType="Web_IT_HELPDESKModel.EMP_ANSWER" />
+          <EntitySet Name="Employees" EntityType="Web_IT_HELPDESKModel.Employee" />
+          <EntitySet Name="Employee_Screen" EntityType="Web_IT_HELPDESKModel.Employee_Screen" />
+          <EntitySet Name="EmployeeInfoes" EntityType="Web_IT_HELPDESKModel.EmployeeInfo" />
+          <EntitySet Name="Events" EntityType="Web_IT_HELPDESKModel.Event" />
+          <EntitySet Name="hr_emp_infor" EntityType="Web_IT_HELPDESKModel.hr_emp_infor" />
+          <EntitySet Name="hr_emp_meal" EntityType="Web_IT_HELPDESKModel.hr_emp_meal" />
+          <EntitySet Name="Incidents" EntityType="Web_IT_HELPDESKModel.Incident" />
+          <EntitySet Name="Levels" EntityType="Web_IT_HELPDESKModel.Level" />
+          <EntitySet Name="Order_" EntityType="Web_IT_HELPDESKModel.Order_" />
+          <EntitySet Name="OrderDetails" EntityType="Web_IT_HELPDESKModel.OrderDetail" />
+          <EntitySet Name="PERIODs" EntityType="Web_IT_HELPDESKModel.PERIOD" />
+          <EntitySet Name="QUESTIONs" EntityType="Web_IT_HELPDESKModel.QUESTION" />
+          <EntitySet Name="Screens" EntityType="Web_IT_HELPDESKModel.Screen" />
+          <EntitySet Name="Seal_Using" EntityType="Web_IT_HELPDESKModel.Seal_Using" />
+          <EntitySet Name="Status" EntityType="Web_IT_HELPDESKModel.Status" />
+          <EntitySet Name="UserLogons" EntityType="Web_IT_HELPDESKModel.UserLogon" />
+          <EntitySet Name="ORDER_TYPE_VIEW" EntityType="Web_IT_HELPDESKModel.ORDER_TYPE_VIEW" />
+          <AssociationSet Name="FK_Album_AlbumType" Association="Web_IT_HELPDESKModel.FK_Album_AlbumType">
+            <End Role="AlbumType" EntitySet="AlbumTypes" />
+            <End Role="Album" EntitySet="Albums" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cart_Album" Association="Web_IT_HELPDESKModel.FK_Cart_Album">
+            <End Role="Album" EntitySet="Albums" />
+            <End Role="Cart" EntitySet="Carts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetail_Album" Association="Web_IT_HELPDESKModel.FK_OrderDetail_Album">
+            <End Role="Album" EntitySet="Albums" />
+            <End Role="OrderDetail" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BIZ_TRIP_Employee" Association="Web_IT_HELPDESKModel.FK_BIZ_TRIP_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="BIZ_TRIP" EntitySet="BIZ_TRIP" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Document_DocumentType" Association="Web_IT_HELPDESKModel.FK_Document_DocumentType">
+            <End Role="DocumentType" EntitySet="DocumentTypes" />
+            <End Role="Document" EntitySet="Documents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Document_Employee" Association="Web_IT_HELPDESKModel.FK_Document_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Document" EntitySet="Documents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EMP_ANSWER_Employee" Association="Web_IT_HELPDESKModel.FK_EMP_ANSWER_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="EMP_ANSWER" EntitySet="EMP_ANSWER" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EMP_ANSWER_QUESTION" Association="Web_IT_HELPDESKModel.FK_EMP_ANSWER_QUESTION">
+            <End Role="QUESTION" EntitySet="QUESTIONs" />
+            <End Role="EMP_ANSWER" EntitySet="EMP_ANSWER" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_Screen_Employee" Association="Web_IT_HELPDESKModel.FK_Employee_Screen_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Employee_Screen" EntitySet="Employee_Screen" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order__Employee" Association="Web_IT_HELPDESKModel.FK_Order__Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Order_" EntitySet="Order_" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserLogon_Employee" Association="Web_IT_HELPDESKModel.FK_UserLogon_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="UserLogon" EntitySet="UserLogons" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_Screen_Screen" Association="Web_IT_HELPDESKModel.FK_Employee_Screen_Screen">
+            <End Role="Screen" EntitySet="Screens" />
+            <End Role="Employee_Screen" EntitySet="Employee_Screen" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetail_Order_" Association="Web_IT_HELPDESKModel.FK_OrderDetail_Order_">
+            <End Role="Order_" EntitySet="Order_" />
+            <End Role="OrderDetail" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <EntitySet Name="CONTRACTs" EntityType="Web_IT_HELPDESKModel.CONTRACT" />
+          <EntitySet Name="CONTRACT_SUB" EntityType="Web_IT_HELPDESKModel.CONTRACT_SUB" />
+          <AssociationSet Name="FK_CONTRACT_CONTRACT_TYPE" Association="Web_IT_HELPDESKModel.FK_CONTRACT_CONTRACT_TYPE">
+            <End Role="CONTRACT_TYPE" EntitySet="CONTRACT_TYPE" />
+            <End Role="CONTRACT" EntitySet="CONTRACTs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CONTRACT_Employee" Association="Web_IT_HELPDESKModel.FK_CONTRACT_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="CONTRACT" EntitySet="CONTRACTs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CONTRACT_PERIOD" Association="Web_IT_HELPDESKModel.FK_CONTRACT_PERIOD">
+            <End Role="PERIOD" EntitySet="PERIODs" />
+            <End Role="CONTRACT" EntitySet="CONTRACTs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CONTRACT_SUB_CONTRACT" Association="Web_IT_HELPDESKModel.FK_CONTRACT_SUB_CONTRACT">
+            <End Role="CONTRACT" EntitySet="CONTRACTs" />
+            <End Role="CONTRACT_SUB" EntitySet="CONTRACT_SUB" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CONTRACT_SUB_Employee" Association="Web_IT_HELPDESKModel.FK_CONTRACT_SUB_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="CONTRACT_SUB" EntitySet="CONTRACT_SUB" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CONTRACT_SUB_PERIOD" Association="Web_IT_HELPDESKModel.FK_CONTRACT_SUB_PERIOD">
+            <End Role="PERIOD" EntitySet="PERIODs" />
+            <End Role="CONTRACT_SUB" EntitySet="CONTRACT_SUB" />
+          </AssociationSet>
+          <EntitySet Name="CONTRACT_TYPE_DETAIL" EntityType="Web_IT_HELPDESKModel.CONTRACT_TYPE_DETAIL" />
+          <EntitySet Name="EMP_ANSWER_bk20190826" EntityType="Web_IT_HELPDESKModel.EMP_ANSWER_bk20190826" />
+          <EntitySet Name="employee_bk20190826" EntityType="Web_IT_HELPDESKModel.employee_bk20190826" />
+          <EntitySet Name="EmployeeInfo_bk20190826" EntityType="Web_IT_HELPDESKModel.EmployeeInfo_bk20190826" />
+          <EntitySet Name="sysdiagrams" EntityType="Web_IT_HELPDESKModel.sysdiagram" />
+          <AssociationSet Name="FK_CONTRACT_CONTRACT_TYPE_DETAIL" Association="Web_IT_HELPDESKModel.FK_CONTRACT_CONTRACT_TYPE_DETAIL">
+            <End Role="CONTRACT_TYPE_DETAIL" EntitySet="CONTRACT_TYPE_DETAIL" />
+            <End Role="CONTRACT" EntitySet="CONTRACTs" />
+          </AssociationSet>
+          </EntityContainer>
+        <ComplexType Name="FUNC_ORDER_Result">
+          <Property Type="Int32" Name="ID" Nullable="true" />
+          <Property Type="String" Name="TITLE" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="UNIT" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="HR" Nullable="true" />
+          <Property Type="Int32" Name="ACCOUNTING" Nullable="true" />
+          <Property Type="Int32" Name="ANIMAL" Nullable="true" />
+          <Property Type="Int32" Name="AQUA" Nullable="true" />
+          <Property Type="Int32" Name="HSE" Nullable="true" />
+          <Property Type="Int32" Name="LOGISTIC" Nullable="true" />
+          <Property Type="Int32" Name="MARKETING" Nullable="true" />
+          <Property Type="Int32" Name="MAINTANANCE" Nullable="true" />
+          <Property Type="Int32" Name="PURCHASING" Nullable="true" />
+          <Property Type="Int32" Name="QC" Nullable="true" />
+          <Property Type="Int32" Name="R_D" Nullable="true" />
+          <Property Type="Int32" Name="SALES_SUPPORT" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="func_report_detail_Result">
+          <Property Type="Int32" Name="ID" Nullable="true" />
+          <Property Type="String" Name="TITLE" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="UNIT" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="HR" Nullable="true" />
+          <Property Type="Int32" Name="ACCOUNTING" Nullable="true" />
+          <Property Type="Int32" Name="ANIMAL" Nullable="true" />
+          <Property Type="Int32" Name="AQUA" Nullable="true" />
+          <Property Type="Int32" Name="HSE" Nullable="true" />
+          <Property Type="Int32" Name="LOGISTIC" Nullable="true" />
+          <Property Type="Int32" Name="MARKETING" Nullable="true" />
+          <Property Type="Int32" Name="MAINTANANCE" Nullable="true" />
+          <Property Type="Int32" Name="PURCHASING" Nullable="true" />
+          <Property Type="Int32" Name="QC" Nullable="true" />
+          <Property Type="Int32" Name="R_D" Nullable="true" />
+          <Property Type="Int32" Name="SALES_SUPPORT" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="Album">
+          <Key>
+            <PropertyRef Name="AlbumId" />
+          </Key>
+          <Property Type="Int32" Name="AlbumId" Nullable="false" />
+          <Property Type="Int32" Name="AlbumTypeId" />
+          <Property Type="String" Name="Title" MaxLength="160" FixedLength="false" Unicode="true" />
+          <Property Type="Decimal" Name="Price" Precision="10" Scale="2" />
+          <Property Type="String" Name="AlbumArtUrl" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Unit" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AlbumType" Relationship="Web_IT_HELPDESKModel.FK_Album_AlbumType" FromRole="Album" ToRole="AlbumType" />
+          <NavigationProperty Name="Carts" Relationship="Web_IT_HELPDESKModel.FK_Cart_Album" FromRole="Album" ToRole="Cart" />
+          <NavigationProperty Name="OrderDetails" Relationship="Web_IT_HELPDESKModel.FK_OrderDetail_Album" FromRole="Album" ToRole="OrderDetail" />
+        </EntityType>
+        <EntityType Name="AlbumType">
+          <Key>
+            <PropertyRef Name="AlbumTypeId" />
+          </Key>
+          <Property Type="Int32" Name="AlbumTypeId" Nullable="false" />
+          <Property Type="String" Name="AlbumType1" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Albums" Relationship="Web_IT_HELPDESKModel.FK_Album_AlbumType" FromRole="AlbumType" ToRole="Album" />
+        </EntityType>
+        <EntityType Name="BIZ_TRIP">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="String" Name="EMPNO" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="NAME" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DEPT" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DESCRIPTION" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="VEHICLE" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CONTACT_COMPANY" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CONTACT_PERSON" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CONTACT_DEPT" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="DATE" Precision="3" />
+          <Property Type="DateTime" Name="FROM_DATE" Precision="3" />
+          <Property Type="DateTime" Name="TO_DATE" Precision="3" />
+          <Property Type="Boolean" Name="USED_EQUIPMENT" />
+          <Property Type="String" Name="REMARK" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="PLANT" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="DEPT_CONFIRM" />
+          <Property Type="Binary" Name="DEPT_CONFIRM_IMAGE" MaxLength="Max" FixedLength="false" />
+          <Property Type="Boolean" Name="HR_CONFIRM" />
+          <Property Type="Binary" Name="HR_CONFIRM_IMAGE" MaxLength="Max" FixedLength="false" />
+          <Property Type="Boolean" Name="DEL" />
+          <Property Type="Guid" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="NO" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Boolean" Name="IT_CONFIRM" />
+          <NavigationProperty Name="Employee" Relationship="Web_IT_HELPDESKModel.FK_BIZ_TRIP_Employee" FromRole="BIZ_TRIP" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="RecordId" />
+          </Key>
+          <Property Type="Int32" Name="RecordId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="CartId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="AlbumId" />
+          <Property Type="Int32" Name="Count" />
+          <Property Type="DateTime" Name="DateCreated" Precision="3" />
+          <Property Type="String" Name="Note" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Album" Relationship="Web_IT_HELPDESKModel.FK_Cart_Album" FromRole="Cart" ToRole="Album" />
+        </EntityType>
+        <EntityType Name="CONTRACT_TYPE">
+          <Key>
+            <PropertyRef Name="CONTRACT_TYPE_ID" />
+          </Key>
+          <Property Type="String" Name="CONTRACT_TYPE_ID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CONTRACT_TYPE_NAME" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CONTRACTs" Relationship="Web_IT_HELPDESKModel.FK_CONTRACT_CONTRACT_TYPE" FromRole="CONTRACT_TYPE" ToRole="CONTRACT" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="DepartmentId" />
+            <PropertyRef Name="Plant" />
+          </Key>
+          <Property Type="String" Name="DepartmentId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Plant" Nullable="false" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DepartmentName" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="Del" />
+          <Property Type="String" Name="Manager_Email" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Document">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Guid" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Code" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Binary" Name="FileContext" MaxLength="Max" FixedLength="false" />
+          <Property Type="String" Name="EmployeeID" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="FileName" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DocumentTypeId" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="Date" Precision="3" />
+          <Property Type="Boolean" Name="Del" />
+          <NavigationProperty Name="DocumentType" Relationship="Web_IT_HELPDESKModel.FK_Document_DocumentType" FromRole="Document" ToRole="DocumentType" />
+          <NavigationProperty Name="Employee" Relationship="Web_IT_HELPDESKModel.FK_Document_Employee" FromRole="Document" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="DocumentType">
+          <Key>
+            <PropertyRef Name="DocumentTypeId" />
+          </Key>
+          <Property Type="String" Name="DocumentTypeId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DocumentTypeName" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Documents" Relationship="Web_IT_HELPDESKModel.FK_Document_DocumentType" FromRole="DocumentType" ToRole="Document" />
+        </EntityType>
+        <EntityType Name="Drinking_Request">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="Quantity" />
+          <Property Type="String" Name="Unit" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Note" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="Date" Precision="3" />
+          <Property Type="Boolean" Name="Department_confirm" Nullable="false" />
+          <Property Type="String" Name="Department_note" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="Department_confirm_date" Precision="3" />
+          <Property Type="Boolean" Name="HR_confirm" Nullable="false" />
+          <Property Type="String" Name="HR_note" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="HR_confirm_date" Precision="3" />
+          <Property Type="Boolean" Name="Del" Nullable="false" />
+          <Property Type="String" Name="DepartmentId" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Employee_name" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="EMP_ANSWER">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Guid" Name="ID" Nullable="false" />
+          <Property Type="Guid" Name="QUESTION_ID" />
+          <Property Type="String" Name="EMPLOYEEID" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="DATE" Precision="3" />
+          <Property Type="Int32" Name="ANSWERID" />
+          <Property Type="String" Name="NOTE" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Employee" Relationship="Web_IT_HELPDESKModel.FK_EMP_ANSWER_Employee" FromRole="EMP_ANSWER" ToRole="Employee" />
+          <NavigationProperty Name="QUESTION" Relationship="Web_IT_HELPDESKModel.FK_EMP_ANSWER_QUESTION" FromRole="EMP_ANSWER" ToRole="QUESTION" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Type="String" Name="EmployeeID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EmployeeName" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Position" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="IDNumber" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Others" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Job" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Status_marry" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="Birthday" Precision="3" />
+          <Property Type="DateTime" Name="datetimeBegin" Precision="3" />
+          <Property Type="String" Name="CellPhone" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Email" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Notes" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="SearchField" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="Del" />
+          <Property Type="String" Name="DepatmentId" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Password" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Plant" MaxLength="4" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="BIZ_TRIP" Relationship="Web_IT_HELPDESKModel.FK_BIZ_TRIP_Employee" FromRole="Employee" ToRole="BIZ_TRIP" />
+          <NavigationProperty Name="Documents" Relationship="Web_IT_HELPDESKModel.FK_Document_Employee" FromRole="Employee" ToRole="Document" />
+          <NavigationProperty Name="EMP_ANSWER" Relationship="Web_IT_HELPDESKModel.FK_EMP_ANSWER_Employee" FromRole="Employee" ToRole="EMP_ANSWER" />
+          <NavigationProperty Name="Employee_Screen" Relationship="Web_IT_HELPDESKModel.FK_Employee_Screen_Employee" FromRole="Employee" ToRole="Employee_Screen" />
+          <NavigationProperty Name="Order_" Relationship="Web_IT_HELPDESKModel.FK_Order__Employee" FromRole="Employee" ToRole="Order_" />
+          <NavigationProperty Name="UserLogons" Relationship="Web_IT_HELPDESKModel.FK_UserLogon_Employee" FromRole="Employee" ToRole="UserLogon" />
+          <NavigationProperty Name="CONTRACTs" Relationship="Web_IT_HELPDESKModel.FK_CONTRACT_Employee" FromRole="Employee" ToRole="CONTRACT" />
+          <NavigationProperty Name="CONTRACT_SUB" Relationship="Web_IT_HELPDESKModel.FK_CONTRACT_SUB_Employee" FromRole="Employee" ToRole="CONTRACT_SUB" />
+          <Property Name="administrator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Employee_Screen">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Guid" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="ScreenId" />
+          <Property Type="String" Name="EmployeeId" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="Use" />
+          <Property Type="Boolean" Name="Read" />
+          <NavigationProperty Name="Employee" Relationship="Web_IT_HELPDESKModel.FK_Employee_Screen_Employee" FromRole="Employee_Screen" ToRole="Employee" />
+          <NavigationProperty Name="Screen" Relationship="Web_IT_HELPDESKModel.FK_Employee_Screen_Screen" FromRole="Employee_Screen" ToRole="Screen" />
+        </EntityType>
+        <EntityType Name="EmployeeInfo">
+          <Key>
+            <PropertyRef Name="EMPNO" />
+          </Key>
+          <Property Type="String" Name="EMPNO" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DEPT_NAME" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="FULL_NAME" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="GRADE" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="POSITION_NAME" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="JOB_NAME" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EMP_STATUS" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BIRTHDAY" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="HIRE_DATE" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="PHONE" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EXTENSION" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="REMARK" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="DE" />
+          <Property Type="String" Name="DEPT" MaxLength="4" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="Email" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Plant" MaxLength="10" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Event">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="TITLE" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="START" Precision="3" />
+          <Property Type="DateTime" Name="END" Precision="3" />
+          <Property Type="String" Name="STATUS" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="hr_emp_infor">
+          <Key>
+            <PropertyRef Name="Employee_Id" />
+          </Key>
+          <Property Type="String" Name="Employee_Id" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Employee_Name" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DepartmentId" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Note" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="Del" />
+        </EntityType>
+        <EntityType Name="hr_emp_meal">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Num" />
+          </Key>
+          <Property Type="Guid" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="Num" Nullable="false" />
+          <Property Type="String" Name="EMPNO" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="Binary" Name="IMAGE" MaxLength="Max" FixedLength="false" />
+          <Property Type="String" Name="Note" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="DateTime" Precision="3" />
+          <Property Type="Boolean" Name="Del" />
+          <Property Type="String" Name="TypeMeal" MaxLength="1" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Incident">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Guid" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Code" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="datetime" Precision="3" />
+          <Property Type="String" Name="StatusId" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="LevelId" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Reply" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="User_create" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="User_resolve" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Note" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="Binary" Name="FileAttched" MaxLength="Max" FixedLength="false" />
+          <Property Type="String" Name="FileName" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="Del" />
+          <Property Type="String" Name="DepartmentId" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="Solved" />
+          <Property Type="DateTime" Name="Solve_datetime" Precision="3" />
+          <Property Type="String" Name="Plant" MaxLength="4" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Level">
+          <Key>
+            <PropertyRef Name="LevelId" />
+          </Key>
+          <Property Type="String" Name="LevelId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="LevelName" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="datetime_rate" />
+          <Property Type="Boolean" Name="Del" />
+        </EntityType>
+        <EntityType Name="Order_">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Type="Int32" Name="OrderId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="DateTime" Name="OrderDate" Precision="3" />
+          <Property Type="Decimal" Name="Total" Precision="10" Scale="2" />
+          <Property Type="String" Name="Note" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="Confirmed" />
+          <Property Type="String" Name="EmployeeID" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Employee_Name" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="Del" />
+          <Property Type="String" Name="Plant" MaxLength="4" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Employee" Relationship="Web_IT_HELPDESKModel.FK_Order__Employee" FromRole="Order_" ToRole="Employee" />
+          <NavigationProperty Name="OrderDetails" Relationship="Web_IT_HELPDESKModel.FK_OrderDetail_Order_" FromRole="Order_" ToRole="OrderDetail" />
+        </EntityType>
+        <EntityType Name="OrderDetail">
+          <Key>
+            <PropertyRef Name="OrderDetailId" />
+          </Key>
+          <Property Type="Int32" Name="OrderDetailId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="OrderId" />
+          <Property Type="Int32" Name="AlbumId" />
+          <Property Type="Decimal" Name="Quantity" Precision="10" Scale="2" />
+          <Property Type="String" Name="Note" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Album" Relationship="Web_IT_HELPDESKModel.FK_OrderDetail_Album" FromRole="OrderDetail" ToRole="Album" />
+          <NavigationProperty Name="Order_" Relationship="Web_IT_HELPDESKModel.FK_OrderDetail_Order_" FromRole="OrderDetail" ToRole="Order_" />
+        </EntityType>
+        <EntityType Name="PERIOD">
+          <Key>
+            <PropertyRef Name="PERIOD_ID" />
+          </Key>
+          <Property Type="String" Name="PERIOD_ID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PERIOD_NAME" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="MONTHS" />
+          <Property Type="Boolean" Name="DEL" />
+          <NavigationProperty Name="CONTRACTs" Relationship="Web_IT_HELPDESKModel.FK_CONTRACT_PERIOD" FromRole="PERIOD" ToRole="CONTRACT" />
+          <NavigationProperty Name="CONTRACT_SUB" Relationship="Web_IT_HELPDESKModel.FK_CONTRACT_SUB_PERIOD" FromRole="PERIOD" ToRole="CONTRACT_SUB" />
+        </EntityType>
+        <EntityType Name="QUESTION">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Guid" Name="ID" Nullable="false" />
+          <Property Type="String" Name="NO" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="QUESTION_CONTENT" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ANSWER_ID" />
+          <Property Type="String" Name="NOTE" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="DEL" />
+          <NavigationProperty Name="EMP_ANSWER" Relationship="Web_IT_HELPDESKModel.FK_EMP_ANSWER_QUESTION" FromRole="QUESTION" ToRole="EMP_ANSWER" />
+        </EntityType>
+        <EntityType Name="Screen">
+          <Key>
+            <PropertyRef Name="ScreenId" />
+          </Key>
+          <Property Type="Int32" Name="ScreenId" Nullable="false" />
+          <Property Type="String" Name="ScreenName" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="HTMLcode" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Note" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Employee_Screen" Relationship="Web_IT_HELPDESKModel.FK_Employee_Screen_Screen" FromRole="Screen" ToRole="Employee_Screen" />
+        </EntityType>
+        <EntityType Name="Seal_Using">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="DateTime" Name="Date" Precision="3" />
+          <Property Type="String" Name="Employee_name" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Type_document" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DepartmentId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Code_number" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Context" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Place_Recipient" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="Period_date" Precision="3" />
+          <Property Type="DateTime" Name="Employee_Seal_keep" Precision="3" />
+          <Property Type="Boolean" Name="Department_confirm" Nullable="false" />
+          <Property Type="Boolean" Name="Employee_Seal_keep_confrim" Nullable="false" />
+          <Property Type="Boolean" Name="Del" Nullable="false" />
+          <Property Type="String" Name="Department_note" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="Department_confirm_date" Precision="3" />
+          <Property Type="String" Name="Employee_Seal_keep_note" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="Date_signature" Precision="3" />
+          <Property Type="String" Name="Name_signature" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Plant" MaxLength="4" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Status">
+          <Key>
+            <PropertyRef Name="StatusId" />
+          </Key>
+          <Property Type="String" Name="StatusId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="StatusName" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="Del" />
+        </EntityType>
+        <EntityType Name="UserLogon">
+          <Key>
+            <PropertyRef Name="UserLogIn" />
+          </Key>
+          <Property Type="String" Name="UserLogIn" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Password" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EmployeeID" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DepatmentId" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="Del" />
+          <NavigationProperty Name="Employee" Relationship="Web_IT_HELPDESKModel.FK_UserLogon_Employee" FromRole="UserLogon" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="ORDER_TYPE_VIEW">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Type="Int32" Name="OrderId" Nullable="false" />
+          <Property Type="DateTime" Name="OrderDate" Precision="3" />
+          <Property Type="Decimal" Name="Total" Precision="10" Scale="2" />
+          <Property Type="String" Name="Note" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="Confirmed" />
+          <Property Type="String" Name="EmployeeID" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Employee_Name" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="Del" />
+          <Property Type="String" Name="Plant" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="AlbumTypeId" />
+        </EntityType>
+        <Association Name="FK_Album_AlbumType">
+          <End Type="Web_IT_HELPDESKModel.AlbumType" Role="AlbumType" Multiplicity="0..1" />
+          <End Type="Web_IT_HELPDESKModel.Album" Role="Album" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AlbumType">
+              <PropertyRef Name="AlbumTypeId" />
+            </Principal>
+            <Dependent Role="Album">
+              <PropertyRef Name="AlbumTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cart_Album">
+          <End Type="Web_IT_HELPDESKModel.Album" Role="Album" Multiplicity="0..1" />
+          <End Type="Web_IT_HELPDESKModel.Cart" Role="Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Album">
+              <PropertyRef Name="AlbumId" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="AlbumId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetail_Album">
+          <End Type="Web_IT_HELPDESKModel.Album" Role="Album" Multiplicity="0..1" />
+          <End Type="Web_IT_HELPDESKModel.OrderDetail" Role="OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Album">
+              <PropertyRef Name="AlbumId" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="AlbumId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BIZ_TRIP_Employee">
+          <End Type="Web_IT_HELPDESKModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="Web_IT_HELPDESKModel.BIZ_TRIP" Role="BIZ_TRIP" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="BIZ_TRIP">
+              <PropertyRef Name="EMPNO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Document_DocumentType">
+          <End Type="Web_IT_HELPDESKModel.DocumentType" Role="DocumentType" Multiplicity="0..1" />
+          <End Type="Web_IT_HELPDESKModel.Document" Role="Document" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DocumentType">
+              <PropertyRef Name="DocumentTypeId" />
+            </Principal>
+            <Dependent Role="Document">
+              <PropertyRef Name="DocumentTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Document_Employee">
+          <End Type="Web_IT_HELPDESKModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="Web_IT_HELPDESKModel.Document" Role="Document" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="Document">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EMP_ANSWER_Employee">
+          <End Type="Web_IT_HELPDESKModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="Web_IT_HELPDESKModel.EMP_ANSWER" Role="EMP_ANSWER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="EMP_ANSWER">
+              <PropertyRef Name="EMPLOYEEID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EMP_ANSWER_QUESTION">
+          <End Type="Web_IT_HELPDESKModel.QUESTION" Role="QUESTION" Multiplicity="0..1" />
+          <End Type="Web_IT_HELPDESKModel.EMP_ANSWER" Role="EMP_ANSWER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QUESTION">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EMP_ANSWER">
+              <PropertyRef Name="QUESTION_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employee_Screen_Employee">
+          <End Type="Web_IT_HELPDESKModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="Web_IT_HELPDESKModel.Employee_Screen" Role="Employee_Screen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="Employee_Screen">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order__Employee">
+          <End Type="Web_IT_HELPDESKModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="Web_IT_HELPDESKModel.Order_" Role="Order_" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="Order_">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserLogon_Employee">
+          <End Type="Web_IT_HELPDESKModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="Web_IT_HELPDESKModel.UserLogon" Role="UserLogon" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="UserLogon">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employee_Screen_Screen">
+          <End Type="Web_IT_HELPDESKModel.Screen" Role="Screen" Multiplicity="0..1" />
+          <End Type="Web_IT_HELPDESKModel.Employee_Screen" Role="Employee_Screen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Screen">
+              <PropertyRef Name="ScreenId" />
+            </Principal>
+            <Dependent Role="Employee_Screen">
+              <PropertyRef Name="ScreenId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetail_Order_">
+          <End Type="Web_IT_HELPDESKModel.Order_" Role="Order_" Multiplicity="0..1" />
+          <End Type="Web_IT_HELPDESKModel.OrderDetail" Role="OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order_">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CONTRACT">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Guid" Name="ID" Nullable="false" />
+          <Property Type="String" Name="VENDOR" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PERIODID" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ADREES" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PHONE" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="REPRESENTATION" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="DATE" Precision="3" />
+          <Property Type="DateTime" Name="DATE_CREATE" Precision="3" />
+          <Property Type="String" Name="CONTRACTNAME" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Binary" Name="CONTENT" MaxLength="Max" FixedLength="false" />
+          <Property Type="String" Name="NOTE" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="USER_CREATE" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DEPARMENTID" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="DEL" />
+          <Property Type="Int32" Name="MONTHS" />
+          <Property Type="String" Name="CONTRACT_TYPE_ID" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="DATE_MATURITY" Precision="3" />
+          <Property Type="String" Name="PLANT" MaxLength="4" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CONTRACT_TYPE" Relationship="Web_IT_HELPDESKModel.FK_CONTRACT_CONTRACT_TYPE" FromRole="CONTRACT" ToRole="CONTRACT_TYPE" />
+          <NavigationProperty Name="Employee" Relationship="Web_IT_HELPDESKModel.FK_CONTRACT_Employee" FromRole="CONTRACT" ToRole="Employee" />
+          <NavigationProperty Name="PERIOD" Relationship="Web_IT_HELPDESKModel.FK_CONTRACT_PERIOD" FromRole="CONTRACT" ToRole="PERIOD" />
+          <NavigationProperty Name="CONTRACT_SUB" Relationship="Web_IT_HELPDESKModel.FK_CONTRACT_SUB_CONTRACT" FromRole="CONTRACT" ToRole="CONTRACT_SUB" />
+          <Property Name="CONTRACT_TYPE_DT_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CONTRACT_TYPE_DETAIL" Relationship="Web_IT_HELPDESKModel.FK_CONTRACT_CONTRACT_TYPE_DETAIL" FromRole="CONTRACT" ToRole="CONTRACT_TYPE_DETAIL" />
+        </EntityType>
+        <EntityType Name="CONTRACT_SUB">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Guid" Name="ID" Nullable="false" />
+          <Property Type="Guid" Name="CONTRACTID" />
+          <Property Type="String" Name="SUBNAME" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="Binary" Name="CONTENT" MaxLength="Max" FixedLength="false" />
+          <Property Type="String" Name="PERIODID" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="DATE" Precision="3" />
+          <Property Type="String" Name="USER_CREATE" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="NOTE" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="DEL" />
+          <Property Type="String" Name="PLANT" MaxLength="4" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CONTRACT" Relationship="Web_IT_HELPDESKModel.FK_CONTRACT_SUB_CONTRACT" FromRole="CONTRACT_SUB" ToRole="CONTRACT" />
+          <NavigationProperty Name="Employee" Relationship="Web_IT_HELPDESKModel.FK_CONTRACT_SUB_Employee" FromRole="CONTRACT_SUB" ToRole="Employee" />
+          <NavigationProperty Name="PERIOD" Relationship="Web_IT_HELPDESKModel.FK_CONTRACT_SUB_PERIOD" FromRole="CONTRACT_SUB" ToRole="PERIOD" />
+        </EntityType>
+        <Association Name="FK_CONTRACT_CONTRACT_TYPE">
+          <End Type="Web_IT_HELPDESKModel.CONTRACT_TYPE" Role="CONTRACT_TYPE" Multiplicity="0..1" />
+          <End Type="Web_IT_HELPDESKModel.CONTRACT" Role="CONTRACT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CONTRACT_TYPE">
+              <PropertyRef Name="CONTRACT_TYPE_ID" />
+            </Principal>
+            <Dependent Role="CONTRACT">
+              <PropertyRef Name="CONTRACT_TYPE_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CONTRACT_Employee">
+          <End Type="Web_IT_HELPDESKModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="Web_IT_HELPDESKModel.CONTRACT" Role="CONTRACT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="CONTRACT">
+              <PropertyRef Name="USER_CREATE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CONTRACT_PERIOD">
+          <End Type="Web_IT_HELPDESKModel.PERIOD" Role="PERIOD" Multiplicity="0..1" />
+          <End Type="Web_IT_HELPDESKModel.CONTRACT" Role="CONTRACT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PERIOD">
+              <PropertyRef Name="PERIOD_ID" />
+            </Principal>
+            <Dependent Role="CONTRACT">
+              <PropertyRef Name="PERIODID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CONTRACT_SUB_CONTRACT">
+          <End Type="Web_IT_HELPDESKModel.CONTRACT" Role="CONTRACT" Multiplicity="0..1" />
+          <End Type="Web_IT_HELPDESKModel.CONTRACT_SUB" Role="CONTRACT_SUB" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CONTRACT">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CONTRACT_SUB">
+              <PropertyRef Name="CONTRACTID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CONTRACT_SUB_Employee">
+          <End Type="Web_IT_HELPDESKModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="Web_IT_HELPDESKModel.CONTRACT_SUB" Role="CONTRACT_SUB" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="CONTRACT_SUB">
+              <PropertyRef Name="USER_CREATE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CONTRACT_SUB_PERIOD">
+          <End Type="Web_IT_HELPDESKModel.PERIOD" Role="PERIOD" Multiplicity="0..1" />
+          <End Type="Web_IT_HELPDESKModel.CONTRACT_SUB" Role="CONTRACT_SUB" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PERIOD">
+              <PropertyRef Name="PERIOD_ID" />
+            </Principal>
+            <Dependent Role="CONTRACT_SUB">
+              <PropertyRef Name="PERIODID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CONTRACT_TYPE_DETAIL">
+          <Key>
+            <PropertyRef Name="CONTRACT_TYPE_DT_ID" />
+          </Key>
+          <Property Name="CONTRACT_TYPE_DT_ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CONTRACT_TYPE_NAME" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CONTRACTs" Relationship="Web_IT_HELPDESKModel.FK_CONTRACT_CONTRACT_TYPE_DETAIL" FromRole="CONTRACT_TYPE_DETAIL" ToRole="CONTRACT" />
+        </EntityType>
+        <EntityType Name="EMP_ANSWER_bk20190826">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="QUESTION_ID" Type="Guid" />
+          <Property Name="EMPLOYEEID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DATE" Type="DateTime" Precision="3" />
+          <Property Name="ANSWERID" Type="Int32" />
+          <Property Name="NOTE" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="employee_bk20190826">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Position" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IDNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Others" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Job" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Status_marry" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Birthday" Type="DateTime" Precision="3" />
+          <Property Name="datetimeBegin" Type="DateTime" Precision="3" />
+          <Property Name="CellPhone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SearchField" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Del" Type="Boolean" />
+          <Property Name="DepatmentId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Plant" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="administrator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="EmployeeInfo_bk20190826">
+          <Key>
+            <PropertyRef Name="EMPNO" />
+          </Key>
+          <Property Name="EMPNO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DEPT_NAME" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="FULL_NAME" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="GRADE" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="POSITION_NAME" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="JOB_NAME" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EMP_STATUS" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="BIRTHDAY" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="HIRE_DATE" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="PHONE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EXTENSION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="REMARK" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DE" Type="Boolean" />
+          <Property Name="DEPT" Type="String" MaxLength="4" FixedLength="true" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Plant" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="name" />
+            <PropertyRef Name="principal_id" />
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_CONTRACT_CONTRACT_TYPE_DETAIL">
+          <End Type="Web_IT_HELPDESKModel.CONTRACT_TYPE_DETAIL" Role="CONTRACT_TYPE_DETAIL" Multiplicity="0..1" />
+          <End Type="Web_IT_HELPDESKModel.CONTRACT" Role="CONTRACT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CONTRACT_TYPE_DETAIL">
+              <PropertyRef Name="CONTRACT_TYPE_DT_ID" />
+            </Principal>
+            <Dependent Role="CONTRACT">
+              <PropertyRef Name="CONTRACT_TYPE_DT_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Web_IT_HELPDESKModelStoreContainer" CdmEntityContainer="Web_IT_HELPDESKEntities">
+          <FunctionImportMapping FunctionImportName="FUNC_ORDER" FunctionName="Web_IT_HELPDESKModel.Store.FUNC_ORDER">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Web_IT_HELPDESKModel.FUNC_ORDER_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TITLE" ColumnName="TITLE" />
+                <ScalarProperty Name="UNIT" ColumnName="UNIT" />
+                <ScalarProperty Name="HR" ColumnName="HR" />
+                <ScalarProperty Name="ACCOUNTING" ColumnName="ACCOUNTING" />
+                <ScalarProperty Name="ANIMAL" ColumnName="ANIMAL" />
+                <ScalarProperty Name="AQUA" ColumnName="AQUA" />
+                <ScalarProperty Name="HSE" ColumnName="HSE" />
+                <ScalarProperty Name="LOGISTIC" ColumnName="LOGISTIC" />
+                <ScalarProperty Name="MARKETING" ColumnName="MARKETING" />
+                <ScalarProperty Name="MAINTANANCE" ColumnName="MAINTANANCE" />
+                <ScalarProperty Name="PURCHASING" ColumnName="PURCHASING" />
+                <ScalarProperty Name="QC" ColumnName="QC" />
+                <ScalarProperty Name="R_D" ColumnName="R_D" />
+                <ScalarProperty Name="SALES_SUPPORT" ColumnName="SALES_SUPPORT" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PRO_INSERT_HR_MEAL" FunctionName="Web_IT_HELPDESKModel.Store.PRO_INSERT_HR_MEAL" />
+          <FunctionImportMapping FunctionImportName="func_report_detail" FunctionName="Web_IT_HELPDESKModel.Store.func_report_detail">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Web_IT_HELPDESKModel.func_report_detail_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TITLE" ColumnName="TITLE" />
+                <ScalarProperty Name="UNIT" ColumnName="UNIT" />
+                <ScalarProperty Name="HR" ColumnName="HR" />
+                <ScalarProperty Name="ACCOUNTING" ColumnName="ACCOUNTING" />
+                <ScalarProperty Name="ANIMAL" ColumnName="ANIMAL" />
+                <ScalarProperty Name="AQUA" ColumnName="AQUA" />
+                <ScalarProperty Name="HSE" ColumnName="HSE" />
+                <ScalarProperty Name="LOGISTIC" ColumnName="LOGISTIC" />
+                <ScalarProperty Name="MARKETING" ColumnName="MARKETING" />
+                <ScalarProperty Name="MAINTANANCE" ColumnName="MAINTANANCE" />
+                <ScalarProperty Name="PURCHASING" ColumnName="PURCHASING" />
+                <ScalarProperty Name="QC" ColumnName="QC" />
+                <ScalarProperty Name="R_D" ColumnName="R_D" />
+                <ScalarProperty Name="SALES_SUPPORT" ColumnName="SALES_SUPPORT" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Albums">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Album">
+              <MappingFragment StoreEntitySet="Album">
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="AlbumArtUrl" ColumnName="AlbumArtUrl" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="AlbumTypeId" ColumnName="AlbumTypeId" />
+                <ScalarProperty Name="AlbumId" ColumnName="AlbumId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AlbumTypes">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.AlbumType">
+              <MappingFragment StoreEntitySet="AlbumType">
+                <ScalarProperty Name="AlbumType1" ColumnName="AlbumType" />
+                <ScalarProperty Name="AlbumTypeId" ColumnName="AlbumTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BIZ_TRIP">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.BIZ_TRIP">
+              <MappingFragment StoreEntitySet="BIZ_TRIP">
+                <ScalarProperty Name="IT_CONFIRM" ColumnName="IT_CONFIRM" />
+                <ScalarProperty Name="NO" ColumnName="NO" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DEL" ColumnName="DEL" />
+                <ScalarProperty Name="HR_CONFIRM_IMAGE" ColumnName="HR_CONFIRM_IMAGE" />
+                <ScalarProperty Name="HR_CONFIRM" ColumnName="HR_CONFIRM" />
+                <ScalarProperty Name="DEPT_CONFIRM_IMAGE" ColumnName="DEPT_CONFIRM_IMAGE" />
+                <ScalarProperty Name="DEPT_CONFIRM" ColumnName="DEPT_CONFIRM" />
+                <ScalarProperty Name="PLANT" ColumnName="PLANT" />
+                <ScalarProperty Name="REMARK" ColumnName="REMARK" />
+                <ScalarProperty Name="USED_EQUIPMENT" ColumnName="USED_EQUIPMENT" />
+                <ScalarProperty Name="TO_DATE" ColumnName="TO_DATE" />
+                <ScalarProperty Name="FROM_DATE" ColumnName="FROM_DATE" />
+                <ScalarProperty Name="DATE" ColumnName="DATE" />
+                <ScalarProperty Name="CONTACT_DEPT" ColumnName="CONTACT_DEPT" />
+                <ScalarProperty Name="CONTACT_PERSON" ColumnName="CONTACT_PERSON" />
+                <ScalarProperty Name="CONTACT_COMPANY" ColumnName="CONTACT_COMPANY" />
+                <ScalarProperty Name="VEHICLE" ColumnName="VEHICLE" />
+                <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
+                <ScalarProperty Name="DEPT" ColumnName="DEPT" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+                <ScalarProperty Name="EMPNO" ColumnName="EMPNO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Carts">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Cart">
+              <MappingFragment StoreEntitySet="Cart">
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="Count" ColumnName="Count" />
+                <ScalarProperty Name="AlbumId" ColumnName="AlbumId" />
+                <ScalarProperty Name="CartId" ColumnName="CartId" />
+                <ScalarProperty Name="RecordId" ColumnName="RecordId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CONTRACT_TYPE">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.CONTRACT_TYPE">
+              <MappingFragment StoreEntitySet="CONTRACT_TYPE">
+                <ScalarProperty Name="CONTRACT_TYPE_NAME" ColumnName="CONTRACT_TYPE_NAME" />
+                <ScalarProperty Name="CONTRACT_TYPE_ID" ColumnName="CONTRACT_TYPE_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="Manager_Email" ColumnName="Manager_Email" />
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="Plant" ColumnName="Plant" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Documents">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Document">
+              <MappingFragment StoreEntitySet="Document">
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="DocumentTypeId" ColumnName="DocumentTypeId" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="FileContext" ColumnName="FileContext" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DocumentTypes">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.DocumentType">
+              <MappingFragment StoreEntitySet="DocumentType">
+                <ScalarProperty Name="DocumentTypeName" ColumnName="DocumentTypeName" />
+                <ScalarProperty Name="DocumentTypeId" ColumnName="DocumentTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Drinking_Request">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Drinking_Request">
+              <MappingFragment StoreEntitySet="Drinking_Request">
+                <ScalarProperty Name="Employee_name" ColumnName="Employee_name" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="HR_confirm_date" ColumnName="HR_confirm_date" />
+                <ScalarProperty Name="HR_note" ColumnName="HR_note" />
+                <ScalarProperty Name="HR_confirm" ColumnName="HR_confirm" />
+                <ScalarProperty Name="Department_confirm_date" ColumnName="Department_confirm_date" />
+                <ScalarProperty Name="Department_note" ColumnName="Department_note" />
+                <ScalarProperty Name="Department_confirm" ColumnName="Department_confirm" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EMP_ANSWER">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.EMP_ANSWER">
+              <MappingFragment StoreEntitySet="EMP_ANSWER">
+                <ScalarProperty Name="NOTE" ColumnName="NOTE" />
+                <ScalarProperty Name="ANSWERID" ColumnName="ANSWERID" />
+                <ScalarProperty Name="DATE" ColumnName="DATE" />
+                <ScalarProperty Name="EMPLOYEEID" ColumnName="EMPLOYEEID" />
+                <ScalarProperty Name="QUESTION_ID" ColumnName="QUESTION_ID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="administrator" ColumnName="administrator" />
+                <ScalarProperty Name="Plant" ColumnName="Plant" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="DepatmentId" ColumnName="DepatmentId" />
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="SearchField" ColumnName="SearchField" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="CellPhone" ColumnName="CellPhone" />
+                <ScalarProperty Name="datetimeBegin" ColumnName="datetimeBegin" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="Status_marry" ColumnName="Status_marry" />
+                <ScalarProperty Name="Job" ColumnName="Job" />
+                <ScalarProperty Name="Others" ColumnName="Others" />
+                <ScalarProperty Name="IDNumber" ColumnName="IDNumber" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employee_Screen">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Employee_Screen">
+              <MappingFragment StoreEntitySet="Employee_Screen">
+                <ScalarProperty Name="Read" ColumnName="Read" />
+                <ScalarProperty Name="Use" ColumnName="Use" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="ScreenId" ColumnName="ScreenId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeeInfoes">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.EmployeeInfo">
+              <MappingFragment StoreEntitySet="EmployeeInfo">
+                <ScalarProperty Name="Plant" ColumnName="Plant" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="DEPT" ColumnName="DEPT" />
+                <ScalarProperty Name="DE" ColumnName="DE" />
+                <ScalarProperty Name="REMARK" ColumnName="REMARK" />
+                <ScalarProperty Name="EXTENSION" ColumnName="EXTENSION" />
+                <ScalarProperty Name="PHONE" ColumnName="PHONE" />
+                <ScalarProperty Name="HIRE_DATE" ColumnName="HIRE_DATE" />
+                <ScalarProperty Name="BIRTHDAY" ColumnName="BIRTHDAY" />
+                <ScalarProperty Name="EMP_STATUS" ColumnName="EMP_STATUS" />
+                <ScalarProperty Name="JOB_NAME" ColumnName="JOB_NAME" />
+                <ScalarProperty Name="POSITION_NAME" ColumnName="POSITION_NAME" />
+                <ScalarProperty Name="GRADE" ColumnName="GRADE" />
+                <ScalarProperty Name="FULL_NAME" ColumnName="FULL_NAME" />
+                <ScalarProperty Name="DEPT_NAME" ColumnName="DEPT_NAME" />
+                <ScalarProperty Name="EMPNO" ColumnName="EMPNO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Events">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Event">
+              <MappingFragment StoreEntitySet="Event">
+                <ScalarProperty Name="STATUS" ColumnName="STATUS" />
+                <ScalarProperty Name="END" ColumnName="END" />
+                <ScalarProperty Name="START" ColumnName="START" />
+                <ScalarProperty Name="TITLE" ColumnName="TITLE" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hr_emp_infor">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.hr_emp_infor">
+              <MappingFragment StoreEntitySet="hr_emp_infor">
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="Employee_Name" ColumnName="Employee_Name" />
+                <ScalarProperty Name="Employee_Id" ColumnName="Employee_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hr_emp_meal">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.hr_emp_meal">
+              <MappingFragment StoreEntitySet="hr_emp_meal">
+                <ScalarProperty Name="TypeMeal" ColumnName="TypeMeal" />
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="IMAGE" ColumnName="IMAGE" />
+                <ScalarProperty Name="EMPNO" ColumnName="EMPNO" />
+                <ScalarProperty Name="Num" ColumnName="Num" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Incidents">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Incident">
+              <MappingFragment StoreEntitySet="Incidents">
+                <ScalarProperty Name="Plant" ColumnName="Plant" />
+                <ScalarProperty Name="Solve_datetime" ColumnName="Solve_datetime" />
+                <ScalarProperty Name="Solved" ColumnName="Solved" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="FileAttched" ColumnName="FileAttched" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="User_resolve" ColumnName="User_resolve" />
+                <ScalarProperty Name="User_create" ColumnName="User_create" />
+                <ScalarProperty Name="Reply" ColumnName="Reply" />
+                <ScalarProperty Name="LevelId" ColumnName="LevelId" />
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+                <ScalarProperty Name="datetime" ColumnName="datetime" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Levels">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Level">
+              <MappingFragment StoreEntitySet="Level">
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="datetime_rate" ColumnName="datetime_rate" />
+                <ScalarProperty Name="LevelName" ColumnName="LevelName" />
+                <ScalarProperty Name="LevelId" ColumnName="LevelId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Order_">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Order_">
+              <MappingFragment StoreEntitySet="Order_">
+                <ScalarProperty Name="Plant" ColumnName="Plant" />
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="Employee_Name" ColumnName="Employee_Name" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="Confirmed" ColumnName="Confirmed" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderDetails">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.OrderDetail">
+              <MappingFragment StoreEntitySet="OrderDetail">
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="AlbumId" ColumnName="AlbumId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="OrderDetailId" ColumnName="OrderDetailId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PERIODs">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.PERIOD">
+              <MappingFragment StoreEntitySet="PERIOD">
+                <ScalarProperty Name="DEL" ColumnName="DEL" />
+                <ScalarProperty Name="MONTHS" ColumnName="MONTHS" />
+                <ScalarProperty Name="PERIOD_NAME" ColumnName="PERIOD_NAME" />
+                <ScalarProperty Name="PERIOD_ID" ColumnName="PERIOD_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QUESTIONs">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.QUESTION">
+              <MappingFragment StoreEntitySet="QUESTION">
+                <ScalarProperty Name="DEL" ColumnName="DEL" />
+                <ScalarProperty Name="NOTE" ColumnName="NOTE" />
+                <ScalarProperty Name="ANSWER_ID" ColumnName="ANSWER_ID" />
+                <ScalarProperty Name="QUESTION_CONTENT" ColumnName="QUESTION_CONTENT" />
+                <ScalarProperty Name="NO" ColumnName="NO" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Screens">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Screen">
+              <MappingFragment StoreEntitySet="Screen">
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="HTMLcode" ColumnName="HTMLcode" />
+                <ScalarProperty Name="ScreenName" ColumnName="ScreenName" />
+                <ScalarProperty Name="ScreenId" ColumnName="ScreenId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Seal_Using">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Seal_Using">
+              <MappingFragment StoreEntitySet="Seal_Using">
+                <ScalarProperty Name="Plant" ColumnName="Plant" />
+                <ScalarProperty Name="Name_signature" ColumnName="Name_signature" />
+                <ScalarProperty Name="Date_signature" ColumnName="Date_signature" />
+                <ScalarProperty Name="Employee_Seal_keep_note" ColumnName="Employee_Seal_keep_note" />
+                <ScalarProperty Name="Department_confirm_date" ColumnName="Department_confirm_date" />
+                <ScalarProperty Name="Department_note" ColumnName="Department_note" />
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="Employee_Seal_keep_confrim" ColumnName="Employee_Seal_keep_confrim" />
+                <ScalarProperty Name="Department_confirm" ColumnName="Department_confirm" />
+                <ScalarProperty Name="Employee_Seal_keep" ColumnName="Employee_Seal_keep" />
+                <ScalarProperty Name="Period_date" ColumnName="Period_date" />
+                <ScalarProperty Name="Place_Recipient" ColumnName="Place_Recipient" />
+                <ScalarProperty Name="Context" ColumnName="Context" />
+                <ScalarProperty Name="Code_number" ColumnName="Code_number" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="Type_document" ColumnName="Type_document" />
+                <ScalarProperty Name="Employee_name" ColumnName="Employee_name" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Status">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Status">
+              <MappingFragment StoreEntitySet="Status">
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserLogons">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.UserLogon">
+              <MappingFragment StoreEntitySet="UserLogon">
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="DepatmentId" ColumnName="DepatmentId" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserLogIn" ColumnName="UserLogIn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ORDER_TYPE_VIEW">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.ORDER_TYPE_VIEW">
+              <MappingFragment StoreEntitySet="ORDER_TYPE_VIEW">
+                <ScalarProperty Name="AlbumTypeId" ColumnName="AlbumTypeId" />
+                <ScalarProperty Name="Plant" ColumnName="Plant" />
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="Employee_Name" ColumnName="Employee_Name" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="Confirmed" ColumnName="Confirmed" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CONTRACTs">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.CONTRACT">
+              <MappingFragment StoreEntitySet="CONTRACT">
+                <ScalarProperty Name="CONTRACT_TYPE_DT_ID" ColumnName="CONTRACT_TYPE_DT_ID" />
+                <ScalarProperty Name="PLANT" ColumnName="PLANT" />
+                <ScalarProperty Name="DATE_MATURITY" ColumnName="DATE_MATURITY" />
+                <ScalarProperty Name="CONTRACT_TYPE_ID" ColumnName="CONTRACT_TYPE_ID" />
+                <ScalarProperty Name="MONTHS" ColumnName="MONTHS" />
+                <ScalarProperty Name="DEL" ColumnName="DEL" />
+                <ScalarProperty Name="DEPARMENTID" ColumnName="DEPARMENTID" />
+                <ScalarProperty Name="USER_CREATE" ColumnName="USER_CREATE" />
+                <ScalarProperty Name="NOTE" ColumnName="NOTE" />
+                <ScalarProperty Name="CONTENT" ColumnName="CONTENT" />
+                <ScalarProperty Name="CONTRACTNAME" ColumnName="CONTRACTNAME" />
+                <ScalarProperty Name="DATE_CREATE" ColumnName="DATE_CREATE" />
+                <ScalarProperty Name="DATE" ColumnName="DATE" />
+                <ScalarProperty Name="REPRESENTATION" ColumnName="REPRESENTATION" />
+                <ScalarProperty Name="PHONE" ColumnName="PHONE" />
+                <ScalarProperty Name="ADREES" ColumnName="ADREES" />
+                <ScalarProperty Name="PERIODID" ColumnName="PERIODID" />
+                <ScalarProperty Name="VENDOR" ColumnName="VENDOR" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CONTRACT_SUB">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.CONTRACT_SUB">
+              <MappingFragment StoreEntitySet="CONTRACT_SUB">
+                <ScalarProperty Name="PLANT" ColumnName="PLANT" />
+                <ScalarProperty Name="DEL" ColumnName="DEL" />
+                <ScalarProperty Name="NOTE" ColumnName="NOTE" />
+                <ScalarProperty Name="USER_CREATE" ColumnName="USER_CREATE" />
+                <ScalarProperty Name="DATE" ColumnName="DATE" />
+                <ScalarProperty Name="PERIODID" ColumnName="PERIODID" />
+                <ScalarProperty Name="CONTENT" ColumnName="CONTENT" />
+                <ScalarProperty Name="SUBNAME" ColumnName="SUBNAME" />
+                <ScalarProperty Name="CONTRACTID" ColumnName="CONTRACTID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CONTRACT_TYPE_DETAIL">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.CONTRACT_TYPE_DETAIL">
+              <MappingFragment StoreEntitySet="CONTRACT_TYPE_DETAIL">
+                <ScalarProperty Name="CONTRACT_TYPE_NAME" ColumnName="CONTRACT_TYPE_NAME" />
+                <ScalarProperty Name="CONTRACT_TYPE_DT_ID" ColumnName="CONTRACT_TYPE_DT_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EMP_ANSWER_bk20190826">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.EMP_ANSWER_bk20190826">
+              <MappingFragment StoreEntitySet="EMP_ANSWER_bk20190826">
+                <ScalarProperty Name="NOTE" ColumnName="NOTE" />
+                <ScalarProperty Name="ANSWERID" ColumnName="ANSWERID" />
+                <ScalarProperty Name="DATE" ColumnName="DATE" />
+                <ScalarProperty Name="EMPLOYEEID" ColumnName="EMPLOYEEID" />
+                <ScalarProperty Name="QUESTION_ID" ColumnName="QUESTION_ID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="employee_bk20190826">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.employee_bk20190826">
+              <MappingFragment StoreEntitySet="employee_bk20190826">
+                <ScalarProperty Name="administrator" ColumnName="administrator" />
+                <ScalarProperty Name="Plant" ColumnName="Plant" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="DepatmentId" ColumnName="DepatmentId" />
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="SearchField" ColumnName="SearchField" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="CellPhone" ColumnName="CellPhone" />
+                <ScalarProperty Name="datetimeBegin" ColumnName="datetimeBegin" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="Status_marry" ColumnName="Status_marry" />
+                <ScalarProperty Name="Job" ColumnName="Job" />
+                <ScalarProperty Name="Others" ColumnName="Others" />
+                <ScalarProperty Name="IDNumber" ColumnName="IDNumber" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeeInfo_bk20190826">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.EmployeeInfo_bk20190826">
+              <MappingFragment StoreEntitySet="EmployeeInfo_bk20190826">
+                <ScalarProperty Name="Plant" ColumnName="Plant" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="DEPT" ColumnName="DEPT" />
+                <ScalarProperty Name="DE" ColumnName="DE" />
+                <ScalarProperty Name="REMARK" ColumnName="REMARK" />
+                <ScalarProperty Name="EXTENSION" ColumnName="EXTENSION" />
+                <ScalarProperty Name="PHONE" ColumnName="PHONE" />
+                <ScalarProperty Name="HIRE_DATE" ColumnName="HIRE_DATE" />
+                <ScalarProperty Name="BIRTHDAY" ColumnName="BIRTHDAY" />
+                <ScalarProperty Name="EMP_STATUS" ColumnName="EMP_STATUS" />
+                <ScalarProperty Name="JOB_NAME" ColumnName="JOB_NAME" />
+                <ScalarProperty Name="POSITION_NAME" ColumnName="POSITION_NAME" />
+                <ScalarProperty Name="GRADE" ColumnName="GRADE" />
+                <ScalarProperty Name="FULL_NAME" ColumnName="FULL_NAME" />
+                <ScalarProperty Name="DEPT_NAME" ColumnName="DEPT_NAME" />
+                <ScalarProperty Name="EMPNO" ColumnName="EMPNO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

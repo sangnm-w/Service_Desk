@@ -1,0 +1,91 @@
+﻿@{
+    ViewBag.Title = "CJ VINA PORTAL WEBSITE";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="../../Content/js/responsiveslides.js"></script>
+<link href="../../Content/Site.css" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.js")" type="text/javascript"></script>
+
+
+<div style="text-align:center">
+<div class="rslides">
+  <div><img src="../../Content/img/example-slide-1.jpg" alt=""></div>
+  <div><img src="../../Content/img/example-slide-2.jpg" alt=""></div>
+  <div><img src="../../Content/img/example-slide-3.jpg" alt=""></div>
+  <div><img src="../../Content/img/example-slide-4.jpg" alt=""></div>
+</div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#toggle1").click(function () {
+            $("#div1").show();
+            $("#div2").hide();
+        });
+        $("#toggle2").click(function () {
+            $("#div2").show();
+            $("#div1").hide();
+        });
+    });
+</script>
+
+<script>
+  $(function() {
+      $(".rslides").responsiveSlides();
+  });
+</script>
+
+<div id="wrapper">
+<div id="slider">
+   <h2>THIS IS PORTAL WEBSITE</h2>
+    <br />
+    <br />
+  <ul>
+      <h3>-----------------------------------------------</h3>
+  <li>
+      <a href="#home">THÔNG BÁO - CÔNG VĂN</a>
+      <ul> 
+          <li><button id="toggle1">@Ajax.ActionLink(
+                "Mới phát hành",
+                "partial0000001",
+                "Document",
+                null,
+                new AjaxOptions
+                {
+                    UpdateTargetId = "div1",
+                    InsertionMode = InsertionMode.Replace
+                }, new { @class = "button" }
+            )</button>
+           </li> 
+          <li><a href="#home">Năm 2016 </a></li>
+          <li><a href="#home">Năm 2015 </a></li>
+      </ul>
+  </li>
+   <h3>-----------------------------------------------</h3>
+  <li>
+      <a href="#news">VĂN BẢN - QUY TRÌNH</a></li>
+      <h3>-----------------------------------------------</h3>
+  <li> 
+      <a href="http://52.213.3.168/servicedesk/Document/Contactlist2">THÔNG TIN LIÊN HỆ
+      </a></li>
+      <h3>-----------------------------------------------</h3>
+  <li> <a href="#about">TRA CỨU</a></li>
+      <h3>-----------------------------------------------</h3>
+  <li> <a href="#home">BOD</a>
+      <h3>-----------------------------------------------</h3>
+  </ul>
+</div>
+
+    <div id="content">
+     <div id="div1">
+         @{Html.RenderAction("partial0000001", "Document");}
+     </div>
+</div>
+
+
+</div>
+<div style="clear:both"></div>
+
+ 

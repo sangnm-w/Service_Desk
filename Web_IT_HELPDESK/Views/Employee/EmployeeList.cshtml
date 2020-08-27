@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Web_IT_HELPDESK.Employee>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="../../Content/js/responsiveslides.js"></script>
+<link href="../../Content/Site.css" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.js")" type="text/javascript"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $(".toggle1").click(function () {
+            $("#div1").show();
+            $("#div2").hide();
+            $("#div_result").hide();
+        });
+        $("#toggle2").click(function () {
+            $("#div2").show();
+            $("#div1").hide();
+            $("#div_result").hide();
+        });
+        $(".toggle3").click(function () {
+            $("#div_result").show();
+            $("#div2").hide();
+            $("#div1").hide();
+        });
+    });
+</script>
+
+<div style="float:left; width:20% auto;"> 
+<table>
+    <tr>
+        <th>
+           Id
+        </th>
+        <th>
+          Name
+        </th>
+    </tr>
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+                    <a class="toggle1">   @Ajax.ActionLink(
+                                 item.EmployeeID,
+                                "EditRoleViewModel",
+                                "Employee",
+                                new { v_emp_id = item.EmployeeID },
+                                new AjaxOptions
+                                {
+                                    UpdateTargetId = "div1",
+                                    InsertionMode = InsertionMode.Replace,
+                                },
+                              new { @class = "button" }
+                            )
+                  </a>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmployeeName)
+        </td>
+    </tr>
+}
+</table>
+</div>
+  <div id="div1" style="float:left; width:30% auto; border: 1px solid #fff;"></div>

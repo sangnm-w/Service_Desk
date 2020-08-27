@@ -1,0 +1,373 @@
+﻿@model Web_IT_HELPDESK.BIZ_TRIP
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+ <div class="page-content">
+   <div class="row">
+	  <div class="col-md-10">
+
+        <div class="col-md-12 panel-info">
+			<div class="content-box-header panel-heading">
+		  		<div class="panel-title ">Adding New BIZ TRIP</div>
+							
+				<div class="panel-options">
+					<a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
+					<a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
+				</div>
+			</div>
+            <div class="content-box-large box-with-header">
+                   @using (Html.BeginForm()) {
+            @Html.ValidationSummary(true)
+				  			<div>
+                                  
+								<div class="row">
+									<div class="col-sm-4">
+										Date time <input type="text" class="form-control" id="DATE" name="DATE" value="@Model.DATE">
+									</div>
+                                    <div class="col-sm-4">
+                                        DEPARTMENT <input type="text" class="form-control" disabled="disabled" id="DEPT" name="DEPT" value="@ViewBag.DEPT">
+									</div>
+                                </div>
+                                <div class="row">
+									<div class="col-sm-6">
+										FULL NAME (Họ và tên) <input type="text" class="form-control" id="NAME" name="NAME" value="@ViewBag.NAME">
+									</div>
+                                    <div class="col-sm-6">
+										EMPLOYEE’S ID <input type="text" class="form-control" disabled="disabled" id="EMPNO" name="EMPNO" value="@ViewBag.EMPNO">
+									</div>
+                                </div>
+                                <div class="row">
+									<div class="col-sm-6">
+										JOB TITLE (Chức vụ) <input type="text" class="form-control" id="Job" name="Job" value="">
+									</div>
+                                    <div class="col-sm-6">
+										DEPARTMENT (Bộ phận) <input type="text" class="form-control" disabled="disabled" id="DepartmentName" name="DepartmentName" value="@ViewBag.DepartmentName">
+									</div>
+                                </div>
+                                <hr>
+                                <div class="row">
+									<div class="col-sm-12">
+										Means of Transportation (Phương tiện đi công tác):    @Html.DropDownListFor(x => x.VEHICLE, new List<SelectListItem>
+                                                                                                {
+                                                                                                  new SelectListItem() {Text = "Personal", Value="Personal"},
+                                                                                                  new SelectListItem() {Text = "Company car", Value="Company_car"},
+                                                                                                  new SelectListItem() {Text = "Public", Value="Public"}
+                                                                                                })   
+									</div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <!--div class="col-sm-12">
+                                        <h4><input type="text" class="form-control" style="text-align:center" disabled="disabled" value="PURPOSE OF BUSINESS TRIP (Nội Dung Công Tác)" /></h4>
+                                    </div-->
+                                    <div class="col-sm-12">
+                                        <h4><input type="text" class="form-control" style="text-align:center" id="DESCRIPTION" name="DESCRIPTION" placeholder="PURPOSE OF BUSINESS TRIP (Nội Dung Công Tác)" value="@Model.DESCRIPTION" /></h4>
+                                    </div>
+                                </div>
+
+                                 <div class="row">
+									<div class="col-sm-6" style="text-align:center">
+										<h5>CONTACT PLACE (Nơi liên hệ) </h5>
+									</div>
+                                    <div class="col-sm-6" style="text-align:center">
+										<h5>ESTIMATED DURATION (Thời Gian Dự Kiến) </h5>
+									</div>
+                                </div>
+
+                                   <div class="row">
+									<div class="col-sm-6">
+										Company (Công ty) <input type="text" class="form-control" id="CONTACT_COMPANY" name="CONTACT_COMPANY" value="@Model.CONTACT_COMPANY">
+                                        Contact person (Người liên hệ) <input type="text" class="form-control" id="CONTACT_PERSON" name="CONTACT_PERSON" value="@Model.CONTACT_PERSON">
+									</div>
+                                    <div class="col-sm-6">
+                                        From (Từ giờ) 
+                                        <div class="input-group bfh-datepicker-toggle" data-toggle="bfh-datepicker">
+                                            <span class="input-group-addon">
+                                                <i class="glyphicon glyphicon-calendar"></i>
+                                            </span>
+                                            <input class="bfh-datepicker" data-format="y-m-d" data-date="today" type="date" id="FROM_DATE" name="FROM_DATE" required = "required"  >
+                                              hour: <select id='p_hour_f' name='p_hour_f' style ="width:50px">
+                                                     <option selected='selected'  value='00'>00</option>
+                                                     <option value='01'>01</option><option value='02'>02</option><option value='03'>03</option><option value='04'>04</option>
+                                                     <option value='05'>05</option><option value='06'>06</option><option value='07'>07</option><option value='08'>08</option>
+                                                     <option value='09'>09</option><option value='10'>10</option><option value='11'>11</option><option value='12'>12</option>
+                                                     <option value='13'>13</option><option value='14'>14</option><option value='15'>15</option><option value='16'>16</option>
+                                                     <option value='17'>17</option><option value='18'>18</option><option value='19'>19</option><option value='20'>20</option>
+                                                     <option value='21'>21</option><option value='22'>22</option><option value='23'>23</option>
+                                                     </select>
+                                                     minute: <select id='p_minute_f' name='p_minute_f' style ="width:50px">
+                                                     <option selected='selected' value='00'>00</option>
+                                                     <option value='01'>01</option><option value='02'>02</option><option value='03'>03</option><option value='04'>04</option>
+                                                     <option value='05'>05</option><option value='06'>06</option><option value='07'>07</option><option value='08'>08</option>
+                                                     <option value='09'>09</option><option value='10'>10</option><option value='11'>11</option><option value='12'>12</option>
+                                                     <option value='13'>13</option><option value='14'>14</option><option value='15'>15</option><option value='16'>16</option>
+                                                     <option value='17'>17</option><option value='18'>18</option><option value='19'>19</option><option value='20'>20</option>
+                                                     <option value='21'>21</option><option value='22'>22</option><option value='23'>23</option><option value='24'>24</option>
+                                                     <option value='25'>25</option><option value='26'>26</option><option value='27'>27</option><option value='28'>28</option>
+                                                     <option value='29'>29</option><option value='30'>30</option><option value='31'>31</option><option value='32'>32</option>
+                                                     <option value='33'>33</option><option value='34'>34</option><option value='35'>35</option><option value='36'>36</option>
+                                                     <option value='37'>37</option><option value='38'>38</option><option value='39'>39</option><option value='40'>40</option>
+                                                     <option value='41'>41</option><option value='42'>42</option><option value='43'>43</option><option value='44'>44</option>
+                                                     <option value='45'>45</option><option value='46'>46</option><option value='47'>47</option><option value='48'>48</option>
+                                                     <option value='49'>49</option><option value='50'>50</option><option value='51'>51</option><option value='52'>52</option>
+                                                     <option value='53'>53</option><option value='54'>54</option><option value='55'>55</option><option value='56'>56</option>
+                                                     <option value='57'>57</option><option value='58'>58</option><option value='59'>59</option>
+                                                     </select>
+                                        </div>
+                                        To (Đến giờ) 
+                                        <div class="input-group bfh-datepicker-toggle" data-toggle="bfh-datepicker">
+                                            <span class="input-group-addon" >
+                                              <i class="glyphicon glyphicon-calendar">
+                                              </i>
+                                            </span>
+                                            <input class="bfh-datepicker" data-format="y-m-d" data-date="today" type="date" id="TO_DATE" name="TO_DATE" required = "required"  >
+                                             hour: <select id='p_hour_t' name='p_hour_t' style ="width:50px">
+                                                 <option selected='selected'  value='00'>00</option>
+                                                 <option value='01'>01</option><option value='02'>02</option><option value='03'>03</option><option value='04'>04</option>
+                                                 <option value='05'>05</option><option value='06'>06</option><option value='07'>07</option><option value='08'>08</option>
+                                                 <option value='09'>09</option><option value='10'>10</option><option value='11'>11</option><option value='12'>12</option>
+                                                 <option value='13'>13</option><option value='14'>14</option><option value='15'>15</option><option value='16'>16</option>
+                                                 <option value='17'>17</option><option value='18'>18</option><option value='19'>19</option><option value='20'>20</option>
+                                                 <option value='21'>21</option><option value='22'>22</option><option value='23'>23</option>
+                                                 </select>
+
+                                                  minute: <select id='p_minute_t' name='p_minute_t' style ="width:50px">
+                                                 <option selected='selected' value='00'>00</option>
+                                                 <option value='01'>01</option><option value='02'>02</option><option value='03'>03</option><option value='04'>04</option>
+                                                 <option value='05'>05</option><option value='06'>06</option><option value='07'>07</option><option value='08'>08</option>
+                                                 <option value='09'>09</option><option value='10'>10</option><option value='11'>11</option><option value='12'>12</option>
+                                                 <option value='13'>13</option><option value='14'>14</option><option value='15'>15</option><option value='16'>16</option>
+                                                 <option value='17'>17</option><option value='18'>18</option><option value='19'>19</option><option value='20'>20</option>
+                                                 <option value='21'>21</option><option value='22'>22</option><option value='23'>23</option><option value='24'>24</option>
+                                                 <option value='25'>25</option><option value='26'>26</option><option value='27'>27</option><option value='28'>28</option>
+                                                 <option value='29'>29</option><option value='30'>30</option><option value='31'>31</option><option value='32'>32</option>
+                                                 <option value='33'>33</option><option value='34'>34</option><option value='35'>35</option><option value='36'>36</option>
+                                                 <option value='37'>37</option><option value='38'>38</option><option value='39'>39</option><option value='40'>40</option>
+                                                 <option value='41'>41</option><option value='42'>42</option><option value='43'>43</option><option value='44'>44</option>
+                                                 <option value='45'>45</option><option value='46'>46</option><option value='47'>47</option><option value='48'>48</option>
+                                                 <option value='49'>49</option><option value='50'>50</option><option value='51'>51</option><option value='52'>52</option>
+                                                 <option value='53'>53</option><option value='54'>54</option><option value='55'>55</option><option value='56'>56</option>
+                                                 <option value='57'>57</option><option value='58'>58</option><option value='59'>59</option>
+                                                 </select>
+                                        </div>
+									</div>
+                                    
+                                </div>
+                                  
+
+                                 <div class="row">
+                                    <div class="col-sm-12">
+                                    Contact Dept - /Phòng ban liên hệ/
+                                       <input type="text" class="form-control" id="CONTACT_DEPT" name="CONTACT_DEPT"  value="@Model.CONTACT_DEPT" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                      Bring Equipment - /Mang thiết bị/  <input id="USED_EQUIPMENT" name="USED_EQUIPMENT" type="checkbox">
+                                            @Html.DropDownListFor(x => x.REMARK, new List<SelectListItem>
+                                                {
+                                                                    new SelectListItem() {Text = "NONE", Value="none"},
+                                                                    new SelectListItem() {Text = "LAPTOP", Value="laptop"},
+                                                                    new SelectListItem() {Text = "PRINTER", Value="printer"}
+                                                },new {@disabled="disabled"})  
+                                   </div>
+                                   <div class="col-sm-4">
+								     <div class="btn btn-primary">
+											<input type="submit" class="fa fa-save"/>
+								     </div>
+                                   </div>
+                                </div>
+                                <hr>
+                                <div>
+                                    @Html.ActionLink("Back to List", "Index")
+                                </div>
+							</div>
+                   }
+			</div>
+        </div>
+
+        <!--using (Html.BeginForm()) {
+            @Html.ValidationSummary(true)
+            <fieldset>
+                <legend>BIZ_TRIP</legend>
+                <table style="width:900px">
+                <tr>
+                <th> Employee no - /Mã nhân viên/ </th>
+                <th> <br />
+                     Html.TextBox("EMPNO", (string)ViewBag.EMPNO,new { class = "text-box single-line", readonly = "readonly", onfocus = "this.blur()" , style="background-color:#DEDEDE;"})
+                     Html.ValidationMessageFor(model => model.EMPNO)
+
+                </th> 
+                </tr>
+
+                <tr>
+                <th> Employee name - /Họ tên nhân viên/  </th>
+                <th> <br />
+                     Html.TextBox("NAME", (string)ViewBag.NAME)
+                     Html.ValidationMessageFor(model => model.NAME) </th> 
+                </tr>
+                <tr>
+                <th> Html.LabelFor(model => model.DEPT)    -  /Mã phòng ban/ </th>
+                <th> <br />
+                     Html.TextBox("DEPT", (string)ViewBag.DEPT,new { class = "text-box single-line", readonly = "readonly", onfocus = "this.blur()", style="background-color:#DEDEDE;" })
+                     Html.ValidationMessageFor(model => model.DEPT) </th> 
+                </tr>
+                 <tr>
+                <th> DepartmentName    -  /Tên phòng ban/ </th>
+                <th> <br />
+                     Html.TextBox("DepartmentName", (string)ViewBag.DepartmentName,new { class = "text-box single-line", readonly = "readonly", onfocus = "this.blur()", style="background-color:#DEDEDE;" }) </th> 
+                </tr>
+                <tr style="width:90px">
+                <th style="width:90px"> Description -  /Nội dung công tác/  </th>
+                <th style="width:90px"> <br /> Html.TextBox("DESCRIPTION", null, new { id = "add confirm", type = "string", required = "required", style="width:300px", cols="50" }) </th> 
+                </tr>
+                <tr>
+                <th> Vehicle - /Phương tiện công tác/ </th>
+                <th> <br />
+                    Html.DropDownListFor(x => x.VEHICLE, new List<SelectListItem>
+                    {
+                                        new SelectListItem() {Text = "Personal", Value="Personal"},
+                                        new SelectListItem() {Text = "Company car", Value="Company_car"},
+                                        new SelectListItem() {Text = "Public", Value="Public"}
+                    })   </th> 
+                </tr>
+                 <tr>
+                <th> Contact company - /Công ty liên hệ/ </th>
+                <th> <br /> Html.TextBox("CONTACT_COMPANY", null, new { id = "add confirm", type = "string", required = "required", style="width:300px"  }) </th> 
+                </tr>
+                <tr>
+                <th> Contact person - /Người liên hệ/ </th>
+                <th> <br />
+                     Html.TextBox("CONTACT_PERSON", null, new { id = "add confirm", type = "string", required = "required", style="width:300px"  }) </th> 
+                </tr>
+                <tr>
+                <th> Contact Dept - /Phòng ban liên hệ/  </th>
+                <th> <br />
+                     Html.TextBox("CONTACT_DEPT", null, new { id = "add confirm", type = "string", required = "required", style="width:300px"  }) </th> 
+                </tr>
+                <tr>
+                <th> Html.LabelFor(model => model.DATE)  -  /Ngày tạo/ </th>
+                <th> <br />
+                     Html.TextBoxFor(model => model.DATE, new { class = "text-box single-line", readonly = "readonly", onfocus = "this.blur()" , style="background-color:#DEDEDE;"})
+                     Html.ValidationMessageFor(model => model.DATE) </th> 
+                </tr>
+                <tr>
+                <th> Html.LabelFor(model => model.FROM_DATE) </th>
+                <th> <br />
+                    Html.TextBox("FROM_DATE", null, new { id = "add confirm", type = "date", required = "required" }) 
+
+                     hour: <select id='p_hour_f' name='p_hour_f' style ="width:50px">
+                     <option selected='selected'  value='00'>00</option>
+                     <option value='01'>01</option><option value='02'>02</option><option value='03'>03</option><option value='04'>04</option>
+                     <option value='05'>05</option><option value='06'>06</option><option value='07'>07</option><option value='08'>08</option>
+                     <option value='09'>09</option><option value='10'>10</option><option value='11'>11</option><option value='12'>12</option>
+                     <option value='13'>13</option><option value='14'>14</option><option value='15'>15</option><option value='16'>16</option>
+                     <option value='17'>17</option><option value='18'>18</option><option value='19'>19</option><option value='20'>20</option>
+                     <option value='21'>21</option><option value='22'>22</option><option value='23'>23</option>
+                     </select>
+                     minute: <select id='p_minute_f' name='p_minute_f' style ="width:50px">
+                     <option selected='selected' value='00'>00</option>
+                     <option value='01'>01</option><option value='02'>02</option><option value='03'>03</option><option value='04'>04</option>
+                     <option value='05'>05</option><option value='06'>06</option><option value='07'>07</option><option value='08'>08</option>
+                     <option value='09'>09</option><option value='10'>10</option><option value='11'>11</option><option value='12'>12</option>
+                     <option value='13'>13</option><option value='14'>14</option><option value='15'>15</option><option value='16'>16</option>
+                     <option value='17'>17</option><option value='18'>18</option><option value='19'>19</option><option value='20'>20</option>
+                     <option value='21'>21</option><option value='22'>22</option><option value='23'>23</option><option value='24'>24</option>
+                     <option value='25'>25</option><option value='26'>26</option><option value='27'>27</option><option value='28'>28</option>
+                     <option value='29'>29</option><option value='30'>30</option><option value='31'>31</option><option value='32'>32</option>
+                     <option value='33'>33</option><option value='34'>34</option><option value='35'>35</option><option value='36'>36</option>
+                     <option value='37'>37</option><option value='38'>38</option><option value='39'>39</option><option value='40'>40</option>
+                     <option value='41'>41</option><option value='42'>42</option><option value='43'>43</option><option value='44'>44</option>
+                     <option value='45'>45</option><option value='46'>46</option><option value='47'>47</option><option value='48'>48</option>
+                     <option value='49'>49</option><option value='50'>50</option><option value='51'>51</option><option value='52'>52</option>
+                     <option value='53'>53</option><option value='54'>54</option><option value='55'>55</option><option value='56'>56</option>
+                     <option value='57'>57</option><option value='58'>58</option><option value='59'>59</option>
+                     </select>
+                </th> 
+
+                </tr>
+                <tr>
+                <th> Html.LabelFor(model => model.TO_DATE) </th>
+                <th> <br />
+                     Html.TextBox("TO_DATE", null, new { id = "add confirm", type = "date", required = "required" }) 
+
+                      hour: <select id='p_hour_t' name='p_hour_t' style ="width:50px">
+                     <option selected='selected'  value='00'>00</option>
+                     <option value='01'>01</option><option value='02'>02</option><option value='03'>03</option><option value='04'>04</option>
+                     <option value='05'>05</option><option value='06'>06</option><option value='07'>07</option><option value='08'>08</option>
+                     <option value='09'>09</option><option value='10'>10</option><option value='11'>11</option><option value='12'>12</option>
+                     <option value='13'>13</option><option value='14'>14</option><option value='15'>15</option><option value='16'>16</option>
+                     <option value='17'>17</option><option value='18'>18</option><option value='19'>19</option><option value='20'>20</option>
+                     <option value='21'>21</option><option value='22'>22</option><option value='23'>23</option>
+                     </select>
+
+                      minute: <select id='p_minute_t' name='p_minute_t' style ="width:50px">
+                     <option selected='selected' value='00'>00</option>
+                     <option value='01'>01</option><option value='02'>02</option><option value='03'>03</option><option value='04'>04</option>
+                     <option value='05'>05</option><option value='06'>06</option><option value='07'>07</option><option value='08'>08</option>
+                     <option value='09'>09</option><option value='10'>10</option><option value='11'>11</option><option value='12'>12</option>
+                     <option value='13'>13</option><option value='14'>14</option><option value='15'>15</option><option value='16'>16</option>
+                     <option value='17'>17</option><option value='18'>18</option><option value='19'>19</option><option value='20'>20</option>
+                     <option value='21'>21</option><option value='22'>22</option><option value='23'>23</option><option value='24'>24</option>
+                     <option value='25'>25</option><option value='26'>26</option><option value='27'>27</option><option value='28'>28</option>
+                     <option value='29'>29</option><option value='30'>30</option><option value='31'>31</option><option value='32'>32</option>
+                     <option value='33'>33</option><option value='34'>34</option><option value='35'>35</option><option value='36'>36</option>
+                     <option value='37'>37</option><option value='38'>38</option><option value='39'>39</option><option value='40'>40</option>
+                     <option value='41'>41</option><option value='42'>42</option><option value='43'>43</option><option value='44'>44</option>
+                     <option value='45'>45</option><option value='46'>46</option><option value='47'>47</option><option value='48'>48</option>
+                     <option value='49'>49</option><option value='50'>50</option><option value='51'>51</option><option value='52'>52</option>
+                     <option value='53'>53</option><option value='54'>54</option><option value='55'>55</option><option value='56'>56</option>
+                     <option value='57'>57</option><option value='58'>58</option><option value='59'>59</option>
+                     </select>
+                </th> 
+                </tr>
+                <tr>
+                <th> Html.LabelFor(model => model.USED_EQUIPMENT) </th>
+                <th> <br />
+                     Html.CheckBoxFor(model => model.USED_EQUIPMENT)
+                     Html.ValidationMessageFor(model => model.USED_EQUIPMENT) </th> 
+                </tr>
+                <tr>
+                <th> Bring Equipment - Mang thiết bị  </th>
+                <th> <br />
+                    Html.DropDownListFor(x => x.REMARK, new List<SelectListItem>
+                        {
+                                            new SelectListItem() {Text = "NONE", Value="none"},
+                                            new SelectListItem() {Text = "LAPTOP", Value="laptop"},
+                                            new SelectListItem() {Text = "PRINTER", Value="printer"}
+                        },new {disabled="disabled"})  </th> 
+                </tr>
+                </table>
+
+                <p>
+                    <input type="submit" value="Create" />
+                </p>
+            </fieldset>
+        }
+          -->
+
+        @{
+            object addInput = (Model.USED_EQUIPMENT) ? null : new { disabled = "disabled" };
+
+         }
+
+<script>
+    $('#USED_EQUIPMENT').click(function () {
+        var $this = $(this);
+
+        if ($this.is(':checked')) {
+            $('#REMARK').removeAttr("disabled");
+        } else {
+            $('#REMARK').attr("disabled", "disabled")
+        }
+    });
+</script>
+
+        </div>
+    </div>
+ </div>
+
+

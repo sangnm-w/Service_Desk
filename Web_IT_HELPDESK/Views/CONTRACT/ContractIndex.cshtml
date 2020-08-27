@@ -1,0 +1,218 @@
+﻿@model IEnumerable<Web_IT_HELPDESK.CONTRACT>
+
+<link href="../../Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "ContractIndex";
+}
+<br />
+<h2>CONTRACT MANAGEMENT</h2>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="../../Content/js/responsiveslides.js"></script>
+    <link href="../../Content/Site.css" rel="stylesheet" />
+    <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.js")" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#check:button').toggle(function () {
+            $('.company:checkbox').attr('checked', 'checked');
+            $(this).val('uncheck all')
+        }, function () {
+            $('.company:checkbox').removeAttr('checked');
+            $(this).val('check all');
+        })
+    })
+</script>
+
+  <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+  <script>
+      $(function () {
+          $("#datepicker").datepicker({
+              showOtherMonths: true,
+              selectOtherMonths: true
+          });
+      });
+  </script>
+
+
+   <script type="text/javascript">
+       $(document).ready(function () {
+           $('.refresh').click(function () {
+               location.reload();
+           });
+       });
+    </script>
+<div id="container">
+@using (Html.BeginForm("ContractIndex", "CONTRACT", FormMethod.Post))
+{
+    @Html.RadioButton("v_contract_type", "SALES", false)<label>SALES TYPE</label>
+    @Html.RadioButton("v_contract_type", "PURCHASE", false)<label>PURCHASE TYPE</label>
+    @Html.RadioButton("v_contract_type", "All", true)<label>ALL</label>
+    <br />
+    <br />
+  <input type="button" id="check" value="check all" />
+<table>
+     <tr>
+    <td><input type="checkbox" name="v_companys" class="company"  value="0301" checked="checked"/><label> ACCOUNTING PART</label></td>
+    <td><input type="checkbox" name="v_companys" class="company"  value="0302" checked="checked"/><label> PERSONNEL PART</label></td>
+    <td><input type="checkbox" name="v_companys" class="company"  value="0303" checked="checked"/><label> PURCHASING PART</label></td>
+    <td><input type="checkbox" name="v_companys" class="company"  value="0304" checked="checked"/><label>LOGISTIC PART </label></td>
+     </tr>                     
+    <tr>                       
+    <td><input type="checkbox" name="v_companys" class="company"  value="0307" checked="checked"/><label> R & D </label></td>
+    <td><input type="checkbox" name="v_companys" class="company"  value="0308" checked="checked"/><label>R&D LAP DEPARTMENT</label></td>
+    <td><input type="checkbox" name="v_companys" class="company"  value="0400" checked="checked"/><label>PRODUCTION DEPT </label></td>
+    <td><input type="checkbox" name="v_companys" class="company"  value="0403" checked="checked"/><label> MAINTENANCE PART</label></td>
+    </tr>                      
+    <tr>                       
+    <td><input type="checkbox" name="v_companys" class="company"  value="0406" checked="checked"/><label> ENVIRONMENT & SAFETY</label></td>
+    <td><input type="checkbox" name="v_companys" class="company"  value="0504" checked="checked"/><label> MARKETING PART</label></td>
+    <td><input type="checkbox" name="v_companys" class="company"  value="0600" checked="checked"/><label> QUALITY CONTROL DEPT</label></td>
+    <td><input type="checkbox" name="v_companys" class="company"  value="0604" checked="checked"/><label>CREDIT MANAGERMENT</label></td>
+    </tr>
+</table>
+    
+   <table>
+    <tr>
+      <td style="text-align:right;">Search</td>
+      <td><input type="text" name="search_" value="search" style="background:#A9BCF5; color:red; font-style: italic; text-align:right;"></td> 
+    </tr>
+    <!--<tr>
+      <td>From Date</td>
+      <td><input type="text" class="date" name="fromdate_" value="@DateTime.Today" style="background:#A9BCF5;"></td>
+      <td>To Date</td>
+      <td><input type="text" class="date" name="todate_" value="@DateTime.Today" style="background:#A9BCF5; "></td>
+    </tr> -->
+    <tr style="text-align:right;">
+      <td>Maturity date <br> (mm/dd/yyyy)</td>
+      <td><input type="text" id="datepicker" name="date_" style="background:#A9BCF5;text-align:right;" value="@DateTime.Today.ToString("MM/dd/yyyy")"></td>
+    </tr>
+    <tr style="text-align:right;">
+      <td>Day number</td>
+      <td><input type="number" id="daynum" name="daynum_" style="background:#A9BCF5; text-align:right;" value="30" placeholder="30"></td>
+    </tr>
+    </table>
+     <input type="submit" value="Search" />
+}
+
+<br />
+<p>
+    @Html.ActionLink("Create New", "CreateCONTRACTViewModel2")
+</p>
+<table>
+    <tr>
+        <th>
+            VENDOR
+        </th>
+         <th>
+            TYPE
+        </th>
+        <th>
+            PERIOD
+        </th>
+        <th>
+            MONTH
+        </th>
+        <th>
+            ADREES
+        </th>
+        <th>
+            PHONE
+        </th>
+        <th>
+            REPRESENTATION
+        </th>
+        <th>
+            DATE
+        </th>
+        <th>
+            NAME
+        </th>
+        <th>
+            USER
+        </th>
+        @*<th>
+            DEP
+        </th>*@
+        <th></th>
+        <th>subs</th>
+    </tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.VENDOR)
+        </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.CONTRACT_TYPE.CONTRACT_TYPE_NAME)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PERIOD.PERIOD_NAME)
+        </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.MONTHS)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ADREES)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PHONE)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.REPRESENTATION)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DATE, new { @type = "datetime" })
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CONTRACTNAME)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.USER_CREATE)
+        </td>
+        <!--td>
+        @*    @Html.TextBox("DepartmentName",new Web_IT_HELPDESK.Web_IT_HELPDESKEntities().Departments.Where(i => i.Del != true 
+                                                                    && i.DepartmentId==item.DEPARMENTID
+                                                                    && i.Plant==item.PLANT).Select(o=>o.DepartmentName).SingleOrDefault().ToString(),
+                                                                    new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()", @style="background-color:#DEDEDE;" })
+            *@
+        </td-->
+        <td>
+                @Html.ActionLink("Detail", "EditCONTRACTViewModel", new { id = item.ID },new {@class="button"}) 
+            <!--Html.ActionLink("Details", "Details", new { id=item.ID }) |-->
+             <button class="refresh">
+             @Ajax.ActionLink(
+                                                "Delete", 
+                                                "Delete_contract", 
+                                                "CONTRACT",
+                                                new { v_id = item.ID},
+                                                new AjaxOptions {  
+                                                    UpdateTargetId = "" ,
+                                                    InsertionMode = InsertionMode.Replace
+                                            },
+                                            new { @class = "button" }
+                                            )
+                 </button>
+            @if (item.CONTENT != null)
+            {
+                @Html.ActionLink("Getfile", "Get_file", new { con_id = item.ID },new {@class="button"}) 
+            }
+        </td>
+        <td>
+            @foreach (var sub in new Web_IT_HELPDESK.Web_IT_HELPDESKEntities().CONTRACT_SUB.Where(o => o.CONTRACTID == item.ID))
+            {
+                if (sub.CONTENT != null)
+                {
+                @Html.ActionLink(@sub.SUBNAME.ToString(), "Get_sub", new { sub_id = sub.ID }) 
+                }
+                <br />
+            }
+        </td>
+    </tr>
+}
+
+</table>
+
+</div>

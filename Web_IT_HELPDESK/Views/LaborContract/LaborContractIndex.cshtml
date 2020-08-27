@@ -1,0 +1,175 @@
+﻿@model IEnumerable<Web_IT_HELPDESK.CJ_HR_RECRUITMENT>
+
+@{
+    ViewBag.Title = "LaborContractIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>LaborContractIndex</h2>
+
+@using (Html.BeginForm())
+{
+   <table>
+    <tr>
+      <td>Search</td>
+      <td><input type="text" name="search_" value="search" style="background:#A9BCF5; color:red; font-style: italic;"></td> 
+    </tr>
+    <tr>
+      <td>From Date</td>
+      <td><input type="date" name="fromdate_" style="background:#A9BCF5;"></td>
+      <td>To Date</td>
+      <td><input type="date" name="todate_"  style="background:#A9BCF5; "></td>
+    </tr>
+    <!--<tr>
+      <td>Maturity Date</td>
+      <td><input type="text" class="date" name="date_" value="DateTime.Now.ToString("dd/MM/yyyy")" style="background:#A9BCF5; "></td>
+    </tr> -->
+    </table>
+     <input type="submit" value="Search" />
+}
+
+<script>
+    var number = document.getElementById('number');
+
+    number.onkeydown = function (e) {
+        if (!((e.keyCode > 95 && e.keyCode < 106)
+          || (e.keyCode > 47 && e.keyCode < 58)
+          || e.keyCode == 8)) {
+            return false;
+        }
+    }
+
+</script>
+
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            NAME
+        </th>
+        <th>
+            DOB
+        </th>
+        <th>
+            JOB
+        </th>
+        <th>
+            ADDRESS
+        </th>
+        <th>
+            ID_NUM
+        </th>
+        <th>
+            ID_DATE
+        </th>
+        <th>
+            ID_PLACE
+        </th>
+        <th>
+            PERIOD
+        </th>
+        <th>
+            GRADE
+        </th>
+        <th>
+            EMP_LEVEL
+        </th>
+        <th>
+            SALARY
+        </th>
+        <th>
+            ALLOWANCE
+        </th>
+        <th>
+            (%)
+        </th>
+         <th>
+            PLANT
+        </th>
+        <th>
+            FROM_DATE
+        </th>
+        <th>
+            TO_DATE
+        </th>
+        <th>
+            NOTE
+        </th>
+        <th>
+            CONTRACT_NO
+        </th>
+        <th>
+            APPROVE
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.EMP_NAME)
+        </td>
+        <td>
+          <input type="text" style="width:80px" value="@item.DOB.Value.ToString("dd/MM/yyyy")") />
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.JOB)
+        </td>
+        <td>
+            <input type="text" style="width:300px;" value="@item.ADDRESS" />
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ID_NUM)
+        </td>
+        <td>
+            <input type="text" style="width:80px" value="@item.ID_DATE.Value.ToString("dd/MM/yyyy")") />
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ID_PLACE)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PERIOD)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PROMOTION)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EMP_LEVEL)
+        </td>
+        <td>
+            <input type="text" style="width:80px; text-align:right;" value="@item.SALARY.Value.ToString("#,##0")" />
+        </td>
+        <td>
+              <input type="text" style="width:80px; text-align:right;" value="@item.ALLOWANCE.Value.ToString("#,##0")"/>
+        </td>
+        <td>
+            <input type="text" style="width:30px; text-align:right;" value="@item.PERCENT_SALRY.Value.ToString("#,##0")"/>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PLANT)
+        </td>
+        <td>
+            <input type="text" style="width:80px" value="@item.FROM_DATE.Value.ToString("dd/MM/yyyy")") />
+        </td>
+        <td>
+            <input type="text" style="width:80px" value="@item.TO_DATE.Value.ToString("dd/MM/yyyy")") />
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NOTE)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CONTRACT_NO)
+        </td>
+        <td>
+            <input type="checkbox" value="@item.APPROVE" />
+        </td>
+        <td>
+            @Html.ActionLink("Get_file", "Get_file", new { id_num=item.ID_NUM  })
+        </td>
+    </tr>
+}
+
+</table>

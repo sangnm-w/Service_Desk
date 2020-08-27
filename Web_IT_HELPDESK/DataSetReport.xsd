@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DataSetReport" targetNamespace="http://tempuri.org/DataSetReport.xsd" xmlns:mstns="http://tempuri.org/DataSetReport.xsd" xmlns="http://tempuri.org/DataSetReport.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="DataSetReport" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DataSetReport" msprop:Generator_UserDSName="DataSetReport">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="DataTableOrder" msprop:Generator_TableClassName="DataTableOrderDataTable" msprop:Generator_TableVarName="tableDataTableOrder" msprop:Generator_RowChangedName="DataTableOrderRowChanged" msprop:Generator_TablePropName="DataTableOrder" msprop:Generator_RowDeletingName="DataTableOrderRowDeleting" msprop:Generator_RowChangingName="DataTableOrderRowChanging" msprop:Generator_RowEvHandlerName="DataTableOrderRowChangeEventHandler" msprop:Generator_RowDeletedName="DataTableOrderRowDeleted" msprop:Generator_RowClassName="DataTableOrderRow" msprop:Generator_UserTableName="DataTableOrder" msprop:Generator_RowEvArgName="DataTableOrderRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="OrderId" msprop:Generator_ColumnVarNameInTable="columnOrderId" msprop:Generator_ColumnPropNameInRow="OrderId" msprop:Generator_ColumnPropNameInTable="OrderIdColumn" msprop:Generator_UserColumnName="OrderId" type="xs:string" minOccurs="0" />
+              <xs:element name="OrderDate" msprop:Generator_ColumnVarNameInTable="columnOrderDate" msprop:Generator_ColumnPropNameInRow="OrderDate" msprop:Generator_ColumnPropNameInTable="OrderDateColumn" msprop:Generator_UserColumnName="OrderDate" type="xs:string" minOccurs="0" />
+              <xs:element name="Confirmed" msprop:Generator_ColumnVarNameInTable="columnConfirmed" msprop:Generator_ColumnPropNameInRow="Confirmed" msprop:Generator_ColumnPropNameInTable="ConfirmedColumn" msprop:Generator_UserColumnName="Confirmed" type="xs:string" minOccurs="0" />
+              <xs:element name="EmployeeID" msprop:Generator_ColumnVarNameInTable="columnEmployeeID" msprop:Generator_ColumnPropNameInRow="EmployeeID" msprop:Generator_ColumnPropNameInTable="EmployeeIDColumn" msprop:Generator_UserColumnName="EmployeeID" type="xs:string" minOccurs="0" />
+              <xs:element name="Employe_Name" msprop:Generator_ColumnVarNameInTable="columnEmploye_Name" msprop:Generator_ColumnPropNameInRow="Employe_Name" msprop:Generator_ColumnPropNameInTable="Employe_NameColumn" msprop:Generator_UserColumnName="Employe_Name" type="xs:string" minOccurs="0" />
+              <xs:element name="Plant" msprop:Generator_ColumnVarNameInTable="columnPlant" msprop:Generator_ColumnPropNameInRow="Plant" msprop:Generator_ColumnPropNameInTable="PlantColumn" msprop:Generator_UserColumnName="Plant" type="xs:string" minOccurs="0" />
+              <xs:element name="OrderDetailId" msprop:Generator_ColumnVarNameInTable="columnOrderDetailId" msprop:Generator_ColumnPropNameInRow="OrderDetailId" msprop:Generator_ColumnPropNameInTable="OrderDetailIdColumn" msprop:Generator_UserColumnName="OrderDetailId" type="xs:string" minOccurs="0" />
+              <xs:element name="AlbumID" msprop:Generator_ColumnVarNameInTable="columnAlbumID" msprop:Generator_ColumnPropNameInRow="AlbumID" msprop:Generator_ColumnPropNameInTable="AlbumIDColumn" msprop:Generator_UserColumnName="AlbumID" type="xs:string" minOccurs="0" />
+              <xs:element name="Quantity" msprop:Generator_ColumnVarNameInTable="columnQuantity" msprop:Generator_ColumnPropNameInRow="Quantity" msprop:Generator_ColumnPropNameInTable="QuantityColumn" msprop:Generator_UserColumnName="Quantity" type="xs:string" minOccurs="0" />
+              <xs:element name="Note" msprop:Generator_ColumnVarNameInTable="columnNote" msprop:Generator_ColumnPropNameInRow="Note" msprop:Generator_ColumnPropNameInTable="NoteColumn" msprop:Generator_UserColumnName="Note" type="xs:string" minOccurs="0" />
+              <xs:element name="Title" msprop:Generator_ColumnVarNameInTable="columnTitle" msprop:Generator_ColumnPropNameInRow="Title" msprop:Generator_ColumnPropNameInTable="TitleColumn" msprop:Generator_UserColumnName="Title" type="xs:string" minOccurs="0" />
+              <xs:element name="Unit" msprop:Generator_ColumnVarNameInTable="columnUnit" msprop:Generator_ColumnPropNameInRow="Unit" msprop:Generator_ColumnPropNameInTable="UnitColumn" msprop:Generator_UserColumnName="Unit" type="xs:string" minOccurs="0" />
+              <xs:element name="DepatmentName" msprop:Generator_ColumnVarNameInTable="columnDepatmentName" msprop:Generator_ColumnPropNameInRow="DepatmentName" msprop:Generator_ColumnPropNameInTable="DepatmentNameColumn" msprop:Generator_UserColumnName="DepatmentName" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="DataTableBizTrip" msprop:Generator_TableClassName="DataTableBizTripDataTable" msprop:Generator_TableVarName="tableDataTableBizTrip" msprop:Generator_TablePropName="DataTableBizTrip" msprop:Generator_RowDeletingName="DataTableBizTripRowDeleting" msprop:Generator_RowChangingName="DataTableBizTripRowChanging" msprop:Generator_RowEvHandlerName="DataTableBizTripRowChangeEventHandler" msprop:Generator_RowDeletedName="DataTableBizTripRowDeleted" msprop:Generator_UserTableName="DataTableBizTrip" msprop:Generator_RowChangedName="DataTableBizTripRowChanged" msprop:Generator_RowEvArgName="DataTableBizTripRowChangeEvent" msprop:Generator_RowClassName="DataTableBizTripRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="EMPNO" msprop:Generator_ColumnVarNameInTable="columnEMPNO" msprop:Generator_ColumnPropNameInRow="EMPNO" msprop:Generator_ColumnPropNameInTable="EMPNOColumn" msprop:Generator_UserColumnName="EMPNO" type="xs:string" minOccurs="0" />
+              <xs:element name="NAME" msprop:Generator_ColumnVarNameInTable="columnNAME" msprop:Generator_ColumnPropNameInRow="NAME" msprop:Generator_ColumnPropNameInTable="NAMEColumn" msprop:Generator_UserColumnName="NAME" type="xs:string" minOccurs="0" />
+              <xs:element name="DEPT" msprop:Generator_ColumnVarNameInTable="columnDEPT" msprop:Generator_ColumnPropNameInRow="DEPT" msprop:Generator_ColumnPropNameInTable="DEPTColumn" msprop:Generator_UserColumnName="DEPT" type="xs:string" minOccurs="0" />
+              <xs:element name="DESCRIPTION" msprop:Generator_ColumnVarNameInTable="columnDESCRIPTION" msprop:Generator_ColumnPropNameInRow="DESCRIPTION" msprop:Generator_ColumnPropNameInTable="DESCRIPTIONColumn" msprop:Generator_UserColumnName="DESCRIPTION" type="xs:string" minOccurs="0" />
+              <xs:element name="VEHICLE" msprop:Generator_ColumnVarNameInTable="columnVEHICLE" msprop:Generator_ColumnPropNameInRow="VEHICLE" msprop:Generator_ColumnPropNameInTable="VEHICLEColumn" msprop:Generator_UserColumnName="VEHICLE" type="xs:string" minOccurs="0" />
+              <xs:element name="CONTACT_COMPANY" msprop:Generator_ColumnVarNameInTable="columnCONTACT_COMPANY" msprop:Generator_ColumnPropNameInRow="CONTACT_COMPANY" msprop:Generator_ColumnPropNameInTable="CONTACT_COMPANYColumn" msprop:Generator_UserColumnName="CONTACT_COMPANY" type="xs:string" minOccurs="0" />
+              <xs:element name="CONTACT_PERSON" msprop:Generator_ColumnVarNameInTable="columnCONTACT_PERSON" msprop:Generator_ColumnPropNameInRow="CONTACT_PERSON" msprop:Generator_ColumnPropNameInTable="CONTACT_PERSONColumn" msprop:Generator_UserColumnName="CONTACT_PERSON" type="xs:string" minOccurs="0" />
+              <xs:element name="CONTACT_DEPT" msprop:Generator_ColumnVarNameInTable="columnCONTACT_DEPT" msprop:Generator_ColumnPropNameInRow="CONTACT_DEPT" msprop:Generator_ColumnPropNameInTable="CONTACT_DEPTColumn" msprop:Generator_UserColumnName="CONTACT_DEPT" type="xs:string" minOccurs="0" />
+              <xs:element name="DATE" msprop:Generator_ColumnVarNameInTable="columnDATE" msprop:Generator_ColumnPropNameInRow="DATE" msprop:Generator_ColumnPropNameInTable="DATEColumn" msprop:Generator_UserColumnName="DATE" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="FROM_DATE" msprop:Generator_ColumnVarNameInTable="columnFROM_DATE" msprop:Generator_ColumnPropNameInRow="FROM_DATE" msprop:Generator_ColumnPropNameInTable="FROM_DATEColumn" msprop:Generator_UserColumnName="FROM_DATE" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="TO_DATE" msprop:Generator_ColumnVarNameInTable="columnTO_DATE" msprop:Generator_ColumnPropNameInRow="TO_DATE" msprop:Generator_ColumnPropNameInTable="TO_DATEColumn" msprop:Generator_UserColumnName="TO_DATE" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="USED_EQUIPMENT" msprop:Generator_ColumnVarNameInTable="columnUSED_EQUIPMENT" msprop:Generator_ColumnPropNameInRow="USED_EQUIPMENT" msprop:Generator_ColumnPropNameInTable="USED_EQUIPMENTColumn" msprop:Generator_UserColumnName="USED_EQUIPMENT" type="xs:boolean" minOccurs="0" />
+              <xs:element name="REMARK" msprop:Generator_ColumnVarNameInTable="columnREMARK" msprop:Generator_ColumnPropNameInRow="REMARK" msprop:Generator_ColumnPropNameInTable="REMARKColumn" msprop:Generator_UserColumnName="REMARK" type="xs:string" minOccurs="0" />
+              <xs:element name="DEPT_CONFIRM_IMAGE" msprop:Generator_ColumnVarNameInTable="columnDEPT_CONFIRM_IMAGE" msprop:Generator_ColumnPropNameInRow="DEPT_CONFIRM_IMAGE" msprop:Generator_ColumnPropNameInTable="DEPT_CONFIRM_IMAGEColumn" msprop:Generator_UserColumnName="DEPT_CONFIRM_IMAGE" type="xs:base64Binary" minOccurs="0" />
+              <xs:element name="HR_CONFIRM_IMAGE" msprop:Generator_ColumnVarNameInTable="columnHR_CONFIRM_IMAGE" msprop:Generator_ColumnPropNameInRow="HR_CONFIRM_IMAGE" msprop:Generator_ColumnPropNameInTable="HR_CONFIRM_IMAGEColumn" msprop:Generator_UserColumnName="HR_CONFIRM_IMAGE" type="xs:base64Binary" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,122 @@
+﻿@model Web_IT_HELPDESK.Drinking_Request
+
+@{
+    ViewBag.Title = "Confirm";
+}
+
+<h2>Confirm</h2>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Drinking_Request</legend>
+
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Employee_name)
+        </div>
+        <div class="editor-field">
+           @Html.TextBoxFor(model => model.Employee_name, new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()" , @style="background-color:#DEDEDE;"})
+            @Html.ValidationMessageFor(model => model.Employee_name)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DepartmentId)
+        </div>
+        <div class="editor-field">
+           @Html.TextBoxFor(model => model.DepartmentId, new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()" , @style="background-color:#DEDEDE;"})
+            @Html.ValidationMessageFor(model => model.DepartmentId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Quantity)
+        </div>
+        <div class="editor-field">
+          @Html.TextBoxFor(model => model.Quantity, new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()" , @style="background-color:#DEDEDE;"})
+            @Html.ValidationMessageFor(model => model.Quantity)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Unit)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Unit, new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()" , @style="background-color:#DEDEDE;"})
+            @Html.ValidationMessageFor(model => model.Unit)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Note)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Note, new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()" , @style="background-color:#DEDEDE;"})
+            @Html.ValidationMessageFor(model => model.Note)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Date)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Date, new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()" , @style="background-color:#DEDEDE;"})
+            @Html.ValidationMessageFor(model => model.Date)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Department_confirm)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Department_confirm, new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()" , @style="background-color:#DEDEDE;"})
+            @Html.ValidationMessageFor(model => model.Department_confirm)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Department_note)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Department_note, new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()" , @style="background-color:#DEDEDE;"})
+            @Html.ValidationMessageFor(model => model.Department_note)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Department_confirm_date)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Department_confirm_date, new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()" , @style="background-color:#DEDEDE;"})
+            @Html.ValidationMessageFor(model => model.Department_confirm_date)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.HR_confirm)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.HR_confirm)
+            @Html.ValidationMessageFor(model => model.HR_confirm)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.HR_note)
+        </div>
+        <div class="editor-field">
+             @Html.TextBox("HR_note", null, new { id = "add confirm", type = "string", required = "required" })
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.HR_confirm_date)
+        </div>
+        <div class="editor-field">
+           @Html.TextBoxFor(model => model.HR_confirm_date, new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()" , @style="background-color:#DEDEDE;"})
+            @Html.ValidationMessageFor(model => model.HR_confirm_date)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

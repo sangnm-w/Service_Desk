@@ -1,0 +1,24 @@
+﻿@model IEnumerable<Web_IT_HELPDESK.Document>
+
+<table>
+    <tr>
+        <th>
+            Code
+        </th>
+        <th>
+            FileName
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td style="width:100px">
+            @Html.DisplayFor(modelItem => item.Code)
+        </td>
+        <td style="width:600px">
+            @Html.ActionLink(item.FileName, "Get_file", new { id = item.Id }) 
+        </td>
+    </tr>
+}
+
+</table>

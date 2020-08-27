@@ -1,0 +1,14 @@
+﻿@model int
+
+@{
+    ViewBag.Title = "Checkout Complete";
+}
+
+<h2>Checkout Complete - Hoàn tất</h2>
+
+<p>Thanks for your request to HR department: @Model</p>
+<p>/Cám ơn đã gởi yêu cầu đến phòng nhân sự/: @Model</p>
+
+<p>Return Index Home - /Trở về trang chủ /
+    @Html.ActionLink("store", "Index", "Home")
+</p>

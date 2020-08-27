@@ -1,0 +1,74 @@
+﻿@model IEnumerable<Web_IT_HELPDESK.Album>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<body>
+    <br />
+<!--if (Convert.ToString(Session["employee_id"].ToString().ToLower())=="admin")-->
+<!--{-->
+<h3>@Html.ActionLink("Order list - Danh sách yêu cầu VPP từ phòng ban", "OrderList", "Order_")</h3>
+<!--}-->
+
+@using (Html.BeginForm())
+{
+    <p>
+        Find (Tìm văn phòng phẩm): @Html.TextBox("SearchString") 
+        <input type="submit" value="Search" /></p>
+}
+<table>
+    <tr>
+        <th>
+            Id - Mã sản phẩm
+        </th>
+        <th>
+            Item - Tên sản phẩm
+        </th>
+        <th>
+            Unit - Đơn vị tính
+        </th>
+        <th>
+            Quantity - Số lượng
+        </th>
+         <th>
+            Notes - Ghi chú
+        </th>
+    </tr>
+ @using (Html.BeginForm("Submit", "HumanceResource", FormMethod.Post))
+ {
+     
+     int j = 1;
+     <input type="text" name="text_answers[0]" value ="0" readonly="true" hidden="hidden"/> 
+     <input type="text" name="text_s[0]" value ="0" readonly="true" hidden="hidden"/> 
+     <!-- giả lập để lấy giá trị radio checked-->
+     foreach (var item in Model)
+     { 
+     <tr>  
+      <td>
+        @item.AlbumId
+     </td>     
+      <td>
+        @item.Title
+     </td>
+     <td>
+        @item.Unit
+     </td>
+      <td>
+       <input type="number" name="text_answers[@j]" value ="0"/> 
+      </td>
+      <td>
+         <input type="text" name="text_s[@j]" value ="-"/> 
+     </td>
+     </tr>
+     j = (Int16)j + 1;
+     Session[j.ToString()] = item.AlbumId;
+     }
+
+     <input type="submit" value="Submit" />
+ }
+ 
+</table>
+
+</body>

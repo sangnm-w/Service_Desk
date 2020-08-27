@@ -1,0 +1,8 @@
+﻿.PagedList-control > button{
+	margin: 0;
+	padding: 0;
+}
+/*.PagedList-control > ul > li{
+	margin: .25em;
+	display: inline-block;
+}*/

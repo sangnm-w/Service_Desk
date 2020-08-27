@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Web_IT_HELPDESK.Employee_Screen>
+
+@using (Html.BeginForm("Save", "Employee", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <fieldset>
+        <legend>Authority user</legend>
+        <!--input type="checkbox" name="ints2" value="0" checked="checked"--> 
+        @foreach (var item in new Web_IT_HELPDESK.Web_IT_HELPDESKEntities().Employee_Screen//.Where(i => i.Use == true)
+                    .Select(item => new { HTMLcode = item.Screen.HTMLcode, EmployeeID = item.Employee.EmployeeID, Use = item.Use, ScreenName = item.Screen.ScreenName, ScreenId = item.Screen.ScreenId }).OrderBy(item => item.ScreenId))
+{
+    if (item.EmployeeID == Convert.ToString(Session["v_emp_id"]))
+            {
+            //Html.CheckBoxFor(x => @item.Use.Value)
+             <input type="checkbox" name="ints1" value="@item.ScreenId" checked="checked" hidden="hidden"/>
+             if(@item.Use==true)
+             {
+                 <input type="checkbox" name="ints2" value="@item.ScreenId" checked="checked"/>
+                 <span></span>
+                 <label>@item.ScreenName</label><br />
+             }
+             else
+             {
+                  <input type="checkbox" name="ints2" value="@item.ScreenId"/>
+                  <span></span>
+                  <label>@item.ScreenName</label><br />
+             }
+            
+            }
+}
+    </fieldset>
+  <a href="http://52.213.3.168/servicedesk/Home/Index">Back Home</a>    
+  <a href="http://52.213.3.168/servicedesk/Employee/EmployeeList">Return</a>                                                                       
+  <input type="submit" value="Save" />
+}

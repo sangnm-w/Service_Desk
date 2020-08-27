@@ -1,0 +1,439 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="hr_contract_binhModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="hr_contract_binhModelStoreContainer">
+          <EntitySet Name="CJ_HR_RECRUITMENT" EntityType="hr_contract_binhModel.Store.CJ_HR_RECRUITMENT" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CJ_HR_RECRUITMENT_ACCEPT" EntityType="hr_contract_binhModel.Store.CJ_HR_RECRUITMENT_ACCEPT" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CJ_HR_SALARY_REPORT" EntityType="hr_contract_binhModel.Store.CJ_HR_SALARY_REPORT" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_CJ_HR_RECRUITMENT_ACCEPT_CJ_HR_RECRUITMENT" Association="hr_contract_binhModel.Store.FK_CJ_HR_RECRUITMENT_ACCEPT_CJ_HR_RECRUITMENT">
+            <End Role="CJ_HR_RECRUITMENT" EntitySet="CJ_HR_RECRUITMENT" />
+            <End Role="CJ_HR_RECRUITMENT_ACCEPT" EntitySet="CJ_HR_RECRUITMENT_ACCEPT" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CJ_HR_SALARY_REPORT_CJ_HR_RECRUITMENT" Association="hr_contract_binhModel.Store.FK_CJ_HR_SALARY_REPORT_CJ_HR_RECRUITMENT">
+            <End Role="CJ_HR_RECRUITMENT" EntitySet="CJ_HR_RECRUITMENT" />
+            <End Role="CJ_HR_SALARY_REPORT" EntitySet="CJ_HR_SALARY_REPORT" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="CJ_HR_RECRUITMENT">
+          <Key>
+            <PropertyRef Name="ID_NUM" />
+          </Key>
+          <Property Name="EMP_NAME" Type="nvarchar" MaxLength="50" />
+          <Property Name="DOB" Type="datetime" />
+          <Property Name="JOB" Type="nvarchar" MaxLength="50" />
+          <Property Name="ADDRESS" Type="nvarchar" MaxLength="200" />
+          <Property Name="ID_NUM" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="ID_DATE" Type="datetime" />
+          <Property Name="ID_PLACE" Type="nvarchar" MaxLength="50" />
+          <Property Name="PERIOD" Type="numeric" />
+          <Property Name="FROM_DATE" Type="datetime" />
+          <Property Name="PROMOTION" Type="nvarchar" MaxLength="50" />
+          <Property Name="EMP_LEVEL" Type="nvarchar" MaxLength="50" />
+          <Property Name="SALARY" Type="numeric" />
+          <Property Name="ALLOWANCE" Type="numeric" />
+          <Property Name="PERCENT_SALRY" Type="numeric" />
+          <Property Name="START_DATE" Type="datetime" />
+          <Property Name="ATTACHED_FILE" Type="varbinary(max)" />
+          <Property Name="DEL" Type="nvarchar" MaxLength="5" />
+          <Property Name="PLANT" Type="nvarchar" MaxLength="10" />
+          <Property Name="TO_DATE" Type="datetime" />
+          <Property Name="NOTE" Type="nvarchar" MaxLength="200" />
+          <Property Name="CONTRACT_NO" Type="nvarchar" MaxLength="50" />
+          <Property Name="APPROVE" Type="bit" />
+          <Property Name="SIGNATURE_IMAGE" Type="varbinary(max)" />
+          <Property Name="HR_APPROVE" Type="bit" />
+          <Property Name="SIGNATURE_HR_IMAGE" Type="varbinary(max)" />
+          <Property Name="HR_APPROVE_DATE" Type="datetime" />
+          <Property Name="SALES_APPROVE" Type="bit" />
+          <Property Name="SIGNATURE_SALES_IMAGE" Type="varbinary(max)" />
+          <Property Name="SALES_APPROVE_DATE" Type="datetime" />
+          <Property Name="SALES_EMPLOYEE" Type="bit" />
+        </EntityType>
+        <EntityType Name="CJ_HR_RECRUITMENT_ACCEPT">
+          <Key>
+            <PropertyRef Name="ID_NUM" />
+          </Key>
+          <Property Name="EMP_NAME" Type="nvarchar" MaxLength="50" />
+          <Property Name="DOB" Type="datetime" />
+          <Property Name="JOB" Type="nvarchar" MaxLength="50" />
+          <Property Name="ADDRESS" Type="nvarchar(max)" />
+          <Property Name="ID_NUM" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="ID_DATE" Type="datetime" />
+          <Property Name="ID_PLACE" Type="nvarchar" MaxLength="50" />
+          <Property Name="TYPE_CONTRACT" Type="nvarchar" MaxLength="50" />
+          <Property Name="FROM_DATE" Type="datetime" />
+          <Property Name="TO_DATE" Type="datetime" />
+          <Property Name="POSITION" Type="nvarchar" MaxLength="50" />
+          <Property Name="GRADE" Type="nvarchar" MaxLength="50" />
+          <Property Name="SALARY" Type="numeric" />
+          <Property Name="ALLOWANCE" Type="numeric" />
+          <Property Name="START_DATE" Type="datetime" />
+          <Property Name="ATTACHED_FILE" Type="varbinary(max)" />
+          <Property Name="DEL" Type="bit" />
+          <Property Name="PLANT" Type="nvarchar" MaxLength="50" />
+          <Property Name="NOTE" Type="nvarchar(max)" />
+          <Property Name="CONTRACT_NO" Type="nvarchar" MaxLength="50" />
+          <Property Name="SIGNATURE" Type="varbinary(max)" />
+          <Property Name="APPROVE" Type="bit" />
+          <Property Name="POSITION_ALLOWANCE" Type="numeric" />
+          <Property Name="TRAINING_ALLOWANCE" Type="numeric" />
+          <Property Name="HAZADOUS" Type="numeric" />
+          <Property Name="LIVING_FARM" Type="numeric" />
+          <Property Name="OMC" Type="numeric" />
+          <Property Name="MEAL" Type="numeric" />
+          <Property Name="PHONE" Type="numeric" />
+          <Property Name="EQUIPMENT_DE" Type="numeric" />
+          <Property Name="PRODUCTIVITY" Type="numeric" />
+        </EntityType>
+        <EntityType Name="CJ_HR_SALARY_REPORT">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID_NUM" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="POSITION" Type="nvarchar" MaxLength="200" />
+          <Property Name="PURPOSE" Type="nvarchar" MaxLength="200" />
+          <Property Name="DEPARTMENT" Type="nvarchar" MaxLength="200" />
+          <Property Name="FULLNAME" Type="nvarchar" MaxLength="200" />
+          <Property Name="GENDER" Type="nvarchar" MaxLength="50" />
+          <Property Name="DOB" Type="nvarchar" MaxLength="50" />
+          <Property Name="RESIDENT" Type="nvarchar(max)" />
+          <Property Name="EDUCATION" Type="nvarchar" MaxLength="50" />
+          <Property Name="EXPERIENCE" Type="nvarchar" MaxLength="50" />
+          <Property Name="JOIN_DATE" Type="nvarchar" MaxLength="50" />
+          <Property Name="WORKING_TIME" Type="nvarchar" MaxLength="50" />
+          <Property Name="BASIC_SALARY" Type="numeric" />
+          <Property Name="GRADE" Type="nvarchar" MaxLength="50" />
+          <Property Name="MEAL" Type="numeric" />
+          <Property Name="POSITION_ALLOWANCE" Type="numeric" />
+          <Property Name="PHONE_ALLOWANCE" Type="numeric" />
+          <Property Name="PRODUCTIVITY_BONUS" Type="numeric" />
+          <Property Name="PERIOD_WORKING" Type="nvarchar" MaxLength="50" />
+          <Property Name="NOTE" Type="nvarchar(max)" />
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="SIGNATURE_IMAGE" Type="varbinary(max)" />
+          <Property Name="HR_APPROVE" Type="bit" />
+          <Property Name="SIGNATURE_HR_IMAGE" Type="varbinary(max)" />
+          <Property Name="HR_APPROVE_DATE" Type="datetime" />
+          <Property Name="SALES_APPROVE" Type="bit" />
+          <Property Name="SIGNATURE_SALES_IMAGE" Type="varbinary(max)" />
+          <Property Name="SALES_APPROVE_DATE" Type="datetime" />
+          <Property Name="SALES_EMPLOYEE" Type="bit" />
+          <Property Name="SIGNATURE_BOD_DATE" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_CJ_HR_RECRUITMENT_ACCEPT_CJ_HR_RECRUITMENT">
+          <End Role="CJ_HR_RECRUITMENT" Type="hr_contract_binhModel.Store.CJ_HR_RECRUITMENT" Multiplicity="1" />
+          <End Role="CJ_HR_RECRUITMENT_ACCEPT" Type="hr_contract_binhModel.Store.CJ_HR_RECRUITMENT_ACCEPT" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="CJ_HR_RECRUITMENT">
+              <PropertyRef Name="ID_NUM" />
+            </Principal>
+            <Dependent Role="CJ_HR_RECRUITMENT_ACCEPT">
+              <PropertyRef Name="ID_NUM" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CJ_HR_SALARY_REPORT_CJ_HR_RECRUITMENT">
+          <End Role="CJ_HR_RECRUITMENT" Type="hr_contract_binhModel.Store.CJ_HR_RECRUITMENT" Multiplicity="1" />
+          <End Role="CJ_HR_SALARY_REPORT" Type="hr_contract_binhModel.Store.CJ_HR_SALARY_REPORT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CJ_HR_RECRUITMENT">
+              <PropertyRef Name="ID_NUM" />
+            </Principal>
+            <Dependent Role="CJ_HR_SALARY_REPORT">
+              <PropertyRef Name="ID_NUM" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="hr_contract_binhModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="hr_contract_binhEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="CJ_HR_RECRUITMENT" EntityType="hr_contract_binhModel.CJ_HR_RECRUITMENT" />
+          <EntitySet Name="CJ_HR_RECRUITMENT_ACCEPT" EntityType="hr_contract_binhModel.CJ_HR_RECRUITMENT_ACCEPT" />
+          <AssociationSet Name="FK_CJ_HR_RECRUITMENT_ACCEPT_CJ_HR_RECRUITMENT" Association="hr_contract_binhModel.FK_CJ_HR_RECRUITMENT_ACCEPT_CJ_HR_RECRUITMENT">
+            <End Role="CJ_HR_RECRUITMENT" EntitySet="CJ_HR_RECRUITMENT" />
+            <End Role="CJ_HR_RECRUITMENT_ACCEPT" EntitySet="CJ_HR_RECRUITMENT_ACCEPT" />
+          </AssociationSet>
+          <EntitySet Name="CJ_HR_SALARY_REPORT" EntityType="hr_contract_binhModel.CJ_HR_SALARY_REPORT" />
+          <AssociationSet Name="FK_CJ_HR_SALARY_REPORT_CJ_HR_RECRUITMENT" Association="hr_contract_binhModel.FK_CJ_HR_SALARY_REPORT_CJ_HR_RECRUITMENT">
+            <End Role="CJ_HR_RECRUITMENT" EntitySet="CJ_HR_RECRUITMENT" />
+            <End Role="CJ_HR_SALARY_REPORT" EntitySet="CJ_HR_SALARY_REPORT" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="CJ_HR_RECRUITMENT">
+          <Key>
+            <PropertyRef Name="ID_NUM" />
+          </Key>
+          <Property Type="String" Name="EMP_NAME" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="DOB" Precision="3" />
+          <Property Type="String" Name="JOB" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ADDRESS" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ID_NUM" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="ID_DATE" Precision="3" />
+          <Property Type="String" Name="ID_PLACE" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Decimal" Name="PERIOD" Precision="18" Scale="0" />
+          <Property Type="DateTime" Name="FROM_DATE" Precision="3" />
+          <Property Type="String" Name="PROMOTION" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EMP_LEVEL" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Decimal" Name="SALARY" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="ALLOWANCE" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="PERCENT_SALRY" Precision="18" Scale="0" />
+          <Property Type="DateTime" Name="START_DATE" Precision="3" />
+          <Property Type="Binary" Name="ATTACHED_FILE" MaxLength="Max" FixedLength="false" />
+          <Property Type="String" Name="DEL" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PLANT" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="TO_DATE" Precision="3" />
+          <Property Type="String" Name="NOTE" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CONTRACT_NO" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="APPROVE" />
+          <Property Type="Binary" Name="SIGNATURE_IMAGE" MaxLength="Max" FixedLength="false" />
+          <Property Type="Boolean" Name="HR_APPROVE" />
+          <Property Type="Binary" Name="SIGNATURE_HR_IMAGE" MaxLength="Max" FixedLength="false" />
+          <Property Type="DateTime" Name="HR_APPROVE_DATE" Precision="3" />
+          <Property Type="Boolean" Name="SALES_APPROVE" />
+          <Property Type="Binary" Name="SIGNATURE_SALES_IMAGE" MaxLength="Max" FixedLength="false" />
+          <Property Type="DateTime" Name="SALES_APPROVE_DATE" Precision="3" />
+          <Property Type="Boolean" Name="SALES_EMPLOYEE" />
+          <NavigationProperty Name="CJ_HR_RECRUITMENT_ACCEPT" Relationship="hr_contract_binhModel.FK_CJ_HR_RECRUITMENT_ACCEPT_CJ_HR_RECRUITMENT" FromRole="CJ_HR_RECRUITMENT" ToRole="CJ_HR_RECRUITMENT_ACCEPT" />
+          <NavigationProperty Name="CJ_HR_SALARY_REPORT" Relationship="hr_contract_binhModel.FK_CJ_HR_SALARY_REPORT_CJ_HR_RECRUITMENT" FromRole="CJ_HR_RECRUITMENT" ToRole="CJ_HR_SALARY_REPORT" />
+        </EntityType>
+        <EntityType Name="CJ_HR_RECRUITMENT_ACCEPT">
+          <Key>
+            <PropertyRef Name="ID_NUM" />
+          </Key>
+          <Property Type="String" Name="EMP_NAME" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="DOB" Precision="3" />
+          <Property Type="String" Name="JOB" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ADDRESS" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ID_NUM" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="ID_DATE" Precision="3" />
+          <Property Type="String" Name="ID_PLACE" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="TYPE_CONTRACT" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="FROM_DATE" Precision="3" />
+          <Property Type="DateTime" Name="TO_DATE" Precision="3" />
+          <Property Type="String" Name="POSITION" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="GRADE" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Decimal" Name="SALARY" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="ALLOWANCE" Precision="18" Scale="0" />
+          <Property Type="DateTime" Name="START_DATE" Precision="3" />
+          <Property Type="Binary" Name="ATTACHED_FILE" MaxLength="Max" FixedLength="false" />
+          <Property Type="Boolean" Name="DEL" />
+          <Property Type="String" Name="PLANT" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="NOTE" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CONTRACT_NO" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Binary" Name="SIGNATURE" MaxLength="Max" FixedLength="false" />
+          <Property Type="Boolean" Name="APPROVE" />
+          <Property Type="Decimal" Name="POSITION_ALLOWANCE" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="TRAINING_ALLOWANCE" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="HAZADOUS" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="LIVING_FARM" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="OMC" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="MEAL" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="PHONE" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="EQUIPMENT_DE" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="PRODUCTIVITY" Precision="18" Scale="0" />
+          <NavigationProperty Name="CJ_HR_RECRUITMENT" Relationship="hr_contract_binhModel.FK_CJ_HR_RECRUITMENT_ACCEPT_CJ_HR_RECRUITMENT" FromRole="CJ_HR_RECRUITMENT_ACCEPT" ToRole="CJ_HR_RECRUITMENT" />
+        </EntityType>
+        <Association Name="FK_CJ_HR_RECRUITMENT_ACCEPT_CJ_HR_RECRUITMENT">
+          <End Type="hr_contract_binhModel.CJ_HR_RECRUITMENT" Role="CJ_HR_RECRUITMENT" Multiplicity="1" />
+          <End Type="hr_contract_binhModel.CJ_HR_RECRUITMENT_ACCEPT" Role="CJ_HR_RECRUITMENT_ACCEPT" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="CJ_HR_RECRUITMENT">
+              <PropertyRef Name="ID_NUM" />
+            </Principal>
+            <Dependent Role="CJ_HR_RECRUITMENT_ACCEPT">
+              <PropertyRef Name="ID_NUM" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CJ_HR_SALARY_REPORT">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="String" Name="ID_NUM" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="POSITION" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PURPOSE" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DEPARTMENT" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="FULLNAME" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="GENDER" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DOB" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="RESIDENT" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EDUCATION" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EXPERIENCE" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="JOIN_DATE" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="WORKING_TIME" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Decimal" Name="BASIC_SALARY" Precision="18" Scale="0" />
+          <Property Type="String" Name="GRADE" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Decimal" Name="MEAL" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="POSITION_ALLOWANCE" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="PHONE_ALLOWANCE" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="PRODUCTIVITY_BONUS" Precision="18" Scale="0" />
+          <Property Type="String" Name="PERIOD_WORKING" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="NOTE" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Guid" Name="ID" Nullable="false" />
+          <Property Type="Binary" Name="SIGNATURE_IMAGE" MaxLength="Max" FixedLength="false" />
+          <Property Type="Boolean" Name="HR_APPROVE" />
+          <Property Type="Binary" Name="SIGNATURE_HR_IMAGE" MaxLength="Max" FixedLength="false" />
+          <Property Type="DateTime" Name="HR_APPROVE_DATE" Precision="3" />
+          <Property Type="Boolean" Name="SALES_APPROVE" />
+          <Property Type="Binary" Name="SIGNATURE_SALES_IMAGE" MaxLength="Max" FixedLength="false" />
+          <Property Type="DateTime" Name="SALES_APPROVE_DATE" Precision="3" />
+          <Property Type="Boolean" Name="SALES_EMPLOYEE" />
+          <Property Type="DateTime" Name="SIGNATURE_BOD_DATE" Precision="3" />
+          <NavigationProperty Name="CJ_HR_RECRUITMENT" Relationship="hr_contract_binhModel.FK_CJ_HR_SALARY_REPORT_CJ_HR_RECRUITMENT" FromRole="CJ_HR_SALARY_REPORT" ToRole="CJ_HR_RECRUITMENT" />
+        </EntityType>
+        <Association Name="FK_CJ_HR_SALARY_REPORT_CJ_HR_RECRUITMENT">
+          <End Type="hr_contract_binhModel.CJ_HR_RECRUITMENT" Role="CJ_HR_RECRUITMENT" Multiplicity="1" />
+          <End Type="hr_contract_binhModel.CJ_HR_SALARY_REPORT" Role="CJ_HR_SALARY_REPORT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CJ_HR_RECRUITMENT">
+              <PropertyRef Name="ID_NUM" />
+            </Principal>
+            <Dependent Role="CJ_HR_SALARY_REPORT">
+              <PropertyRef Name="ID_NUM" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="hr_contract_binhModelStoreContainer" CdmEntityContainer="hr_contract_binhEntities">
+          <EntitySetMapping Name="CJ_HR_RECRUITMENT">
+            <EntityTypeMapping TypeName="hr_contract_binhModel.CJ_HR_RECRUITMENT">
+              <MappingFragment StoreEntitySet="CJ_HR_RECRUITMENT">
+                <ScalarProperty Name="SALES_EMPLOYEE" ColumnName="SALES_EMPLOYEE" />
+                <ScalarProperty Name="SALES_APPROVE_DATE" ColumnName="SALES_APPROVE_DATE" />
+                <ScalarProperty Name="SIGNATURE_SALES_IMAGE" ColumnName="SIGNATURE_SALES_IMAGE" />
+                <ScalarProperty Name="SALES_APPROVE" ColumnName="SALES_APPROVE" />
+                <ScalarProperty Name="HR_APPROVE_DATE" ColumnName="HR_APPROVE_DATE" />
+                <ScalarProperty Name="SIGNATURE_HR_IMAGE" ColumnName="SIGNATURE_HR_IMAGE" />
+                <ScalarProperty Name="HR_APPROVE" ColumnName="HR_APPROVE" />
+                <ScalarProperty Name="SIGNATURE_IMAGE" ColumnName="SIGNATURE_IMAGE" />
+                <ScalarProperty Name="APPROVE" ColumnName="APPROVE" />
+                <ScalarProperty Name="CONTRACT_NO" ColumnName="CONTRACT_NO" />
+                <ScalarProperty Name="NOTE" ColumnName="NOTE" />
+                <ScalarProperty Name="TO_DATE" ColumnName="TO_DATE" />
+                <ScalarProperty Name="PLANT" ColumnName="PLANT" />
+                <ScalarProperty Name="DEL" ColumnName="DEL" />
+                <ScalarProperty Name="ATTACHED_FILE" ColumnName="ATTACHED_FILE" />
+                <ScalarProperty Name="START_DATE" ColumnName="START_DATE" />
+                <ScalarProperty Name="PERCENT_SALRY" ColumnName="PERCENT_SALRY" />
+                <ScalarProperty Name="ALLOWANCE" ColumnName="ALLOWANCE" />
+                <ScalarProperty Name="SALARY" ColumnName="SALARY" />
+                <ScalarProperty Name="EMP_LEVEL" ColumnName="EMP_LEVEL" />
+                <ScalarProperty Name="PROMOTION" ColumnName="PROMOTION" />
+                <ScalarProperty Name="FROM_DATE" ColumnName="FROM_DATE" />
+                <ScalarProperty Name="PERIOD" ColumnName="PERIOD" />
+                <ScalarProperty Name="ID_PLACE" ColumnName="ID_PLACE" />
+                <ScalarProperty Name="ID_DATE" ColumnName="ID_DATE" />
+                <ScalarProperty Name="ID_NUM" ColumnName="ID_NUM" />
+                <ScalarProperty Name="ADDRESS" ColumnName="ADDRESS" />
+                <ScalarProperty Name="JOB" ColumnName="JOB" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="EMP_NAME" ColumnName="EMP_NAME" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CJ_HR_RECRUITMENT_ACCEPT">
+            <EntityTypeMapping TypeName="hr_contract_binhModel.CJ_HR_RECRUITMENT_ACCEPT">
+              <MappingFragment StoreEntitySet="CJ_HR_RECRUITMENT_ACCEPT">
+                <ScalarProperty Name="PRODUCTIVITY" ColumnName="PRODUCTIVITY" />
+                <ScalarProperty Name="EQUIPMENT_DE" ColumnName="EQUIPMENT_DE" />
+                <ScalarProperty Name="PHONE" ColumnName="PHONE" />
+                <ScalarProperty Name="MEAL" ColumnName="MEAL" />
+                <ScalarProperty Name="OMC" ColumnName="OMC" />
+                <ScalarProperty Name="LIVING_FARM" ColumnName="LIVING_FARM" />
+                <ScalarProperty Name="HAZADOUS" ColumnName="HAZADOUS" />
+                <ScalarProperty Name="TRAINING_ALLOWANCE" ColumnName="TRAINING_ALLOWANCE" />
+                <ScalarProperty Name="POSITION_ALLOWANCE" ColumnName="POSITION_ALLOWANCE" />
+                <ScalarProperty Name="APPROVE" ColumnName="APPROVE" />
+                <ScalarProperty Name="SIGNATURE" ColumnName="SIGNATURE" />
+                <ScalarProperty Name="CONTRACT_NO" ColumnName="CONTRACT_NO" />
+                <ScalarProperty Name="NOTE" ColumnName="NOTE" />
+                <ScalarProperty Name="PLANT" ColumnName="PLANT" />
+                <ScalarProperty Name="DEL" ColumnName="DEL" />
+                <ScalarProperty Name="ATTACHED_FILE" ColumnName="ATTACHED_FILE" />
+                <ScalarProperty Name="START_DATE" ColumnName="START_DATE" />
+                <ScalarProperty Name="ALLOWANCE" ColumnName="ALLOWANCE" />
+                <ScalarProperty Name="SALARY" ColumnName="SALARY" />
+                <ScalarProperty Name="GRADE" ColumnName="GRADE" />
+                <ScalarProperty Name="POSITION" ColumnName="POSITION" />
+                <ScalarProperty Name="TO_DATE" ColumnName="TO_DATE" />
+                <ScalarProperty Name="FROM_DATE" ColumnName="FROM_DATE" />
+                <ScalarProperty Name="TYPE_CONTRACT" ColumnName="TYPE_CONTRACT" />
+                <ScalarProperty Name="ID_PLACE" ColumnName="ID_PLACE" />
+                <ScalarProperty Name="ID_DATE" ColumnName="ID_DATE" />
+                <ScalarProperty Name="ID_NUM" ColumnName="ID_NUM" />
+                <ScalarProperty Name="ADDRESS" ColumnName="ADDRESS" />
+                <ScalarProperty Name="JOB" ColumnName="JOB" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="EMP_NAME" ColumnName="EMP_NAME" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CJ_HR_SALARY_REPORT">
+            <EntityTypeMapping TypeName="hr_contract_binhModel.CJ_HR_SALARY_REPORT">
+              <MappingFragment StoreEntitySet="CJ_HR_SALARY_REPORT">
+                <ScalarProperty Name="SIGNATURE_BOD_DATE" ColumnName="SIGNATURE_BOD_DATE" />
+                <ScalarProperty Name="SALES_EMPLOYEE" ColumnName="SALES_EMPLOYEE" />
+                <ScalarProperty Name="SALES_APPROVE_DATE" ColumnName="SALES_APPROVE_DATE" />
+                <ScalarProperty Name="SIGNATURE_SALES_IMAGE" ColumnName="SIGNATURE_SALES_IMAGE" />
+                <ScalarProperty Name="SALES_APPROVE" ColumnName="SALES_APPROVE" />
+                <ScalarProperty Name="HR_APPROVE_DATE" ColumnName="HR_APPROVE_DATE" />
+                <ScalarProperty Name="SIGNATURE_HR_IMAGE" ColumnName="SIGNATURE_HR_IMAGE" />
+                <ScalarProperty Name="HR_APPROVE" ColumnName="HR_APPROVE" />
+                <ScalarProperty Name="SIGNATURE_IMAGE" ColumnName="SIGNATURE_IMAGE" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="NOTE" ColumnName="NOTE" />
+                <ScalarProperty Name="PERIOD_WORKING" ColumnName="PERIOD_WORKING" />
+                <ScalarProperty Name="PRODUCTIVITY_BONUS" ColumnName="PRODUCTIVITY_BONUS" />
+                <ScalarProperty Name="PHONE_ALLOWANCE" ColumnName="PHONE_ALLOWANCE" />
+                <ScalarProperty Name="POSITION_ALLOWANCE" ColumnName="POSITION_ALLOWANCE" />
+                <ScalarProperty Name="MEAL" ColumnName="MEAL" />
+                <ScalarProperty Name="GRADE" ColumnName="GRADE" />
+                <ScalarProperty Name="BASIC_SALARY" ColumnName="BASIC_SALARY" />
+                <ScalarProperty Name="WORKING_TIME" ColumnName="WORKING_TIME" />
+                <ScalarProperty Name="JOIN_DATE" ColumnName="JOIN_DATE" />
+                <ScalarProperty Name="EXPERIENCE" ColumnName="EXPERIENCE" />
+                <ScalarProperty Name="EDUCATION" ColumnName="EDUCATION" />
+                <ScalarProperty Name="RESIDENT" ColumnName="RESIDENT" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="GENDER" ColumnName="GENDER" />
+                <ScalarProperty Name="FULLNAME" ColumnName="FULLNAME" />
+                <ScalarProperty Name="DEPARTMENT" ColumnName="DEPARTMENT" />
+                <ScalarProperty Name="PURPOSE" ColumnName="PURPOSE" />
+                <ScalarProperty Name="POSITION" ColumnName="POSITION" />
+                <ScalarProperty Name="ID_NUM" ColumnName="ID_NUM" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

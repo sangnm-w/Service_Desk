@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Web_IT_HELPDESK.Cart>
+
+@{
+    ViewBag.Title = "Item list";
+}
+
+<h2>Item list</h2>
+
+<table>
+    <tr>
+        <th>
+            Id - Mã
+        </th>
+        <th>
+            ItemId - Mã VPP
+        </th>
+        <th>
+            Date - Ngày Tạo
+        </th>
+        <th>
+            Name - Tên VPP
+        </th>
+          <th>
+            QTY - Số lượng
+        </th>
+        <th>
+            Note - Ghi chú  
+        </th>
+        <th></th>
+    </tr>
+@using (Html.BeginForm("RemoveFromCart2", "ShoppingCart", FormMethod.Post))
+{
+    foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.RecordId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AlbumId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateCreated)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Album.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Count)
+        </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.Note)
+        </td>
+        <td>
+            @Html.ActionLink("Remove", "RemoveFromCart3", new { cart_id=item.RecordId.ToString() },new { @class = "button" }) 
+
+        </td>
+    </tr>
+    }
+}
+    <p class="button">
+    @Html.ActionLink("<< Trở lại ", "Index", "HumanceResource")
+    </p>
+    <p class="button">
+    @Html.ActionLink("Hoàn tất >>", "AddressAndPayment", "Checkout")
+</p>
+
+</table>
