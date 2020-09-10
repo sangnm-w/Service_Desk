@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -257,7 +258,7 @@ namespace Web_IT_HELPDESK
            
         }
 
-        private string str_connect = "data source=52.213.3.168;initial catalog=Web_IT_HELPDESK;persist security info=True;user id=sa;password=#P@ssword#;multipleactiveresultsets=True;";
+        private string str_connect = ConfigurationManager.ConnectionStrings["Web_IT_HELPDESK_connString"].ConnectionString;
         private DataTable email_data(string department_id, string v_plant)
         {
             DataTable datatable = new DataTable();

@@ -351,23 +351,6 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.hr_emp_meal' does not have a p
           <Property Name="Solve_datetime" Type="datetime" />
           <Property Name="Plant" Type="nvarchar" MaxLength="4" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'Web_IT_HELPDESK.dbo.Incidents_Log' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="Incidents_Log">
-          <Property Name="Id" Type="uniqueidentifier" />
-          <Property Name="Code" Type="nvarchar" MaxLength="50" />
-          <Property Name="datetime" Type="datetime" />
-          <Property Name="StatusId" Type="nvarchar" MaxLength="50" />
-          <Property Name="LevelId" Type="nvarchar" MaxLength="50" />
-          <Property Name="Reply" Type="nvarchar" MaxLength="200" />
-          <Property Name="User_create" Type="nvarchar" MaxLength="50" />
-          <Property Name="User_resolve" Type="nvarchar" MaxLength="50" />
-          <Property Name="Note" Type="nvarchar" MaxLength="200" />
-          <Property Name="FileAttched" Type="varbinary(max)" />
-          <Property Name="FileName" Type="nvarchar" MaxLength="100" />
-          <Property Name="DepartmentId" Type="bit" />
-          <Property Name="datetime_log" Type="datetime" />
-        </EntityType>-->
         <EntityType Name="Level">
           <Key>
             <PropertyRef Name="LevelId" />
@@ -391,25 +374,6 @@ warning 6013: The table/view 'Web_IT_HELPDESK.dbo.Incidents_Log' does not have a
           <Property Name="Del" Type="bit" />
           <Property Name="Plant" Type="nvarchar" MaxLength="4" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'Web_IT_HELPDESK.dbo.ORDER_VIEW' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="ORDER_VIEW">
-          <Property Name="ORDER_VIEW_ID" Type="bigint" />
-          <Property Name="TITLE" Type="nvarchar" MaxLength="160" />
-          <Property Name="UNIT" Type="nvarchar" MaxLength="50" />
-          <Property Name="HR" Type="numeric" Precision="38" Scale="2" />
-          <Property Name="ACCOUNTING" Type="numeric" Precision="38" Scale="2" />
-          <Property Name="ANIMAL" Type="numeric" Precision="38" Scale="2" />
-          <Property Name="AQUA" Type="numeric" Precision="38" Scale="2" />
-          <Property Name="HSE" Type="numeric" Precision="38" Scale="2" />
-          <Property Name="LOGISTIC" Type="numeric" Precision="38" Scale="2" />
-          <Property Name="MARKETING" Type="numeric" Precision="38" Scale="2" />
-          <Property Name="MAINTANANCE" Type="numeric" Precision="38" Scale="2" />
-          <Property Name="PURCHASING" Type="numeric" Precision="38" Scale="2" />
-          <Property Name="QC" Type="numeric" Precision="38" Scale="2" />
-          <Property Name="R&amp;D" Type="numeric" Precision="38" Scale="2" />
-          <Property Name="SALES SUPPORT" Type="numeric" Precision="38" Scale="2" />
-        </EntityType>-->
         <EntityType Name="OrderDetail">
           <Key>
             <PropertyRef Name="OrderDetailId" />
@@ -504,6 +468,34 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.sysdiagrams' does not have a p
           <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
           <Property Name="DepatmentId" Type="nvarchar" MaxLength="50" />
           <Property Name="Del" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Web_IT_HELPDESK.dbo.IncidentsView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="IncidentsView">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="User_create" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="50" />
+          <Property Name="datetime" Type="datetime" />
+          <Property Name="StatusId" Type="nvarchar" MaxLength="50" />
+          <Property Name="LevelId" Type="nvarchar" MaxLength="50" />
+          <Property Name="Reply" Type="nvarchar" MaxLength="200" />
+          <Property Name="User_create" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="User_resolve" Type="nvarchar" MaxLength="50" />
+          <Property Name="Note" Type="nvarchar" MaxLength="200" />
+          <Property Name="FileAttched" Type="varbinary(max)" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="100" />
+          <Property Name="Del" Type="bit" />
+          <Property Name="DepartmentId" Type="nvarchar" MaxLength="50" />
+          <Property Name="Solved" Type="bit" />
+          <Property Name="Solve_datetime" Type="datetime" />
+          <Property Name="Plant" Type="nvarchar" MaxLength="4" />
+          <Property Name="EmployeeName" Type="nvarchar" MaxLength="100" />
+          <Property Name="LevelName" Type="nvarchar" MaxLength="200" />
+          <Property Name="StatusName" Type="nvarchar" MaxLength="200" />
+          <Property Name="DepartmentName" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -939,6 +931,30 @@ FROM [dbo].[hr_emp_meal] AS [hr_emp_meal]</DefiningQuery>
 [sysdiagrams].[definition] AS [definition]
 FROM [dbo].[sysdiagrams] AS [sysdiagrams]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="IncidentsView" EntityType="Self.IncidentsView" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[IncidentsView].[Id] AS [Id], 
+[IncidentsView].[Code] AS [Code], 
+[IncidentsView].[datetime] AS [datetime], 
+[IncidentsView].[StatusId] AS [StatusId], 
+[IncidentsView].[LevelId] AS [LevelId], 
+[IncidentsView].[Reply] AS [Reply], 
+[IncidentsView].[User_create] AS [User_create], 
+[IncidentsView].[User_resolve] AS [User_resolve], 
+[IncidentsView].[Note] AS [Note], 
+[IncidentsView].[FileAttched] AS [FileAttched], 
+[IncidentsView].[FileName] AS [FileName], 
+[IncidentsView].[Del] AS [Del], 
+[IncidentsView].[DepartmentId] AS [DepartmentId], 
+[IncidentsView].[Solved] AS [Solved], 
+[IncidentsView].[Solve_datetime] AS [Solve_datetime], 
+[IncidentsView].[Plant] AS [Plant], 
+[IncidentsView].[EmployeeName] AS [EmployeeName], 
+[IncidentsView].[LevelName] AS [LevelName], 
+[IncidentsView].[StatusName] AS [StatusName], 
+[IncidentsView].[DepartmentName] AS [DepartmentName]
+FROM [dbo].[IncidentsView] AS [IncidentsView]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="ORDER_TYPE_VIEW" EntityType="Self.ORDER_TYPE_VIEW" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
 [ORDER_TYPE_VIEW].[OrderId] AS [OrderId], 
@@ -1167,6 +1183,7 @@ FROM [dbo].[ORDER_TYPE_VIEW] AS [ORDER_TYPE_VIEW]</DefiningQuery>
             <End Role="CONTRACT_TYPE_DETAIL" EntitySet="CONTRACT_TYPE_DETAIL" />
             <End Role="CONTRACT" EntitySet="CONTRACTs" />
           </AssociationSet>
+          <EntitySet Name="IncidentsViews" EntityType="Web_IT_HELPDESKModel.IncidentsView" />
           </EntityContainer>
         <ComplexType Name="FUNC_ORDER_Result">
           <Property Type="Int32" Name="ID" Nullable="true" />
@@ -1947,6 +1964,32 @@ FROM [dbo].[ORDER_TYPE_VIEW] AS [ORDER_TYPE_VIEW]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="IncidentsView">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="User_create" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="datetime" Type="DateTime" Precision="3" />
+          <Property Name="StatusId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LevelId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Reply" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="User_create" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="User_resolve" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="FileAttched" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="FileName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Del" Type="Boolean" />
+          <Property Name="DepartmentId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Solved" Type="Boolean" />
+          <Property Name="Solve_datetime" Type="DateTime" Precision="3" />
+          <Property Name="Plant" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LevelName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="StatusName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DepartmentName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2488,6 +2531,32 @@ FROM [dbo].[ORDER_TYPE_VIEW] AS [ORDER_TYPE_VIEW]</DefiningQuery>
                 <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
                 <ScalarProperty Name="principal_id" ColumnName="principal_id" />
                 <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IncidentsViews">
+            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.IncidentsView">
+              <MappingFragment StoreEntitySet="IncidentsView">
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+                <ScalarProperty Name="LevelName" ColumnName="LevelName" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="Plant" ColumnName="Plant" />
+                <ScalarProperty Name="Solve_datetime" ColumnName="Solve_datetime" />
+                <ScalarProperty Name="Solved" ColumnName="Solved" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="FileAttched" ColumnName="FileAttched" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="User_resolve" ColumnName="User_resolve" />
+                <ScalarProperty Name="User_create" ColumnName="User_create" />
+                <ScalarProperty Name="Reply" ColumnName="Reply" />
+                <ScalarProperty Name="LevelId" ColumnName="LevelId" />
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+                <ScalarProperty Name="datetime" ColumnName="datetime" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -4,183 +4,149 @@
 }
 
 <meta charset="utf-8">
-  <!--link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-  <link rel="stylesheet" href="/resources/demos/style.css"-->
+<!--link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="/resources/demos/style.css"-->
 
- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script src="52.213.28.99/servicedesk/Content/js/responsiveslides.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="http://52.213.28.99/servicedesk/Content/js/responsiveslides.js"></script>
 @*<link href="/Content/Site.css" rel="stylesheet" />*@
 <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.js")" type="text/javascript"></script>
- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-   <script>
-       $(function () {
-           $("#tabs").tabs();
-       });
-  </script>
-
-
-@if(ViewBag.Message != null)
-{
 <script>
-
-$(document).ready(function(){
-
-alert('@ViewBag.Message');
-
-});
+    $(function () {
+        $("#tabs").tabs();
+    });
 </script>
-}
 
+<div class="row">
+    <div class="col-md-6">
+        <div class="content-box-large">
+            <div class="panel-heading">
+                <div class="panel-title"> <h2> BEST EMPLOYEE ASSESSMENT MONTHLY </h2></div>
 
+                <div class="panel-options">
+                    <a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
+                    <a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                @*Ut tristique adipiscing mauris, sit amet suscipit metus porta quis. Donec dictum tincidunt erat, eu blandit ligula. Nam sit amet dolor sapien. Quisque velit erat, congue sed suscipit vel, feugiat sit amet enim. Suspendisse interdum enim at mi tempor commodo. Sed tincidunt sed tortor eu scelerisque. Donec luctus malesuada vulputate. Nunc vel auctor metus, vel adipiscing odio. Aliquam aliquet rhoncus libero, at varius nisi pulvinar nec. Aliquam erat volutpat. Donec ut neque mi. Praesent enim nisl, bibendum vitae ante et, placerat pharetra magna. Donec facilisis nisl turpis, eget facilisis turpis semper non. Maecenas luctus ligula tincidunt iasdsd vitae ante et,
+                *@
+                <h2> Guideline: </h2>
+                <h5>  There are 15 criterias classify into 3 group: CJ Culture, Professional, Proactive (Self-Leadership)	</h5>
+                <h5>  Assess the level of each criteria follow: S, A, B, C then click (1) into box	</h5>
+                <h5>  Final score = (total S)x5 + (total A)x4 + (total B)x3 + (total C)x2		</h5>
 
+                <br /><br />
+                @*Interdum et malesuada fames ac ante ipsum primis in faucibus. Quisque sed consectetur erat. Maecenas in elementum libero. Sed consequat pellentesque ultricies. Ut laoreet vehicula nisl sed placerat. Duis posuere lectus n, eros et hendrerit pellentesque, ante magna condimentum sapien, eget ultrices eros libero non orci. Etiam varius diam lectus.
+                *@
+                <br /><br />
+            </div>
+        </div>
+    </div>
 
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="content-box-header">
+                    <div class="panel-title">New vs Returning Visitors</div>
 
+                    <div class="panel-options">
+                        <a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
+                        <a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
+                    </div>
+                </div>
+                <div class="content-box-large box-with-header">
 
-<html>
- 
-  <body>
-  	
-    <div class="page-content">
-    	<div class="row">
-		  
-		  <div class="col-md-10">
-		  	<div class="row">
-		  		<div class="col-md-6">
-		  			<div class="content-box-large">
-		  				<div class="panel-heading">
-							<div class="panel-title"> <h2> BEST EMPLOYEE ASSESSMENT MONTHLY </h2></div>
-							
-							<div class="panel-options">
-								<a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
-								<a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
-							</div>
-						</div>
-		  				<div class="panel-body">
-		  					@*Ut tristique adipiscing mauris, sit amet suscipit metus porta quis. Donec dictum tincidunt erat, eu blandit ligula. Nam sit amet dolor sapien. Quisque velit erat, congue sed suscipit vel, feugiat sit amet enim. Suspendisse interdum enim at mi tempor commodo. Sed tincidunt sed tortor eu scelerisque. Donec luctus malesuada vulputate. Nunc vel auctor metus, vel adipiscing odio. Aliquam aliquet rhoncus libero, at varius nisi pulvinar nec. Aliquam erat volutpat. Donec ut neque mi. Praesent enim nisl, bibendum vitae ante et, placerat pharetra magna. Donec facilisis nisl turpis, eget facilisis turpis semper non. Maecenas luctus ligula tincidunt iasdsd vitae ante et, 
-                              *@
-                              <h2> Guideline: </h2>	
-                              <h5>  There are 15 criterias classify into 3 group: CJ Culture, Professional, Proactive (Self-Leadership)	</h5>
-                              <h5>  Assess the level of each criteria follow: S, A, B, C then click (1) into box	</h5>
-                              <h5>  Final score = (total S)x5 + (total A)x4 + (total B)x3 + (total C)x2		</h5> 
+                    Pellentesque luctus quam quis consequat vulputate. Sed sit amet diam ipsum. Praesent in pellentesque diam, sit amet dignissim erat. Aliquam erat volutpat. Aenean laoreet metus leo, laoreet feugiat enim suscipit quis. Praesent mauris mauris, ornare vitae tincidunt sed, hendrerit eget augue. Nam nec vestibulum nisi, eu dignissim nulla.
+                    <br /><br />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="content-box-header">
+                    <div class="panel-title">New Canteen Survey 2018</div>
 
-				  			<br /><br />
-				  			@*Interdum et malesuada fames ac ante ipsum primis in faucibus. Quisque sed consectetur erat. Maecenas in elementum libero. Sed consequat pellentesque ultricies. Ut laoreet vehicula nisl sed placerat. Duis posuere lectus n, eros et hendrerit pellentesque, ante magna condimentum sapien, eget ultrices eros libero non orci. Etiam varius diam lectus.
-                              *@
-							<br /><br />
-		  				</div>
-		  			</div>
-		  		</div>
+                    <div class="panel-options">
+                        <a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
+                        <a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
+                    </div>
+                </div>
+                <div class="content-box-large box-with-header">
 
-		  		<div class="col-md-6">
-		  			<div class="row">
-		  				<div class="col-md-12">
-		  					<div class="content-box-header">
-			  					<div class="panel-title">New vs Returning Visitors</div>
-								
-								<div class="panel-options">
-									<a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
-									<a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
-								</div>
-				  			</div>
-				  			<div class="content-box-large box-with-header">
-				  				
-					  			Pellentesque luctus quam quis consequat vulputate. Sed sit amet diam ipsum. Praesent in pellentesque diam, sit amet dignissim erat. Aliquam erat volutpat. Aenean laoreet metus leo, laoreet feugiat enim suscipit quis. Praesent mauris mauris, ornare vitae tincidunt sed, hendrerit eget augue. Nam nec vestibulum nisi, eu dignissim nulla.
-								<br /><br />
-							</div>
-		  				</div>
-		  			</div>
-		  			<div class="row">
-		  				<div class="col-md-12">
-		  					<div class="content-box-header">
-			  					<div class="panel-title">New Canteen Survey 2018</div>
-								
-								<div class="panel-options">
-									<a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
-									<a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
-								</div>
-				  			</div>
-				  			<div class="content-box-large box-with-header">
-				  				
-					  			Pellentesque luctus quam quis consequat vulputate. Sed sit amet diam ipsum. Praesent in pellentesque diam, sit amet dignissim erat. Aliquam erat volutpat. Aenean laoreet metus leo, laoreet feugiat enim suscipit quis. Praesent mauris mauris, ornare vitae tincidunt sed, hendrerit eget augue. Nam nec vestibulum nisi, eu dignissim nulla.
-								<br /><br />
-							</div>
-		  				</div>
-		  			</div>
-		  		</div>
-		  	</div>
+                    Pellentesque luctus quam quis consequat vulputate. Sed sit amet diam ipsum. Praesent in pellentesque diam, sit amet dignissim erat. Aliquam erat volutpat. Aenean laoreet metus leo, laoreet feugiat enim suscipit quis. Praesent mauris mauris, ornare vitae tincidunt sed, hendrerit eget augue. Nam nec vestibulum nisi, eu dignissim nulla.
+                    <br /><br />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-		  	<div class="row">
-		  		<div class="col-md-12 panel-warning">
-		  			<div class="content-box-header panel-heading">
-	  					<div class="panel-title ">CONTENT</div>
-						
-						<div class="panel-options">
-							<a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
-							<a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
-						</div>
-		  			</div>
-		  			<div class="content-box-large box-with-header">
-			  			@using (Html.BeginForm("Submit_", "Home", FormMethod.Post))
-                 {
+<div class="row">
+    <div class="col-md-12 panel-warning">
+        <div class="content-box-header panel-heading">
+            <div class="panel-title ">CONTENT</div>
+
+            <div class="panel-options">
+                <a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
+                <a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
+            </div>
+        </div>
+        <div class="content-box-large box-with-header">
+            @using (Html.BeginForm("Submit_", "Home", FormMethod.Post))
+            {
                 <input type="submit" value="Submit" />
                 <!--div id="tabs-1"-->
-                    if (Convert.ToString(Session["plant_id"]) != "030")
+                if (Convert.ToString(Session["plant_id"]) != "030")
+                {
+                    int j = 0;
+                    foreach (var item_question in new Web_IT_HELPDESK.Web_IT_HELPDESKEntities().QUESTIONs.Where(i => i.DEL != true && (i.NOTE == "minhkhanh.hr@cjvina.com_20190301")).OrderBy(o => o.NO))
                     {
-                        int j = 0;
-                        foreach (var item_question in new Web_IT_HELPDESK.Web_IT_HELPDESKEntities().QUESTIONs.Where(i => i.DEL != true && (i.NOTE == "minhkhanh.hr@cjvina.com_20190301")).OrderBy(o => o.NO))
+                        if (j == 0)
                         {
-                             if(j==0)
-                                {
-                                     <h1>CJ Culture </h1>
-                                }
-                           
-                           
-                            <br />
-                                @item_question.NO <span> ) .   </span>
-                             @item_question.QUESTION_CONTENT.ToString().ToUpper().Replace("\\", "    \\    ")
-                           <br/>
-                            <input type="radio" name="answers[@j]" value="0" /> <label style="color:blue" >- S(x5) (Exceptional)  </label>
-                            <input type="radio" name="answers[@j]" value="1" /> <label style="color:blue" >- A(x4) (Exceeds expectations)  </label>
-                            <input type="radio" name="answers[@j]" value="2" checked="checked" /> <label style="color:blue" > - B(x3) (Meet expectations) 
-  </label>
-                            <input type="radio" name="answers[@j]" value="3" /> <label style="color:blue" >- C(x2) (Improvement expectations) 
- </label>
-                            
-                            <input type="radio" name="answers[@j]" value="4" hidden="hidden"/> <label style="color:blue" hidden="hidden">- Hoàn toàn đồng ý</label>
-                            <br/> <textarea name="answersnote[@j]" cols="50" hidden="hidden" style="border:solid 1px" placeholder="Ghi chú đóng góp"></textarea>
-                            <input type="text" name="questions[@j]" value="@item_question.ID" hidden="hidden"/>
-                            <br/>
-                             j = j + 1;
-                             if (j == 6)
-                             {
-                                     <h1>Professional</h1>
-                             }
-                             if (j == 8)
-                             {
-                                    <h1> Proactive (Self - Leadership) </h1>
-                             }
+                            <h1>CJ Culture </h1>
+                        }
+                        <br />
+                        @item_question.NO <span> ) .   </span>
+                        @item_question.QUESTION_CONTENT.ToString().ToUpper().Replace("\\", "    \\    ")
+                        <br />
+                        <input type="radio" name="answers[@j]" value="0" /> <label style="color:blue">- S(x5) (Exceptional)  </label>
+                        <input type="radio" name="answers[@j]" value="1" /> <label style="color:blue">- A(x4) (Exceeds expectations)  </label>
+                        <input type="radio" name="answers[@j]" value="2" checked="checked" /> <label style="color:blue">
+                            - B(x3) (Meet expectations)
+                        </label>
+                        <input type="radio" name="answers[@j]" value="3" /> <label style="color:blue">
+                            - C(x2) (Improvement expectations)
+                        </label>
+
+                        <input type="radio" name="answers[@j]" value="4" hidden="hidden" /> <label style="color:blue" hidden="hidden">- Hoàn toàn đồng ý</label>
+                        <br /> <textarea name="answersnote[@j]" cols="50" hidden="hidden" style="border:solid 1px" placeholder="Ghi chú đóng góp"></textarea>
+                        <input type="text" name="questions[@j]" value="@item_question.ID" hidden="hidden" />
+                        <br />
+                        j = j + 1;
+                        if (j == 6)
+                        {
+                            <h1>Professional</h1>
+                        }
+                        if (j == 8)
+                        {
+                            <h1> Proactive (Self - Leadership) </h1>
                         }
                     }
                 }
-						<br /><br />
-					</div>
-		  		</div>
-		  	</div>
-            
-		  	<div class="content-box-large">
-				content-box-large
-		  	</div>
-		  </div>
-		</div>
+            }
+            <br /><br />
+        </div>
     </div>
+</div>
 
-  </body>
-</html>
-
-
+<div class="content-box-large">
+    content-box-large
+</div>

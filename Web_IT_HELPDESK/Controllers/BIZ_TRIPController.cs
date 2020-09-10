@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Reporting.WebForms;
+using System;
+using System.Data.Entity.Validation;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Net.Mail;
-using System.Data.SqlClient;
-using System.Data.Entity.Validation;
-using System.Globalization;
-using PagedList;
-using Web_IT_HELPDESK.Controllers.ObjectManager;
-using System.Data.Entity.Core.Objects;
 using System.Web.UI.WebControls;
-using Microsoft.Reporting.WebForms;
-using System.IO;
+using Web_IT_HELPDESK.Controllers.ObjectManager;
 
 namespace Web_IT_HELPDESK.Controllers
 {

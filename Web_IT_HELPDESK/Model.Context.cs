@@ -15,7 +15,8 @@ namespace Web_IT_HELPDESK
     using System.Data.Entity.Core.Objects.DataClasses;
     using System.Data.Entity.Infrastructure;
     using System.Linq;
-    
+    using Web_IT_HELPDESK.ViewModels;
+
     public partial class Web_IT_HELPDESKEntities : DbContext
     {
         public Web_IT_HELPDESKEntities()
@@ -62,7 +63,8 @@ namespace Web_IT_HELPDESK
         public DbSet<employee_bk20190826> employee_bk20190826 { get; set; }
         public DbSet<EmployeeInfo_bk20190826> EmployeeInfo_bk20190826 { get; set; }
         public DbSet<sysdiagram> sysdiagrams { get; set; }
-    
+        public DbSet<IncidentsView> IncidentsViews { get; set; }
+        
         [EdmFunction("Web_IT_HELPDESKEntities", "FUNC_ORDER")]
         public virtual IQueryable<FUNC_ORDER_Result> FUNC_ORDER(Nullable<System.DateTime> v_fromdate, Nullable<System.DateTime> v_todate)
         {

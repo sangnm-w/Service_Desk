@@ -1,21 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Security;
-//using Web_IT_HELPDESK.Models.ObjectManager;
-using System.Runtime.CompilerServices;
-using System.Web.UI.WebControls;
-using System.Drawing;
-using System.IO;
 using System.Data;
-//using Microsoft.Reporting.WebForms;
-using System.Net.Mail;
-using System.Data.SqlClient;
 using System.Data.Entity.Validation;
 using System.Globalization;
-using PagedList;
+using System.Linq;
+using System.Web.Mvc;
 using Web_IT_HELPDESK.Controllers.ObjectManager;
 
 namespace Web_IT_HELPDESK.Controllers

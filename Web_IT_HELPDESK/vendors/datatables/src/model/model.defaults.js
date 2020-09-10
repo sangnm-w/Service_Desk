@@ -129,7 +129,7 @@ DataTable.defaults = {
 	 *  @example
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+	 *        "aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "all"]]
 	 *      } );
 	 *    } );
 	 *  
@@ -140,7 +140,7 @@ DataTable.defaults = {
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "iDisplayLength": 25,
-	 *        "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]]
+	 *        "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "all"]]
 	 *      } );
 	 *    } );
 	 */

@@ -26,7 +26,7 @@
     <!-- styles -->
     <link href="http://52.213.28.99/servicedesk/css/styles.css" rel="stylesheet" />
 
-    <link href="https://code.jquery.com/ui/1.10.3/themes/redmond/jquery-ui.css" rel="stylesheet" media="screen">
+    <link href="http://code.jquery.com/ui/1.12.1/themes/redmond/jquery-ui.css" rel="stylesheet" media="screen">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -38,9 +38,9 @@
     <link href="http://52.213.28.99/servicedesk/vendors/datatables/dataTables.bootstrap.css" rel="stylesheet" media="screen">
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="http://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
     <!-- jQuery UI -->
-    <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="http://52.213.28.99/servicedesk/bootstrap/js/bootstrap.min.js"></script>
 
@@ -52,8 +52,7 @@
     <script src="http://52.213.28.99/servicedesk/js/tables.js"></script>
 
 
-    <link href="https://code.jquery.com/ui/1.10.3/themes/redmond/jquery-ui.css" rel="stylesheet" media="screen">
-
+    <link href="http://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" rel="stylesheet" media="screen">
 
 </head>
 
@@ -100,7 +99,7 @@
 
     <div class="page-content">
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <div class="sidebar content-box" style="display: block;">
                     <ul class="nav">
                         <!-- Main menu -->
@@ -118,7 +117,7 @@
 
                         <li class="submenu">
                             <a href="#">
-                                <i class="glyphicon glyphicon-list"></i> Issue
+                                <i class="glyphicon glyphicon-list"></i> IT Order Request
                                 <span class="caret pull-right"></span>
                             </a>
                             <!-- Sub menu -->
@@ -185,7 +184,9 @@
                     </ul>
                 </div>
             </div>
-            @RenderBody()
+            <div class="col-md-9">
+                @RenderBody()
+            </div>
         </div>
     </div>
 

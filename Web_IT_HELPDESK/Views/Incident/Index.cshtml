@@ -1,197 +1,183 @@
-﻿@model IEnumerable<Web_IT_HELPDESK.Incident>
+﻿@model IEnumerable<Web_IT_HELPDESK.Models.IncidentModel>
 
-    @{
-        ViewBag.Title = "Index";
-        Layout = "~/Views/Shared/_Layout.cshtml";
-    }
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-    <body>
-        <div class="page-content">
-            <div class="row">
+<div class="content-box-large">
+    <h4>IT Order Request</h4>
 
-                <div class="col-md-10">
-                    <div class="content-box-large">
-                        <h4>Issue Page</h4>
-
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                @using (Html.BeginForm("Index", "Incident", FormMethod.Post))
-                                {
-                                    <div class="form-group">
-                                        <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Month :</label>
-                                        @Html.TextBox("_datetime", DateTime.Now.ToString("yyyy-MM"), new { @type = "month", @class = "form-control", @style = "width: auto; display: inline-block" })
-                                    </div>
-                                    if (ViewBag.IsAdmin == true)
-                                    {
-                                        /*Only admin have this group*/
-                                        <div class="form-group">
-                                            <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Plants :</label>
-                                            <div class="row">
-                                                <div class="col-sm-3">
-                                                    <label class="radio-inline">
-                                                        @Html.RadioButton("plants", "0301", false)<label>LONG AN</label>
-                                                    </label>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <label class="radio-inline">
-                                                        @Html.RadioButton("plants", "0302", false)<label>HUNG YEN</label>
-                                                    </label>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <label class="radio-inline">
-                                                        @Html.RadioButton("plants", "0303", false)<label>VINH LONG</label>
-                                                    </label>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <label class="radio-inline">
-                                                        @Html.RadioButton("plants", "0304", false)<label>DONG NAI</label>
-                                                    </label>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <label class="radio-inline">
-                                                        @Html.RadioButton("plants", "0305", false)<label>HA NAM</label>
-                                                    </label>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <label class="radio-inline">
-                                                        @Html.RadioButton("plants", "0306", false)<label>BINH DINH</label>
-                                                    </label>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <label class="radio-inline">
-                                                        @Html.RadioButton("plants", "All", true)<label>ALL</label>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-                                    <div class="form-group">
-                                        <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Process :</label>
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <label class="radio-inline">
-                                                    @Html.RadioButton("solved", "False", false)<label>NOT YET</label>
-                                                </label>
-
-                                                <label class="radio-inline">
-                                                    @Html.RadioButton("solved", "True", false)<label>FINISHED</label>
-                                                </label>
-                                                <label class="radio-inline">
-                                                    @Html.RadioButton("solved", "All", true)<label>ALL</label>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <button type="submit" class="btn btn-default">Search</button>
-                                    </div>
-                                }
+    <div class="panel panel-default">
+        <div class="panel-body">
+            @using (Html.BeginForm("Index", "Incident", FormMethod.Post))
+            {
+                <div class="form-group">
+                    <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Month :</label>
+                    @Html.TextBox("_datetime", DateTime.Now.ToString("yyyy-MM"), new { @type = "month", @class = "form-control", @style = "width: auto; display: inline-block" })
+                </div>
+                if (ViewBag.IsAdmin == true)
+                {
+                    /*Only admin have this group*/
+                    <div class="form-group">
+                        <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Plants :</label>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="radio-inline">
+                                    @Html.RadioButton("plants", "0301", false)<label>LONG AN</label>
+                                </label>
                             </div>
-                        </div>
-                        <div class="panel panel-info">
-                            <div class="content-box-header panel-heading">
-                                <div class="panel-title ">Request List</div>
-
-                                <div class="panel-options">
-                                    <a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
-                                    <a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
-                                </div>
+                            <div class="col-sm-3">
+                                <label class="radio-inline">
+                                    @Html.RadioButton("plants", "0302", false)<label>HUNG YEN</label>
+                                </label>
                             </div>
-                            <div class="panel-body">
-                                <table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-bordered dataTable" id="example" aria-describedby="example_info">
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                Mã
-                                            </th>
-                                            <th>
-                                                Ngày tạo
-                                            </th>
-                                            <th>
-                                                Trạng thái
-                                            </th>
-                                            <th>
-                                                Cấp độ
-                                            </th>
-                                            <th>
-                                                Phòng yêu cầu
-                                            </th>
-                                            <th>
-                                                Phản hồi
-                                            </th>
-                                            <th>
-                                                Người tạo
-                                            </th>
-                                            <th>
-                                                Người giải quyết
-                                            </th>
-                                            <th>
-                                                Note
-                                            </th>
-                                            <th>
-                                                FileName
-                                            </th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model)
-                                        {
-                                            bool department_confirm = (bool)item.Solved;
-                                            <tr style="@(department_confirm == false ? "Background-color:#99FF99" : "")">
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Code)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.datetime)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.StatusId)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.LevelId)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.DepartmentId)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Reply)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.User_create)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.User_resolve)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Note)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.FileName)
-                                                </td>
-                                                <td>
-                                                    <div class="btn-group-vertical" role="group" aria-label="Button group">
-                                                        @Html.ActionLink("Edit", "Edit", new { inc_id = item.Id }, new { @class = "btn btn-default btn-xs", @role = "button" })
-                                                        @Html.ActionLink("Details", "Details", new { inc_id = item.Id }, new { @class = "btn btn-default btn-xs", @role = "button" })
-                                                        @if (item.Solved != true && ViewBag.IsAdmin)
-                                                        {
-                                                            @Html.ActionLink("Solve", "Solve", new { inc_id = item.Id }, new { @class = "btn btn-default btn-xs", @role = "button" })
-                                                        }
-
-                                                        @if (item.FileAttched != null)
-                                                        {
-                                                            @Html.ActionLink("Get_file", "Get_file", new { inc_id = item.Id }, new { @class = "btn btn-default btn-xs", @role = "button" })
-                                                        }
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
+                            <div class="col-sm-3">
+                                <label class="radio-inline">
+                                    @Html.RadioButton("plants", "0303", false)<label>VINH LONG</label>
+                                </label>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="radio-inline">
+                                    @Html.RadioButton("plants", "0304", false)<label>DONG NAI</label>
+                                </label>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="radio-inline">
+                                    @Html.RadioButton("plants", "0305", false)<label>HA NAM</label>
+                                </label>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="radio-inline">
+                                    @Html.RadioButton("plants", "0306", false)<label>BINH DINH</label>
+                                </label>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="radio-inline">
+                                    @Html.RadioButton("plants", "all", true)<label>ALL</label>
+                                </label>
                             </div>
                         </div>
                     </div>
+                }
+                <div class="form-group">
+                    <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Process :</label>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label class="radio-inline">
+                                @Html.RadioButton("solved", "False", false)<label>NOT YET</label>
+                            </label>
+
+                            <label class="radio-inline">
+                                @Html.RadioButton("solved", "True", false)<label>FINISHED</label>
+                            </label>
+                            <label class="radio-inline">
+                                @Html.RadioButton("solved", "all", true)<label>ALL</label>
+                            </label>
+                        </div>
+                    </div>
                 </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-default">Search</button>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="content-box-header panel-heading">
+            <div class="panel-title ">Request List</div>
+
+            <div class="panel-options">
+                <a href="@Url.Action("Download", "Incident")" data-rel="download">
+                    <i class="glyphicon glyphicon-download-alt"></i>
+                </a>
             </div>
         </div>
-    </body>
+        <div class="panel-body">
+            <table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-bordered dataTable" id="inctable" aria-describedby="example_info">
+                <thead>
+                    <tr>
+                        <th>
+                            Mã
+                        </th>
+                        <th>
+                            Ngày tạo
+                        </th>
+                        <th>
+                            Trạng thái
+                        </th>
+                        <th>
+                            Cấp độ
+                        </th>
+                        <th>
+                            Người tạo
+                        </th>
+                        <th>
+                            Người giải quyết
+                        </th>
+                        <th>
+                            Note
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        bool department_confirm = (bool)item.Solved;
+                        <tr style="@(department_confirm == false ? "Background-color:#99FF99" : "")">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Code)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.datetime)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.statusName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.levelName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.userCreateName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.userResolveName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Note)
+                            </td>
+                            <td>
+                                <div class="btn-group-vertical" role="group" aria-label="Button group">
+                                    @if (item.Solved != true && ViewBag.IsAdmin)
+                                    {
+                                        @Html.ActionLink("Edit", "Edit", new { inc_id = item.Id }, new { @class = "btn btn-default btn-xs", @role = "button" })
+                                        if (ViewBag.IsAdmin)
+                                        {
+                                            @Html.ActionLink("Solve", "Solve", new { inc_id = item.Id }, new { @class = "btn btn-default btn-xs", @role = "button" })
+                                        }
+                                    }
+                                    @Html.ActionLink("Details", "Details", new { inc_id = item.Id }, new { @class = "btn btn-default btn-xs", @role = "button" })
+
+                                    @if (item.FileAttched != null)
+                                    {
+                                        @Html.ActionLink("Get_file", "Get_file", new { inc_id = item.Id }, new { @class = "btn btn-default btn-xs", @role = "button" })
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $('#inctable').DataTable({
+                        aaSorting: [[0, 'desc']]
+                    });
+                });
+            </script>
+        </div>
+    </div>
+</div>

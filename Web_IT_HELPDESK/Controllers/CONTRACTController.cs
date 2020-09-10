@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Web_IT_HELPDESK.Models;
-using PagedList;
-using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Validation;
 
 namespace Web_IT_HELPDESK.Controllers
 {
@@ -40,14 +39,14 @@ namespace Web_IT_HELPDESK.Controllers
             string v_plant = GetPlant_id(System.Web.HttpContext.Current.User.Identity.Name);
             if (v_companys != null)
             {
-                if ((search_ == "" || search_ == "search") && v_companys.Count == 12 && v_contract_type == "All")
+                if ((search_ == "" || search_ == "search") && v_companys.Count == 12 && v_contract_type == "all")
                 {
                     var contract_list = en.CONTRACTs.Where(o => o.DEL != true 
                                                               && date_ <= EntityFunctions.AddDays(o.DATE, daynum_) 
                                                               && o.PLANT == v_plant).OrderBy(i => i.DATE);
                     return View(contract_list);
                 }
-                else if((search_ == "" || search_ == "search") && v_companys.Count == 12 && v_contract_type != "All")
+                else if((search_ == "" || search_ == "search") && v_companys.Count == 12 && v_contract_type != "all")
                 {
                     var contract_list = en.CONTRACTs.Where(o => o.DEL != true 
                                                              && o.CONTRACT_TYPE.CONTRACT_TYPE_NAME==v_contract_type
@@ -55,7 +54,7 @@ namespace Web_IT_HELPDESK.Controllers
                                                              && o.PLANT == v_plant).OrderBy(i => i.DATE);
                     return View(contract_list);
                 }
-                else if (search_ == "" || search_ == "search" && v_contract_type == "All")
+                else if (search_ == "" || search_ == "search" && v_contract_type == "all")
                 {
                     foreach (var v_company in v_companys)
                     {
@@ -69,7 +68,7 @@ namespace Web_IT_HELPDESK.Controllers
                                                                 && o.PLANT == v_plant).OrderBy(i => i.DATE);
                     return View(contract_list);
                 }
-                else if (search_ == "" || search_ == "search" && v_contract_type != "All")
+                else if (search_ == "" || search_ == "search" && v_contract_type != "all")
                 {
                     foreach (var v_company in v_companys)
                     {
@@ -84,7 +83,7 @@ namespace Web_IT_HELPDESK.Controllers
                                                              && v_company_string.Trim().Contains(o.DEPARMENTID)).OrderBy(i => i.DATE);
                     return View(contract_list);
                 }
-                else if (v_contract_type == "All" && (search_ != "" || search_ != "search"))
+                else if (v_contract_type == "all" && (search_ != "" || search_ != "search"))
                 {
                     foreach (var v_company in v_companys)
                     {
@@ -99,7 +98,7 @@ namespace Web_IT_HELPDESK.Controllers
                                                              && o.CONTRACTNAME.Contains(search_) == true && v_company_string.Trim().Contains(o.DEPARMENTID)).OrderBy(i => i.DATE);
                     return View(contract_list);
                 }
-                else if (v_contract_type == "All")
+                else if (v_contract_type == "all")
                 {
                     foreach (var v_company in v_companys)
                     {

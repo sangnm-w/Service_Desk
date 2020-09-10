@@ -6532,7 +6532,7 @@ $.widget("ui.menu", {
 			this.activate(event, this.element.children(edge));
 			return;
 		}
-		var next = this.active[direction + "All"](".ui-menu-item").eq(0);
+		var next = this.active[direction + "all"](".ui-menu-item").eq(0);
 		if (next.length) {
 			this.activate(event, next);
 		} else {
