@@ -44,19 +44,31 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
         /// <returns> (bool) Result of sending </returns>
         public bool Send_IncidentEmail(IncidentModel incM, string actionName = null, List<string> toMails = null, List<string> ccMails = null, List<string> bccMails = null)
         {
-            // Check duplicate between toMails and ccMails
-            if (ccMails != null && ccMails.Count > 0)
-                foreach (string m in ccMails)
-                    if (toMails.Contains(m))
-                        toMails.Remove(m);
-            // Check duplicate between toMails and bccMails
-            if (bccMails != null && bccMails.Count > 0)
-                foreach (string m in bccMails)
-                    if (toMails.Contains(m))
-                        toMails.Remove(m);
+            // Check toMails is null
+            if (toMails == null)
+            {
+                return false;
+            }
+            else
+            {
+                // Check duplicate between toMails and ccMails
+                if (ccMails != null)
+                    foreach (string m in toMails)
+                        if (ccMails.Contains(m))
+                            ccMails.Remove(m);
+
+                if (bccMails != null)
+                {
+                    foreach (string m in toMails)
+                        if (bccMails.Contains(m))
+                            bccMails.Remove(m);
+                    foreach (string m in ccMails)
+                        if (bccMails.Contains(m))
+                            bccMails.Remove(m);
+                }
+            }
 
             return Send_Mail(Define_IncidentMail(incM, actionName, toMails, ccMails, bccMails));
-
         }
 
         /// <summary>

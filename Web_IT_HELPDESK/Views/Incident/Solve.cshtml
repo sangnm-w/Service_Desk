@@ -79,10 +79,8 @@
                         @Html.ValidationMessageFor(model => model.User_resolve)
                     </div>
                     <div class="col-sm-4">
-                        Attactment : @Html.DisplayFor(model => model.FileName) <br />
-                        <div class="btn btn-primary">
-                            @Html.TextBox("attachment", null, new { @type = "file", @id = "image" })
-                        </div>
+                        Attactment <br />
+                        @Html.TextBoxFor(model => model.FileName, new { @class = "form-control", @readonly = "readonly", onfocus = "this.blur()", @style = "background-color:#DEDEDE;" })
                     </div>
                 </div>
                 <hr>

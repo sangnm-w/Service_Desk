@@ -226,10 +226,16 @@ namespace Web_IT_HELPDESK.Controllers
                 /*1========== Sending Mail ==========================================================================================*/
                 IncidentModel incEx = IncidentViewModel.Instance.get_single_Inc(incident.Id);
                 List<string> toMails = en.Employees.Where(e => e.Plant == plantid && e.DepatmentId == "0805").Select(e => e.Email).ToList();
-                List<string> ccMails = new List<string>() { en.Departments.FirstOrDefault(e => e.Plant == plantid && e.DepartmentId == "0805").Manager_Email.ToString() };
+                List<string> ccMails = new List<string>() { en.Departments.FirstOrDefault(e => e.Plant == plantid && e.DepartmentId == "0805").Manager_Email };
 
-                bool resultSend = IncidentHelper.Instance.Send_IncidentEmail(incEx, "Create", toMails, ccMails);
+                bool resultSend = IncidentHelper.Instance.Send_IncidentEmail(incEx, "CREATE", toMails, ccMails);
                 /*1==================================================================================================================*/
+
+                if (!resultSend)
+                {
+                    Response.Write("Sending mail method have been fail");
+                    Response.End();
+                }
 
                 //TryToDelete(Path.Combine(a, incident.FileName)); // delete file is create in address_file path
 
@@ -320,13 +326,19 @@ namespace Web_IT_HELPDESK.Controllers
                     Response.End();
                 }
 
-                //~~~~~~~~~~~~~~~~~~~~~
-                subject = "[Điều chỉnh] - Yêu cầu giải quyết incident: " + new_inc.Code + " - tạo ngày: " + new_inc.datetime;
-                body = "Incident được tạo bởi: " + en.Employees.FirstOrDefault(e => e.EmployeeID == new_inc.User_create).EmployeeName + "\n" + new_inc.Note + "\n" +
-                 "Nhân viên phòng ban: " + deptName + " \n Hỗ trợ incidnet: " + new_inc.Code + "\n Trân trọng!";
+                /*1========== Sending Mail ==========================================================================================*/
+                IncidentModel incEx = IncidentViewModel.Instance.get_single_Inc(currInc.Id);
+                List<string> toMails = en.Employees.Where(e => e.Plant == plantid && e.DepatmentId == "0805").Select(e => e.Email).ToList();
+                List<string> ccMails = new List<string>() { en.Departments.FirstOrDefault(e => e.Plant == plantid && e.DepartmentId == "0805").Manager_Email };
 
-                email_send("user_email", "pass", mailCcIT, mailBccManager, subject, body, new_inc);
-                //~~~~~~~~~~~~~~~~~~~~~
+                bool resultSend = IncidentHelper.Instance.Send_IncidentEmail(incEx, "EDIT", toMails, ccMails);
+                /*1==================================================================================================================*/
+
+                if (!resultSend)
+                {
+                    Response.Write("Sending mail method have been fail");
+                    Response.End();
+                }
 
             }
             return RedirectToAction("Index", "Incident");
@@ -339,8 +351,7 @@ namespace Web_IT_HELPDESK.Controllers
             Incident inc = en.Incidents.Find(inc_id);
 
             ViewBag.UserCreate = en.Employees.FirstOrDefault(e => e.EmployeeID == inc.User_create)?.EmployeeName;
-
-            ViewBag.User_resolve = session_emp;
+            ViewBag.User_resolve = en.Employees.FirstOrDefault(e => e.EmployeeID == session_emp)?.EmployeeName;
             ViewBag.plantName = Plants.Instance[inc.Plant];
             ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", inc.LevelId);
             ViewBag.StatusId = new SelectList(en.Status.Where(s => s.StatusId == "ST6"), "StatusId", "StatusName", inc.StatusId);
@@ -359,22 +370,19 @@ namespace Web_IT_HELPDESK.Controllers
 
             if (inc.StatusId == "ST6" && ModelState.IsValid)
             {
+
                 var currInc = en.Incidents.FirstOrDefault(i => i.Id == inc.Id);
                 currInc.Note = inc.Note;
                 currInc.LevelId = inc.LevelId;
                 currInc.StatusId = inc.StatusId;
                 currInc.Solved = true;
                 currInc.Solve_datetime = DateTime.Now;
+                currInc.User_resolve = session_emp;
                 currInc.Reply = inc.Reply;
-
-                string user_create = Convert.ToString(inc.User_create);
-                string note = Convert.ToString(inc.Note);
-                string user_resolve = Convert.ToString(inc.User_resolve);
-                string reply = Convert.ToString(inc.Reply);
-
                 string plantId = Plants.Instance.FirstOrDefault(p => p.Value == inc.Plant).Key;
                 currInc.Plant = plantId;
 
+                // Save Incident
                 try
                 {
                     en.Entry(currInc).State = EntityState.Modified;
@@ -392,13 +400,20 @@ namespace Web_IT_HELPDESK.Controllers
                     Response.End();
                 }
 
-                //~~~~~~~~~~~~~~~~~~~~~
-                subject = "Yêu cầu giải quyết issue: " + inc.Code + " - tạo ngày: " + inc.datetime;
-                body = "Issue được tạo bởi: " + en.Employees.FirstOrDefault(e => e.EmployeeID == user_create).EmployeeName + "\n" + note + "\n" +
-                "Nhân viên phòng ban: " + deptName + " \n phản hồi issue: " + reply + "\n Trân trọng!";
+                /*1========== Sending Mail ==========================================================================================*/
+                IncidentModel incEx = IncidentViewModel.Instance.get_single_Inc(currInc.Id);
+                List<string> toMails = new List<string>() { en.Employees.FirstOrDefault(e => e.EmployeeID == currInc.User_create).Email };
+                List<string> ccMails = en.Employees.Where(e => e.Plant == plantid && e.DepatmentId == "0805").Select(e => e.Email).ToList();
+                List<string> bccMails = new List<string>() { en.Departments.FirstOrDefault(e => e.Plant == plantid && e.DepartmentId == "0805").Manager_Email };
 
-                email_send("user_email", "pass", mailCcIT, mailBccManager, subject, body, inc);
-                //~~~~~~~~~~~~~~~~~~~~~
+                bool resultSend = IncidentHelper.Instance.Send_IncidentEmail(incEx, "SOLVE", toMails, ccMails, bccMails);
+                /*1==================================================================================================================*/
+
+                if (!resultSend)
+                {
+                    Response.Write("Sending mail method have been fail");
+                    Response.End();
+                }
 
                 return RedirectToAction("Index", "Incident");
             }
