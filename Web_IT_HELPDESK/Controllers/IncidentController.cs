@@ -614,28 +614,29 @@ namespace Web_IT_HELPDESK.Controllers
                     }
                 }
 
+                var lstInc = inc.Join(Plants.Instance,
+                    i => i.Plant,
+                    p => p.Key,
+                    (i, p) => new
+                    {
+                        i.Code,
+                        Date = i.datetime,
+                        Status = i.statusName,
+                        Level = i.levelName,
+                        Creator = i.userCreateName,
+                        Solver = i.userResolveName,
+                        i.Note,
+                        i.Reply,
+                        File = i.FileName,
+                        Department = i.departmentName,
+                        Plant = p.Value
+                    }).ToList();
 
-                var listIncs = inc.ToList();
-                var grid = new System.Web.UI.WebControls.GridView();
-
-                grid.DataSource = listIncs;
-                grid.DataBind();
-
-                Response.ClearContent();
-                Response.Buffer = true;
-                //Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.ContentType = "application/ms-excel"; // EPP for xlsx
-                Response.Charset = "";
-                Response.ContentEncoding = System.Text.Encoding.Unicode;
-                Response.BinaryWrite(System.Text.Encoding.Unicode.GetPreamble());
-                Response.AddHeader("content-disposition", "attachment; filename=IT Order Requests.xls");
-                StringWriter sw = new StringWriter();
-                HtmlTextWriter htw = new HtmlTextWriter(sw);
-
-                grid.RenderControl(htw);
-
-                Response.Output.Write(sw.ToString());
-
+                var stream = ExcelHelper.Instance.CreateExcelFile(null, lstInc);
+                var buffer = stream as MemoryStream;
+                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                Response.AddHeader("Content-Disposition", "attachment; filename=IT Order Request.xlsx");
+                Response.BinaryWrite(buffer.ToArray());
                 Response.Flush();
                 Response.End();
 

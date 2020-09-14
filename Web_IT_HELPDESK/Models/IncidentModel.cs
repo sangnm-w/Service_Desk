@@ -10,5 +10,6 @@ namespace Web_IT_HELPDESK.Models
         public string statusName { get; set; }
         public string levelName { get; set; }
         public string departmentName { get; set; }
+        public string plantName { get; set; }
     }
 }
