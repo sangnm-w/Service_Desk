@@ -11,27 +11,6 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
 {
     public class IncidentHelper
     {
-        private IncidentHelper() { }
-
-        private static IncidentHelper _instance;
-
-        public static IncidentHelper Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new IncidentHelper();
-                }
-                return _instance;
-            }
-            private set
-            {
-                _instance = value;
-            }
-        }
-
-        private string senderID = "ithelpdesk@cjvina.com", senderPW = "qwer4321!";
 
         /// <summary>
         /// This method send mail of Incident
@@ -156,7 +135,8 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                     msg.Subject = subject;
                     msg.IsBodyHtml = true;
                     msg.Body = bodyHtml.ToString();
-                    msg.Attachments.Add(attached_file);
+                    if (attached_file != null)
+                        msg.Attachments.Add(attached_file);
                 }
             }
             return msg;
@@ -185,5 +165,28 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                 }
             }
         }
+
+        private IncidentHelper() { }
+
+        private static IncidentHelper _instance;
+
+        public static IncidentHelper Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new IncidentHelper();
+                }
+                return _instance;
+            }
+            private set
+            {
+                _instance = value;
+            }
+        }
+
+        private string senderID = "ithelpdesk@cjvina.com", senderPW = "qwer4321!";
+
     }
 }
