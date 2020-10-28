@@ -19,7 +19,7 @@ namespace Web_IT_HELPDESK.Controllers
             return View();
         }
 
-        Web_IT_HELPDESKEntities en = new Web_IT_HELPDESKEntities();
+        ServiceDeskEntities en = new ServiceDeskEntities();
         public ActionResult PortalAdmin()
         {
             var document = en.Documents;

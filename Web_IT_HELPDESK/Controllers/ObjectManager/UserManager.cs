@@ -7,7 +7,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
 {
     public class UserManager
     {
-        Web_IT_HELPDESKEntities en = new Web_IT_HELPDESKEntities();
+        ServiceDeskEntities en = new ServiceDeskEntities();
         public string GetUserPassword(string userLogIn)
         {
             var user = from i in en.Employees where i.EmployeeID == userLogIn select i;
@@ -21,7 +21,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
         {
             var user = from i in en.Employees where i.EmployeeID == userLogIn select i;
             if (user.ToList().Count > 0)
-                return user.First().Plant;
+                return user.First().Plant_Id;
             else
                 return string.Empty;
         } 

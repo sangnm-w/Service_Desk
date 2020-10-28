@@ -14,7 +14,7 @@ namespace Web_IT_HELPDESK.Controllers
     {
         //
         // GET: /LogOn/
-        Web_IT_HELPDESKEntities en = new Web_IT_HELPDESKEntities();
+        ServiceDeskEntities en = new ServiceDeskEntities();
 
         public ActionResult Logon()
         {
@@ -34,13 +34,13 @@ namespace Web_IT_HELPDESK.Controllers
 
         private string GetPlant_id(string v_emp)
         {
-            string plant_id = en.Employees.Where(f => (f.EmployeeID == v_emp)).Select(f => f.Plant).SingleOrDefault();
+            string plant_id = en.Employees.Where(f => (f.EmployeeID == v_emp)).Select(f => f.Plant_Id).SingleOrDefault();
             return plant_id;
         }
 
         private string GetDept_id(string v_plant_id, string session_emp)
         {
-            string dept_id = en.Employees.Where(f => (f.EmployeeID == session_emp && f.Plant == v_plant_id)).Select(f => f.DepatmentId).SingleOrDefault();
+            string dept_id = en.Employees.Where(f => (f.EmployeeID == session_emp && f.Plant_Id == v_plant_id)).Select(f => f.Department_Id).SingleOrDefault();
             return dept_id;
         }
 

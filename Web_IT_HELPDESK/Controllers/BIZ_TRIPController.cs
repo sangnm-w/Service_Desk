@@ -1,5 +1,6 @@
 ﻿using Microsoft.Reporting.WebForms;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Globalization;
 using System.IO;
@@ -8,14 +9,15 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using Web_IT_HELPDESK.Controllers.ObjectManager;
+using Web_IT_HELPDESK.Models;
+using Web_IT_HELPDESK.ViewModels;
 
 namespace Web_IT_HELPDESK.Controllers
 {
     public class BIZ_TRIPController : Controller
     {
-        //
         // GET: /BIZ_TRIP/
-        Web_IT_HELPDESKEntities en = new Web_IT_HELPDESKEntities();
+        ServiceDeskEntities en = new ServiceDeskEntities();
         private string session_emp = System.Web.HttpContext.Current.User.Identity.Name;
         private DateTime to_date { get; set; }
         private DateTime from_date { get; set; }
@@ -23,19 +25,19 @@ namespace Web_IT_HELPDESK.Controllers
 
         private string GetDept_id(string v_plant_id)
         {
-            string dept_id = en.Employees.Where(f => (f.EmployeeID == session_emp && f.Plant == v_plant_id)).Select(f => f.DepatmentId).SingleOrDefault();
+            string dept_id = en.Employees.Where(f => (f.EmployeeID == session_emp && f.Plant_Id == v_plant_id)).Select(f => f.Department_Id).SingleOrDefault();
             return dept_id;
         }
 
         public ActionResult biz_trip_index()
         {
-            var DepartmentName = from i in en.Departments where i.Del != true select i.DepartmentName;
+            var DepartmentName = from i in en.Departments where i.Deactive != true select i.Department_Name;
             SelectList deptlist = new SelectList(DepartmentName);
             ViewBag.DepartmentName = deptlist;
             string plant_id = userManager.GetUserPlant(session_emp);
 
             string dept_id = Convert.ToString(GetDept_id(plant_id));
-            string dept_name = en.Departments.Where(o => o.DepartmentId == dept_id && o.Plant == plant_id).Select(f => f.DepartmentName).SingleOrDefault();
+            string dept_name = en.Departments.Where(o => o.Department_Id == dept_id && o.Plant_Id == plant_id).Select(f => f.Department_Name).SingleOrDefault();
             ViewBag.DepartmentNameview = dept_name;
 
             IFormatProvider culture = new CultureInfo("en-US", true);
@@ -169,7 +171,7 @@ namespace Web_IT_HELPDESK.Controllers
             }
             string plant_id = userManager.GetUserPlant(session_emp);
             string dept_id = Convert.ToString(GetDept_id(plant_id));
-            ViewBag.DepartmentNameview = en.Departments.Where(o => o.DepartmentId == dept_id && o.Plant == plant_id).Select(f => f.DepartmentName).SingleOrDefault();
+            ViewBag.DepartmentNameview = en.Departments.Where(o => o.Department_Id == dept_id && o.Plant_Id == plant_id).Select(f => f.Department_Name).SingleOrDefault();
 
             if (session_emp != "")
             {
@@ -214,11 +216,12 @@ namespace Web_IT_HELPDESK.Controllers
                 BIZ_TRIP biz_trip = new BIZ_TRIP();
                 ViewBag.DEPT = GetDept_id(plant_id);
                 string v_dept = GetDept_id(plant_id).ToString();
-                ViewBag.DepartmentName = en.Departments.Where(o => o.DepartmentId == v_dept && o.Plant == plant_id).Select(f => f.DepartmentName).SingleOrDefault();
+                ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == v_dept && o.Plant_Id == plant_id).Select(f => f.Department_Name).SingleOrDefault();
                 /*get employee name*/
                 ViewBag.EMPNO = session_emp;
                 ViewBag.PLANT = plant_id;
-                ViewBag.NAME = en.Employees.Where(f => (f.EmployeeID == session_emp.ToString() && f.Plant == plant_id)).Select(f => f.EmployeeName).SingleOrDefault();
+                ViewBag.NAME = en.Employees.Where(f => (f.EmployeeID == session_emp.ToString() && f.Plant_Id == plant_id)).Select(f => f.EmployeeName).SingleOrDefault();
+                ViewBag.Job = en.Employees.Where(f => (f.EmployeeID == session_emp.ToString() && f.Plant_Id == plant_id)).Select(f => f.Job).SingleOrDefault();
                 /*get employee name*/
                 return View(biz_trip);
             }
@@ -258,36 +261,40 @@ namespace Web_IT_HELPDESK.Controllers
                 throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
             }
 
-            string result, status = "";
-            string department_name = en.Departments.Where(o => o.DepartmentId == v_dept.ToString() && o.Plant == plantid).Select(f => f.DepartmentName).SingleOrDefault();
+            string result;
+            string department_name = en.Departments.Where(o => o.Department_Id == v_dept.ToString() && o.Plant_Id == plantid).Select(f => f.Department_Name).SingleOrDefault();
             subject = "[APPROVE] - Phiếu đăng ký đi công tác: " + biz_trip.NAME + " - tạo ngày: " + biz_trip.DATE;
             result = string.Format("Thông báo! <br /> <br />" +
                                               "Đã gởi email phiếu đăng ký đi công tác đến trưởng phòng bộ phận: " + department_name + " <br />" +
                                               "************** Cám ơn đã sử dụng chương trình **************");
-            status = "1";
-            //}
-            body = "     Employee Name: " + biz_trip.NAME + "\n" +
-                   "        Department: " + department_name + "\n" +
-                   "              Date: " + biz_trip.DATE + "\n" +
-                   "       Description: " + biz_trip.DESCRIPTION + "\n" +
-                   "           Vehicle: " + biz_trip.VEHICLE + "\n" +
-                   "  Conctact Company: " + biz_trip.CONTACT_COMPANY + "\n" +
-                   "Conctact Departent: " + biz_trip.CONTACT_DEPT + "\n" +
-                   "    Contact person: " + biz_trip.CONTACT_PERSON + "\n" +
-                   "         From date: " + biz_trip.FROM_DATE + "       To date: " + biz_trip.TO_DATE + "\n" +
-                   "    Used equipemnt: " + biz_trip.USED_EQUIPMENT.ToString() + "\n" +
-                   " Equipemnt remarks: " + biz_trip.REMARK.ToString() + "\n" +
-                   "-------------------------------------" + "\n" +
-                   "   Follow link to confirm: " + "http://52.213.3.168/servicedesk/BIZ_TRIP/dept_confirm/" + biz_trip.ID + "\n" + "\n" +
-                   "Regards!" + "\n" + "\n" + "\n" +
+            #region SendMail Biztrip
+            //string result, status = "";
+            //string department_name = en.Departments.Where(o => o.Department_Id == v_dept.ToString() && o.Plant_Id == plantid).Select(f => f.Department_Name).SingleOrDefault();
+            //subject = "[APPROVE] - Phiếu đăng ký đi công tác: " + biz_trip.NAME + " - tạo ngày: " + biz_trip.DATE;
+            //result = string.Format("Thông báo! <br /> <br />" +
+            //                                  "Đã gởi email phiếu đăng ký đi công tác đến trưởng phòng bộ phận: " + department_name + " <br />" +
+            //                                  "************** Cám ơn đã sử dụng chương trình **************");
+            //status = "1";
+            //body = "     Employee Name: " + biz_trip.NAME + "\n" +
+            //       "        Department: " + department_name + "\n" +
+            //       "              Date: " + biz_trip.DATE + "\n" +
+            //       "       Description: " + biz_trip.DESCRIPTION + "\n" +
+            //       "           Vehicle: " + biz_trip.VEHICLE + "\n" +
+            //       "  Conctact Company: " + biz_trip.CONTACT_COMPANY + "\n" +
+            //       "Conctact Departent: " + biz_trip.CONTACT_DEPT + "\n" +
+            //       "    Contact person: " + biz_trip.CONTACT_PERSON + "\n" +
+            //       "         From date: " + biz_trip.FROM_DATE + "       To date: " + biz_trip.TO_DATE + "\n" +
+            //       "    Used equipemnt: " + biz_trip.USED_EQUIPMENT.ToString() + "\n" +
+            //       " Equipemnt remarks: " + biz_trip.REMARK.ToString() + "\n" +
+            //       "-------------------------------------" + "\n" +
+            //       "   Follow link to confirm: " + "http://52.213.3.168/servicedesk/BIZ_TRIP/dept_confirm/" + biz_trip.ID + "\n" + "\n" +
+            //       "Regards!" + "\n" + "\n" + "\n" +
 
-                   "Copy right by IT TEAM: contact Nguyen Thai Binh - IT Software for supporting";
+            //       "Copy right by IT TEAM: contact Nguyen Thai Binh - IT Software for supporting";
 
 
-            inf.email_send("user_email", "pass", biz_trip.DEPT, subject, body, status, userManager.GetUserPlant(session_emp));
-            //~~~~~~~~~~~~~~~~~~~~~
-            //return RedirectToAction("Index", "SealUsing");
-
+            //inf.email_send("user_email", "pass", biz_trip.DEPT, subject, body, status, userManager.GetUserPlant(session_emp)); 
+            #endregion
 
             return result;
         }
@@ -300,22 +307,20 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.EMPNO = session_emp;
             ViewBag.DEPT = biz_trip.DEPT;
             ViewBag.PLANT = biz_trip.PLANT;
-            ViewBag.DepartmentName = en.Departments.Where(o => o.DepartmentId == biz_trip.DEPT
-                                                         && o.Plant == biz_trip.PLANT).Select(i => i.DepartmentName).SingleOrDefault();
+            ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == biz_trip.DEPT
+                                                         && o.Plant_Id == biz_trip.PLANT).Select(i => i.Department_Name).SingleOrDefault();
             /*get employee name*/
-            ViewBag.User_name = en.Employees.Where(f => (f.EmployeeID == session_emp.ToString() && f.Plant == biz_trip.DEPT.ToString())).Select(f => f.EmployeeName).SingleOrDefault();
+            ViewBag.User_name = en.Employees.Where(f => (f.EmployeeID == session_emp.ToString() && f.Plant_Id == biz_trip.DEPT.ToString())).Select(f => f.EmployeeName).SingleOrDefault();
             /*get employee name*/
             return View(biz_trip);
         }
 
-        //
         // POST: /BIZ_TRIP/dept_confirm/GUID
-
         [HttpPost]
         public string dept_confirm(BIZ_TRIP biz_trip, HttpPostedFileBase image)
         {
             //string plantid = userManager.GetUserPlant(session_emp);
-            var dept = from i in en.Departments where i.DepartmentId == biz_trip.DEPT && i.Plant == biz_trip.PLANT select i.DepartmentName;
+            var dept = from i in en.Departments where i.Department_Id == biz_trip.DEPT && i.Plant_Id == biz_trip.PLANT select i.Department_Name;
             /*string result;
 
             en.Entry(biz_trip).State = System.Data.Entity.EntityState.Modified;
@@ -379,29 +384,29 @@ namespace Web_IT_HELPDESK.Controllers
                     en.Entry(existingCart).CurrentValues.SetValues(biz_trip);
                     en.SaveChanges();
                     subject = "[APPROVE] - Phiếu yêu cầu đăng ký đi công tác BIZ TRIP: " + biz_trip.NAME + " - ngày: " + biz_trip.DATE;
-                     body = 
-                        "     Employee Name: " + biz_trip.NAME + "\n" +
-                        "        Department: " + dept.Single().ToString() + "\n" +
-                        "              Date: " + biz_trip.DATE + "\n" +
-                        "       Description: " + biz_trip.DESCRIPTION + "\n" +
-                        "           Vehicle: " + biz_trip.VEHICLE + "\n" +
-                        "  Conctact Company: " + biz_trip.CONTACT_COMPANY + "\n" +
-                        "Conctact Departent: " + biz_trip.CONTACT_DEPT + "\n" +
-                        "    Contact person: " + biz_trip.CONTACT_PERSON + "\n" +
-                        "         From date: " + biz_trip.FROM_DATE + "       To date: " +biz_trip.TO_DATE+"\n"+
-                        "    Used equipemnt: " + biz_trip.USED_EQUIPMENT.ToString() + "\n" +
-                        " Equipemnt remarks: " + biz_trip.REMARK.ToString() + "\n" +
-                        "-------------------------------------" + "\n" +
-                        "Confirmed by department manager" + "\n" +
-                        "   Follow to confirm by link: " + "http://52.213.3.168/servicedesk/BIZ_TRIP/hr_confirm/" + biz_trip.ID + "\n" +
-                        "Regards!" + "\n" + "\n" + "\n" +
+                    body =
+                       "     Employee Name: " + biz_trip.NAME + "\n" +
+                       "        Department: " + dept.Single().ToString() + "\n" +
+                       "              Date: " + biz_trip.DATE + "\n" +
+                       "       Description: " + biz_trip.DESCRIPTION + "\n" +
+                       "           Vehicle: " + biz_trip.VEHICLE + "\n" +
+                       "  Conctact Company: " + biz_trip.CONTACT_COMPANY + "\n" +
+                       "Conctact Departent: " + biz_trip.CONTACT_DEPT + "\n" +
+                       "    Contact person: " + biz_trip.CONTACT_PERSON + "\n" +
+                       "         From date: " + biz_trip.FROM_DATE + "       To date: " + biz_trip.TO_DATE + "\n" +
+                       "    Used equipemnt: " + biz_trip.USED_EQUIPMENT.ToString() + "\n" +
+                       " Equipemnt remarks: " + biz_trip.REMARK.ToString() + "\n" +
+                       "-------------------------------------" + "\n" +
+                       "Confirmed by department manager" + "\n" +
+                       "   Follow to confirm by link: " + "http://52.213.3.168/servicedesk/BIZ_TRIP/hr_confirm/" + biz_trip.ID + "\n" +
+                       "Regards!" + "\n" + "\n" + "\n" +
 
-                        "Copy right by IT TEAM: contact Nguyen Thai Binh - IT Software for supporting";
+                       "Copy right by IT TEAM: contact Nguyen Thai Binh - IT Software for supporting";
 
-                //~~~~~~~~~~~~~~~~~~~~~
+                    //~~~~~~~~~~~~~~~~~~~~~
 
-                confirm_status = "APPROVED";
-                inf.email_send("user_email", "pass", biz_trip.DEPT, subject, body, "2", biz_trip.PLANT);
+                    confirm_status = "APPROVED";
+                    inf.email_send("user_email", "pass", biz_trip.DEPT, subject, body, "2", biz_trip.PLANT);
                     result = string.Format("ALERT! <br /> HR MANAGER Finished to approve: " + biz_trip.DEPT_CONFIRM.ToString() + " <br />" +
                                            "Employee: " + biz_trip.NAME.ToString() + " <br />" +
                                                  "Thank you.");
@@ -423,22 +428,20 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.EMPNO = session_emp;
             ViewBag.DEPT = biz_trip.DEPT;
             ViewBag.PLANT = biz_trip.PLANT;
-            ViewBag.DepartmentName = en.Departments.Where(o => o.DepartmentId == biz_trip.DEPT
-                                                         && o.Plant == biz_trip.PLANT).Select(i => i.DepartmentName).SingleOrDefault();
+            ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == biz_trip.DEPT
+                                                         && o.Plant_Id == biz_trip.PLANT).Select(i => i.Department_Name).SingleOrDefault();
             /*get employee name*/
-            ViewBag.User_name = en.Employees.Where(f => (f.EmployeeID == session_emp.ToString() && f.Plant == biz_trip.DEPT.ToString())).Select(f => f.EmployeeName).SingleOrDefault();
+            ViewBag.User_name = en.Employees.Where(f => (f.EmployeeID == session_emp.ToString() && f.Plant_Id == biz_trip.DEPT.ToString())).Select(f => f.EmployeeName).SingleOrDefault();
             /*get employee name*/
             return View(biz_trip);
         }
 
-        //
         // POST: /BIZ_TRIP/dept_confirm/GUID
-
         [HttpPost]
         public string hr_confirm(BIZ_TRIP biz_trip, HttpPostedFileBase image)
         {
             string plantid = userManager.GetUserPlant(session_emp);
-            var dept = from i in en.Departments where i.DepartmentId == biz_trip.DEPT && i.Plant == biz_trip.PLANT select i.DepartmentName;
+            var dept = from i in en.Departments where i.Department_Id == biz_trip.DEPT && i.Plant_Id == biz_trip.PLANT select i.Department_Name;
             string result = "********ALERT! ******** ;<br /> Not yet Finished";
 
             image = image ?? Request.Files["image"];
@@ -488,7 +491,7 @@ namespace Web_IT_HELPDESK.Controllers
                     inf.email_send("user_email", "pass", biz_trip.DEPT, subject, body, "4", biz_trip.PLANT);
                     result = string.Format("ALERT! <br /> MANAGER Finished to approve: " + biz_trip.DEPT_CONFIRM.ToString() + " <br />" +
                                            "Employee: " + biz_trip.NAME.ToString() + " <br />" +
-                                           "This email was sent to GA to arrange car."+ " <br />" +
+                                           "This email was sent to GA to arrange car." + " <br />" +
                                                  "Thank you.");
 
                 }
@@ -574,7 +577,7 @@ namespace Web_IT_HELPDESK.Controllers
 
             //int pageSize = 20;
             //int pageNumber = (page ?? 1);
-            var biztrip_list = en.BIZ_TRIP.Where(o => o.DEL != true 
+            var biztrip_list = en.BIZ_TRIP.Where(o => o.DEL != true
                                                 && o.PLANT == plant_id
                                                 && o.DATE >= from_date
                                                 && o.DATE <= to_date
@@ -586,7 +589,7 @@ namespace Web_IT_HELPDESK.Controllers
         {
             var biz_trip = en.BIZ_TRIP.Where(i => i.ID == id).FirstOrDefault();
             string v_plant = userManager.GetUserPlant(session_emp);
-            var dept = from i in en.Departments where i.DepartmentId == biz_trip.DEPT && i.Plant == v_plant select i.DepartmentName;
+            var dept = from i in en.Departments where i.Department_Id == biz_trip.DEPT && i.Plant_Id == v_plant select i.Department_Name;
             //~~~~~~~~~~~~~~~~~~~~~
             subject = "<<Gấp>> [Cần duyệt] - Phiếu yêu cầu sử dụng con dấu: " + biz_trip.NAME + " - tạo ngày: " + biz_trip.DATE;
             body = "     Employee Name: " + biz_trip.NAME + "\n" +
@@ -639,7 +642,29 @@ namespace Web_IT_HELPDESK.Controllers
                            where i.ID == v_id
                            select i;
 
-                ReportDataSource rd = new ReportDataSource("DataSetBizTrip", list);
+                var lstBizTrip = en.BIZ_TRIP.Where(b => b.ID == v_id).Select(b => new Biz_TripViewModel
+                {
+                    EMPNO = b.EMPNO,
+                    NAME = b.NAME,
+                    DEPT = b.DEPT,
+                    DESCRIPTION = b.DESCRIPTION,
+                    VEHICLE = b.VEHICLE,
+                    CONTACT_COMPANY = b.CONTACT_COMPANY,
+                    CONTACT_PERSON = b.CONTACT_PERSON,
+                    CONTACT_DEPT = b.CONTACT_DEPT,
+                    DATE = b.DATE,
+                    FROM_DATE = b.FROM_DATE,
+                    TO_DATE = b.TO_DATE,
+                    USED_EQUIPMENT = b.USED_EQUIPMENT,
+                    REMARK = b.REMARK,
+                    PLANT = b.PLANT,
+                    DEPT_CONFIRM_IMAGE = b.DEPT_CONFIRM_IMAGE,
+                    HR_CONFIRM_IMAGE = b.HR_CONFIRM_IMAGE,
+                    POSITION = b.Employee.Job,
+                    DEPTNAME = en.Departments.FirstOrDefault(d => d.Plant_Id == b.PLANT && d.Department_Id == b.DEPT).Department_Name
+                });
+
+                ReportDataSource rd = new ReportDataSource("DataSetBizTrip", lstBizTrip);
                 lr.DataSources.Add(rd);
                 string reportType = reportid;
                 string mimeType;
@@ -675,8 +700,9 @@ namespace Web_IT_HELPDESK.Controllers
                 return File(renderedBytes, mimeType);
 
             }
-            catch
+            catch (Exception ex)
             {
+
                 return View();
             }
         }

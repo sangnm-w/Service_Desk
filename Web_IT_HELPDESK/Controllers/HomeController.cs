@@ -18,7 +18,7 @@ namespace Web_IT_HELPDESK.Controllers
             return View();
         }
 
-        Web_IT_HELPDESKEntities en=new Web_IT_HELPDESKEntities();
+        ServiceDeskEntities en =new ServiceDeskEntities();
         private string session_emp = System.Web.HttpContext.Current.User.Identity.Name;
 
         [HttpPost, ActionName("Submit")]
@@ -69,11 +69,11 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         [HttpPost, ActionName("Submit_")] // khảo sát canteen
-        public ActionResult Submit_(IEnumerable<string> answers, IEnumerable<string> answersnote, IEnumerable<Guid> questions)
+        public ActionResult Submit_(IEnumerable<string> answersnote, IEnumerable<Guid> questions)
         {
             string result = string.Empty;
             int index = 0;
-            foreach (var answer in answers)
+            foreach (var answer in answersnote)
             {
                 EMP_ANSWER emp_answer = new EMP_ANSWER();
 
@@ -83,7 +83,7 @@ namespace Web_IT_HELPDESK.Controllers
                 emp_answer.QUESTION_ID = en.QUESTIONs.Where(o => o.ID == question_id).Select(i => i.ID).SingleOrDefault();
                 emp_answer.EMPLOYEEID = session_emp;
                 emp_answer.DATE = DateTime.Now;
-                emp_answer.ANSWERID = Convert.ToInt32(answer.ToString());
+                emp_answer.NOTE = answer.ToString();
                 
                 // Get IP May Tinh
                 /*IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());
@@ -113,13 +113,13 @@ namespace Web_IT_HELPDESK.Controllers
 
         private string GetDept_id()
         {
-            string dept_id = en.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.DepatmentId).SingleOrDefault();
+            string dept_id = en.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.Department_Id).SingleOrDefault();
             return dept_id;
         }
 
         private string GetPlant_id()
         {
-            string plant_id = en.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.Plant).SingleOrDefault();
+            string plant_id = en.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.Plant_Id).SingleOrDefault();
             return plant_id;
         }
 

@@ -1,0 +1,137 @@
+﻿@model Web_IT_HELPDESK.Device
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Device</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Device_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Device_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Serial_No)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Serial_No)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Purchase_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Purchase_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CPU)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CPU)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RAM)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RAM)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DISK)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DISK)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Operation_System)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Operation_System)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Note)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Note)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Depreciation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Depreciation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Device_Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Device_Status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Plant_Id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Plant_Id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Addition_Information)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Addition_Information)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CONTRACT.VENDOR)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CONTRACT.VENDOR)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Device_Type.Device_Type_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Device_Type.Device_Type_Name)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

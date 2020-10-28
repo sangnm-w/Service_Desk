@@ -12,7 +12,7 @@ namespace Web_IT_HELPDESK.Controllers
     {
         //
         // GET: /ShoppingCart/
-        Web_IT_HELPDESKEntities en = new Web_IT_HELPDESKEntities();
+        ServiceDeskEntities en = new ServiceDeskEntities();
         public ActionResult Index()
         {
             var cart = ShoppingCart.GetCart(this.HttpContext);

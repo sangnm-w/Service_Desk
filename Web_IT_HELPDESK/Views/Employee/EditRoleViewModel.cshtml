@@ -5,7 +5,7 @@
     <fieldset>
         <legend>Authority user</legend>
         <!--input type="checkbox" name="ints2" value="0" checked="checked"--> 
-        @foreach (var item in new Web_IT_HELPDESK.Web_IT_HELPDESKEntities().Employee_Screen//.Where(i => i.Use == true)
+        @foreach (var item in new Web_IT_HELPDESK.ServiceDeskEntities().Employee_Screen//.Where(i => i.Use == true)
                     .Select(item => new { HTMLcode = item.Screen.HTMLcode, EmployeeID = item.Employee.EmployeeID, Use = item.Use, ScreenName = item.Screen.ScreenName, ScreenId = item.Screen.ScreenId }).OrderBy(item => item.ScreenId))
 {
     if (item.EmployeeID == Convert.ToString(Session["v_emp_id"]))

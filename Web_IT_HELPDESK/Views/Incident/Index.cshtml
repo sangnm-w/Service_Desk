@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Web_IT_HELPDESK.Models.IncidentModel>
+﻿@model IEnumerable<Web_IT_HELPDESK.ViewModels.IncidentViewModel>
 
 @{
     ViewBag.Title = "Index";
@@ -22,36 +22,14 @@
                     <div class="form-group">
                         <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Plants :</label>
                         <div class="row">
-                            <div class="col-sm-3">
-                                <label class="radio-inline">
-                                    @Html.RadioButton("plants", "0301", false)<label>Long An</label>
-                                </label>
-                            </div>
-                            <div class="col-sm-3">
-                                <label class="radio-inline">
-                                    @Html.RadioButton("plants", "0302", false)<label>Hung Yen</label>
-                                </label>
-                            </div>
-                            <div class="col-sm-3">
-                                <label class="radio-inline">
-                                    @Html.RadioButton("plants", "0303", false)<label>Vinh Long</label>
-                                </label>
-                            </div>
-                            <div class="col-sm-3">
-                                <label class="radio-inline">
-                                    @Html.RadioButton("plants", "0304", false)<label>Dong Nai</label>
-                                </label>
-                            </div>
-                            <div class="col-sm-3">
-                                <label class="radio-inline">
-                                    @Html.RadioButton("plants", "0305", false)<label>Ha Nam</label>
-                                </label>
-                            </div>
-                            <div class="col-sm-3">
-                                <label class="radio-inline">
-                                    @Html.RadioButton("plants", "0306", false)<label>Binh Dinh</label>
-                                </label>
-                            </div>
+                            @foreach (var item in ViewBag.Plants)
+                            {
+                                <div class="col-sm-3">
+                                    <label class="radio-inline">
+                                        @Html.RadioButton("plants", (string)item.Plant_Id, false)<label>@item.Plant_Name</label>
+                                    </label>
+                                </div>
+                            }
                             <div class="col-sm-3">
                                 <label class="radio-inline">
                                     @Html.RadioButton("plants", "all", true)<label>All</label>
@@ -98,25 +76,25 @@
                 <thead>
                     <tr>
                         <th>
-                            No.
+                            @Html.DisplayNameFor(model => model.Code)
                         </th>
                         <th>
-                            Date Created
+                            @Html.DisplayNameFor(model => model.datetime)
                         </th>
                         <th>
-                            Status
+                            @Html.DisplayNameFor(model => model.statusName)
                         </th>
                         <th>
-                            Level
+                            @Html.DisplayNameFor(model => model.levelName)
                         </th>
                         <th>
-                            Creator
+                            @Html.DisplayNameFor(model => model.userCreateName)
                         </th>
                         <th>
-                            Solver
+                            @Html.DisplayNameFor(model => model.userResolveName)
                         </th>
                         <th>
-                            Note
+                            @Html.DisplayNameFor(model => model.Note)
                         </th>
                         <th>
                             Action
@@ -171,13 +149,15 @@
                     }
                 </tbody>
             </table>
-            <script type="text/javascript">
-                $(document).ready(function () {
-                    $('#inctable').DataTable({
-                        aaSorting: [[0, 'desc']]
-                    });
-                });
-            </script>
         </div>
     </div>
 </div>
+@section Script {
+    <script type="text/javascript">
+        //$.fn.dataTable.moment('D/MM/YYYY');
+
+        $('#inctable').DataTable({
+            aaSorting: [[0, 'desc']]
+        });
+    </script>
+}

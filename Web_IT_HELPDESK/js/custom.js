@@ -1,6 +1,4 @@
 $(document).ready(function(){
-
-
   $(".submenu > a").click(function(e) {
     e.preventDefault();
     var $li = $(this).parent("li");
@@ -16,5 +14,17 @@ $(document).ready(function(){
       $li.addClass("open");
     }
   });
-  
+    $(".subsubmenu > a").click(function (e) {
+        e.preventDefault();
+        var $li = $(this).parent("li");
+        var $ul = $(this).next("ul");
+
+        if ($li.hasClass("open")) {
+            $ul.slideUp(350);
+            $li.removeClass("open");
+        } else {
+            $ul.slideDown(350);
+            $li.addClass("open");
+        }
+    });
 });

@@ -1,0 +1,9 @@
+1. Apply Selectron for all webpages.
+	- Reference: Allocations\Edit.cshtml
+	- Link: https://www.jqueryscript.net/form/jQuery-Custom-Select-Plugin-selectron.html
+
+2. Transfer CreateExcelFile for one model to for flexible model
+
+Done 3. format purchase date and depreciation date of Create Allocation not follow model
+
+4. Bootstrap 4 select

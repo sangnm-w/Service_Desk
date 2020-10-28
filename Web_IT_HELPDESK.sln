@@ -1,9 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.1169
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web_IT_HELPDESK", "Web_IT_HELPDESK\Web_IT_HELPDESK.csproj", "{A696722E-23A3-46B3-BD76-7147C628AD16}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SomeThing", "SomeThing", "{58DC11CF-5610-4031-BB7F-629122D04B90}"
+	ProjectSection(SolutionItems) = preProject
+		GitMind.txt = GitMind.txt
+		Import normal.cs = Import normal.cs
+		Import with EPPlus mvcCore.cs = Import with EPPlus mvcCore.cs
+		Task.txt = Task.txt
+		TextFile1.txt = TextFile1.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D83FAC08-B8D9-4B62-B05B-AF7927206C66}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -5,95 +5,102 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+@section Style{
+    <style>
+        textarea {
+            resize: vertical;
+            min-height: 34px;
+            max-height: 102px;
+        }
+    </style>
+}
 
-@using (Html.BeginForm("Solve", "Incident", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    <div class="col-md-12 panel-info">
-        <div class="content-box-header panel-heading">
-            <div class="panel-title ">Solve Order Request</div>
+<div class="col-md-12 panel-info">
+    <div class="content-box-header panel-heading">
+        <div class="panel-title ">Solve Order Request</div>
 
-            <div class="panel-options">
-                <a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
-                <a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
-            </div>
+        <div class="panel-options">
+            <a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
+            <a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
         </div>
-        <div class="content-box-large box-with-header">
-            <div>
+    </div>
+    <div class="content-box-large box-with-header">
+        @using (Html.BeginForm("Solve", "Incident", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id)
                 <div class="row">
-                    @Html.HiddenFor(model => model.Id)
                     <div class="col-sm-2">
-                        No. <br />
-                        @Html.TextBoxFor(model => model.Code, new { @class = "form-control", @readonly = "readonly", onfocus = "this.blur()", @style = "background-color:#DEDEDE;" })
-                        @Html.ValidationMessageFor(model => model.Code)
+                        @Html.LabelFor(model => model.Code, "No.", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-sm-2">
-                        Plant <br />
-                        @Html.TextBox("Plant", (string)ViewBag.plantName, new { @class = "form-control", @readonly = "readonly", onfocus = "this.blur()", @style = "background-color:#DEDEDE;" })
-                        @Html.ValidationMessageFor(model => model.Plant)
+                        @Html.LabelFor(model => model.Plant, "Plant", htmlAttributes: new { @class = "control-label" })
+                        @Html.Editor("Plant Name", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @Value = ViewBag.plantName } })
+                        @Html.HiddenFor(model => model.Plant)
+                        @Html.ValidationMessageFor(model => model.Plant, "", new { @class = "text-danger" })
                     </div>
-                    <div class="col-sm-2">
-                        Date time <br />
-                        @Html.TextBoxFor(model => model.datetime, new { @class = "form-control", @readonly = "readonly", onfocus = "this.blur()", @style = "background-color:#DEDEDE;" })
-                        @Html.ValidationMessageFor(model => model.datetime)
+                    <div class="col-sm-4">
+                        @Html.LabelFor(model => model.DepartmentId, "Department", htmlAttributes: new { @class = "control-label" })
+                        @Html.Editor("Department Name", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @Value = ViewBag.DepartmentName } })
+                        @Html.HiddenFor(model => model.DepartmentId)
+                        @Html.ValidationMessageFor(model => model.DepartmentId, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.LabelFor(model => model.datetime, "Created Date", htmlAttributes: new { @class = "control-label" })
+                        @Html.Editor("Created Date", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @Value = ((DateTime)Model.datetime).ToString("dd/MM/yyyy") } })
+                        @Html.HiddenFor(model => model.datetime)
+                        @Html.ValidationMessageFor(model => model.datetime, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <hr />
                 <div class="row">
-                    <div class="col-sm-2 text-alert" style="display: grid">
-                        Status <br />
-                        @Html.DropDownList("StatusId", null, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.StatusId, "", new { @class = "alert-danger" })
-                    </div>
-                    <div class="col-sm-2">
-                        Level <br />
-                        @Html.DropDownList("LevelId", null, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.LevelId)
+                    <div class="col-sm-4">
+                        @Html.LabelFor(model => model.StatusId, "Status", htmlAttributes: new { @class = "control-label" })
+                        @Html.Editor("Status Name", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @Value = ViewBag.StatusName } })
+                        @Html.HiddenFor(model => model.StatusId)
+                        @Html.ValidationMessageFor(model => model.StatusId, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-sm-4">
-                        Department <br />
-                        @Html.DropDownList("DepartmentId", null, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.DepartmentId)
+                        @Html.LabelFor(model => model.LevelId, "Level", htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownList("LevelId")
+                        @Html.ValidationMessageFor(model => model.LevelId, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.LabelFor(model => model.FileName, "Attactment", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.FileName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.FileName, "", new { @class = "text-danger" })
                     </div>
                 </div>
-
                 <hr />
                 <div class="row">
                     <div class="col-sm-4">
-                        Employee request <br />
-                        @Html.TextBox("User_Create", (string)ViewBag.UserCreate, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.LabelFor(model => model.User_create, "Requester", htmlAttributes: new { @class = "control-label" })
+                        @Html.Editor("UserCreateName", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @Value = ViewBag.UserCreateName } })
+                        @Html.HiddenFor(model => model.User_create)
+                        @Html.ValidationMessageFor(model => model.User_create, "", new { @class = "text-danger" })
                     </div>
-                    <div class="col-sm-4">
-                        Employee solve <br />
-                        @if (string.IsNullOrWhiteSpace(Model.User_resolve))
-                        {
-                            @*@Html.TextBox("User_resolve", (String)ViewBag.User_resolve, new { @class = "form-control", @readonly = "readonly" })*@
-                            @Html.TextBoxFor(model => model.User_resolve, new { @class = "form-control", @readonly = "readonly", @Value = ViewBag.User_resolve })
-                        }
-                        else
-                        {
-                            @Html.TextBoxFor(model => model.User_resolve, new { @class = "form-control", @readonly = "readonly" })
-                        }
-
-                        @Html.ValidationMessageFor(model => model.User_resolve)
-                    </div>
-                    <div class="col-sm-4">
-                        Attactment <br />
-                        @Html.TextBoxFor(model => model.FileName, new { @class = "form-control", @readonly = "readonly", onfocus = "this.blur()", @style = "background-color:#DEDEDE;" })
+                    <div class="col-sm-8">
+                        @Html.LabelFor(model => model.Note, "Note", htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.Note, new { @class = "form-control", @rows = 3 })
+                        @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <hr>
                 <div class="row">
-                    <div class="col-sm-6">
-                        Note <br />
-                        @Html.TextAreaFor(model => model.Note, new { @class = "form-control", @row = 3 })
-                        @Html.ValidationMessageFor(model => model.Note)
+                    <div class="col-sm-4">
+                        @Html.LabelFor(model => model.User_resolve, "Solver", htmlAttributes: new { @class = "control-label" })
+                        @Html.Editor("UserResolve Name", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @Value = ViewBag.UserResolveName } })
+                        @Html.HiddenFor(model => model.User_resolve)
+                        @Html.ValidationMessageFor(model => model.User_create, "", new { @class = "text-danger" })
                     </div>
-                    <div class="col-sm-6">
-                        Reply <br />
-                        @Html.TextAreaFor(model => model.Reply, new { @class = "form-control", @row = 3 })
-                        @Html.ValidationMessageFor(model => model.Reply)
+                    <div class="col-sm-8">
+                        @Html.LabelFor(model => model.Reply, "Reply", htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.Reply, new { @class = "form-control", @rows = 3 })
+                        @Html.ValidationMessageFor(model => model.Reply, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <hr>
@@ -106,6 +113,11 @@
                     </div>
                 </div>
             </div>
-        </div>
+        }
     </div>
+</div>
+@section Script {
+    <script type="text/javascript">
+        $('select').selectron();
+    </script>
 }

@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Web_IT_HELPDESK
+@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -107,7 +108,7 @@
                 if (Convert.ToString(Session["plant_id"]) != "030")
                 {
                     int j = 0;
-                    foreach (var item_question in new Web_IT_HELPDESK.Web_IT_HELPDESKEntities().QUESTIONs.Where(i => i.DEL != true && (i.NOTE == "minhkhanh.hr@cjvina.com_20190301")).OrderBy(o => o.NO))
+                    foreach (var item_question in new ServiceDeskEntities().QUESTIONs.Where(i => i.DEL != true).OrderBy(o => o.NO))
                     {
                         if (j == 0)
                         {
@@ -117,28 +118,11 @@
                         @item_question.NO <span> ) .   </span>
                         @item_question.QUESTION_CONTENT.ToString().ToUpper().Replace("\\", "    \\    ")
                         <br />
-                        <input type="radio" name="answers[@j]" value="0" /> <label style="color:blue">- S(x5) (Exceptional)  </label>
-                        <input type="radio" name="answers[@j]" value="1" /> <label style="color:blue">- A(x4) (Exceeds expectations)  </label>
-                        <input type="radio" name="answers[@j]" value="2" checked="checked" /> <label style="color:blue">
-                            - B(x3) (Meet expectations)
-                        </label>
-                        <input type="radio" name="answers[@j]" value="3" /> <label style="color:blue">
-                            - C(x2) (Improvement expectations)
-                        </label>
-
-                        <input type="radio" name="answers[@j]" value="4" hidden="hidden" /> <label style="color:blue" hidden="hidden">- Hoàn toàn đồng ý</label>
-                        <br /> <textarea name="answersnote[@j]" cols="50" hidden="hidden" style="border:solid 1px" placeholder="Ghi chú đóng góp"></textarea>
+                        <br /> <textarea name="answersnote[@j]" cols="50" style="border:solid 1px" placeholder="Ghi chú đóng góp"></textarea>
                         <input type="text" name="questions[@j]" value="@item_question.ID" hidden="hidden" />
+
                         <br />
                         j = j + 1;
-                        if (j == 6)
-                        {
-                            <h1>Professional</h1>
-                        }
-                        if (j == 8)
-                        {
-                            <h1> Proactive (Self - Leadership) </h1>
-                        }
                     }
                 }
             }
@@ -150,3 +134,7 @@
 <div class="content-box-large">
     content-box-large
 </div>
+
+@*<script>
+    alert(@viewbag.)
+</script>*@

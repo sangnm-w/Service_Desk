@@ -11,12 +11,12 @@ namespace Web_IT_HELPDESK.Controllers
         //
         // GET: /Employee/
 
-        Web_IT_HELPDESKEntities en = new Web_IT_HELPDESKEntities();
+        ServiceDeskEntities en = new ServiceDeskEntities();
         private string session_emp = System.Web.HttpContext.Current.User.Identity.Name;
 
         public ActionResult EmployeeList()
         {
-            var v_employee_list = en.Employees.Where(i => i.Del != true && i.EmployeeID != "admin"); //&& (i.EmployeeID == "hr" || i.EmployeeID == "pro" || i.EmployeeID == "qc"));
+            var v_employee_list = en.Employees.Where(i => i.Deactive != true && i.EmployeeID != "admin"); //&& (i.EmployeeID == "hr" || i.EmployeeID == "pro" || i.EmployeeID == "qc"));
             return View(v_employee_list);
         }
 
@@ -50,7 +50,7 @@ namespace Web_IT_HELPDESK.Controllers
                 a.Use = true;
                 en.SaveChanges();
             }
-            return View("EmployeeList", en.Employees.Where(i => i.Del != true && i.EmployeeID != "admin"));
+            return View("EmployeeList", en.Employees.Where(i => i.Deactive != true && i.EmployeeID != "admin"));
         }
 
 

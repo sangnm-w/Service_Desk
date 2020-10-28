@@ -13,7 +13,7 @@ namespace Web_IT_HELPDESK.Controllers
     {
         //
         // GET: /DrinkingRequest/
-        Web_IT_HELPDESKEntities en = new Web_IT_HELPDESKEntities();
+        ServiceDeskEntities en = new ServiceDeskEntities();
         private DateTime to_date { get; set; }
         private DateTime from_date { get; set; }
         private string session_emp = System.Web.HttpContext.Current.User.Identity.Name;
@@ -22,7 +22,7 @@ namespace Web_IT_HELPDESK.Controllers
             string plant_id = userManager.GetUserPlant(session_emp);
             string dept_id = Convert.ToString(GetDept_id(plant_id));
 
-            var DepartmentName = from i in en.Departments where i.Del != true select i.DepartmentName;
+            var DepartmentName = from i in en.Departments where i.Deactive != true select i.Department_Name;
             string deptname = DepartmentName.FirstOrDefault().ToString();
             SelectList deptlist = new SelectList(DepartmentName);
             ViewBag.DepartmentName = deptlist;
@@ -167,13 +167,13 @@ namespace Web_IT_HELPDESK.Controllers
         //  Get_department_Id
         private string GetDept_id(string v_plant_id)
         {
-            string dept_id = en.Employees.Where(f => (f.EmployeeID == session_emp && f.Plant == v_plant_id)).Select(f => f.DepatmentId).SingleOrDefault();
+            string dept_id = en.Employees.Where(f => (f.EmployeeID == session_emp && f.Plant_Id == v_plant_id)).Select(f => f.Department_Id).SingleOrDefault();
             return dept_id;
         }
         //GetPlant_id
         private string GetPlant_id()
         {
-            string plant_id = en.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.Plant).SingleOrDefault();
+            string plant_id = en.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.Plant_Id).SingleOrDefault();
             return plant_id;
         }
 
@@ -204,9 +204,9 @@ namespace Web_IT_HELPDESK.Controllers
         {
             string plant_id = userManager.GetUserPlant(session_emp);
             var dept = from i in en.Departments 
-                       where i.DepartmentId == drinking_request.DepartmentId
-                          && i.Plant == plant_id
-                      select i.DepartmentName;
+                       where i.Department_Id == drinking_request.DepartmentId
+                          && i.Plant_Id == plant_id
+                      select i.Department_Name;
             en.Drinking_Request.Add(drinking_request);
             try
             {
@@ -280,7 +280,7 @@ namespace Web_IT_HELPDESK.Controllers
         public string Edit(Drinking_Request drinking_request)
         {
 
-            var dept = from i in en.Departments where i.DepartmentId == drinking_request.DepartmentId select i.DepartmentName;
+            var dept = from i in en.Departments where i.Department_Id == drinking_request.DepartmentId select i.Department_Name;
             string result;
 
             en.Entry(drinking_request).State = System.Data.Entity   .EntityState.Modified;
@@ -350,7 +350,7 @@ namespace Web_IT_HELPDESK.Controllers
         [HttpPost]
         public ActionResult Confirm(Drinking_Request drinking_request)
         {
-            var dept = from i in en.Departments where i.DepartmentId == drinking_request.DepartmentId select i.DepartmentName;
+            var dept = from i in en.Departments where i.Department_Id == drinking_request.DepartmentId select i.Department_Name;
             drinking_request.HR_confirm_date = DateTime.Now;
             en.Entry(drinking_request).State = System.Data.Entity.EntityState.Modified;
             en.SaveChanges();
@@ -441,7 +441,7 @@ namespace Web_IT_HELPDESK.Controllers
         {
             var drinking_request = en.Drinking_Request.Where(i => i.Id == id).FirstOrDefault();
             string plantid = userManager.GetUserPlant(session_emp);
-            var dept = from i in en.Departments where i.DepartmentId == drinking_request.DepartmentId && i.Plant == plantid select i.DepartmentName;
+            var dept = from i in en.Departments where i.Department_Id == drinking_request.DepartmentId && i.Plant_Id == plantid select i.Department_Name;
             //~~~~~~~~~~~~~~~~~~~~~
             subject = "<<Gấp>> [Cần duyệt] - Phiếu yêu cầu sử dụng: " + drinking_request.Employee_name + " - tạo ngày: " + drinking_request.Date;
             body = "Tên người yêu cầu: " + drinking_request.Employee_name + "\n" +

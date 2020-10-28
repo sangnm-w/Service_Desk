@@ -1,0 +1,212 @@
+﻿@model IEnumerable<Web_IT_HELPDESK.ViewModels.DeviceViewModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Style {
+    <style>
+        .borderlastcol {
+            border-left: 1px solid black;
+        }
+    </style>
+}
+
+<!-- Modal -->
+<div id="uploadModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Upload from excel</h4>
+            </div>
+            <div class="modal-body">
+                <!-- Form -->
+                @using (Html.BeginForm("Upload", "Devices", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <span>Select file : </span>
+                    <input type="file" name="FileUpload" id="FileUpload" class="form-control" /><br>
+                    <input type="submit" class="btn btn-info" value="Upload" id="btn_upload" />
+                }
+                <!-- Preview-->
+                <div id='preview'></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content-box-large">
+    <h4>IT Devices</h4>
+    <div class="panel panel-info">
+        <div class="content-box-header panel-heading">
+            <div class="panel-title ">Device List</div>
+
+            <div class="panel-options">
+
+                <a href="" data-toggle="modal" data-target="#uploadModal">
+                    <i class="glyphicon glyphicon glyphicon-upload"></i>
+                </a>
+
+                <a href="@Url.Action("Download", "Devices")">
+                    <i class="glyphicon glyphicon glyphicon-download"></i>
+                </a>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="box-body table-responsive">
+                <table class="display nowrap" id="device" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Device.Device_Code)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Device.Device_Type.Device_Type_Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Device.Device_Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Device.Serial_No)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Device.Purchase_Date)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Device.CPU)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Device.RAM)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Device.DISK)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Device.Operation_System)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Device.OS_License)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Device.Office)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Device.Office_License)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Device.Note)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Device.Depreciation)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Device.Device_Status)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Plant_Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Device.Addition_Information)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Device.Create_Date)
+                            </th>
+                            <th>
+                                Action
+                            </th>
+                        </tr>
+                    <thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device.Device_Code)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device.Device_Type.Device_Type_Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device.Device_Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device.Serial_No)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device.Purchase_Date)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device.CPU)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device.RAM)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device.DISK)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device.Operation_System)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device.OS_License)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device.Office)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device.Office_License)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device.Note)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device.Depreciation)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device.Device_Status)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Plant_Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device.Addition_Information)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device.Create_Date)
+                                </td>
+                                <td>
+                                    @if (item.Device.Device_Type_Id == 6) //6 == Laptop And Desktop
+                                    {
+                                        @Html.ActionLink("Edit", "Edit", new { id = item.Device.Device_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
+                                    }
+                                    else // Other device type
+                                    {
+                                        @Html.ActionLink("Edit", "EditOthers", new { id = item.Device.Device_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@if (!String.IsNullOrEmpty(ViewBag.Error))
+{
+    <script type="text/javascript">alert("@ViewBag.Error")</script>
+}
+@section Script {
+    <script type="text/javascript">
+        $.fn.dataTable.moment('D/MM/YYYY');
+
+        $('#device').DataTable({
+            'aaSorting': [0, 'desc'],
+            "columnDefs": [
+                { className: "borderlastcol", "targets": [18] }
+            ],
+            'scrollX': true,
+        });
+    </script>
+}

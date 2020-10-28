@@ -40,12 +40,12 @@ namespace Web_IT_HELPDESK
         public Nullable<System.DateTime> TO_DATE { get; set; }
         public string NOTE { get; set; }
         public string CONTRACT_NO { get; set; }
-        public bool APPROVE { get; set; }
+        public Nullable<bool> APPROVE { get; set; }
         public byte[] SIGNATURE_IMAGE { get; set; }
-        public bool HR_APPROVE { get; set; }
+        public Nullable<bool> HR_APPROVE { get; set; }
         public byte[] SIGNATURE_HR_IMAGE { get; set; }
         public Nullable<System.DateTime> HR_APPROVE_DATE { get; set; }
-        public bool SALES_APPROVE { get; set; }
+        public Nullable<bool> SALES_APPROVE { get; set; }
         public byte[] SIGNATURE_SALES_IMAGE { get; set; }
         public Nullable<System.DateTime> SALES_APPROVE_DATE { get; set; }
         public Nullable<bool> SALES_EMPLOYEE { get; set; }

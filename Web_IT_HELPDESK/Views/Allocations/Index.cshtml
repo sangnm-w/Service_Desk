@@ -1,0 +1,190 @@
+﻿@model IEnumerable<Web_IT_HELPDESK.ViewModels.AllocationViewModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Style {
+    <style>
+        .borderlastcol {
+            border-left: 1px solid black;
+        }
+    </style>
+}
+<!-- Modal -->
+<div id="uploadModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Upload from excel</h4>
+            </div>
+            <div class="modal-body">
+                <!-- Form -->
+                @using (Html.BeginForm("Upload", "Devices", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <span>Select file : </span>
+                    <input type="file" name="FileUpload" id="FileUpload" class="form-control" /><br>
+                    <input type="submit" class="btn btn-info" value="Upload" id="btn_upload" />
+                }
+                <!-- Preview-->
+                <div id='preview'></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content-box-large">
+    <h4>IT Device Providing</h4>
+    <div class="panel panel-info">
+        <div class="content-box-header panel-heading">
+            <div class="panel-title ">Providing Devices List</div>
+
+            @*<div class="panel-options">
+
+                    <a href="" data-toggle="modal" data-target="#uploadModal">
+                        <i class="glyphicon glyphicon glyphicon-upload"></i>
+                    </a>
+
+                    <a href="@Url.Action("Download", "Devices")">
+                        <i class="glyphicon glyphicon glyphicon-download"></i>
+                    </a>
+                </div>*@
+        </div>
+        <div class="panel-body">
+            <div class="box-body table-responsive">
+                <table class="display nowrap" id="allocation" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Device.Device_Code)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Device.Device_Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Device.Serial_No)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Device.Purchase_Date)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Allocation.Allocation_Code)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Deliver_Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Receiver_Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Allocation.Delivery_Date)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Allocation.Return_Date)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Allocation.Note)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Allocation.IP)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Allocation.Create_Date)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Allocation.Department.Department_Name)
+                            </th>
+                            <th>
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device.Device_Code)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device.Device_Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device.Serial_No)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device.Purchase_Date)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Allocation.Allocation_Code)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Deliver_Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Receiver_Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Allocation.Delivery_Date)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Allocation.Return_Date)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Allocation.Note)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Allocation.IP)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Allocation.Create_Date)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Allocation.Department.Department_Name)
+                                </td>
+                                <td>
+                                    @if (item.Allocation != null)
+                                    {
+                                        if (!item.Allocation.Return_Date.HasValue)
+                                        {
+                                            @Html.ActionLink("Edit", "Edit", new { id = item.Allocation.Allocation_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
+                                            @Html.ActionLink("Revoke", "Revoke", new { id = item.Allocation.Allocation_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
+                                        }
+                                        else
+                                        {
+                                            if (item.Allocation.Flag_ReAllocation == true)
+                                            {
+                                                @Html.ActionLink("Re-Providing", "ReAllocation", new { id = item.Device.Device_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @Html.ActionLink("Provide", "Create", new { id = item.Device.Device_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Script {
+    <script type="text/javascript">
+        $.fn.dataTable.moment("D/MM/YYYY");
+
+        $('#allocation').DataTable({
+            aaSorting: [[0, 'desc']],
+            "columnDefs": [
+                { className: "borderlastcol", "targets": [13] }
+            ],
+            "scrollX": true
+        });
+    </script>
+}

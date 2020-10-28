@@ -276,7 +276,7 @@ body {
         display: none;
     }
 
-.sidebar .nav li.open ul {
+.sidebar .nav li.open > ul {
     display: block;
 }
 
@@ -378,6 +378,40 @@ body {
 .sidebar .nav li.open > a:hover > .caret {
     border-bottom-color: #aaa;
 }
+
+.subsubmenu {
+    margin: 0;
+}
+
+    .subsubmenu a {
+        border-bottom: none !important;
+    }
+
+    .subsubmenu ul {
+        display: none;
+    }
+
+        .subsubmenu ul li {
+            list-style: circle;
+            margin-left: 70px !important;
+        }
+
+            .subsubmenu ul li a {
+                font-size: 13px;
+                line-height: 20px;
+                padding: 5px 10px 5px 0px !important;
+                color: #999;
+                background: #fff;
+                display: block;
+                text-decoration: none;
+                border-top: 0px;
+                font-weight: bold;
+            }
+
+    .subsubmenu.open > ul {
+        display: block;
+    }
+
 
 .login-bg {
     background: rgba(255, 255, 255, 0);

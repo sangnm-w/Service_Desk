@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'D:\Dev Enviroment\Visual Studio\source\repos\Web_IT_Helpdesk_root\Web_IT_HELPDESK\Web_IT_HELPDESK\Model_labor_contract.edmx'. 
+﻿// T4 code generation is enabled for model 'D:\Dev Enviroment\Visual Studio\source\repos\Web_IT_Helpdesk_root\Test\Web_IT_HELPDESK\Web_IT_HELPDESK\Model_labor_contract.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

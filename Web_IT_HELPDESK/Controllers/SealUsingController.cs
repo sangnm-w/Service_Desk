@@ -12,21 +12,21 @@ namespace Web_IT_HELPDESK.Controllers
     {
         //
         // GET: /SealUsing/
-        Web_IT_HELPDESKEntities en = new Web_IT_HELPDESKEntities();
+        ServiceDeskEntities en = new ServiceDeskEntities();
         private string session_emp = System.Web.HttpContext.Current.User.Identity.Name;
 
         public ActionResult Index()
         {
-            var DepartmentName = from i in en.Departments where i.Del != true select i.DepartmentName;
+            var DepartmentName = from i in en.Departments where i.Deactive != true select i.Department_Name;
             SelectList deptlist = new SelectList(DepartmentName);
             ViewBag.DepartmentName = deptlist;
             string plant_id = userManager.GetUserPlant(session_emp);
 
             string dept_id = Convert.ToString(GetDept_id(plant_id));
-            string dept_name =en.Departments.Where(o => o.DepartmentId == dept_id && o.Plant == plant_id).Select(f => f.DepartmentName).SingleOrDefault();
+            string dept_name = en.Departments.Where(o => o.Department_Id == dept_id && o.Plant_Id == plant_id).Select(f => f.Department_Name).SingleOrDefault();
             ViewBag.DepartmentNameview = dept_name;
 
-            IFormatProvider culture = new CultureInfo("en-US", true); 
+            IFormatProvider culture = new CultureInfo("en-US", true);
             string _datetime = DateTime.Now.ToString("MM/yyyy");
             from_date = DateTime.ParseExact("01/" + _datetime, "dd/MM/yyyy", culture);
             string v_mm = _datetime.Substring(0, 2);
@@ -79,26 +79,26 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 if (session_emp != "admin" && session_emp != "D83003" && session_emp != "MK78072" && session_emp != "H88768" && session_emp != "HN91185" && session_emp != "HN92244")
                 {
-                    var students = en.Seal_Using.Where(i => i.Del != true 
-                                                    && i.DepartmentId == dept_id 
+                    var students = en.Seal_Using.Where(i => i.Del != true
+                                                    && i.DepartmentId == dept_id
                                                     && i.Plant == plant_id
-                                                    && i.Date >= from_date 
-                                                    && i.Date <= to_date 
+                                                    && i.Date >= from_date
+                                                    && i.Date <= to_date
                                                     && i.Plant == plant_id
                                                     ).OrderByDescending(o => o.Id);
                     return View(students);//.ToPagedList(pageNumber, pageSize));
                 }
-                else 
+                else
                 {
-                    var students2 = en.Seal_Using.Where(i => i.Del != true 
-                                                          && i.Date >= from_date 
+                    var students2 = en.Seal_Using.Where(i => i.Del != true
+                                                          && i.Date >= from_date
                                                           && i.Date <= to_date
                                                           && i.Plant == plant_id
                                                           ).OrderByDescending(o => o.Id);
                     return View(students2);//.ToPagedList(pageNumber, pageSize));
                 }
             }
-           else return RedirectToAction("LogOn", "LogOn");
+            else return RedirectToAction("LogOn", "LogOn");
 
         }
 
@@ -108,84 +108,84 @@ namespace Web_IT_HELPDESK.Controllers
         [Authorize]
         [HttpPost]
         public ActionResult Index(string searchString, string _datetime, int? page)
-         {
-             //http://www.asp.net/mvc/overview/getting-started/getting-started-with-ef-using-mvc/sorting-filtering-and-paging-with-the-entity-framework-in-an-asp-net-mvc-application
-             IFormatProvider culture = new CultureInfo("en-US", true);
-             from_date = DateTime.ParseExact("01/" + _datetime, "dd/MM/yyyy", culture);
-             string v_mm = _datetime.Substring(0, 2);
+        {
+            //http://www.asp.net/mvc/overview/getting-started/getting-started-with-ef-using-mvc/sorting-filtering-and-paging-with-the-entity-framework-in-an-asp-net-mvc-application
+            IFormatProvider culture = new CultureInfo("en-US", true);
+            from_date = DateTime.ParseExact("01/" + _datetime, "dd/MM/yyyy", culture);
+            string v_mm = _datetime.Substring(0, 2);
 
-             switch (v_mm)
-             {
-                 case "01":
-                     to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                     break;
-                 case "02":
-                     to_date = DateTime.ParseExact("28/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                     break;
-                 case "03":
-                     to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                     break;
-                 case "04":
-                     to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                     break;
-                 case "05":
-                     to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                     break;
-                 case "06":
-                     to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                     break;
-                 case "07":
-                     to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                     break;
-                 case "08":
-                     to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                     break;
-                 case "09":
-                     to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                     break;
-                 case "10":
-                     to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                     break;
-                 case "11":
-                     to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                     break;
-                 case "12":
-                     to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                     break;
-             }
-             string plant_id = userManager.GetUserPlant(session_emp);
-             string dept_id = Convert.ToString(GetDept_id(plant_id));
-             ViewBag.DepartmentNameview = en.Departments.Where(o => o.DepartmentId == dept_id && o.Plant == plant_id).Select(f => f.DepartmentName).SingleOrDefault();
+            switch (v_mm)
+            {
+                case "01":
+                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
+                    break;
+                case "02":
+                    to_date = DateTime.ParseExact("28/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
+                    break;
+                case "03":
+                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
+                    break;
+                case "04":
+                    to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
+                    break;
+                case "05":
+                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
+                    break;
+                case "06":
+                    to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
+                    break;
+                case "07":
+                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
+                    break;
+                case "08":
+                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
+                    break;
+                case "09":
+                    to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
+                    break;
+                case "10":
+                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
+                    break;
+                case "11":
+                    to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
+                    break;
+                case "12":
+                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
+                    break;
+            }
+            string plant_id = userManager.GetUserPlant(session_emp);
+            string dept_id = Convert.ToString(GetDept_id(plant_id));
+            ViewBag.DepartmentNameview = en.Departments.Where(o => o.Department_Id == dept_id && o.Plant_Id == plant_id).Select(f => f.Department_Name).SingleOrDefault();
 
-             if (session_emp != "")
-             {
-                 var students = from s in en.Seal_Using.Where(i => i.Del != true && i.Date >= from_date && i.Date <= to_date && i.Plant==plant_id).OrderByDescending(o => o.Id)
-                                select s;
+            if (session_emp != "")
+            {
+                var students = from s in en.Seal_Using.Where(i => i.Del != true && i.Date >= from_date && i.Date <= to_date && i.Plant == plant_id).OrderByDescending(o => o.Id)
+                               select s;
 
-                 if (session_emp != "admin" && String.IsNullOrEmpty(searchString) && session_emp != "D83003" && session_emp != "V78157" 
-                                    || session_emp != "MK78072" || session_emp != "H88768" || session_emp != "HN91185" || session_emp != "HN92244")
-                     students = students.Where(s => s.DepartmentId == dept_id && s.Plant == plant_id).OrderByDescending(i => i.Id);
-                 else if (session_emp != "admin" && !String.IsNullOrEmpty(searchString) && session_emp != "D83003" && session_emp != "V78157" // triển khai cho Đồng Nai
-                                                || session_emp != "MK78072" || session_emp != "H88768" || session_emp != "HN91185" || session_emp != "HN92244") // triem khai tat ca chi nhanh
-                     students = students.Where(s => s.DepartmentId == dept_id && (s.DepartmentId.Contains(searchString)
-                                        || s.Employee_name.Contains(searchString)) && s.Plant == plant_id).OrderByDescending(i => i.Id);
-                 else if (!String.IsNullOrEmpty(searchString))
-                 {
-                     students = students.Where(s => (s.DepartmentId.Contains(searchString)
-                                            || s.Employee_name.Contains(searchString)) && s.Plant == plant_id).OrderByDescending(i => i.Id);
-                     //|| Convert.ToString(s.Date).Contains(searchString));
-                 }
-                 return View(students);
-             }
-             else return RedirectToAction("LogOn", "LogOn");
-         }
+                if (session_emp != "admin" && String.IsNullOrEmpty(searchString) && session_emp != "D83003" && session_emp != "V78157"
+                                   || session_emp != "MK78072" || session_emp != "H88768" || session_emp != "HN91185" || session_emp != "HN92244")
+                    students = students.Where(s => s.DepartmentId == dept_id && s.Plant == plant_id).OrderByDescending(i => i.Id);
+                else if (session_emp != "admin" && !String.IsNullOrEmpty(searchString) && session_emp != "D83003" && session_emp != "V78157" // triển khai cho Đồng Nai
+                                               || session_emp != "MK78072" || session_emp != "H88768" || session_emp != "HN91185" || session_emp != "HN92244") // triem khai tat ca chi nhanh
+                    students = students.Where(s => s.DepartmentId == dept_id && (s.DepartmentId.Contains(searchString)
+                                       || s.Employee_name.Contains(searchString)) && s.Plant == plant_id).OrderByDescending(i => i.Id);
+                else if (!String.IsNullOrEmpty(searchString))
+                {
+                    students = students.Where(s => (s.DepartmentId.Contains(searchString)
+                                           || s.Employee_name.Contains(searchString)) && s.Plant == plant_id).OrderByDescending(i => i.Id);
+                    //|| Convert.ToString(s.Date).Contains(searchString));
+                }
+                return View(students);
+            }
+            else return RedirectToAction("LogOn", "LogOn");
+        }
 
 
 
 
         private string GetDept_id(string v_plant_id)
         {
-            string dept_id = en.Employees.Where(f => (f.EmployeeID == session_emp && f.Plant == v_plant_id)).Select(f => f.DepatmentId).SingleOrDefault();
+            string dept_id = en.Employees.Where(f => (f.EmployeeID == session_emp && f.Plant_Id == v_plant_id)).Select(f => f.Department_Id).SingleOrDefault();
             return dept_id;
         }
 
@@ -210,11 +210,11 @@ namespace Web_IT_HELPDESK.Controllers
                 Seal_Using seal_using = new Seal_Using();
                 ViewBag.DepartmentId = GetDept_id(plant_id);
                 string v_dept = GetDept_id(plant_id).ToString();
-                ViewBag.DepartmentName = en.Departments.Where(o => o.DepartmentId == v_dept && o.Plant == plant_id).Select(f => f.DepartmentName).SingleOrDefault();
+                ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == v_dept && o.Plant_Id == plant_id).Select(f => f.Department_Name).SingleOrDefault();
                 /*get employee name*/
 
                 ViewBag.Plant = plant_id;
-                ViewBag.User_name = en.Employees.Where(f => (f.EmployeeID == session_emp.ToString() && f.Plant == plant_id)).Select(f => f.EmployeeName).SingleOrDefault();
+                ViewBag.User_name = en.Employees.Where(f => (f.EmployeeID == session_emp.ToString() && f.Plant_Id == plant_id)).Select(f => f.EmployeeName).SingleOrDefault();
                 /*get employee name*/
                 return View(seal_using);
             }
@@ -231,7 +231,7 @@ namespace Web_IT_HELPDESK.Controllers
         public string Create(Seal_Using seal_using)
         {
             string plantid = userManager.GetUserPlant(session_emp);
-            var dept = from i in en.Departments where i.DepartmentId == seal_using.DepartmentId && i.Plant== plantid select i.DepartmentName;
+            var dept = from i in en.Departments where i.Department_Id == seal_using.DepartmentId && i.Plant_Id == plantid select i.Department_Name;
             en.Seal_Using.Add(seal_using);
             try
             {
@@ -243,8 +243,8 @@ namespace Web_IT_HELPDESK.Controllers
                         .SelectMany(x => x.ValidationErrors)
                         .Select(x => x.ErrorMessage);
                 var fullErrorMessage = string.Join("; ", errorMessages);
-            var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
-            throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
+                var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
+                throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
             }
 
             string result, status = "";
@@ -259,13 +259,13 @@ namespace Web_IT_HELPDESK.Controllers
             }
             else
             {*/
-                subject = "[Duyệt] - Phiếu yêu cầu sử dụng con dấu: " + seal_using.Employee_name + " - tạo ngày: " + seal_using.Date;
-                result = string.Format("Thông báo! <br /> <br />" +
-                                                  "Đã gởi email xác nhận sử dụng con dấu đến trưởng phòng bộ phận: " + dept.Single().ToString() + " <br />" +
-                                                  "************** Cám ơn đã sử dụng chương trình **************");
-                status = "1";
+            subject = "[Duyệt] - Phiếu yêu cầu sử dụng con dấu: " + seal_using.Employee_name + " - tạo ngày: " + seal_using.Date;
+            result = string.Format("Thông báo! <br /> <br />" +
+                                              "Đã gởi email xác nhận sử dụng con dấu đến trưởng phòng bộ phận: " + dept.Single().ToString() + " <br />" +
+                                              "************** Cám ơn đã sử dụng chương trình **************");
+            status = "1";
             //}
-            body =  "Tên người yêu cầu: " + seal_using.Employee_name + "\n" +
+            body = "Tên người yêu cầu: " + seal_using.Employee_name + "\n" +
                     "          Bộ phận: " + dept.Single().ToString() + "\n" +
                     "     Ngày yêu cầu: " + seal_using.Date + "\n" +
                     "  Ngày ký văn bản: " + seal_using.Date_signature + "\n" +
@@ -280,15 +280,15 @@ namespace Web_IT_HELPDESK.Controllers
 
 
 
-            inf.email_send("user_email", "pass", seal_using.DepartmentId, subject, body, status,  userManager.GetUserPlant(session_emp));
+            inf.email_send("user_email", "pass", seal_using.DepartmentId, subject, body, status, userManager.GetUserPlant(session_emp));
             //~~~~~~~~~~~~~~~~~~~~~
             //return RedirectToAction("Index", "SealUsing");
 
-            
+
             return result;
         }
 
-       
+
 
         // resend email to manager
         /*[HttpPost, ActionName("Resend")]
@@ -330,7 +330,7 @@ namespace Web_IT_HELPDESK.Controllers
         {
             var seal_using = en.Seal_Using.Where(i => i.Id == id).FirstOrDefault();
             string plantid = userManager.GetUserPlant(session_emp);
-            var dept = from i in en.Departments where i.DepartmentId == seal_using.DepartmentId && i.Plant == plantid select i.DepartmentName;
+            var dept = from i in en.Departments where i.Department_Id == seal_using.DepartmentId && i.Plant_Id == plantid select i.Department_Name;
             //~~~~~~~~~~~~~~~~~~~~~
             subject = "<<Gấp>> [Cần duyệt] - Phiếu yêu cầu sử dụng con dấu: " + seal_using.Employee_name + " - tạo ngày: " + seal_using.Date;
             body = "Tên người yêu cầu: " + seal_using.Employee_name + "\n" +
@@ -347,7 +347,7 @@ namespace Web_IT_HELPDESK.Controllers
 
 
 
-            inf.email_send("user_email", "pass", seal_using.DepartmentId, subject, body, "1",  userManager.GetUserPlant(session_emp));
+            inf.email_send("user_email", "pass", seal_using.DepartmentId, subject, body, "1", userManager.GetUserPlant(session_emp));
             //~~~~~~~~~~~~~~~~~~~~~
 
             ViewBag.EmployeeID = seal_using.Employee_name;
@@ -368,10 +368,10 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.Department_confirm_date = DateTime.Now;
             ViewBag.DepartmentId = seal_using.DepartmentId;
             ViewBag.Plant = seal_using.Plant;
-            ViewBag.DepartmentName = en.Departments.Where(o => o.DepartmentId == seal_using.DepartmentId
-                                                         && o.Plant == seal_using.Plant).Select(i => i.DepartmentName).SingleOrDefault();
+            ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == seal_using.DepartmentId
+                                                         && o.Plant_Id == seal_using.Plant).Select(i => i.Department_Name).SingleOrDefault();
             /*get employee name*/
-            ViewBag.User_name = en.Employees.Where(f => (f.EmployeeID == session_emp.ToString() && f.Plant == seal_using.DepartmentId.ToString())).Select(f => f.EmployeeName).SingleOrDefault();
+            ViewBag.User_name = en.Employees.Where(f => (f.EmployeeID == session_emp.ToString() && f.Plant_Id == seal_using.DepartmentId.ToString())).Select(f => f.EmployeeName).SingleOrDefault();
             /*get employee name*/
             return View(seal_using);
         }
@@ -383,7 +383,7 @@ namespace Web_IT_HELPDESK.Controllers
         public string Edit(Seal_Using seal_using)
         {
             //string plantid = userManager.GetUserPlant(session_emp);
-            var dept = from i in en.Departments where i.DepartmentId == seal_using.DepartmentId && i.Plant == seal_using.Plant select i.DepartmentName;
+            var dept = from i in en.Departments where i.Department_Id == seal_using.DepartmentId && i.Plant_Id == seal_using.Plant select i.Department_Name;
             string result;
 
             en.Entry(seal_using).State = System.Data.Entity.EntityState.Modified;
@@ -431,7 +431,7 @@ namespace Web_IT_HELPDESK.Controllers
                    "Trân trọng!" + "\n" + "\n" + "\n" +
 
                    "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";
-                inf.email_send("user_email", "pass", seal_using.DepartmentId, subject, body, "1",  userManager.GetUserPlant(session_emp));
+                inf.email_send("user_email", "pass", seal_using.DepartmentId, subject, body, "1", userManager.GetUserPlant(session_emp));
                 confirm_status = "KHÔNG ĐỒNG Ý XÁC NHẬN";
                 result = string.Format("Thông báo! <br /> Trạng thái được duyệt đã chọn: " + confirm_status + " <br />" +
                                                   "Bộ phận: " + dept.Single().ToString() + " <br />" +
@@ -448,10 +448,10 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.Employee_Seal_keep = DateTime.Now;
             ViewBag.DepartmentId = ViewBag.DepartmentId = seal_using.DepartmentId;
             ViewBag.Plant = seal_using.Plant;
-            ViewBag.DepartmentName = en.Departments.Where(o => o.DepartmentId == seal_using.DepartmentId
-                                                         && o.Plant == seal_using.Plant).Select(i => i.DepartmentName).SingleOrDefault();
+            ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == seal_using.DepartmentId
+                                                         && o.Plant_Id == seal_using.Plant).Select(i => i.Department_Name).SingleOrDefault();
             /*get employee name*/
-            ViewBag.User_name = en.Employees.Where(f => (f.EmployeeID == session_emp.ToString() && f.Plant == seal_using.DepartmentId.ToString())).Select(f => f.EmployeeName).SingleOrDefault();
+            ViewBag.User_name = en.Employees.Where(f => (f.EmployeeID == session_emp.ToString() && f.Plant_Id == seal_using.DepartmentId.ToString())).Select(f => f.EmployeeName).SingleOrDefault();
             /*get employee name*/
             return View(seal_using);
         }
@@ -492,7 +492,7 @@ namespace Web_IT_HELPDESK.Controllers
             try
             {
                 Seal_Using seal_using = en.Seal_Using.Find(id);
-                if(seal_using == null)
+                if (seal_using == null)
                     return HttpNotFound();
                 else if (seal_using.Department_confirm == false)
                 {

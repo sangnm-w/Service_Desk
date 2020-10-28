@@ -5,6 +5,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section Style{
+    <style type="text/css">
+        textarea {
+            resize: vertical;
+        }
+    </style>
+}
 
 <div class="col-md-12 panel-info">
     <div class="content-box-header panel-heading">
@@ -16,71 +23,66 @@
         </div>
     </div>
     <div class="content-box-large box-with-header">
-        <div>
-            <div class="row">
-                @Html.HiddenFor(model => model.Id)
-                <div class="col-sm-2">
-                    No. <br />
-                    @Html.TextBoxFor(model => model.Code, new { @class = "form-control", @readonly = "readonly", onfocus = "this.blur()", @style = "background-color:#DEDEDE;" })
-                </div>
-                <div class="col-sm-2">
-                    Plant <br />
-                    @Html.TextBox("Plant", (string)ViewBag.plantName, new { @class = "form-control", @readonly = "readonly", onfocus = "this.blur()", @style = "background-color:#DEDEDE;" })
-                </div>
-                <div class="col-sm-2">
-                    Date time <br />
-                    @Html.TextBoxFor(model => model.datetime, new { @class = "form-control", @readonly = "readonly", onfocus = "this.blur()", @style = "background-color:#DEDEDE;" })
-                </div>
+        <div class="row">
+            <div class="col-sm-2">
+                @Html.LabelFor(model => model.Code, "No.", htmlAttributes: new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.Code, new { @class = "form-control", @readonly = "readonly" })
             </div>
-            <hr />
-            <div class="row">
-                <div class="col-sm-2">
-                    Status <br />
-                    @Html.TextBox("Status", (string)ViewBag.StatusName, new { @class = "form-control", @readonly = "readonly", onfocus = "this.blur()", @style = "background-color:#DEDEDE;" })
-                </div>
-                <div class="col-sm-2">
-                    Level <br />
-                    @Html.TextBox("Level", (string)ViewBag.LevelName, new { @class = "form-control", @readonly = "readonly", onfocus = "this.blur()", @style = "background-color:#DEDEDE;" })
-                </div>
-                <div class="col-sm-4">
-                    Department <br />
-                    @Html.TextBox("Department", (string)ViewBag.DepartmentName, new { @class = "form-control", @readonly = "readonly", onfocus = "this.blur()", @style = "background-color:#DEDEDE;" })
-                </div>
+            <div class="col-sm-2">
+                @Html.LabelFor(model => model.Plant, "Plant", htmlAttributes: new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.Plant, new { @class = "form-control", @readonly = "readonly", @Value = ViewBag.plantName })
             </div>
-            <hr />
-            <div class="row">
-                <div class="col-sm-4">
-                    Employee request <br />
-                    @Html.TextBox("User_Create", (string)ViewBag.UserCreate, new { @class = "form-control", @readonly = "readonly" })
-                </div>
-                <div class="col-sm-4">
-                    Employee solve <br />
-                    @Html.TextBox("User_Resolve", (string)ViewBag.UserResolve, new { @class = "form-control", @readonly = "readonly" })
-                </div>
-                <div class="col-sm-4">
-                    Attactment <br />
-                    @Html.TextBoxFor(model => model.FileName, new { @class = "form-control", @readonly = "readonly", onfocus = "this.blur()", @style = "background-color:#DEDEDE;" })
-                </div>
+            <div class="col-sm-4">
+                @Html.LabelFor(model => model.DepartmentId, "Department", htmlAttributes: new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.DepartmentId, new { @class = "form-control", @readonly = "readonly", @Value = ViewBag.DepartmentName })
             </div>
-            <hr>
-            <div class="row">
-                <div class="col-sm-6">
-                    Note <br />
-                    @Html.TextAreaFor(model => model.Note, new { @class = "form-control", @readonly = "readonly", onfocus = "this.blur()", @row = 3 })
-                    @Html.ValidationMessageFor(model => model.Note)
-                </div>
-                <div class="col-sm-6">
-                    Reply <br />
-                    @Html.TextAreaFor(model => model.Reply, new { @class = "form-control", @readonly = "readonly", onfocus = "this.blur()", @row = 3 })
-                    @Html.ValidationMessageFor(model => model.Reply)
-                </div>
+            <div class="col-sm-4">
+                @Html.LabelFor(model => model.datetime, "Created Date", htmlAttributes: new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.datetime,"{0:dd/MM/yyyy}", new { @class = "form-control", @readonly = "readonly" })
             </div>
-            <hr>
-            <div class="row">
-                <div class="col-sm-12">
-                    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default", @style = "float: right" })
-                </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-sm-4">
+                @Html.LabelFor(model => model.StatusId, "Status", htmlAttributes: new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.StatusId, new { @class = "form-control", @readonly = "readonly", @Value = ViewBag.StatusName })
             </div>
+            <div class="col-sm-4">
+                @Html.LabelFor(model => model.LevelId, "Level", htmlAttributes: new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.LevelId, new { @class = "form-control", @readonly = "readonly", @Value = ViewBag.LevelName })
             </div>
+            <div class="col-sm-4">
+                @Html.LabelFor(model => model.FileName, "Attactment", htmlAttributes: new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.FileName, new { @class = "form-control", @readonly = "readonly" })
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-sm-4">
+                @Html.LabelFor(model => model.User_create, "Requester", htmlAttributes: new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.User_create, new { @class = "form-control", @readonly = "readonly", @Value = ViewBag.User_Create })
+            </div>
+            <div class="col-sm-8">
+                @Html.LabelFor(model => model.Note, "Note", htmlAttributes: new { @class = "control-label" })
+                @Html.TextAreaFor(model => model.Note, new { @class = "form-control", @rows = 3, @readonly = "readonly" })
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-4">
+                @Html.LabelFor(model => model.User_resolve, "Solver", htmlAttributes: new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.User_create, new { @class = "form-control", @readonly = "readonly", @Value = ViewBag.User_Resolve })
+            </div>
+            <div class="col-sm-8">
+                @Html.LabelFor(model => model.Reply, "Reply", htmlAttributes: new { @class = "control-label" })
+                @Html.TextAreaFor(model => model.Reply, new { @class = "form-control", @rows = 3, @readonly = "readonly" })
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-12">
+                @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default", @style = "float: right" })
+            </div>
+        </div>
     </div>
 </div>

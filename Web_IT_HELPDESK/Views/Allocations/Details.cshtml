@@ -1,0 +1,99 @@
+﻿@model Web_IT_HELPDESK.Allocation
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Allocation</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Allocation_Code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Allocation_Code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Deliver)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Deliver)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Receiver)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Receiver)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Delivery_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Delivery_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Return_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Return_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Note)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Note)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IP)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IP)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Create_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Create_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Department.DepartmentName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Department.DepartmentName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Device.Device_Code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Device.Device_Code)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Allocation_Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
