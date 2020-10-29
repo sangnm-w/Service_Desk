@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Validation;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace Web_IT_HELPDESK.Controllers
     {
         //
         // GET: /CONTRACT/
-        Web_IT_HELPDESKEntities en = new Web_IT_HELPDESKEntities();
+        ServiceDeskEntities en = new ServiceDeskEntities();
         public ActionResult ContractIndex()//int? page)
         {
             DateTime today = DateTime.Today;
@@ -22,7 +23,7 @@ namespace Web_IT_HELPDESK.Controllers
             int v_month = today.Month;
             string dept=GetDept_id(System.Web.HttpContext.Current.User.Identity.Name);
             string v_plant = GetPlant_id(System.Web.HttpContext.Current.User.Identity.Name);
-            var contract_list = en.CONTRACTs.Where(o => o.DEL != true && today <= EntityFunctions.AddDays(o.DATE, 45) && o.DEPARMENTID == dept && o.PLANT == v_plant).OrderBy(i => i.DATE); 
+            var contract_list = en.CONTRACTs.Where(o => o.DEL != true && today <= DbFunctions.AddDays(o.DATE, 45) && o.DEPARTMENTID == dept && o.PLANT == v_plant).OrderBy(i => i.DATE); 
                                                                                 // EntityFunctions.AddDays lấy ngày hiện tại so sánh 30 ngày ngày trong quá khứ 
             //int pageSize = 1;
             //int pageNumber = (page ?? 1);
@@ -42,7 +43,7 @@ namespace Web_IT_HELPDESK.Controllers
                 if ((search_ == "" || search_ == "search") && v_companys.Count == 12 && v_contract_type == "all")
                 {
                     var contract_list = en.CONTRACTs.Where(o => o.DEL != true 
-                                                              && date_ <= EntityFunctions.AddDays(o.DATE, daynum_) 
+                                                              && date_ <=DbFunctions.AddDays(o.DATE, daynum_) 
                                                               && o.PLANT == v_plant).OrderBy(i => i.DATE);
                     return View(contract_list);
                 }
@@ -50,7 +51,7 @@ namespace Web_IT_HELPDESK.Controllers
                 {
                     var contract_list = en.CONTRACTs.Where(o => o.DEL != true 
                                                              && o.CONTRACT_TYPE.CONTRACT_TYPE_NAME==v_contract_type
-                                                             && date_ <= EntityFunctions.AddDays(o.DATE, daynum_) 
+                                                             && date_ <= DbFunctions.AddDays(o.DATE, daynum_) 
                                                              && o.PLANT == v_plant).OrderBy(i => i.DATE);
                     return View(contract_list);
                 }
@@ -62,9 +63,9 @@ namespace Web_IT_HELPDESK.Controllers
                     }
 
                     var contract_list = en.CONTRACTs.Where(o => o.DEL != true
-                                                                && v_company_string.Trim().Contains(o.DEPARMENTID)
-                                                                && date_ <= EntityFunctions.AddDays(o.DATE, daynum_)
-                                                                && v_company_string.Trim().Contains(o.DEPARMENTID) 
+                                                                && v_company_string.Trim().Contains(o.DEPARTMENTID)
+                                                                && date_ <= DbFunctions.AddDays(o.DATE, daynum_)
+                                                                && v_company_string.Trim().Contains(o.DEPARTMENTID) 
                                                                 && o.PLANT == v_plant).OrderBy(i => i.DATE);
                     return View(contract_list);
                 }
@@ -76,11 +77,11 @@ namespace Web_IT_HELPDESK.Controllers
                     }
 
                     var contract_list = en.CONTRACTs.Where(o => o.DEL != true
-                                                             && v_company_string.Trim().Contains(o.DEPARMENTID)
+                                                             && v_company_string.Trim().Contains(o.DEPARTMENTID)
                                                              && o.CONTRACT_TYPE.CONTRACT_TYPE_NAME == v_contract_type
-                                                             && date_ <= EntityFunctions.AddDays(o.DATE, daynum_)
+                                                             && date_ <= DbFunctions.AddDays(o.DATE, daynum_)
                                                              && o.PLANT == v_plant
-                                                             && v_company_string.Trim().Contains(o.DEPARMENTID)).OrderBy(i => i.DATE);
+                                                             && v_company_string.Trim().Contains(o.DEPARTMENTID)).OrderBy(i => i.DATE);
                     return View(contract_list);
                 }
                 else if (v_contract_type == "all" && (search_ != "" || search_ != "search"))
@@ -92,10 +93,10 @@ namespace Web_IT_HELPDESK.Controllers
 
                     var contract_list = en.CONTRACTs.Where(o => o.DEL != true
                                                              && o.CONTRACT_TYPE.CONTRACT_TYPE_NAME == v_contract_type
-                                                             && o.CONTRACTNAME.Contains(search_) == true && v_company_string.Trim().Contains(o.DEPARMENTID)
-                                                             && date_ <= EntityFunctions.AddDays(o.DATE, daynum_)
+                                                             && o.CONTRACTNAME.Contains(search_) == true && v_company_string.Trim().Contains(o.DEPARTMENTID)
+                                                             && date_ <= DbFunctions.AddDays(o.DATE, daynum_)
                                                              && o.PLANT == v_plant
-                                                             && o.CONTRACTNAME.Contains(search_) == true && v_company_string.Trim().Contains(o.DEPARMENTID)).OrderBy(i => i.DATE);
+                                                             && o.CONTRACTNAME.Contains(search_) == true && v_company_string.Trim().Contains(o.DEPARTMENTID)).OrderBy(i => i.DATE);
                     return View(contract_list);
                 }
                 else if (v_contract_type == "all")
@@ -107,9 +108,9 @@ namespace Web_IT_HELPDESK.Controllers
 
                     var contract_list = en.CONTRACTs.Where(o => o.DEL != true
                                                              && o.CONTRACT_TYPE.CONTRACT_TYPE_NAME == v_contract_type
-                                                             && date_ <= EntityFunctions.AddDays(o.DATE, daynum_)
+                                                             && date_ <= DbFunctions.AddDays(o.DATE, daynum_)
                                                              && o.PLANT == v_plant
-                                                             && o.CONTRACTNAME.Contains(search_) == true && v_company_string.Trim().Contains(o.DEPARMENTID)).OrderBy(i => i.DATE);
+                                                             && o.CONTRACTNAME.Contains(search_) == true && v_company_string.Trim().Contains(o.DEPARTMENTID)).OrderBy(i => i.DATE);
                     return View(contract_list);
                 }
                 else
@@ -120,17 +121,17 @@ namespace Web_IT_HELPDESK.Controllers
                     }
 
                     var contract_list = en.CONTRACTs.Where(o => o.DEL != true 
-                                                             && date_ <= EntityFunctions.AddDays(o.DATE, daynum_) 
+                                                             && date_ <= DbFunctions.AddDays(o.DATE, daynum_) 
                                                              && o.CONTRACTNAME.Contains(search_) == true
                                                              && o.PLANT == v_plant
-                                                             && v_company_string.Trim().Contains(o.DEPARMENTID)).OrderBy(i => i.DATE);
+                                                             && v_company_string.Trim().Contains(o.DEPARTMENTID)).OrderBy(i => i.DATE);
                     return View(contract_list);
                 }
             }
             else
             {
                 var contract_list = en.CONTRACTs.Where(o => o.DEL != true 
-                                                            && o.DEPARMENTID == v_company_string
+                                                            && o.DEPARTMENTID == v_company_string
                                                             && o.PLANT == v_plant).OrderBy(i => i.DATE);
                 return View(contract_list);
             }
@@ -147,7 +148,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.User_create = System.Web.HttpContext.Current.User.Identity.Name;
             ViewBag.PERIOD_ID = new SelectList(en.PERIODs, "PERIOD_ID", "PERIOD_NAME", en.PERIODs.First().PERIOD_ID);
             ViewBag.CONTRACT_TYPE_ID = new SelectList(en.CONTRACT_TYPE, "CONTRACT_TYPE_ID", "CONTRACT_TYPE_NAME", en.CONTRACT_TYPE.First().CONTRACT_TYPE_ID);
-            var dept = from i in en.Employees where i.EmployeeID== System.Web.HttpContext.Current.User.Identity.Name select i.DepatmentId;
+            var dept = from i in en.Employees where i.EmployeeID== System.Web.HttpContext.Current.User.Identity.Name select i.Department_Id;
             ViewBag.DEPT_ID = dept.ToString();
             return PartialView("partial_create_new_asset", _contract);
         }
@@ -174,14 +175,14 @@ namespace Web_IT_HELPDESK.Controllers
 
         private string GetDept_id(string v_emp)
         {
-            string dept_id = en.Employees.Where(f => (f.EmployeeID == v_emp)).Select(f => f.DepatmentId).SingleOrDefault();
+            string dept_id = en.Employees.Where(f => (f.EmployeeID == v_emp)).Select(f => f.Department_Id).SingleOrDefault();
             return dept_id;
         }
 
         //GetPlant_id
         private string GetPlant_id(string v_emp)
         {
-            string plant_id = en.Employees.Where(f => (f.EmployeeID == v_emp)).Select(f => f.Plant).SingleOrDefault();
+            string plant_id = en.Employees.Where(f => (f.EmployeeID == v_emp)).Select(f => f.Plant_Id).SingleOrDefault();
             return plant_id;
         }
 
@@ -213,7 +214,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         [HttpPost]
         public ActionResult CreateCONTRACTViewModel2(List<CONTRACT_SUB> CONTRACT_SUB, string[] PERIOD_ID, 
-                                                        string PERIODID, string USER_CREATE, string DEPARMENTID,string CONTRACT_TYPE_ID,
+                                                        string PERIODID, string USER_CREATE, string DEPARTMENTID,string CONTRACT_TYPE_ID,
                                                         CONTRACT contract, HttpPostedFileBase image, List<HttpPostedFileBase> subcontent)
         {
             image = image ?? Request.Files["image"];
@@ -237,7 +238,7 @@ namespace Web_IT_HELPDESK.Controllers
                     contract.CONTRACT_TYPE_ID = CONTRACT_TYPE_ID;
                     contract.PERIODID = PERIODID;
                     contract.USER_CREATE = USER_CREATE;
-                    contract.DEPARMENTID = DEPARMENTID;
+                    contract.DEPARTMENTID = DEPARTMENTID;
                     contract.USER_CREATE = System.Web.HttpContext.Current.User.Identity.Name;
                     contract.PLANT = GetPlant_id(System.Web.HttpContext.Current.User.Identity.Name);
                     en.CONTRACTs.Add(contract);
@@ -250,7 +251,7 @@ namespace Web_IT_HELPDESK.Controllers
 
             //if (ModelState.IsValid)
             //{
-                using (Web_IT_HELPDESKEntities dc = new Web_IT_HELPDESKEntities())
+                using (ServiceDeskEntities dc = new ServiceDeskEntities())
                 {
                     try
                     {
@@ -329,7 +330,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         [HttpPost]
         public ActionResult EditCONTRACTViewModel(List<CONTRACT_SUB> CONTRACT_SUB, string v_asset_id, string[] PERIOD_ID, 
-                                            string PERIODID, string USER_CREATE, string DEPARMENTID,string CONTRACT_TYPE_ID, 
+                                            string PERIODID, string USER_CREATE, string DEPARTMENTID,string CONTRACT_TYPE_ID, 
                                             CONTRACT contract, HttpPostedFileBase image, List<HttpPostedFileBase> subcontent)
         {
              image = image ?? Request.Files["image"];
@@ -347,7 +348,7 @@ namespace Web_IT_HELPDESK.Controllers
                      contract.CONTRACT_TYPE_ID = CONTRACT_TYPE_ID;
                      contract.PERIODID = PERIODID;
                      contract.USER_CREATE = USER_CREATE;
-                     contract.DEPARMENTID = DEPARMENTID;
+                     contract.DEPARTMENTID = DEPARTMENTID;
                      contract.PLANT = GetPlant_id(System.Web.HttpContext.Current.User.Identity.Name);
                      var existingCart = en.CONTRACTs.Find(contract.ID);
                      if (existingCart != null)
@@ -377,7 +378,7 @@ namespace Web_IT_HELPDESK.Controllers
                      contract.CONTRACT_TYPE_ID = CONTRACT_TYPE_ID;
                      contract.PERIODID = PERIODID;
                      contract.USER_CREATE = USER_CREATE;
-                     contract.DEPARMENTID = DEPARMENTID;
+                     contract.DEPARTMENTID = DEPARTMENTID;
                      attachedEntry.CurrentValues.SetValues(contract);
                      en.SaveChanges();
                  }
@@ -392,7 +393,7 @@ namespace Web_IT_HELPDESK.Controllers
                                     .Where(x => x.Value.Errors.Count > 0)
                                     .Select(x => new { x.Key, x.Value.Errors })
                                     .ToArray();
-                using (Web_IT_HELPDESKEntities dc = new Web_IT_HELPDESKEntities())
+                using (ServiceDeskEntities dc = new ServiceDeskEntities())
                 {
                     try
                     {
@@ -556,7 +557,7 @@ namespace Web_IT_HELPDESK.Controllers
             int v_year = today.Year;
             int v_month = today.Month;
             string dept = GetDept_id(System.Web.HttpContext.Current.User.Identity.Name);
-            var contract_list = en.CONTRACTs.Where(o => o.DEL != true && today <= EntityFunctions.AddDays(o.DATE, 45) && o.DEPARMENTID == dept).OrderBy(i => i.DATE);
+            var contract_list = en.CONTRACTs.Where(o => o.DEL != true && today <= DbFunctions.AddDays(o.DATE, 45) && o.DEPARTMENTID == dept).OrderBy(i => i.DATE);
             return View("ContractIndex", contract_list);
         }
 

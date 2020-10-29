@@ -434,7 +434,7 @@ namespace Web_IT_HELPDESK.Controllers
                 }
                // else { MessageBox.Show("Kiểm tra thông tin cấu trúc email", "Thông báo!"); }
             }
-            catch (Exception ex) { }//MessageBox.Show("Lỗi: " + ex.ToString(), "Thông báo!"); }
+            catch (Exception) { }//MessageBox.Show("Lỗi: " + ex.ToString(), "Thông báo!"); }
         }
 
     }

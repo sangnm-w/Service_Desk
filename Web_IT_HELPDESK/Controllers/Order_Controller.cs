@@ -1,14 +1,12 @@
-﻿using System;
+﻿using Microsoft.Reporting.WebForms;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Microsoft.Reporting.WebForms;
-using Web_IT_HELPDESK.Models;
 
 namespace Web_IT_HELPDESK.Controllers
 {
@@ -16,20 +14,19 @@ namespace Web_IT_HELPDESK.Controllers
     {
         //
         // GET: /Order_/
-
-        Web_IT_HELPDESKEntities en = new Web_IT_HELPDESKEntities();
+        ServiceDeskEntities en = new ServiceDeskEntities();
         private string session_emp = System.Web.HttpContext.Current.User.Identity.Name;
         private string v_year = "/" + DateTime.Now.ToString("yyyy");
         //GetPlant_id
         private string GetPlant_id(string v_emp)
         {
-            string plant_id = en.Employees.Where(f => (f.EmployeeID == v_emp)).Select(f => f.Plant).SingleOrDefault();
+            string plant_id = en.Employees.Where(f => (f.EmployeeID == v_emp)).Select(f => f.Plant_Id).SingleOrDefault();
             return plant_id;
         }
 
         private string GetDept_id(string v_plant_id)
         {
-            string dept_id = en.Employees.Where(f => (f.EmployeeID == session_emp && f.Plant == v_plant_id)).Select(f => f.DepatmentId).SingleOrDefault();
+            string dept_id = en.Employees.Where(f => (f.EmployeeID == session_emp && f.Plant_Id == v_plant_id)).Select(f => f.Department_Id).SingleOrDefault();
             return dept_id;
         }
 
@@ -337,11 +334,11 @@ namespace Web_IT_HELPDESK.Controllers
             if (orderId != 0)
             {
                 var v_empno = en.Order_.Where(i => i.OrderId == orderId).SingleOrDefault().EmployeeID;
-                dept_id = en.Employees.Where(f => (f.EmployeeID == v_empno)).Select(f => f.DepatmentId).SingleOrDefault();
+                dept_id = en.Employees.Where(f => (f.EmployeeID == v_empno)).Select(f => f.Department_Id).SingleOrDefault();
             }
             else
             {
-                dept_id = en.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.DepatmentId).SingleOrDefault();
+                dept_id = en.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.Department_Id).SingleOrDefault();
             }
             return dept_id;
         }
@@ -349,7 +346,7 @@ namespace Web_IT_HELPDESK.Controllers
          {
              var session_emp = Session["employee_id"];
              string a = Convert.ToString(Session["employee_id"]);
-             string dept_id = en.Employees.Where(f => (f.EmployeeID == a)).Select(f => f.DepatmentId).SingleOrDefault();
+             string dept_id = en.Employees.Where(f => (f.EmployeeID == a)).Select(f => f.DepartmentId).SingleOrDefault();
              return dept_id;
          }*/
 
@@ -379,7 +376,7 @@ namespace Web_IT_HELPDESK.Controllers
 
             //int order_id= (int)orderdetails.Distinct().FirstOrDefault().OrderId;
 
-            var dept = from i in en.Departments where i.DepartmentId == GetDept_id_by_oder(Convert.ToInt32(Session["OrderId"].ToString())).Single().ToString() select i.DepartmentName;
+            var dept = from i in en.Departments where i.Department_Id == GetDept_id_by_oder(Convert.ToInt32(Session["OrderId"].ToString())).Single().ToString() select i.Department_Name;
             subject = "[Thông báo] - Phòng nhân sự điều chỉnh thông tin yêu cầu văn phòng phẩm";
             result = string.Format("Thông báo! <br /> <br />" +
                                               "Đã gởi email xác nhận!  <br />" +
@@ -435,7 +432,7 @@ namespace Web_IT_HELPDESK.Controllers
             }
             string result, status = "";
 
-            var dept = from i in en.Departments where i.DepartmentId == GetDept_id_by_oder(v_getoder.OrderId).Single().ToString() select i.DepartmentName;
+            var dept = from i in en.Departments where i.Department_Id == GetDept_id_by_oder(v_getoder.OrderId).Single().ToString() select i.Department_Name;
             subject = "[Thông báo] - Duyệt thông tin yêu cầu văn phòng phẩm";
             result = string.Format("Thông báo! <br /> <br />" +
                                               "Đã gởi email xác nhận!  <br />" +
@@ -804,8 +801,8 @@ namespace Web_IT_HELPDESK.Controllers
                                    t.Note,
                                    t.Album.Title,
                                    t.Album.Unit,
-                                   //(en.Departments.Where(o => o.DepartmentId == j.Employee.DepatmentId && o.Plant == j.Plant).Select(i=>i.DepartmentName).SingleOrDefault())
-                                   t.Order_.Employee.DepatmentId
+                                   //(en.Departments.Where(o => o.DepartmentId == j.Employee.DepartmentId && o.Plant == j.Plant).Select(i=>i.DepartmentName).SingleOrDefault())
+                                   t.Order_.Employee.Department_Id
                                } into g
                                select new
                                {
@@ -821,14 +818,14 @@ namespace Web_IT_HELPDESK.Controllers
                                    Note = g.Key.Note,
                                    Title = g.Key.Title,
                                    Unit = g.Key.Unit,
-                                   DepatmentName = g.Key.DepatmentId
+                                   DepatmentName = g.Key.Department_Id
                                };
 
                     //var list = en.OrderDetails.ToList().Where(i => i.OrderId == id);
 
 
-                    string v_department_name = en.Departments.Where(o => o.DepartmentId == list.Select(i => i.DepatmentName).FirstOrDefault()
-                                                                        && o.Plant == list.Select(i => i.Plant).FirstOrDefault()).Select(e => e.DepartmentName).SingleOrDefault();
+                    string v_department_name = en.Departments.Where(o => o.Department_Id == list.Select(i => i.DepatmentName).FirstOrDefault()
+                                                                        && o.Plant_Id == list.Select(i => i.Plant).FirstOrDefault()).Select(e => e.Department_Name).SingleOrDefault();
 
 
                     //ReportParameter p1 = new ReportParameter("p_department_name", v_department_name);

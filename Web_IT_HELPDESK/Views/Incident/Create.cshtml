@@ -4,64 +4,86 @@
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@section Style{
+    <style>
+        textarea {
+            resize: vertical;
+            min-height: 34px;
+            max-height: 102px;
+        }
+    </style>
+}
+<div class="col-md-12 panel-info">
+    <div class="content-box-header panel-heading">
+        <div class="panel-title ">Add New Order Request</div>
 
-<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
-
-
-@using (Html.BeginForm("Create", "Incident", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    <div class="col-md-12 panel-info">
-        <div class="content-box-header panel-heading">
-            <div class="panel-title ">Add New Order Request</div>
-
-            <div class="panel-options">
-                <a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
-                <a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
-            </div>
+        <div class="panel-options">
+            <a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
+            <a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
         </div>
-        <div class="content-box-large box-with-header">
-            <div>
-
+    </div>
+    <div class="content-box-large box-with-header">
+        @using (Html.BeginForm("Create", "Incident", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <div class="row">
                     <div class="col-sm-2">
-                        No. <input type="text" readonly="readonly" class="form-control" id="Code" name="Code" value="@Model.Code">
+                        @Html.LabelFor(model => model.Code, "No.", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-sm-2">
-                        Plant <input type="text" readonly="readonly" class="form-control" id="Plant" name="Plant" value="@ViewBag.plantName">
+                        @Html.LabelFor(model => model.Plant, "Plant", htmlAttributes: new { @class = "control-label" })
+                        @Html.Editor("Plant Name", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @Value = ViewBag.plantName } })
+                        @Html.HiddenFor(model => model.Plant)
+                        @Html.ValidationMessageFor(model => model.Plant, "", new { @class = "text-danger" })
                     </div>
-                    <div class="col-sm-2">
-                        Date time <input type="text" readonly="readonly" class="form-control" id="datetime" name="datetime" value="@Model.datetime">
+                    <div class="col-sm-4">
+                        @Html.LabelFor(model => model.DepartmentId, "Department", htmlAttributes: new { @class = "control-label" })
+                        @Html.Editor("Department Name", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @Value = ViewBag.DepartmentName } })
+                        @Html.HiddenFor(model => model.DepartmentId)
+                        @Html.ValidationMessageFor(model => model.DepartmentId, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.LabelFor(model => model.datetime, "Created Date", htmlAttributes: new { @class = "control-label" })
+                        @Html.Editor("Created Date", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @Value = ((DateTime)Model.datetime).ToString("dd/MM/yyyy") } })
+                        @Html.HiddenFor(model => model.datetime)
+                        @Html.ValidationMessageFor(model => model.datetime, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <hr>
                 <div class="row">
                     <div class="col-sm-4">
-                        Status <br />
-                        @Html.DropDownList("StatusId", (IEnumerable<SelectListItem>)ViewBag.StatusId, new { @class = "form-control" })
+                        @Html.LabelFor(model => model.StatusId, "Status", htmlAttributes: new { @class = "control-label" })
+                        @Html.Editor("Status Name", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @Value = ViewBag.StatusName } })
+                        @Html.HiddenFor(model => model.StatusId)
+                        @Html.ValidationMessageFor(model => model.StatusId, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-sm-4">
-                        Level <br />
-                        @Html.DropDownList("LevelId", (IEnumerable<SelectListItem>)ViewBag.LevelId, new { @class = "form-control" })
+                        @Html.LabelFor(model => model.LevelId, "Level", htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownList("LevelId")
+                        @Html.ValidationMessageFor(model => model.LevelId, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-sm-4">
-                        Department <br />
-                        @Html.DropDownList("DepartmentId", (IEnumerable<SelectListItem>)ViewBag.DepartmentId, new { @class = "form-control" })
+                        @Html.LabelFor(model => model.FileName, "Attactment", htmlAttributes: new { @class = "control-label" }) :
+                        @Html.TextBox("attachment", null, new { @class = "btn btn-primary form-control", @type = "file", @id = "attachment" })
+                        @Html.ValidationMessageFor(model => model.FileName, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <hr>
                 <div class="row">
                     <div class="col-sm-4">
-                        User create <input type="text" readonly="readonly" class="form-control" id="User_create" name="User_create" value="@ViewBag.User_create">
+                        @Html.LabelFor(model => model.User_create, "Requester", htmlAttributes: new { @class = "control-label" })
+                        @Html.Editor("UserCreate Name", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @Value = ViewBag.UserCreateName } })
+                        @Html.HiddenFor(model => model.User_create)
+                        @Html.ValidationMessageFor(model => model.User_create, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-sm-8">
-                        Note <textarea class="form-control" placeholder="Type here" rows="1" id="Note" name="Note"></textarea>
-                    </div>
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <input type="file" id="image" name="image" class="btn btn-primary">
+                        @Html.LabelFor(model => model.Note, "Note", htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.Note, new { @class = "form-control", @rows = 3 })
+                        @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <hr>
@@ -74,6 +96,11 @@
                     </div>
                 </div>
             </div>
-        </div>
+        }
     </div>
+</div>
+@section Script {
+    <script type="text/javascript">
+        $('select').selectron();
+    </script>
 }

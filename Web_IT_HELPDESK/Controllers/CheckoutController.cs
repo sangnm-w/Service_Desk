@@ -12,7 +12,7 @@ namespace Web_IT_HELPDESK.Controllers
         //
         // GET: /Checkout/
 
-        Web_IT_HELPDESKEntities storeDB = new Web_IT_HELPDESKEntities();
+        ServiceDeskEntities storeDB = new ServiceDeskEntities();
 
         public ActionResult AddressAndPayment()
         {
@@ -33,13 +33,13 @@ namespace Web_IT_HELPDESK.Controllers
         //  Get_department_Id
         private string GetDept_id()
         {
-            string dept_id = storeDB.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.DepatmentId).SingleOrDefault();
+            string dept_id = storeDB.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.Department_Id).SingleOrDefault();
             return dept_id;
         }
         //GetPlant_id
         private string GetPlant_id()
         {
-            string plant_id = storeDB.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.Plant).SingleOrDefault();
+            string plant_id = storeDB.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.Plant_Id).SingleOrDefault();
             return plant_id;
         }
 
@@ -68,7 +68,7 @@ namespace Web_IT_HELPDESK.Controllers
                 //gởi mail đến trưởng phòng
                 string result, status = "";
 
-                var dept = from i in storeDB.Departments where i.DepartmentId == GetDept_id() select i.DepartmentName;
+                var dept = from i in storeDB.Departments where i.Department_Id == GetDept_id() select i.Department_Name;
                 subject = "[Duyệt] - Thông tin yêu cầu văn phòng phẩm";
                 result = string.Format("Thông báo! <br /> <br />" +
                                                   "Đã gởi email xác nhận!  <br />" +

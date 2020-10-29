@@ -36,7 +36,7 @@
 
 @using (Html.BeginForm("EditCONTRACTViewModel", "CONTRACT", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    int j = 0; int k = 1; int row_count = new Web_IT_HELPDESK.Web_IT_HELPDESKEntities().CONTRACT_SUB.Where(o => o.CONTRACTID == Model.CONTRACT.ID).Count()-1;
+    int j = 0; int k = 1; int row_count = new Web_IT_HELPDESK.ServiceDeskEntities().CONTRACT_SUB.Where(o => o.CONTRACTID == Model.CONTRACT.ID).Count()-1;
     <script type="text/javascript">
         //int a = 0;//Model.ImportsDetail.Count();
         $(document).ready(function () { 
@@ -237,7 +237,7 @@
 					</tr>
 				</thead>
 				<tbody>
-                    <!--if (new Web_IT_HELPDESK.Web_IT_HELPDESKEntities().CONTRACT_SUB.Where(i => i.CONTRACTID == Model.CONTRACT.ID).Count() == 0)
+                    <!--if (new Web_IT_HELPDESK.Entities().CONTRACT_SUB.Where(i => i.CONTRACTID == Model.CONTRACT.ID).Count() == 0)
                     {
                         <tr id="addr0">
 						<td>
@@ -263,7 +263,7 @@
                     }
                     else
                     {-->
-                    @foreach (var item_answer in new Web_IT_HELPDESK.Web_IT_HELPDESKEntities().CONTRACT_SUB.Where(i => i.CONTRACTID == Model.CONTRACT.ID))
+                    @foreach (var item_answer in new Web_IT_HELPDESK.ServiceDeskEntities().CONTRACT_SUB.Where(i => i.CONTRACTID == Model.CONTRACT.ID))
                     {
 					<tr style="width:auto">
 						<th>
@@ -283,7 +283,7 @@
                       	<th>
                               <select  id='PERIOD_ID' name='PERIOD_ID'> 
                                  <option selected='selected' value='@item_answer.PERIODID'>@item_answer.CONTRACT.PERIOD.PERIOD_NAME
-                                     @foreach (var item_asset_flow in new Web_IT_HELPDESK.Web_IT_HELPDESKEntities().PERIODs.Where(i => i.PERIOD_ID != item_answer.PERIODID))
+                                     @foreach (var item_asset_flow in new Web_IT_HELPDESK.ServiceDeskEntities().PERIODs.Where(i => i.PERIOD_ID != item_answer.PERIODID))
                                      {
                                            <option  value='@item_asset_flow.PERIOD_ID'>@item_asset_flow.PERIOD_NAME</option>
                                      }

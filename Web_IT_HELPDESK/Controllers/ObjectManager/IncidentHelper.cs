@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Mail;
-using System.Text;
 using System.Web;
 using Web_IT_HELPDESK.Models;
+using Web_IT_HELPDESK.Properties;
+using Web_IT_HELPDESK.ViewModels;
 
 namespace Web_IT_HELPDESK.Controllers.ObjectManager
 {
@@ -21,7 +21,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
         /// <param name="ccMails"></param>
         /// <param name="bccMails"></param>
         /// <returns> (bool) Result of sending </returns>
-        public bool Send_IncidentEmail(IncidentModel incM, string actionName = null, List<string> toMails = null, List<string> ccMails = null, List<string> bccMails = null)
+        public bool Send_IncidentEmail(IncidentViewModel incM, string actionName = null, List<string> toMails = null, List<string> ccMails = null, List<string> bccMails = null)
         {
             // Check toMails is null
             if (toMails == null)
@@ -47,7 +47,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                 }
             }
 
-            return Send_Mail(Define_IncidentMail(incM, actionName, toMails, ccMails, bccMails));
+            return MailHelper.Send_Mail(Define_IncidentMail(incM, actionName, toMails, ccMails, bccMails));
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
         /// <param name="ccMails"></param>
         /// <param name="bccMails"></param>
         /// <returns> Mail Message </returns>
-        public MailMessage Define_IncidentMail(IncidentModel incM, string actionName, List<string> toMails = null, List<string> ccMails = null, List<string> bccMails = null)
+        public MailMessage Define_IncidentMail(IncidentViewModel incM, string actionName, List<string> toMails = null, List<string> ccMails = null, List<string> bccMails = null)
         {
             MailMessage msg = new MailMessage();
             //receiver TO
@@ -94,14 +94,14 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
 
                     //Create mail body html
                     string bodyHtml = string.Empty;
-                    using (StreamReader reader = new StreamReader(HttpContext.Current.Server.MapPath(@"~/Views/Shared/IncidentEmail.cshtml")))
+                    using (StreamReader reader = new StreamReader(HttpContext.Current.Server.MapPath(@"~/Views/Incident/IncidentEmail.cshtml")))
                     {
                         bodyHtml = reader.ReadToEnd();
                     }
 
                     bodyHtml = bodyHtml.Replace("{incNo}", incM.Code);
                     bodyHtml = bodyHtml.Replace("{datetime}", incM.datetime.ToString());
-                    bodyHtml = bodyHtml.Replace("{plant}", Plants.Instance[incM.Plant]);
+                    bodyHtml = bodyHtml.Replace("{plant}", DepartmentModel.Instance.getPlantName(incM.Plant));
                     bodyHtml = bodyHtml.Replace("{User_Create}", incM.userCreateName);
                     bodyHtml = bodyHtml.Replace("{Status}", incM.statusName);
                     bodyHtml = bodyHtml.Replace("{Level}", incM.levelName);
@@ -131,7 +131,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                                 msg.Bcc.Add(m);
 
                     ///Define mail message
-                    msg.From = new MailAddress(senderID); // from sender
+                    msg.From = new MailAddress(Resources.SenderID); // from sender
                     msg.Subject = subject;
                     msg.IsBodyHtml = true;
                     msg.Body = bodyHtml.ToString();
@@ -140,30 +140,6 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                 }
             }
             return msg;
-        }
-
-        /// <summary>
-        /// This method just send mail
-        /// </summary>
-        /// <param name="msg"></param>
-        /// <returns> (bool) Result of sending </returns>
-        public bool Send_Mail(MailMessage msg)
-        {
-            using (SmtpClient SmtpServer = new SmtpClient("mail.cjvina.com", 587))
-            {
-                try
-                {
-                    SmtpServer.Port = 25;
-                    SmtpServer.Credentials = new System.Net.NetworkCredential(senderID, senderPW);
-                    SmtpServer.EnableSsl = false;
-                    SmtpServer.Send(msg);
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    return false;
-                }
-            }
         }
 
         private IncidentHelper() { }
@@ -185,8 +161,6 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                 _instance = value;
             }
         }
-
-        private string senderID = "ithelpdesk@cjvina.com", senderPW = "qwer4321!";
 
     }
 }

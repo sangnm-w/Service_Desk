@@ -8,7 +8,7 @@ namespace Web_IT_HELPDESK.Models
 {
     public partial class ShoppingCart
     {
-        Web_IT_HELPDESKEntities en = new Web_IT_HELPDESKEntities();
+        ServiceDeskEntities en = new ServiceDeskEntities();
 
         string ShoppingCartId { get; set; }
 

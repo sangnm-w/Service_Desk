@@ -56,7 +56,7 @@
                         <div>
                         <p>Mauris mauris ante, blandit et, ultrices a, susceros. Nam mi. Proin viverra leo ut odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.</p>
                       </div-->
-                        @foreach (var item_department in new Web_IT_HELPDESK.Web_IT_HELPDESKEntities().Departments.Where(i => i.Del != true && i.Plant=="0301").Distinct())
+                        @foreach (var item_department in new Web_IT_HELPDESK.ServiceDeskEntities().Departments.Where(i => i.Del != true && i.Plant=="0301").Distinct())
                         {
                             <h3>@item_department.DepartmentName</h3>
         
@@ -83,7 +83,7 @@
                                     </tr>
                                  </thead>
                             <tbody>
-                            <!--div>foreach (var item in new Web_IT_HELPDESK.Web_IT_HELPDESKEntities().EmployeeInfoes.Where(i => i.DE != true && i.DEPT == item_department.DepartmentId).Distinct())</div-->
+                            <!--div>foreach (var item in new Web_IT_HELPDESK.Entities().EmployeeInfoes.Where(i => i.DE != true && i.DEPT == item_department.DepartmentId).Distinct())</div-->
                             @foreach (var item in Model.Where(i => i.DE != true && i.DEPT == item_department.DepartmentId).Distinct())
                             {
                             <tr>

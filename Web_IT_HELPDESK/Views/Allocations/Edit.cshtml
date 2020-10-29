@@ -1,0 +1,375 @@
+﻿@model Web_IT_HELPDESK.Allocation
+@using Web_IT_HELPDESK.ViewModels
+
+@{
+    ViewBag.Title = "Device Management - Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Style {
+    <style>
+        .material {
+            border: none;
+            border-bottom: 1px solid #ccc;
+            box-shadow: none;
+            background: none !important;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 34px;
+            max-height: 102px;
+        }
+    </style>
+}
+
+<!--Region Device Information-->
+<div class="col-md-12 panel-info">
+    <div class="content-box-header panel-heading">
+        <div class="panel-title ">Device Info</div>
+    </div>
+    <div class="content-box-large box-with-header">
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <fieldset disabled style="background-color:none;">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Device.Device_Type.Device_Type_Name, "Device Type", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Device.Device_Type.Device_Type_Name, "Device_Type_Id", new { htmlAttributes = new { @class = "form-control material", } })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Device.Device_Name, "Device Name", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Device.Device_Name, "Device_Name", new { htmlAttributes = new { @class = "form-control material" } })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Device.Serial_No, "Serial Number", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Device.Serial_No, "Serial Number", new { htmlAttributes = new { @class = "form-control material" } })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Device.CONTRACT.CONTRACTNAME, "Contract", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Device.CONTRACT.CONTRACTNAME, "Contract_Id", null, new { htmlAttributes = new { @class = "form-control material" } })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Device.Purchase_Date, "Purchase Date", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Device.Purchase_Date, "Purchase_Date", new { htmlAttributes = new { @class = "form-control material" } })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Device.Depreciation, "Depreciation", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Device.Depreciation, "Depreciation", new { htmlAttributes = new { @class = "form-control material" } })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Device.CPU, "CPU", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Device.CPU, "CPU", new { htmlAttributes = new { @class = "form-control material" } })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Device.RAM, "RAM", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Device.RAM, "RAM", new { htmlAttributes = new { @class = "form-control material" } })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Device.DISK, "DISK", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Device.DISK, "DISK", new { htmlAttributes = new { @class = "form-control material" } })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Device.Device_Status, "Device Status", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Device.Device_Status, "Device_Status", new { htmlAttributes = new { @class = "form-control material" } })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Device.Operation_System, "Operation System", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Device.Operation_System, "Operation_System", new { htmlAttributes = new { @class = "form-control material" } })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Device.Office, "Microsoft Office", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Device.Office, "Office", new { htmlAttributes = new { @class = "form-control material" } })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Device.OS_License, "OS License", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Device.OS_License, "OS_License", new { htmlAttributes = new { @class = "form-control material" } })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Device.Office_License, "Office License", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Device.Office_License, "Office_License", new { htmlAttributes = new { @class = "form-control material" } })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Device.Note, "Note", htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.Device.Note, htmlAttributes: new { @class = "form-control material", @rows = 2 })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Device.Addition_Information, "Addition Information", htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.Device.Addition_Information, htmlAttributes: new { @class = "form-control material", @rows = 2 })
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>
+<!--End Region Device Information-->
+<!--Region Table Allocations-->
+<div class="col-md-12 panel-info">
+    <div class="content-box-header panel-heading">
+        <div class="panel-title ">History Provides</div>
+    </div>
+    <div class="content-box-large box-with-header">
+        <table class="display nowrap" id="allocation" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Allocation_Code)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Deliver)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Receiver)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Delivery_Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Return_Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Note)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IP)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Create_Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Department.Department_Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Department.Plant_Name)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in (List<AllocationViewModel>)ViewBag.Allocations)
+                {
+                    if (item.Allocation != null)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Allocation.Allocation_Code)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Deliver_Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Receiver_Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Allocation.Delivery_Date)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Allocation.Return_Date)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Allocation.Note)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Allocation.IP)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Allocation.Create_Date)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Allocation.Department.Department_Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Allocation.Department.Plant_Name)
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<!--End Region Table Allocations-->
+<!--Region Edit Form Allocation-->
+<div class="col-md-12 panel-info">
+    <div class="content-box-header panel-heading">
+        <div class="panel-title ">Information Providing</div>
+    </div>
+    <div class="content-box-large box-with-header">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Allocation_Id)
+                @Html.HiddenFor(model => model.Device_Id)
+                @Html.HiddenFor(model => model.Create_Date)
+                @Html.HiddenFor(model => model.Flag_ReAllocation, new { htmlAttributes = new { @Value = 1 } })
+
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Allocation_Code, "Allocation Code", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Allocation_Code, null, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.Allocation_Code, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Deliver, htmlAttributes: new { @class = "control-label" })
+                        @Html.Editor("Deliver Name", null, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.DeliverName, @readonly = "readonly" } })
+                        @Html.HiddenFor(model => model.Deliver)
+                        @Html.ValidationMessageFor(model => model.Deliver, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Delivery_Date, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group date" id="delidatepicker">
+                            @Html.Editor("Delivery Date", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                        @Html.HiddenFor(model => model.Delivery_Date, new { @id = "deliverydate_val" })
+                        @Html.ValidationMessageFor(model => model.Delivery_Date, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Department_Id, "Department", htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownList("Department_Id", null, htmlAttributes: new { @class = "departmentDDL", @disabled = "disabled" })
+                        @Html.HiddenFor(model => model.Department_Id)
+                        @Html.ValidationMessageFor(model => model.Department_Id, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Receiver, htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownList("Receiver", null, htmlAttributes: new { @class = "receiverDDL" })
+                        @Html.ValidationMessageFor(model => model.Receiver, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Return_Date, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group date" id="retudatepicker">
+                            @Html.Editor("Return Date", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @disabled = "disabled" } })
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                        @Html.HiddenFor(model => model.Return_Date, new { @id = "returndate_val" })
+                        @Html.ValidationMessageFor(model => model.Return_Date, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-md-8">
+                        @Html.LabelFor(model => model.Note, "Note", htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.Note, new { @class = "form-control", @rows = 1 })
+                        @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
+                    </div>
+                    @if (new[] { 3, 6 }.Contains((int)ViewBag.DeviceTypeId))
+                    {
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.IP, "IP", htmlAttributes: new { @class = "control-label" })
+                            @Html.EditorFor(model => model.IP, null, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.IP, "", new { @class = "text-danger" })
+                        </div>
+                    }
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-10">
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+                </div>
+                <div class="col-sm-2">
+                    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default", @style = "float: right" })
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<!--End Region Edit Form Allocation-->
+@section Script {
+    <script type="text/javascript">
+        $('#delidatepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            autoclose: true,
+            todayHighlight: true,
+            endDate: 'today'
+        });
+
+        $('#retudatepicker').datepicker();
+
+        $('#delidatepicker').on('changeDate', function () {
+            var d = new Date($('#delidatepicker').datepicker('getDate'));
+            if (d.getFullYear() > 2000) {
+                $('#deliverydate_val').val(
+                    moment(d).format()
+                );
+            }
+        });
+
+        $('#delidatepicker').datepicker('setDate', new Date($('#deliverydate_val').val()));
+
+        $('#allocation').DataTable({
+            aaSorting: [[7, 'desc']],
+            "scrollX": true
+        });
+
+        $('.deliverDDL').selectron({
+            search: true
+        });
+
+        $('.receiverDDL').selectron({
+            search: true
+        });
+
+        $('.departmentDDL').selectron({
+            search: true
+        });
+
+        $('.receiverDDL select').on('change', function () {
+            getDeptVal($(this).val());
+        });
+
+       function getDeptVal(receiverId) {
+            if (receiverId != null && receiverId != '') {
+                $.ajax({
+                    url: '@Url.Action("getDeptVal", "Allocations")',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: { receiverId: receiverId },
+                    cache: false,
+                    success: function (result) {
+                        if (result != null && result != '') {
+                            $('.departmentDDL select').val(result).trigger
+                                ('selectron.change');
+                            $('input[type=hidden]#Department_Id').val(result);
+                        } else {
+                            $('.departmentDDL select').val(null).trigger('selectron.change');
+                            $('input[type=hidden]#Department_Id').val(null);
+                        }
+                    },
+                    error: function (result) {
+                        $('.departmentDDL select').val(null).trigger
+                            ('selectron.change');
+                        $('input[type=hidden]#Department_Id').val(null);
+                    }
+                });
+            }
+            else {
+                $('.departmentDDL select').val(null).trigger
+                    ('selectron.change');
+                $('input[type=hidden]#Department_Id').val(null);
+            }
+        };
+
+        $(document).on("keydown", "form", function (event) {
+            return event.key != "Enter";
+        });
+    </script>
+}

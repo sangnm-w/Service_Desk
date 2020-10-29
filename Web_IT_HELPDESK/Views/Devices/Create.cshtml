@@ -1,0 +1,187 @@
+﻿@model Web_IT_HELPDESK.Device
+
+@{
+    ViewBag.Title = "Create new laptop/desktop";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Style{
+    <link href="~/vendors/Selectron/selectron.css" rel="stylesheet" />
+}
+
+<div class="col-md-12 panel-info">
+    <div class="content-box-header panel-heading">
+        <div class="panel-title ">Add New Laptop/Desktop</div>
+
+        <div class="panel-options">
+            <a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
+            <a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
+        </div>
+    </div>
+    <div class="content-box-large box-with-header">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Device_Type_Id, "Device Type", htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownList("Device_Type_Id")
+                        @Html.ValidationMessageFor(model => model.Device_Type_Id, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Device_Name, "Device Name", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Device_Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Device_Name, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Serial_No, "Serial Number", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Serial_No, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Serial_No, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    @*<div class="col-md-4">
+                            @Html.LabelFor(model => model.Contract_Id, "Contract", htmlAttributes: new { @class = "control-label" })
+                            @Html.DropDownList("Contract_Id")
+                            @Html.ValidationMessageFor(model => model.Contract_Id, "", new { @class = "text-danger" })
+                        </div>*@
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Purchase_Date, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group date" id="purdatepicker">
+                            @Html.Editor("Pur Date", new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                        @Html.HiddenFor(model => model.Purchase_Date, new { @id = "purdate_val", @Value = "" })
+                        @Html.ValidationMessageFor(model => model.Purchase_Date, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Depreciation, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group date" id="deprdatepicker">
+                            @Html.Editor("Depr Date", new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                        @Html.HiddenFor(model => model.Depreciation, new { @id = "deprdate_val", @Value = "" })
+                        @Html.ValidationMessageFor(model => model.Depreciation, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.CPU, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.CPU, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CPU, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.RAM, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.RAM, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.RAM, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.DISK, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.DISK, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.DISK, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Operation_System, "Operation System", htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.Operation_System, new { @class = "form-control", @rows = 1 })
+                        @Html.ValidationMessageFor(model => model.Operation_System, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Office, "Microsoft Office", htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.Office, new { @class = "form-control", @rows = 1 })
+                        @Html.ValidationMessageFor(model => model.Office, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.OS_License, "OS License", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.OS_License, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.OS_License, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Office_License, "Office License", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Office_License, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Office_License, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Note, "Note", htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.Note, new { @class = "form-control", @rows = 2 })
+                        @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Addition_Information, "Addition Information", htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.Addition_Information, new { @class = "form-control", @rows = 2 })
+                        @Html.ValidationMessageFor(model => model.Addition_Information, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-10">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+                <div class="col-sm-2">
+                    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default", @style = "float: right" })
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@section Script {
+    <script src="~/vendors/Selectron/selectron.js"></script>
+    <script type="text/javascript">
+        $('#purdatepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            autoclose: true,
+            todayHighlight: true,
+            endDate: 'today'
+        });
+
+        $('#deprdatepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            autoclose: true,
+            todayHighlight: true
+        });
+
+        $('#purdatepicker').on('changeDate', function () {
+            $("#deprdatepicker").datepicker('setStartDate', new Date($('#purdatepicker').datepicker('getDate')));
+            var p = new Date($('#purdatepicker').datepicker('getDate'));
+            if (p.getFullYear() > 2000) {
+                $('#purdate_val').val(
+                    moment(p).format()
+                );
+            }
+        });
+
+        $('#deprdatepicker').on('changeDate', function () {
+            var d = new Date($('#deprdatepicker').datepicker('getDate'));
+            if (d.getFullYear() > 2000) {
+                $('#deprdate_val').val(
+                    moment(d).format()
+                );
+            }
+        });
+
+        $('#purdatepicker').datepicker('setDate', 'today');
+
+        $('select').selectron({
+            search: true
+        });
+
+        $(document).on("keydown", "form", function (event) {
+            return event.key != "Enter";
+        });
+    </script>
+}

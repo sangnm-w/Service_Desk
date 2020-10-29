@@ -10,7 +10,7 @@ namespace Web_IT_HELPDESK.Controllers
     {
         //
         // GET: /Store/
-        Web_IT_HELPDESKEntities en = new Web_IT_HELPDESKEntities();
+        ServiceDeskEntities en = new ServiceDeskEntities();
         public ActionResult Index()
         {
             return View();

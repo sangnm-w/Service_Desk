@@ -1,27 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Net.Mail;
-using System.Web;
 
 namespace Web_IT_HELPDESK
 {
     public partial class Information
     {
         // Get 
-       
         DataTable dt = new DataTable();
-        public void email_send(string user_email, string pass, string department_id, string str_subject, string str_body, string level_confirm,string v_plant)
+        public void email_send(string user_email, string pass, string department_id, string str_subject, string str_body, string level_confirm, string v_plant)
         {
             user_email = "ithelpdesk@cjvina.com";
             pass = "ithelpdesk2015";
             string email = "";
             if (level_confirm == "1")
             {
-                dt = email_data(department_id,v_plant);
+                dt = email_data(department_id, v_plant);
 
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
@@ -48,10 +44,10 @@ namespace Web_IT_HELPDESK
                         }
                         //else { MessageBox.Show("Sai cấu trúc email", "Thông báo!"); }
                     }
-                    catch (Exception ex) { }//MessageBox.Show("Lỗi: " + ex.ToString(), "Thông báo!"); }
+                    catch (Exception) { }//MessageBox.Show("Lỗi: " + ex.ToString(), "Thông báo!"); }
                 }
             }
-            else if (level_confirm == "2" && v_plant =="0301")
+            else if (level_confirm == "2" && v_plant == "0301")
             {
                 email = "thao.hr@cjvina.com";
                 try
@@ -76,13 +72,13 @@ namespace Web_IT_HELPDESK
                     }
                     //else { MessageBox.Show("Sai cấu trúc email", "Thông báo!"); }
                 }
-                catch (Exception ex) { }//MessageBox.Show("Lỗi: " + ex.ToString(), "Thông báo!"); }
+                catch (Exception) { }//MessageBox.Show("Lỗi: " + ex.ToString(), "Thông báo!"); }
             }
             //quản lý văn phòng phẩm
-            else if (level_confirm == "3" && v_plant =="0301")
+            else if (level_confirm == "3" && v_plant == "0301")
             {
                 email = "hr@cjvina.com"; // chua co nguoi 20181231
-                 
+
                 try
                 {
                     MailMessage mail = new MailMessage();
@@ -101,9 +97,9 @@ namespace Web_IT_HELPDESK
                         SmtpServer.Send(mail);
                     }
                 }
-                catch (Exception ex) { }//MessageBox.Show("Lỗi: " + ex.ToString(), "Thông báo!"); }
+                catch (Exception) { }//MessageBox.Show("Lỗi: " + ex.ToString(), "Thông báo!"); }
             }
-                // quản lý xe
+            // quản lý xe
             else if (level_confirm == "4" && v_plant == "0301")
             {
                 email_send_IT("0000", "0301", user_email, pass, str_subject, str_body);
@@ -130,44 +126,44 @@ namespace Web_IT_HELPDESK
                     }
                     //else { MessageBox.Show("Sai cấu trúc email", "Thông báo!"); }
                 }
-                catch (Exception ex) { }//MessageBox.Show("Lỗi: " + ex.ToString(), "Thông báo!"); }
+                catch (Exception) { }//MessageBox.Show("Lỗi: " + ex.ToString(), "Thông báo!"); }
             }
 
             //logic for Dong Nai
             else if (level_confirm == "2" && v_plant == "0304")
             {
-                 email ="";
-                 for (int i = 0; i < 2; i++)
-                 {
-                     if (i == 0)
-                         email = "dathao.hr@cjvina.com";
+                email = "";
+                for (int i = 0; i < 2; i++)
+                {
+                    if (i == 0)
+                        email = "dathao.hr@cjvina.com";
 
-                     else if (i == 1)
-                         email = "tamhiep.hr@cjvina.com";
-                     try
-                     {
-                         MailMessage mail = new MailMessage();
-                         SmtpClient SmtpServer = new SmtpClient("mail.cjvina.com", 587);
-                         if (user_email.Contains("@cjvina.com"))
-                         {
-                             mail.From = new MailAddress(user_email); // user_email send
-                             mail.To.Add(email); // add email is sent
-                             mail.Subject = str_subject;
+                    else if (i == 1)
+                        email = "tamhiep.hr@cjvina.com";
+                    try
+                    {
+                        MailMessage mail = new MailMessage();
+                        SmtpClient SmtpServer = new SmtpClient("mail.cjvina.com", 587);
+                        if (user_email.Contains("@cjvina.com"))
+                        {
+                            mail.From = new MailAddress(user_email); // user_email send
+                            mail.To.Add(email); // add email is sent
+                            mail.Subject = str_subject;
 
-                             // body
-                             mail.Body = str_body;
+                            // body
+                            mail.Body = str_body;
 
-                             SmtpServer.Port = 25;
-                             SmtpServer.Credentials = new System.Net.NetworkCredential(user_email, pass);  // "ithelpdesk@cjvina.com", "ithelpdesk2015"
-                             SmtpServer.EnableSsl = false;
-                             SmtpServer.Send(mail);
-                         }
-                         //else { MessageBox.Show("Sai cấu trúc email", "Thông báo!"); }
-                     }
+                            SmtpServer.Port = 25;
+                            SmtpServer.Credentials = new System.Net.NetworkCredential(user_email, pass);  // "ithelpdesk@cjvina.com", "ithelpdesk2015"
+                            SmtpServer.EnableSsl = false;
+                            SmtpServer.Send(mail);
+                        }
+                        //else { MessageBox.Show("Sai cấu trúc email", "Thông báo!"); }
+                    }
 
-                     catch { }//MessageBox.Show("Lỗi: " + ex.ToString(), "Thông báo!"); }
+                    catch { }//MessageBox.Show("Lỗi: " + ex.ToString(), "Thông báo!"); }
 
-                 }
+                }
             }
             else if (level_confirm == "3" && v_plant == "0304")
             {
@@ -191,7 +187,7 @@ namespace Web_IT_HELPDESK
                         SmtpServer.Send(mail);
                     }
                 }
-                catch (Exception ex) { }//MessageBox.Show("Lỗi: " + ex.ToString(), "Thông báo!"); }
+                catch (Exception) { }//MessageBox.Show("Lỗi: " + ex.ToString(), "Thông báo!"); }
             }
 
             //logic for VINH LONG & MEKONG
@@ -220,7 +216,7 @@ namespace Web_IT_HELPDESK
                     }
                     //else { MessageBox.Show("Sai cấu trúc email", "Thông báo!"); }
                 }
-                catch (Exception ex) { }//MessageBox.Show("Lỗi: " + ex.ToString(), "Thông báo!"); }
+                catch (Exception) { }//MessageBox.Show("Lỗi: " + ex.ToString(), "Thông báo!"); }
             }
             else if (level_confirm == "3" && (v_plant == "0303" || v_plant == "0308"))
             {
@@ -243,7 +239,7 @@ namespace Web_IT_HELPDESK
                         SmtpServer.Send(mail);
                     }
                 }
-                catch (Exception ex) { }//MessageBox.Show("Lỗi: " + ex.ToString(), "Thông báo!"); }
+                catch (Exception) { }//MessageBox.Show("Lỗi: " + ex.ToString(), "Thông báo!"); }
             }
 
             //logic for HA NAM HUNG YEN
@@ -255,7 +251,7 @@ namespace Web_IT_HELPDESK
             {
                 email_send_IT("3333", v_plant, user_email, pass, str_subject, str_body);
             }
-           
+
         }
 
         private string str_connect = ConfigurationManager.ConnectionStrings["Web_IT_HELPDESK_connString"].ConnectionString;
@@ -383,7 +379,7 @@ namespace Web_IT_HELPDESK
                     }
                     //else { MessageBox.Show("Sai cấu trúc email", "Thông báo!"); }
                 }
-                catch (Exception ex) { }//MessageBox.Show("Lỗi: " + ex.ToString(), "Thông báo!"); }
+                catch (Exception) { }//MessageBox.Show("Lỗi: " + ex.ToString(), "Thông báo!"); }
             }
         }
     }
