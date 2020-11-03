@@ -22,7 +22,7 @@ namespace Web_IT_HELPDESK.Models
             var allocations = en.GetLastAllocationOfDevice()
                 .Join(en.Employees,
                 a => a.Deliver,
-                e => e.EmployeeID,
+                e => e.Emp_CJ,
                 (a, e) => new
                 {
                     allocation = a,
@@ -30,7 +30,7 @@ namespace Web_IT_HELPDESK.Models
                 })
                 .Join(en.Employees,
                 grp => grp.allocation.Receiver,
-                e => e.EmployeeID,
+                e => e.Emp_CJ,
                 (grp, e) => new
                 {
                     allocation = grp.allocation,
@@ -73,7 +73,7 @@ namespace Web_IT_HELPDESK.Models
             var allocations = en.GetLastAllocationOfDevice()
                 .Join(en.Employees,
                 a => a.Deliver,
-                e => e.EmployeeID,
+                e => e.Emp_CJ,
                 (a, e) => new
                 {
                     allocation = a,
@@ -81,7 +81,7 @@ namespace Web_IT_HELPDESK.Models
                 })
                 .Join(en.Employees,
                 grp => grp.allocation.Receiver,
-                e => e.EmployeeID,
+                e => e.Emp_CJ,
                 (grp, e) => new
                 {
                     allocation = grp.allocation,
@@ -126,7 +126,7 @@ namespace Web_IT_HELPDESK.Models
             var allocations = en.Allocations
                 .Join(en.Employees,
                 a => a.Deliver,
-                e => e.EmployeeID,
+                e => e.Emp_CJ,
                 (a, e) => new
                 {
                     Allocation = a,
@@ -134,7 +134,7 @@ namespace Web_IT_HELPDESK.Models
                 })
                 .Join(en.Employees,
                 j1 => j1.Allocation.Receiver,
-                e => e.EmployeeID,
+                e => e.Emp_CJ,
                 (j1, e) => new AllocationViewModel
                 {
                     Allocation = j1.Allocation,

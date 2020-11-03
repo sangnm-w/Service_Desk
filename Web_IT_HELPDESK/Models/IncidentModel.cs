@@ -39,13 +39,13 @@ namespace Web_IT_HELPDESK.Models
                 .Join(
                     en.Employees,
                     isld => isld.inc.User_create,
-                    e => e.EmployeeID,
+                    e => e.Emp_CJ,
                     (isld, e) => new { isld.inc, isld.StatusName, isld.LevelName, isld.Department_Name, e.EmployeeName }
                 )
                 .GroupJoin(
                     en.Employees,
                     i => i.inc.User_resolve,
-                    e => e.EmployeeID,
+                    e => e.Emp_CJ,
                     (i, employeesGroup) => new { i, employeesGroup }
                 )
                 .SelectMany(

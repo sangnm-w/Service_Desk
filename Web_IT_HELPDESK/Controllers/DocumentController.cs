@@ -29,7 +29,7 @@ namespace Web_IT_HELPDESK.Controllers
         public ActionResult Create()
         {
             Document document = new Document();
-            ViewBag.EmployeeID = //Session["employee_id"].ToString();
+            ViewBag.Emp_CJ = //Session["employee_id"].ToString();
                                 System.Web.HttpContext.Current.User.Identity.Name;
             ViewBag.DocumentTypeId = new SelectList(en.DocumentTypes, "DocumentTypeId", "DocumentTypeName", en.DocumentTypes.First().DocumentTypeId);
             return View(document);

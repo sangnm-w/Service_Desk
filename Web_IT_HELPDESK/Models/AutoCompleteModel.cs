@@ -9,14 +9,14 @@ namespace Web_IT_HELPDESK.Models
     {
         public class EmployeeFieldModel
         {
-            public string EmployeeID { get; set; }
+            public string Emp_CJ { get; set; }
             public string EmployeeName { get; set; }
 
             private string _EmployeeField;
 
             public string EmployeeField
             {
-                get { return EmployeeID + " - " + EmployeeName; }
+                get { return Emp_CJ + " - " + EmployeeName; }
                 set { _EmployeeField = value; }
             }
         }

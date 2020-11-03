@@ -201,7 +201,6 @@
     <Compile Include="CONTRACT_TYPE_DETAIL.cs">
       <DependentUpon>ServiceDesk.tt</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AllocationsController.cs" />
     <Compile Include="Controllers\BIZ_TRIPController.cs" />
     <Compile Include="Controllers\CheckoutController.cs" />
@@ -1551,6 +1550,7 @@
     <Content Include="Views\BIZ_TRIP\Create - Copy.cshtml" />
     <Content Include="Views\Incident\IncidentEmail.cshtml" />
     <Content Include="Views\Account\LogOn.cshtml" />
+    <Content Include="Views\Shared\Messenger.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

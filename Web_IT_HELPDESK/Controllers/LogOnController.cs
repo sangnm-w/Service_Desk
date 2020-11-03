@@ -34,13 +34,13 @@ namespace Web_IT_HELPDESK.Controllers
 
         private string GetPlant_id(string v_emp)
         {
-            string plant_id = en.Employees.Where(f => (f.EmployeeID == v_emp)).Select(f => f.Plant_Id).SingleOrDefault();
+            string plant_id = en.Employees.Where(f => (f.Emp_CJ == v_emp)).Select(f => f.Plant_Id).SingleOrDefault();
             return plant_id;
         }
 
         private string GetDept_id(string v_plant_id, string session_emp)
         {
-            string dept_id = en.Employees.Where(f => (f.EmployeeID == session_emp && f.Plant_Id == v_plant_id)).Select(f => f.Department_Id).SingleOrDefault();
+            string dept_id = en.Employees.Where(f => (f.Emp_CJ == session_emp && f.Plant_Id == v_plant_id)).Select(f => f.Department_Id).SingleOrDefault();
             return dept_id;
         }
 
@@ -50,41 +50,33 @@ namespace Web_IT_HELPDESK.Controllers
             if (ModelState.IsValid)
             {
                 UserManager userManager = new UserManager();
-                string password = userManager.GetUserPassword(emp.EmployeeID);
-
-                if (string.IsNullOrEmpty(password))
-                {
-
-                    ModelState.AddModelError("", "The user login or password provided is incorrect.");
-                }
+                string password = userManager.GetUserPassword(emp.Emp_CJ);
 
                 if (emp.Password == password)
                 {
-                    FormsAuthentication.SetAuthCookie(emp.EmployeeID, false);
+                    FormsAuthentication.SetAuthCookie(emp.Emp_CJ, false);
                     if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
                         && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
                     {
-                        Session["employee_id"] = emp.EmployeeID;
-                        Session["plant_id"] = GetPlant_id(emp.EmployeeID);
-                        Session["dept_id"] = GetDept_id(Convert.ToString(GetPlant_id(emp.EmployeeID)),emp.EmployeeID);
+                        Session["employee_id"] = emp.Emp_CJ;
+                        Session["plant_id"] = GetPlant_id(emp.Emp_CJ);
+                        Session["dept_id"] = GetDept_id(Convert.ToString(GetPlant_id(emp.Emp_CJ)), emp.Emp_CJ);
                         return Redirect(returnUrl);
                     }
                     else
                     {
-                        Session["employee_id"] = emp.EmployeeID;
-                        Session["plant_id"] = GetPlant_id(emp.EmployeeID);
-                        Session["dept_id"] = GetDept_id(Convert.ToString(GetPlant_id(emp.EmployeeID)), emp.EmployeeID);
+                        Session["employee_id"] = emp.Emp_CJ;
+                        Session["plant_id"] = GetPlant_id(emp.Emp_CJ);
+                        Session["dept_id"] = GetDept_id(Convert.ToString(GetPlant_id(emp.Emp_CJ)), emp.Emp_CJ);
                         string emailcookies = System.Web.HttpContext.Current.User.Identity.Name;
                         return RedirectToAction("Index", "Home");
                     }
-                    
                 }
                 else
                 {
-                    ModelState.AddModelError("", "The password provided is incorrect.");
+                    ModelState.AddModelError("LogonF", "The Id or Password is invalid!");
                 }
             }
-            // If we got this far, something failed, redisplay form
             return View(emp);
         }
 
@@ -109,7 +101,7 @@ namespace Web_IT_HELPDESK.Controllers
         public ActionResult Create()
         {
             return View();
-        } 
+        }
 
         //
         // POST: /LogOn/Create
@@ -128,10 +120,10 @@ namespace Web_IT_HELPDESK.Controllers
                 return View();
             }
         }
-        
+
         //
         // GET: /LogOn/Edit/5
- 
+
         public ActionResult Edit(int id)
         {
             return View();
@@ -146,7 +138,7 @@ namespace Web_IT_HELPDESK.Controllers
             try
             {
                 // TODO: Add update logic here
- 
+
                 return RedirectToAction("Index");
             }
             catch
@@ -157,7 +149,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         //
         // GET: /LogOn/Delete/5
- 
+
         public ActionResult Delete(int id)
         {
             return View();
@@ -172,7 +164,7 @@ namespace Web_IT_HELPDESK.Controllers
             try
             {
                 // TODO: Add delete logic here
- 
+
                 return RedirectToAction("Index");
             }
             catch

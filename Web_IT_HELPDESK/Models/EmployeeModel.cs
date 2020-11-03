@@ -18,7 +18,7 @@ namespace Web_IT_HELPDESK.Models
         {
             ServiceDeskEntities en = new ServiceDeskEntities();
 
-            var employeeFields = en.Employees.Select(e => new EmployeeFieldModel { EmployeeID = e.EmployeeID, EmployeeName = e.EmployeeName }).Distinct().ToList();
+            var employeeFields = en.Employees.Select(e => new EmployeeFieldModel { Emp_CJ = e.Emp_CJ, EmployeeName = e.EmployeeName }).Distinct().ToList();
 
             return employeeFields;
         }
@@ -26,7 +26,7 @@ namespace Web_IT_HELPDESK.Models
         {
             ServiceDeskEntities en = new ServiceDeskEntities();
 
-            var employeeFields = en.Employees.Where(e => e.Plant_Id == PlantId).Select(e => new EmployeeFieldModel { EmployeeID = e.EmployeeID, EmployeeName = e.EmployeeName }).Distinct().ToList();
+            var employeeFields = en.Employees.Where(e => e.Plant_Id == PlantId).Select(e => new EmployeeFieldModel { Emp_CJ = e.Emp_CJ, EmployeeName = e.EmployeeName }).Distinct().ToList();
 
             return employeeFields;
         }

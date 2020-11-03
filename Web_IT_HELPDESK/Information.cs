@@ -316,7 +316,7 @@ namespace Web_IT_HELPDESK
             DataSet ds = new DataSet();
             string sql;
 
-            sql = "select employeeid,EmployeeName,Email\n" +
+            sql = "select Emp_CJ,EmployeeName,Email\n" +
                     "from employee\n" +
                     "Where DepatmentId='" + department_id + "'\n" +
                        "and Plant='" + v_plant_id + "'\n" +

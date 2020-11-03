@@ -148,7 +148,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.User_create = System.Web.HttpContext.Current.User.Identity.Name;
             ViewBag.PERIOD_ID = new SelectList(en.PERIODs, "PERIOD_ID", "PERIOD_NAME", en.PERIODs.First().PERIOD_ID);
             ViewBag.CONTRACT_TYPE_ID = new SelectList(en.CONTRACT_TYPE, "CONTRACT_TYPE_ID", "CONTRACT_TYPE_NAME", en.CONTRACT_TYPE.First().CONTRACT_TYPE_ID);
-            var dept = from i in en.Employees where i.EmployeeID== System.Web.HttpContext.Current.User.Identity.Name select i.Department_Id;
+            var dept = from i in en.Employees where i.Emp_CJ== System.Web.HttpContext.Current.User.Identity.Name select i.Department_Id;
             ViewBag.DEPT_ID = dept.ToString();
             return PartialView("partial_create_new_asset", _contract);
         }
@@ -175,14 +175,14 @@ namespace Web_IT_HELPDESK.Controllers
 
         private string GetDept_id(string v_emp)
         {
-            string dept_id = en.Employees.Where(f => (f.EmployeeID == v_emp)).Select(f => f.Department_Id).SingleOrDefault();
+            string dept_id = en.Employees.Where(f => (f.Emp_CJ == v_emp)).Select(f => f.Department_Id).SingleOrDefault();
             return dept_id;
         }
 
         //GetPlant_id
         private string GetPlant_id(string v_emp)
         {
-            string plant_id = en.Employees.Where(f => (f.EmployeeID == v_emp)).Select(f => f.Plant_Id).SingleOrDefault();
+            string plant_id = en.Employees.Where(f => (f.Emp_CJ == v_emp)).Select(f => f.Plant_Id).SingleOrDefault();
             return plant_id;
         }
 

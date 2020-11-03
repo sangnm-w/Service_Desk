@@ -18,7 +18,7 @@ namespace Web_IT_HELPDESK.Controllers
             return View();
         }
 
-        ServiceDeskEntities en =new ServiceDeskEntities();
+        ServiceDeskEntities en = new ServiceDeskEntities();
         private string session_emp = System.Web.HttpContext.Current.User.Identity.Name;
 
         [HttpPost, ActionName("Submit")]
@@ -35,11 +35,11 @@ namespace Web_IT_HELPDESK.Controllers
                 //result += string.Format("Answer for question {0} is {1} and {2} <br />", index, answer, correct);
                 EMP_ANSWER emp_answer = new EMP_ANSWER();
                 emp_answer.ID = Guid.NewGuid();
-                emp_answer.QUESTION_ID = en.QUESTIONs.Where(o=>o.NO==index.ToString()).Select(i=>i.ID).SingleOrDefault();
+                emp_answer.QUESTION_ID = en.QUESTIONs.Where(o => o.NO == index.ToString()).Select(i => i.ID).SingleOrDefault();
                 emp_answer.EMPLOYEEID = session_emp;
                 emp_answer.DATE = DateTime.Now;
                 emp_answer.ANSWERID = Convert.ToInt32(answer.ToString());
-                
+
                 // Get IP May Tinh
                 /*IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());
                 foreach (IPAddress addr in localIPs)
@@ -60,7 +60,8 @@ namespace Web_IT_HELPDESK.Controllers
                     en.EMP_ANSWER.Add(emp_answer);
 
                     en.SaveChanges();
-                    ViewBag.Message = "CAC BAN DA HOAN THANH DANH GIA, XIN CHAN THANH CAM ON DANH GIA CUA BAN GIUP CHUNG TOI HOAN THIEN HON ./."; 
+                    //ViewBag.Message = "CAC BAN DA HOAN THANH DANH GIA, XIN CHAN THANH CAM ON DANH GIA CUA BAN GIUP CHUNG TOI HOAN THIEN HON ./."; 
+                    return View("~/Views/Shared/Messenger");
                 }
                 catch { }
                 index++;
@@ -71,7 +72,7 @@ namespace Web_IT_HELPDESK.Controllers
         [HttpPost, ActionName("Submit_")] // khảo sát canteen
         public ActionResult Submit_(IEnumerable<string> answersnote, IEnumerable<Guid> questions)
         {
-            string result = string.Empty;
+            bool result = true;
             int index = 0;
             foreach (var answer in answersnote)
             {
@@ -84,7 +85,7 @@ namespace Web_IT_HELPDESK.Controllers
                 emp_answer.EMPLOYEEID = session_emp;
                 emp_answer.DATE = DateTime.Now;
                 emp_answer.NOTE = answer.ToString();
-                
+
                 // Get IP May Tinh
                 /*IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());
                 foreach (IPAddress addr in localIPs)
@@ -102,10 +103,17 @@ namespace Web_IT_HELPDESK.Controllers
                     en.EMP_ANSWER.Add(emp_answer);
 
                     en.SaveChanges();
-                    ViewBag.Message = "CAC BAN DA HOAN THANH DANH GIA, XIN CHAN THANH CAM ON DANH GIA CUA BAN GIUP CHUNG TOI HOAN THIEN HON ./.";
+                    //ViewBag.Message = "CAC BAN DA HOAN THANH DANH GIA, XIN CHAN THANH CAM ON DANH GIA CUA BAN GIUP CHUNG TOI HOAN THIEN HON ./."; 
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    result = false; 
+                }
                 index++;
+            }
+            if (result)
+            {
+                return View("~/Views/Shared/Messenger.cshtml");
             }
             return View("Index");
         }
@@ -113,13 +121,13 @@ namespace Web_IT_HELPDESK.Controllers
 
         private string GetDept_id()
         {
-            string dept_id = en.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.Department_Id).SingleOrDefault();
+            string dept_id = en.Employees.Where(f => (f.Emp_CJ == session_emp)).Select(f => f.Department_Id).SingleOrDefault();
             return dept_id;
         }
 
         private string GetPlant_id()
         {
-            string plant_id = en.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.Plant_Id).SingleOrDefault();
+            string plant_id = en.Employees.Where(f => (f.Emp_CJ == session_emp)).Select(f => f.Plant_Id).SingleOrDefault();
             return plant_id;
         }
 

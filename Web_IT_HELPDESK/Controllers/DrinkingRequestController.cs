@@ -167,13 +167,13 @@ namespace Web_IT_HELPDESK.Controllers
         //  Get_department_Id
         private string GetDept_id(string v_plant_id)
         {
-            string dept_id = en.Employees.Where(f => (f.EmployeeID == session_emp && f.Plant_Id == v_plant_id)).Select(f => f.Department_Id).SingleOrDefault();
+            string dept_id = en.Employees.Where(f => (f.Emp_CJ == session_emp && f.Plant_Id == v_plant_id)).Select(f => f.Department_Id).SingleOrDefault();
             return dept_id;
         }
         //GetPlant_id
         private string GetPlant_id()
         {
-            string plant_id = en.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.Plant_Id).SingleOrDefault();
+            string plant_id = en.Employees.Where(f => (f.Emp_CJ == session_emp)).Select(f => f.Plant_Id).SingleOrDefault();
             return plant_id;
         }
 
@@ -459,7 +459,7 @@ namespace Web_IT_HELPDESK.Controllers
             inf.email_send("user_email", "pass", drinking_request.DepartmentId, subject, body, "1", userManager.GetUserPlant(session_emp));
             //~~~~~~~~~~~~~~~~~~~~~
 
-            ViewBag.EmployeeID = drinking_request.Employee_name;
+            ViewBag.Emp_CJ = drinking_request.Employee_name;
             ViewBag.DeptID = dept.Single().ToString();
 
             return View();
