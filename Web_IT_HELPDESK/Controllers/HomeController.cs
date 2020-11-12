@@ -111,7 +111,8 @@ namespace Web_IT_HELPDESK.Controllers
                 emp_answer.QUESTION_ID = en.QUESTIONs.FirstOrDefault(q => q.NO == questionNo.ToString()).ID;
                 emp_answer.EMPLOYEEID = session_emp;
                 emp_answer.DATE = DateTime.Now;
-                emp_answer.NOTE = answer.ToString();
+                if (questionNo != 9)
+                    emp_answer.NOTE = answer.ToString();
 
                 emp_answerlist.Add(emp_answer);
                 questionNo++;
