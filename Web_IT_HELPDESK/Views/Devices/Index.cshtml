@@ -176,7 +176,7 @@
                                     @Html.DisplayFor(modelItem => item.Device.Create_Date)
                                 </td>
                                 <td>
-                                    @if (item.Device.Device_Type_Id == 6) //6 == Laptop And Desktop
+                                    @if (item.Device.Device_Type_Id == 3 || item.Device.Device_Type_Id == 6) //6 == Laptop And 3 == Desktop
                                     {
                                         @Html.ActionLink("Edit", "Edit", new { id = item.Device.Device_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
                                     }

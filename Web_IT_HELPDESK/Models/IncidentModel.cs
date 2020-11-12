@@ -112,5 +112,11 @@ namespace Web_IT_HELPDESK.Models
 
             return plantId + "-" + strIncidentCode;
         }
+
+        public List<Rule> get_IncidentRules()
+        {
+            ServiceDeskEntities en = new ServiceDeskEntities();
+            return en.Rules.Where(r => r.Module_Name == Commons.ModuleConstant.INCIDENT && r.Deactive == false).ToList();
+        }
     }
 }

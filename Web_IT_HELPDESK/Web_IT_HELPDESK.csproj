@@ -163,22 +163,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Album.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="AlbumType.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="Allocation.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="BIZ_TRIP.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="Cart.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="CJ_HR_RECRUITMENT.cs">
       <DependentUpon>Model_labor_contract.tt</DependentUpon>
@@ -189,17 +189,18 @@
     <Compile Include="CJ_HR_SALARY_REPORT.cs">
       <DependentUpon>Model_labor_contract.tt</DependentUpon>
     </Compile>
+    <Compile Include="Commons\Constant.cs" />
     <Compile Include="CONTRACT.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="CONTRACT_SUB.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="CONTRACT_TYPE.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="CONTRACT_TYPE_DETAIL.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="Controllers\AllocationsController.cs" />
     <Compile Include="Controllers\BIZ_TRIPController.cs" />
@@ -233,59 +234,59 @@
       <DependentUpon>DataSetReport.xsd</DependentUpon>
     </Compile>
     <Compile Include="Department.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="Device.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="Device_Type.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="Document.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="DocumentType.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="Drinking_Request.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="Employee.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="EmployeeInfo.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="Employee_Screen.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="EMP_ANSWER.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="Event.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="func_report_detail_Result.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="GetLastAllocationOfDevice_Result.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="hr_emp_infor.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="hr_emp_meal.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="Incident.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="Information.cs" />
     <Compile Include="Level.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AllocationModel.cs" />
     <Compile Include="Models\AutoCompleteModel.cs" />
@@ -297,6 +298,7 @@
     <Compile Include="Models\EmployeeModel.cs" />
     <Compile Include="Models\IncidentModel.cs" />
     <Compile Include="Models\LoginPersonViewModel.cs" />
+    <Compile Include="Models\CurrentUser.cs" />
     <Compile Include="Models\Metadata.cs" />
     <Compile Include="Models\PartialClasses.cs" />
     <Compile Include="Models\ShoppingCart.cs" />
@@ -316,16 +318,16 @@
       <DependentUpon>Model_labor_contract.edmx</DependentUpon>
     </Compile>
     <Compile Include="OrderDetail.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="Order_.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="ORDER_TYPE_VIEW.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="PERIOD.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -334,37 +336,47 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="QUESTION.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Rights_Management.cs">
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Role.cs">
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Rule.cs">
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="Screen.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="Seal_Using.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
-    <Compile Include="ServiceDesk.Context.cs">
+    <Compile Include="ServicesDesk.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ServiceDesk.Context.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="ServiceDesk.cs">
+    <Compile Include="ServicesDesk.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
-    <Compile Include="ServiceDesk.Designer.cs">
+    <Compile Include="ServicesDesk.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ServiceDesk.edmx</DependentUpon>
+      <DependentUpon>ServicesDesk.edmx</DependentUpon>
     </Compile>
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="Status.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="UserLogon.cs">
-      <DependentUpon>ServiceDesk.tt</DependentUpon>
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\AllocationViewModel.cs" />
+    <Compile Include="ViewModels\DepartmentViewModel.cs" />
     <Compile Include="ViewModels\DeviceViewModel.cs" />
     <Compile Include="ViewModels\IncidentViewModel.cs" />
     <Compile Include="ViewModels\PlantViewModel.cs" />
@@ -619,15 +631,15 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
-    <Content Include="ServiceDesk.Context.tt">
+    <Content Include="ServicesDesk.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ServiceDesk.edmx</DependentUpon>
-      <LastGenOutput>ServiceDesk.Context.cs</LastGenOutput>
+      <DependentUpon>ServicesDesk.edmx</DependentUpon>
+      <LastGenOutput>ServicesDesk.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="ServiceDesk.tt">
+    <Content Include="ServicesDesk.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ServiceDesk.edmx</DependentUpon>
-      <LastGenOutput>ServiceDesk.cs</LastGenOutput>
+      <DependentUpon>ServicesDesk.edmx</DependentUpon>
+      <LastGenOutput>ServicesDesk.cs</LastGenOutput>
     </Content>
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
@@ -1540,17 +1552,18 @@
     <Content Include="Views\Devices\EditOthers.cshtml" />
     <Content Include="Views\Allocations\Revoke.cshtml" />
     <Content Include="Views\Allocations\Index - CopyForCollapse.cshtml" />
-    <EntityDeploy Include="ServiceDesk.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ServiceDesk.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="ServiceDesk.edmx.diagram">
-      <DependentUpon>ServiceDesk.edmx</DependentUpon>
-    </Content>
     <Content Include="Views\BIZ_TRIP\Create - Copy.cshtml" />
     <Content Include="Views\Incident\IncidentEmail.cshtml" />
     <Content Include="Views\Account\LogOn.cshtml" />
     <Content Include="Views\Shared\Messenger.cshtml" />
+    <Content Include="Views\CONTRACT\ContractIndex - Copy.cshtml" />
+    <EntityDeploy Include="ServicesDesk.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ServicesDesk.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="ServicesDesk.edmx.diagram">
+      <DependentUpon>ServicesDesk.edmx</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

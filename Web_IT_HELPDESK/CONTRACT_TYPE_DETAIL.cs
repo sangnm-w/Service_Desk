@@ -18,7 +18,6 @@ namespace Web_IT_HELPDESK
         public CONTRACT_TYPE_DETAIL()
         {
             this.CONTRACTs = new HashSet<CONTRACT>();
-    
             OnConstructorInit();
         }
         partial void OnConstructorInit();

@@ -19,7 +19,6 @@ namespace Web_IT_HELPDESK
         {
             this.Carts = new HashSet<Cart>();
             this.OrderDetails = new HashSet<OrderDetail>();
-    
             OnConstructorInit();
         }
         partial void OnConstructorInit();

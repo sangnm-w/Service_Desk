@@ -321,7 +321,7 @@ namespace Web_IT_HELPDESK.Controllers
                                 Guid? Contract_Id = null;
                                 bool DeviceType = int.TryParse(worksheet.Cells[rowNo, 1].Value?.ToString(), out int DeviceTypeExcel);
                                 int? Device_Type_Id = DeviceType ? (int?)DeviceTypeExcel : null;
-                                string Device_Code = DeviceModel.Instance.Generate_DeviceCode(plantid, Device_Type_Id);
+                                string Device_Code = DeviceModel.Instance.Generate_DeviceCode_Upload(plantid, Device_Type_Id, deviceList);
                                 string Device_Name = worksheet.Cells[rowNo, 2].Value?.ToString();
                                 string Serial_No = worksheet.Cells[rowNo, 3].Value?.ToString();
                                 DateTime? Purchase_Date = worksheet.Cells[rowNo, 4].Value is null ? (DateTime?)null : Convert.ToDateTime(worksheet.Cells[rowNo, 4].Value);

@@ -18,7 +18,6 @@ namespace Web_IT_HELPDESK
         public DocumentType()
         {
             this.Documents = new HashSet<Document>();
-    
             OnConstructorInit();
         }
         partial void OnConstructorInit();

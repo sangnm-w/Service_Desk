@@ -4,20 +4,19 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<meta charset="utf-8">
+<!--<meta charset="utf-8">
 <!--link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <link rel="stylesheet" href="/resources/demos/style.css"-->
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script src="http://52.213.28.99/servicedesk/Content/js/responsiveslides.js"></script>
+<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="http://52.213.28.99/servicedesk/Content/js/responsiveslides.js"></script>-->
 @*<link href="/Content/Site.css" rel="stylesheet" />*@
-<script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.js")" type="text/javascript"></script>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<link rel="stylesheet" href="/resources/demos/style.css">
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+@*<script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.js")" type="text/javascript"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->*@
 
 <script>
     $(function () {
@@ -93,7 +92,7 @@
 <div class="row">
     <div class="col-md-12 panel-warning">
         <div class="content-box-header panel-heading">
-            <div class="panel-title ">Survey</div>
+            <div class="panel-title ">Survey Form</div>
 
             <div class="panel-options">
                 <a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
@@ -103,42 +102,57 @@
         <div class="content-box-large box-with-header">
             @using (Html.BeginForm("Submit_", "Home", FormMethod.Post))
             {
-                <!--div id="tabs-1"-->
-                if (Convert.ToString(Session["plant_id"]) != "030")
+                int j = 0;
+                <h1>Khảo sát đào tạo</h1>
+                <br />
+                foreach (var item_question in new ServiceDeskEntities().QUESTIONs.Where(i => i.DEL != true))
                 {
-                    int j = 0;
-                    foreach (var item_question in new ServiceDeskEntities().QUESTIONs.Where(i => i.DEL != true).OrderBy(o => o.NO))
-                    {
-                        if (j == 0)
-                        {
-                            <h1>Khảo sát nâng cấp nội dung và giao diện website <a href="https://www.cjvina.com">www.cjvina.com</a></h1>
-                        }
-                        if (j == 0 || j == 1 || j == 2)
-                        {
-                            <br />
-                            @item_question.NO <span> ) .   </span>
-                            @item_question.QUESTION_CONTENT.ToString().ToUpper().Replace("\\", "    \\    ")
-                            <br />
-                            <br />
-                            <textarea name="answersnote[@j]" cols="50" style="border:solid 1px" placeholder="Có / Không"></textarea>
-                            <input type="text" name="questions[@j]" value="@item_question.ID" hidden="hidden" />
+                    double questionNo = Convert.ToDouble(item_question.NO);
 
+                    if (questionNo < 9)
+                    {
+                        <div class="form-group">
+                            <label>
+                                @(questionNo + 1)<span> ) .   </span>
+                                @item_question.QUESTION_CONTENT.ToString().ToUpper().Replace("\\", "    \\    ")
+                            </label>
+                            <textarea class="form-control" name="answertexts[@questionNo]" rows="1" placeholder="Ghi chú đóng góp"></textarea>
+                            <input type="text" name="questions[@questionNo]" value="@item_question.ID" hidden="hidden" />
+                        </div>
+                    }
+                    else
+                    {
+                        if (questionNo == 9)
+                        {
                             <br />
+                            <div class="form-group">
+                                <label>
+                                    @(questionNo + 1) <span> ) .   </span>
+                                    @item_question.QUESTION_CONTENT.ToString().ToUpper().Replace("\\", "    \\    ")
+                                </label>
+                            </div>
                         }
                         else
                         {
-
-                            <br />
-                            @item_question.NO <span> ) .   </span>
-                            @item_question.QUESTION_CONTENT.ToString().ToUpper().Replace("\\", "    \\    ")
-                            <br />
-                            <br />
-                            <textarea name="answersnote[@j]" cols="50" style="border:solid 1px" placeholder="Ghi chú đóng góp"></textarea>
-                            <input type="text" name="questions[@j]" value="@item_question.ID" hidden="hidden" />
-
-                            <br />
+                            <div class="form-group" style="margin-left: 20px;">
+                                <br />
+                                <label>
+                                    @item_question.QUESTION_CONTENT.ToString().ToUpper().Replace("\\", "    \\    ")
+                                </label>
+                                <br />
+                                <input type="radio" name="answerRadios[@j]" value="Hoàn toàn không cần thiết" />
+                                <label style="color:blue; padding-right: 20px;"> 1) Hoàn toàn không cần thiết </label>
+                                <input type="radio" name="answerRadios[@j]" value="Không cần thiết" />
+                                <label style="color:blue; padding-right: 20px;"> 2) Không cần thiết </label>
+                                <input type="radio" name="answerRadios[@j]" value="Không ý kiến" checked="checked" />
+                                <label style="color:blue; padding-right: 20px;"> 3) Không ý kiến </label>
+                                <input type="radio" name="answerRadios[@j]" value="Cần thiết" />
+                                <label style="color:blue; padding-right: 20px;"> 4) Cần thiết </label>
+                                <input type="radio" name="answerRadios[@j]" value="Rất cần thiết" />
+                                <label style="color:blue; padding-right: 20px;"> 5) Rất cần thiết </label>
+                            </div>
+                            j++;
                         }
-                        j = j + 1;
                     }
                 }
                 <br />
@@ -150,3 +164,12 @@
         </div>
     </div>
 </div>
+
+@section Script {
+    <script type="text/javascript">
+        var msg = '@TempData["message"]';
+        if (msg.length) {
+            alert(msg);
+        }
+    </script>
+}

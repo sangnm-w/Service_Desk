@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Web_IT_HELPDESK.Models;
+using Web_IT_HELPDESK.ViewModels;
 
 namespace Web_IT_HELPDESK.Controllers
 {
@@ -17,19 +18,30 @@ namespace Web_IT_HELPDESK.Controllers
         ServiceDeskEntities en = new ServiceDeskEntities();
         public ActionResult ContractIndex()//int? page)
         {
-            DateTime today = DateTime.Today;
+            #region closed - M$ 20201103
+            //DateTime today = DateTime.Today;
 
-            int v_year = today.Year;
-            int v_month = today.Month;
-            string dept=GetDept_id(System.Web.HttpContext.Current.User.Identity.Name);
-            string v_plant = GetPlant_id(System.Web.HttpContext.Current.User.Identity.Name);
-            var contract_list = en.CONTRACTs.Where(o => o.DEL != true && today <= DbFunctions.AddDays(o.DATE, 45) && o.DEPARTMENTID == dept && o.PLANT == v_plant).OrderBy(i => i.DATE); 
-                                                                                // EntityFunctions.AddDays lấy ngày hiện tại so sánh 30 ngày ngày trong quá khứ 
-            //int pageSize = 1;
-            //int pageNumber = (page ?? 1);
+            //int v_year = today.Year;
+            //int v_month = today.Month;
+            //string dept=GetDept_id(System.Web.HttpContext.Current.User.Identity.Name);
+            //string v_plant = GetPlant_id(System.Web.HttpContext.Current.User.Identity.Name);
+            //var contract_list = en.CONTRACTs.Where(o => o.DEL != true && today <= DbFunctions.AddDays(o.DATE, 45) && o.DEPARTMENTID == dept && o.PLANT == v_plant).OrderBy(i => i.DATE); 
+            //                                                                    // EntityFunctions.AddDays lấy ngày hiện tại so sánh 30 ngày ngày trong quá khứ 
+            ////int pageSize = 1;
+            ////int pageNumber = (page ?? 1);
+            #endregion
 
+            string curr_plantId = CurrentUser.Instance.User.Plant_Id;
 
-            return View(contract_list);//.ToPagedList(pageNumber, pageSize));
+            var depts = en.Departments.Where(d => d.Plant_Id == curr_plantId && d.Deactive == false).Select(d => new DepartmentViewModel
+            {
+                Department_Id = d.Department_Id,
+                Department_Name = d.Department_Name
+            }).OrderByDescending(d => d.Department_Name).ToList();
+            ViewBag.Departments = depts;
+
+            var contracts = en.CONTRACTs.Where(c => c.DEL == false);
+            return View(contracts);
         }
 
         [Authorize]
@@ -42,16 +54,16 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 if ((search_ == "" || search_ == "search") && v_companys.Count == 12 && v_contract_type == "all")
                 {
-                    var contract_list = en.CONTRACTs.Where(o => o.DEL != true 
-                                                              && date_ <=DbFunctions.AddDays(o.DATE, daynum_) 
+                    var contract_list = en.CONTRACTs.Where(o => o.DEL != true
+                                                              && date_ <= DbFunctions.AddDays(o.DATE, daynum_)
                                                               && o.PLANT == v_plant).OrderBy(i => i.DATE);
                     return View(contract_list);
                 }
-                else if((search_ == "" || search_ == "search") && v_companys.Count == 12 && v_contract_type != "all")
+                else if ((search_ == "" || search_ == "search") && v_companys.Count == 12 && v_contract_type != "all")
                 {
-                    var contract_list = en.CONTRACTs.Where(o => o.DEL != true 
-                                                             && o.CONTRACT_TYPE.CONTRACT_TYPE_NAME==v_contract_type
-                                                             && date_ <= DbFunctions.AddDays(o.DATE, daynum_) 
+                    var contract_list = en.CONTRACTs.Where(o => o.DEL != true
+                                                             && o.CONTRACT_TYPE.CONTRACT_TYPE_NAME == v_contract_type
+                                                             && date_ <= DbFunctions.AddDays(o.DATE, daynum_)
                                                              && o.PLANT == v_plant).OrderBy(i => i.DATE);
                     return View(contract_list);
                 }
@@ -65,7 +77,7 @@ namespace Web_IT_HELPDESK.Controllers
                     var contract_list = en.CONTRACTs.Where(o => o.DEL != true
                                                                 && v_company_string.Trim().Contains(o.DEPARTMENTID)
                                                                 && date_ <= DbFunctions.AddDays(o.DATE, daynum_)
-                                                                && v_company_string.Trim().Contains(o.DEPARTMENTID) 
+                                                                && v_company_string.Trim().Contains(o.DEPARTMENTID)
                                                                 && o.PLANT == v_plant).OrderBy(i => i.DATE);
                     return View(contract_list);
                 }
@@ -120,8 +132,8 @@ namespace Web_IT_HELPDESK.Controllers
                         v_company_string += v_company.ToString() + " ";
                     }
 
-                    var contract_list = en.CONTRACTs.Where(o => o.DEL != true 
-                                                             && date_ <= DbFunctions.AddDays(o.DATE, daynum_) 
+                    var contract_list = en.CONTRACTs.Where(o => o.DEL != true
+                                                             && date_ <= DbFunctions.AddDays(o.DATE, daynum_)
                                                              && o.CONTRACTNAME.Contains(search_) == true
                                                              && o.PLANT == v_plant
                                                              && v_company_string.Trim().Contains(o.DEPARTMENTID)).OrderBy(i => i.DATE);
@@ -130,7 +142,7 @@ namespace Web_IT_HELPDESK.Controllers
             }
             else
             {
-                var contract_list = en.CONTRACTs.Where(o => o.DEL != true 
+                var contract_list = en.CONTRACTs.Where(o => o.DEL != true
                                                             && o.DEPARTMENTID == v_company_string
                                                             && o.PLANT == v_plant).OrderBy(i => i.DATE);
                 return View(contract_list);
@@ -148,7 +160,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.User_create = System.Web.HttpContext.Current.User.Identity.Name;
             ViewBag.PERIOD_ID = new SelectList(en.PERIODs, "PERIOD_ID", "PERIOD_NAME", en.PERIODs.First().PERIOD_ID);
             ViewBag.CONTRACT_TYPE_ID = new SelectList(en.CONTRACT_TYPE, "CONTRACT_TYPE_ID", "CONTRACT_TYPE_NAME", en.CONTRACT_TYPE.First().CONTRACT_TYPE_ID);
-            var dept = from i in en.Employees where i.Emp_CJ== System.Web.HttpContext.Current.User.Identity.Name select i.Department_Id;
+            var dept = from i in en.Employees where i.Emp_CJ == System.Web.HttpContext.Current.User.Identity.Name select i.Department_Id;
             ViewBag.DEPT_ID = dept.ToString();
             return PartialView("partial_create_new_asset", _contract);
         }
@@ -213,8 +225,8 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateCONTRACTViewModel2(List<CONTRACT_SUB> CONTRACT_SUB, string[] PERIOD_ID, 
-                                                        string PERIODID, string USER_CREATE, string DEPARTMENTID,string CONTRACT_TYPE_ID,
+        public ActionResult CreateCONTRACTViewModel2(List<CONTRACT_SUB> CONTRACT_SUB, string[] PERIOD_ID,
+                                                        string PERIODID, string USER_CREATE, string DEPARTMENTID, string CONTRACT_TYPE_ID,
                                                         CONTRACT contract, HttpPostedFileBase image, List<HttpPostedFileBase> subcontent)
         {
             image = image ?? Request.Files["image"];
@@ -251,59 +263,59 @@ namespace Web_IT_HELPDESK.Controllers
 
             //if (ModelState.IsValid)
             //{
-                using (ServiceDeskEntities dc = new ServiceDeskEntities())
+            using (ServiceDeskEntities dc = new ServiceDeskEntities())
+            {
+                try
                 {
-                    try
-                    {
-                        int j = 0;
-                       
-                        foreach (var i in CONTRACT_SUB)
-                        {
-                            if (subcontent != null )
-                            {
-                                int a =0;
-                                if (a == subcontent[j].InputStream.Length)// check lengh
-                                {
-                                    try
-                                    {
-                                        //foreach (string upload in Request.Files)
-                                        //{
-                                        //create byte array of size equal to file input stream
-                                        byte[] fileData = new byte[subcontent[j].InputStream.Length];
-                                        //add file input stream into byte array
-                                        subcontent[j].InputStream.Read(fileData, 0, Convert.ToInt32(subcontent[j].InputStream.Length));
-                                        //create system.data.linq object using byte array
-                                        System.Data.Linq.Binary binaryFile = new System.Data.Linq.Binary(fileData);
-                                        //initialise object of FileDump LINQ to sql class passing values to be inserted
+                    int j = 0;
 
-                                        i.CONTENT = binaryFile.ToArray();
-                                        i.NOTE = System.IO.Path.GetFileName(subcontent[j].FileName);
-                                        i.CONTRACTID = contract_id;
-                                        i.USER_CREATE = System.Web.HttpContext.Current.User.Identity.Name;
-                                        i.PLANT = GetPlant_id(System.Web.HttpContext.Current.User.Identity.Name);
-                                        i.ID = Guid.NewGuid();
-                                        i.PERIODID = PERIOD_ID[j].ToString();
-                                        dc.CONTRACT_SUB.Add(i);
-                                        if (i.DATE != null)
-                                        {
-                                            dc.SaveChanges();
-                                        }
-                                        j += 1;
-                                        //}
+                    foreach (var i in CONTRACT_SUB)
+                    {
+                        if (subcontent != null)
+                        {
+                            int a = 0;
+                            if (a == subcontent[j].InputStream.Length)// check lengh
+                            {
+                                try
+                                {
+                                    //foreach (string upload in Request.Files)
+                                    //{
+                                    //create byte array of size equal to file input stream
+                                    byte[] fileData = new byte[subcontent[j].InputStream.Length];
+                                    //add file input stream into byte array
+                                    subcontent[j].InputStream.Read(fileData, 0, Convert.ToInt32(subcontent[j].InputStream.Length));
+                                    //create system.data.linq object using byte array
+                                    System.Data.Linq.Binary binaryFile = new System.Data.Linq.Binary(fileData);
+                                    //initialise object of FileDump LINQ to sql class passing values to be inserted
+
+                                    i.CONTENT = binaryFile.ToArray();
+                                    i.NOTE = System.IO.Path.GetFileName(subcontent[j].FileName);
+                                    i.CONTRACTID = contract_id;
+                                    i.USER_CREATE = System.Web.HttpContext.Current.User.Identity.Name;
+                                    i.PLANT = GetPlant_id(System.Web.HttpContext.Current.User.Identity.Name);
+                                    i.ID = Guid.NewGuid();
+                                    i.PERIODID = PERIOD_ID[j].ToString();
+                                    dc.CONTRACT_SUB.Add(i);
+                                    if (i.DATE != null)
+                                    {
+                                        dc.SaveChanges();
                                     }
-                                    catch { }
-                                    ViewBag.Message = "Data successfully saved!";
+                                    j += 1;
+                                    //}
                                 }
+                                catch { }
+                                ViewBag.Message = "Data successfully saved!";
                             }
                         }
                     }
-                    catch { }
                 }
-           // }
+                catch { }
+            }
+            // }
             return View("ContractIndex", en.CONTRACTs.Where(o => o.DEL != true));
         }
-        
-                //Edit IMPORT MODEL 
+
+        //Edit IMPORT MODEL 
         public PartialViewResult EditCONTRACTViewModel(Guid id)
         {
             ContractViewModel _contractviewmodel = new ContractViewModel();
@@ -329,124 +341,124 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditCONTRACTViewModel(List<CONTRACT_SUB> CONTRACT_SUB, string v_asset_id, string[] PERIOD_ID, 
-                                            string PERIODID, string USER_CREATE, string DEPARTMENTID,string CONTRACT_TYPE_ID, 
+        public ActionResult EditCONTRACTViewModel(List<CONTRACT_SUB> CONTRACT_SUB, string v_asset_id, string[] PERIOD_ID,
+                                            string PERIODID, string USER_CREATE, string DEPARTMENTID, string CONTRACT_TYPE_ID,
                                             CONTRACT contract, HttpPostedFileBase image, List<HttpPostedFileBase> subcontent)
         {
-             image = image ?? Request.Files["image"];
-             if (image != null && image.ContentLength > 0)
-             {
-                 try
-                 {
-                     //-----------------------------------------------------------------------
-                     byte[] fileData = new byte[Request.Files["image"].InputStream.Length];
-                     Request.Files["image"].InputStream.Read(fileData, 0, Convert.ToInt32(Request.Files["image"].InputStream.Length));
-                     System.Data.Linq.Binary binaryFile = new System.Data.Linq.Binary(fileData);
-                     contract.CONTENT = binaryFile.ToArray();
-                     contract.NOTE = System.IO.Path.GetFileName(Request.Files["image"].FileName);
-                     //-----------------------------------------------------------------------
-                     contract.CONTRACT_TYPE_ID = CONTRACT_TYPE_ID;
-                     contract.PERIODID = PERIODID;
-                     contract.USER_CREATE = USER_CREATE;
-                     contract.DEPARTMENTID = DEPARTMENTID;
-                     contract.PLANT = GetPlant_id(System.Web.HttpContext.Current.User.Identity.Name);
-                     var existingCart = en.CONTRACTs.Find(contract.ID);
-                     if (existingCart != null)
-                     {
-                         //entity is already in the context
-                         var attachedEntry = en.Entry(existingCart);
-                         attachedEntry.CurrentValues.SetValues(contract);
-                     }
-                     else
-                     {
-                         //Since we don't have it in db, this is a simple add.
-                         en.CONTRACTs.Add(contract);
-                     }
-                     en.SaveChanges();
-                 }
-                 catch { }
-             }
-             else
-             {
-                 var existingCart = en.CONTRACTs.Find(contract.ID);
-                 if (existingCart != null)
-                 {
-                     var attachedEntry = en.Entry(existingCart);
-                     contract.CONTENT = existingCart.CONTENT;
-                     if (contract.PERIODID == "")
-                         contract.PERIODID = existingCart.PERIODID;
-                     contract.CONTRACT_TYPE_ID = CONTRACT_TYPE_ID;
-                     contract.PERIODID = PERIODID;
-                     contract.USER_CREATE = USER_CREATE;
-                     contract.DEPARTMENTID = DEPARTMENTID;
-                     attachedEntry.CurrentValues.SetValues(contract);
-                     en.SaveChanges();
-                 }
-             }
+            image = image ?? Request.Files["image"];
+            if (image != null && image.ContentLength > 0)
+            {
+                try
+                {
+                    //-----------------------------------------------------------------------
+                    byte[] fileData = new byte[Request.Files["image"].InputStream.Length];
+                    Request.Files["image"].InputStream.Read(fileData, 0, Convert.ToInt32(Request.Files["image"].InputStream.Length));
+                    System.Data.Linq.Binary binaryFile = new System.Data.Linq.Binary(fileData);
+                    contract.CONTENT = binaryFile.ToArray();
+                    contract.NOTE = System.IO.Path.GetFileName(Request.Files["image"].FileName);
+                    //-----------------------------------------------------------------------
+                    contract.CONTRACT_TYPE_ID = CONTRACT_TYPE_ID;
+                    contract.PERIODID = PERIODID;
+                    contract.USER_CREATE = USER_CREATE;
+                    contract.DEPARTMENTID = DEPARTMENTID;
+                    contract.PLANT = GetPlant_id(System.Web.HttpContext.Current.User.Identity.Name);
+                    var existingCart = en.CONTRACTs.Find(contract.ID);
+                    if (existingCart != null)
+                    {
+                        //entity is already in the context
+                        var attachedEntry = en.Entry(existingCart);
+                        attachedEntry.CurrentValues.SetValues(contract);
+                    }
+                    else
+                    {
+                        //Since we don't have it in db, this is a simple add.
+                        en.CONTRACTs.Add(contract);
+                    }
+                    en.SaveChanges();
+                }
+                catch { }
+            }
+            else
+            {
+                var existingCart = en.CONTRACTs.Find(contract.ID);
+                if (existingCart != null)
+                {
+                    var attachedEntry = en.Entry(existingCart);
+                    contract.CONTENT = existingCart.CONTENT;
+                    if (contract.PERIODID == "")
+                        contract.PERIODID = existingCart.PERIODID;
+                    contract.CONTRACT_TYPE_ID = CONTRACT_TYPE_ID;
+                    contract.PERIODID = PERIODID;
+                    contract.USER_CREATE = USER_CREATE;
+                    contract.DEPARTMENTID = DEPARTMENTID;
+                    attachedEntry.CurrentValues.SetValues(contract);
+                    en.SaveChanges();
+                }
+            }
             ViewBag.PERIODID = new SelectList(en.PERIODs, "PERIOD_ID", "PERIOD_NAME", contract.PERIODID);
             ViewBag.CONTRACT_TYPE_ID = new SelectList(en.CONTRACT_TYPE, "CONTRACT_TYPE_ID", "CONTRACT_TYPE_NAME", contract.CONTRACT_TYPE_ID);
 
             //if (ModelState.IsValid)
             //{
-                //kiểm tra lỗi ModelState.IsValid
-                var errors = ModelState
-                                    .Where(x => x.Value.Errors.Count > 0)
-                                    .Select(x => new { x.Key, x.Value.Errors })
-                                    .ToArray();
-                using (ServiceDeskEntities dc = new ServiceDeskEntities())
+            //kiểm tra lỗi ModelState.IsValid
+            var errors = ModelState
+                                .Where(x => x.Value.Errors.Count > 0)
+                                .Select(x => new { x.Key, x.Value.Errors })
+                                .ToArray();
+            using (ServiceDeskEntities dc = new ServiceDeskEntities())
+            {
+                try
                 {
-                    try
+                    int j = 0;
+                    foreach (var i in CONTRACT_SUB)
                     {
-                        int j = 0;
-                        foreach (var i in CONTRACT_SUB)
+                        if (subcontent != null && subcontent[j].ContentLength > 0)
                         {
-                            if (subcontent != null && subcontent[j].ContentLength > 0)
+                            try
                             {
-                                try
+                                //create byte array of size equal to file input stream
+                                byte[] fileData = new byte[subcontent[j].InputStream.Length];
+                                //add file input stream into byte array
+                                subcontent[j].InputStream.Read(fileData, 0, Convert.ToInt32(subcontent[j].InputStream.Length));
+                                //create system.data.linq object using byte array
+                                System.Data.Linq.Binary binaryFile = new System.Data.Linq.Binary(fileData);
+                                //initialise object of FileDump LINQ to sql class passing values to be inserted
+
+                                var existing_importdetail = en.CONTRACT_SUB.Find(i.ID);
+                                if (existing_importdetail != null)
                                 {
-                                    //create byte array of size equal to file input stream
-                                    byte[] fileData = new byte[subcontent[j].InputStream.Length];
-                                    //add file input stream into byte array
-                                    subcontent[j].InputStream.Read(fileData, 0, Convert.ToInt32(subcontent[j].InputStream.Length));
-                                    //create system.data.linq object using byte array
-                                    System.Data.Linq.Binary binaryFile = new System.Data.Linq.Binary(fileData);
-                                    //initialise object of FileDump LINQ to sql class passing values to be inserted
-
-                                    var existing_importdetail = en.CONTRACT_SUB.Find(i.ID);
-                                    if (existing_importdetail != null)
-                                    {
-                                        i.CONTENT = binaryFile.ToArray();
-                                        i.NOTE = System.IO.Path.GetFileName(subcontent[j].FileName);
-                                        //entity is already in the context
-                                        var attachedEntry = en.Entry(existing_importdetail);
-                                        i.PERIODID = PERIOD_ID[j].ToString();
-                                        i.CONTRACTID = existing_importdetail.CONTRACTID;
-                                        i.PLANT = GetPlant_id(System.Web.HttpContext.Current.User.Identity.Name);
-                                        attachedEntry.CurrentValues.SetValues(i);
-                                    }
-                                    else
-                                    {
-                                        i.CONTENT = binaryFile.ToArray();
-                                        i.NOTE = System.IO.Path.GetFileName(subcontent[j].FileName);
-
-                                        //Since we don't have it in db, this is a simple add.
-                                        i.CONTRACTID = contract.ID;
-                                        i.PERIODID = PERIOD_ID[j].ToString();
-                                        i.ID = Guid.NewGuid();
-                                        i.PLANT = GetPlant_id(System.Web.HttpContext.Current.User.Identity.Name);
-                                        en.CONTRACT_SUB.Add(i);
-                                    }
-
+                                    i.CONTENT = binaryFile.ToArray();
+                                    i.NOTE = System.IO.Path.GetFileName(subcontent[j].FileName);
+                                    //entity is already in the context
+                                    var attachedEntry = en.Entry(existing_importdetail);
+                                    i.PERIODID = PERIOD_ID[j].ToString();
+                                    i.CONTRACTID = existing_importdetail.CONTRACTID;
+                                    i.PLANT = GetPlant_id(System.Web.HttpContext.Current.User.Identity.Name);
+                                    attachedEntry.CurrentValues.SetValues(i);
                                 }
-                                catch { }
-                                en.SaveChanges();
-                                j += 1;
+                                else
+                                {
+                                    i.CONTENT = binaryFile.ToArray();
+                                    i.NOTE = System.IO.Path.GetFileName(subcontent[j].FileName);
+
+                                    //Since we don't have it in db, this is a simple add.
+                                    i.CONTRACTID = contract.ID;
+                                    i.PERIODID = PERIOD_ID[j].ToString();
+                                    i.ID = Guid.NewGuid();
+                                    i.PLANT = GetPlant_id(System.Web.HttpContext.Current.User.Identity.Name);
+                                    en.CONTRACT_SUB.Add(i);
+                                }
+
                             }
+                            catch { }
+                            en.SaveChanges();
+                            j += 1;
                         }
-                        ViewBag.Message = "Data successfully saved!";
                     }
-                    catch { }
+                    ViewBag.Message = "Data successfully saved!";
                 }
+                catch { }
+            }
             //}
             return View("ContractIndex", en.CONTRACTs.Where(o => o.DEL != true));
         }
@@ -552,7 +564,7 @@ namespace Web_IT_HELPDESK.Controllers
             }
 
 
-          DateTime today = DateTime.Today;
+            DateTime today = DateTime.Today;
 
             int v_year = today.Year;
             int v_month = today.Month;
@@ -561,7 +573,7 @@ namespace Web_IT_HELPDESK.Controllers
             return View("ContractIndex", contract_list);
         }
 
-       
+
     }
 }
 

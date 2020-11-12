@@ -5,83 +5,44 @@
 @{
     ViewBag.Title = "ContractIndex";
 }
+<br />
+<h2>CONTRACT MANAGEMENT</h2>
 
-<div class="content-box-large">
-    <h4>Contract Management</h4>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="../../Content/js/responsiveslides.js"></script>
+<link href="../../Content/Site.css" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.js")" type="text/javascript"></script>
 
-    <div class="panel panel-default">
-        <div class="panel-body">
-            @using (Html.BeginForm("ContractIndex", "CONTRACT", FormMethod.Post))
-            {
-                <div class="form-group">
-                    <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Contract Type :</label>
-                    <div class="row">
-                        <div class="col-md-2">
-                            <input name="v_contract_type" type="radio" value="SALES"><label style="vertical-align: middle; margin-left: 7px;">Sales Type</label>
-                        </div>
-                        <div class="col-md-2">
-                            <input name="v_contract_type" type="radio" value="PURCHASE">
-                            <label style="vertical-align: middle; margin-left: 7px;">Purchase Type</label>
-                        </div>
-                        <div class="col-md-2">
-                            <input name="v_contract_type" type="radio" value="ALL" checked="checked"><label style="vertical-align: middle; margin-left: 7px;">All</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Departments :</label>
-                    <br />
-                    <input type="button" name="deptCheck" id="checkall" value="Check all" />
-                    <div class="row">
-                        @foreach (var item in ViewBag.Departments)
-                        {
-                            <div class="col-md-3 col-sm-2">
-                                <input value="@item.Department_Id" name="v_dept" type="checkbox"><label style="margin-left:5px;">@item.Department_Name</label>
-                            </div>
-                        }
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Filter :</label>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="control-label">Search</label>
-                            <input type="text" name="search_" class="form-control" placeholder="Search..." style="background:#A9BCF5; color:red; font-style: italic;">
-                        </div>
-                        <div class="col-md-3">
-                            <label class="control-label">Maturity (mm/dd/yyyy)</label>
-                            <div class="input-group date" id="date_picker">
-                                <input type="text" id="date_" name="date_" class="form-control" autocomplete="off" style="background:#A9BCF5;" />
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="control-label">Day number</label>
-                            <input type="number" id="daynum" name="daynum_" class="form-control" style="background:#A9BCF5;" value="30" placeholder="30">
-                        </div>
-                    </div>
-                </div>
-                <input type="submit" value="Search" />
-            }
-        </div>
-    </div>
-    <div class="panel panel-info">
-        <div class="content-box-header panel-heading">
-            <div class="panel-title">Contract List</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#check:button').toggle(function () {
+            $('.company:checkbox').attr('checked', 'checked');
+            $(this).val('uncheck all')
+        }, function () {
+            $('.company:checkbox').removeAttr('checked');
+            $(this).val('check all');
+        })
+    })
+</script>
 
-            <div class="panel-options">
-                <a href="@Url.Action("Download", "Contract")" data-rel="download">
-                    <i class="glyphicon glyphicon-download-alt"></i>
-                </a>
-            </div>
-        </div>
-        <div class="panel-body">
-        </div>
-    </div>
-</div>
+@*<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+<script>
+    $(function () {
+        $("#datepicker").datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true
+        });
+    });
+</script>*@
 
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.refresh').click(function () {
+            location.reload();
+        });
+    });
+</script>
 <div id="container">
     @using (Html.BeginForm("ContractIndex", "CONTRACT", FormMethod.Post))
     {
@@ -123,8 +84,6 @@
               <td>To Date</td>
               <td><input type="text" class="date" name="todate_" value="@DateTime.Today" style="background:#A9BCF5; "></td>
             </tr> -->
-            <
-
             <tr style="text-align:right;">
                 <td>Maturity date <br> (mm/dd/yyyy)</td>
                 <td><input type="text" id="datepicker" name="date_" style="background:#A9BCF5;text-align:right;" value="@DateTime.Today.ToString("MM/dd/yyyy")"></td>
@@ -211,14 +170,8 @@
                     @Html.DisplayFor(modelItem => item.CONTRACTNAME)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.USER_CREATE)
                 </td>
-
-
-
-
-
-
-
                 <!--td>
                 @*    @Html.TextBox("DepartmentName",new Web_IT_HELPDESK.Entities().Departments.Where(i => i.Del != true
                                                                             && i.DepartmentId==item.DEPARMENTID
@@ -227,25 +180,9 @@
                     *@
                 </td-->
                 <td>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                     @Html.ActionLink("Detail", "EditCONTRACTViewModel", new { id = item.ID }, new { @class = "button" })
                     <!--Html.ActionLink("Details", "Details", new { id=item.ID }) |-->
                     <button class="refresh">
-
                         @Ajax.ActionLink(
                                                            "Delete",
                                                            "Delete_contract",
@@ -280,27 +217,3 @@
     </table>
 
 </div>
-
-@section Script{
-    <script>
-        $("input[name='deptCheck']").click(function () {
-            var status = $(this).attr('id');
-            if (status === 'checkall') {
-                $('input[type="checkbox"]').prop("checked", true);
-                $(this).attr('id', 'uncheckall');
-                $(this).attr('value', 'Uncheck all');
-            } else {
-                $('input[type="checkbox"]').prop("checked", false);
-                $(this).attr('id', 'checkall');
-                $(this).attr('value', 'Check all');
-            }
-        });
-
-        $('#date_picker').datepicker({
-            autoclose: true,
-            todayHighlight: true
-        });
-
-        $('#date_picker').datepicker('setDate', 'today');
-    </script>
-}

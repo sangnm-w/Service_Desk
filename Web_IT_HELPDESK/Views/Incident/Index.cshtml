@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<Web_IT_HELPDESK.ViewModels.IncidentViewModel>
+@using Web_IT_HELPDESK.ViewModels
 
 @{
     ViewBag.Title = "Index";
@@ -16,7 +17,7 @@
                     <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Month :</label>
                     @Html.TextBox("_datetime", DateTime.Now.ToString("yyyy-MM"), new { @type = "month", @class = "form-control", @style = "width: auto; display: inline-block" })
                 </div>
-                if (ViewBag.IsAdmin == true)
+                if (((List<PlantViewModel>)ViewBag.Plants).Count > 1)
                 {
                     /*Only admin have this group*/
                     <div class="form-group">
@@ -63,7 +64,7 @@
     </div>
     <div class="panel panel-info">
         <div class="content-box-header panel-heading">
-            <div class="panel-title ">Request List</div>
+            <div class="panel-title">Request List</div>
 
             <div class="panel-options">
                 <a href="@Url.Action("Download", "Incident")" data-rel="download">
@@ -129,12 +130,23 @@
                             </td>
                             <td>
                                 <div class="btn-group-vertical" role="group" aria-label="Button group">
-                                    @if (item.Solved != true && ViewBag.IsAdmin)
+                                    @if (item.Solved != true)
                                     {
-                                        @Html.ActionLink("Edit", "Edit", new { inc_id = item.Id }, new { @class = "btn btn-default btn-xs", @role = "button" })
                                         if (ViewBag.IsAdmin)
                                         {
+                                            @Html.ActionLink("Edit", "Edit", new { inc_id = item.Id }, new { @class = "btn btn-default btn-xs", @role = "button" })
                                             @Html.ActionLink("Solve", "Solve", new { inc_id = item.Id }, new { @class = "btn btn-default btn-xs", @role = "button" })
+                                        }
+                                        else
+                                        {
+                                            if (((List<string>)ViewBag.Rules).Contains("EDIT"))
+                                            {
+                                                @Html.ActionLink("Edit", "Edit", new { inc_id = item.Id }, new { @class = "btn btn-default btn-xs", @role = "button" })
+                                            }
+                                            if (((List<string>)ViewBag.Rules).Contains("SOLVE"))
+                                            {
+                                                @Html.ActionLink("Solve", "Solve", new { inc_id = item.Id }, new { @class = "btn btn-default btn-xs", @role = "button" })
+                                            }
                                         }
                                     }
                                     @Html.ActionLink("Details", "Details", new { inc_id = item.Id }, new { @class = "btn btn-default btn-xs", @role = "button" })
@@ -154,7 +166,7 @@
 </div>
 @section Script {
     <script type="text/javascript">
-        //$.fn.dataTable.moment('D/MM/YYYY');
+        $.fn.dataTable.moment('D/MM/YYYY');
 
         $('#inctable').DataTable({
             aaSorting: [[1, 'desc']]

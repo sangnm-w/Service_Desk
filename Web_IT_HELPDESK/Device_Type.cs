@@ -18,7 +18,6 @@ namespace Web_IT_HELPDESK
         public Device_Type()
         {
             this.Devices = new HashSet<Device>();
-    
             OnConstructorInit();
         }
         partial void OnConstructorInit();

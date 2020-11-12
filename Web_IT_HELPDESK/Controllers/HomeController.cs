@@ -70,22 +70,22 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         [HttpPost, ActionName("Submit_")] // khảo sát canteen
-        public ActionResult Submit_(IEnumerable<string> answersnote, IEnumerable<Guid> questions)
+        public ActionResult Submit_(IEnumerable<string> answertexts, IEnumerable<string> answerRadios, IEnumerable<Guid> questions)
         {
             bool result = true;
-            int index = 0;
-            foreach (var answer in answersnote)
+            int questionNo = 0;
+            List<EMP_ANSWER> emp_answerlist = new List<EMP_ANSWER>();
+            foreach (var answer in answertexts)
             {
                 EMP_ANSWER emp_answer = new EMP_ANSWER();
 
                 emp_answer.ID = Guid.NewGuid();
-                var question_id = Guid.Parse(question_id_get(questions, index));
-
-                emp_answer.QUESTION_ID = en.QUESTIONs.Where(o => o.ID == question_id).Select(i => i.ID).SingleOrDefault();
+                emp_answer.QUESTION_ID = en.QUESTIONs.FirstOrDefault(q => q.NO == questionNo.ToString()).ID;
                 emp_answer.EMPLOYEEID = session_emp;
                 emp_answer.DATE = DateTime.Now;
                 emp_answer.NOTE = answer.ToString();
 
+                #region hide
                 // Get IP May Tinh
                 /*IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());
                 foreach (IPAddress addr in localIPs)
@@ -97,27 +97,44 @@ namespace Web_IT_HELPDESK.Controllers
                     }
                 }
                 */
-                // save data
-                try
-                {
-                    en.EMP_ANSWER.Add(emp_answer);
+                #endregion
 
-                    en.SaveChanges();
-                    //ViewBag.Message = "CAC BAN DA HOAN THANH DANH GIA, XIN CHAN THANH CAM ON DANH GIA CUA BAN GIUP CHUNG TOI HOAN THIEN HON ./."; 
-                }
-                catch (Exception ex)
-                {
-                    result = false; 
-                }
-                index++;
+                emp_answerlist.Add(emp_answer);
+                questionNo++;
             }
+
+            foreach (var answer in answerRadios)
+            {
+                EMP_ANSWER emp_answer = new EMP_ANSWER();
+
+                emp_answer.ID = Guid.NewGuid();
+                emp_answer.QUESTION_ID = en.QUESTIONs.FirstOrDefault(q => q.NO == questionNo.ToString()).ID;
+                emp_answer.EMPLOYEEID = session_emp;
+                emp_answer.DATE = DateTime.Now;
+                emp_answer.NOTE = answer.ToString();
+
+                emp_answerlist.Add(emp_answer);
+                questionNo++;
+            }
+
+            try
+            {
+                en.EMP_ANSWER.AddRange(emp_answerlist);
+
+                en.SaveChanges();
+                //ViewBag.Message = "CAC BAN DA HOAN THANH DANH GIA, XIN CHAN THANH CAM ON DANH GIA CUA BAN GIUP CHUNG TOI HOAN THIEN HON ./."; 
+            }
+            catch (Exception ex)
+            {
+                result = false;
+            }
+
             if (result)
             {
                 return View("~/Views/Shared/Messenger.cshtml");
             }
             return View("Index");
         }
-
 
         private string GetDept_id()
         {

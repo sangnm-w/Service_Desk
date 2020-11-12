@@ -21,10 +21,10 @@ namespace Web_IT_HELPDESK
             this.CONTRACTs = new HashSet<CONTRACT>();
             this.Documents = new HashSet<Document>();
             this.EMP_ANSWER = new HashSet<EMP_ANSWER>();
-            this.Employee_Screen = new HashSet<Employee_Screen>();
             this.Order_ = new HashSet<Order_>();
+            this.Rights_Management = new HashSet<Rights_Management>();
             this.UserLogons = new HashSet<UserLogon>();
-    
+            this.Employee_Screen = new HashSet<Employee_Screen>();
             OnConstructorInit();
         }
         partial void OnConstructorInit();
@@ -56,10 +56,12 @@ namespace Web_IT_HELPDESK
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EMP_ANSWER> EMP_ANSWER { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Employee_Screen> Employee_Screen { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order_> Order_ { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Rights_Management> Rights_Management { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserLogon> UserLogons { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Employee_Screen> Employee_Screen { get; set; }
     }
 }

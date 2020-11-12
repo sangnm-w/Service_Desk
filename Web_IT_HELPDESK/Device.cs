@@ -18,7 +18,6 @@ namespace Web_IT_HELPDESK
         public Device()
         {
             this.Allocations = new HashSet<Allocation>();
-    
             OnConstructorInit();
         }
         partial void OnConstructorInit();
@@ -30,6 +29,7 @@ namespace Web_IT_HELPDESK
         public string Device_Name { get; set; }
         public string Serial_No { get; set; }
         public Nullable<System.DateTime> Purchase_Date { get; set; }
+        public string Computer_Name { get; set; }
         public string CPU { get; set; }
         public string RAM { get; set; }
         public string DISK { get; set; }
@@ -37,13 +37,12 @@ namespace Web_IT_HELPDESK
         public string OS_License { get; set; }
         public string Office { get; set; }
         public string Office_License { get; set; }
+        public string Note { get; set; }
         public Nullable<System.DateTime> Depreciation { get; set; }
         public string Device_Status { get; set; }
         public string Addition_Information { get; set; }
         public string Plant_Id { get; set; }
         public Nullable<System.DateTime> Create_Date { get; set; }
-        public string Computer_Name { get; set; }
-        public string Note { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Allocation> Allocations { get; set; }

@@ -68,7 +68,7 @@ namespace Web_IT_HELPDESK
         public string Note { get; set; }
 
         [DisplayName("Created Date")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy HH:mm}")]
         public Nullable<System.DateTime> datetime { get; set; }
 
         [DisplayName("Solved Date")]
