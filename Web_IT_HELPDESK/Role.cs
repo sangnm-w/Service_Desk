@@ -12,22 +12,22 @@ namespace Web_IT_HELPDESK
     using System;
     using System.Collections.Generic;
     
-    public partial class Screen
+    public partial class Role
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Screen()
+        public Role()
         {
-            this.Employee_Screen = new HashSet<Employee_Screen>();
+            this.Rights_Management = new HashSet<Rights_Management>();
             OnConstructorInit();
         }
         partial void OnConstructorInit();
     
-        public int ScreenId { get; set; }
-        public string ScreenName { get; set; }
-        public string HTMLcode { get; set; }
-        public string Note { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public Nullable<bool> Deactive { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Employee_Screen> Employee_Screen { get; set; }
+        public virtual ICollection<Rights_Management> Rights_Management { get; set; }
     }
 }

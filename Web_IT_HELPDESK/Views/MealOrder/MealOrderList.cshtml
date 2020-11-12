@@ -40,7 +40,7 @@
 <table>
     <tr>
         <th>
-            EmployeeID
+            Emp_CJ
         </th>
         <th>
             Note
@@ -56,7 +56,7 @@
     bool department_confirm = (bool)item.Confirmed;
     <tr style="@(department_confirm == false ? "Background-color:#99FF99" : "")">
         <td>
-            @Html.DisplayFor(modelItem => item.EmployeeID)
+            @Html.DisplayFor(modelItem => item.Emp_CJ)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Note)

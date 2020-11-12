@@ -19,7 +19,6 @@ namespace Web_IT_HELPDESK
         {
             this.CONTRACTs = new HashSet<CONTRACT>();
             this.CONTRACT_SUB = new HashSet<CONTRACT_SUB>();
-    
             OnConstructorInit();
         }
         partial void OnConstructorInit();

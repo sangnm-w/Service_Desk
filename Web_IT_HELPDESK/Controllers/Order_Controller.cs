@@ -20,13 +20,13 @@ namespace Web_IT_HELPDESK.Controllers
         //GetPlant_id
         private string GetPlant_id(string v_emp)
         {
-            string plant_id = en.Employees.Where(f => (f.EmployeeID == v_emp)).Select(f => f.Plant_Id).SingleOrDefault();
+            string plant_id = en.Employees.Where(f => (f.Emp_CJ == v_emp)).Select(f => f.Plant_Id).SingleOrDefault();
             return plant_id;
         }
 
         private string GetDept_id(string v_plant_id)
         {
-            string dept_id = en.Employees.Where(f => (f.EmployeeID == session_emp && f.Plant_Id == v_plant_id)).Select(f => f.Department_Id).SingleOrDefault();
+            string dept_id = en.Employees.Where(f => (f.Emp_CJ == session_emp && f.Plant_Id == v_plant_id)).Select(f => f.Department_Id).SingleOrDefault();
             return dept_id;
         }
 
@@ -168,7 +168,7 @@ namespace Web_IT_HELPDESK.Controllers
                            Total = o.Total,
                            Note = o.Note,
                            Confirmed = o.Confirmed,
-                           EmployeeID = o.EmployeeID,
+                           EmployeeID = o.Emp_CJ,
                            Employee_Name = o.Employee_Name,
                            Del = o.Del,
                            Plant = o.Plant
@@ -178,22 +178,22 @@ namespace Web_IT_HELPDESK.Controllers
             /*
             if (session_emp.ToLower() != "admin")
             {
-                students = students.Where(s => s.EmployeeID == session_emp.ToLower()
+                students = students.Where(s => s.Emp_CJ == session_emp.ToLower()
                                                 && s.Plant == v_plant);
             }
             else if (!String.IsNullOrEmpty(searchString) &&
                     (session_emp.ToLower() == "admin" || session_emp == "D83003" || session_emp == "V78157" 
                 || session_emp == "MK78072" || session_emp == "H88768" || session_emp == "HN91185" || session_emp == "HN92244"))
             {
-                students = students.Where(s => (s.EmployeeID == session_emp.ToLower() 
+                students = students.Where(s => (s.Emp_CJ == session_emp.ToLower() 
                                        || s.Note.Contains(searchString)
-                                       || s.EmployeeID.Contains(searchString))
+                                       || s.Emp_CJ.Contains(searchString))
                                        && s.Plant == v_plant);
             }
             else
             {
                 students = students.Where(s => (s.Note.Contains(searchString)
-                                      || s.EmployeeID.Contains(searchString))
+                                      || s.Emp_CJ.Contains(searchString))
                                       && s.Plant == v_plant);
             }*/
 
@@ -334,11 +334,11 @@ namespace Web_IT_HELPDESK.Controllers
             if (orderId != 0)
             {
                 var v_empno = en.Order_.Where(i => i.OrderId == orderId).SingleOrDefault().EmployeeID;
-                dept_id = en.Employees.Where(f => (f.EmployeeID == v_empno)).Select(f => f.Department_Id).SingleOrDefault();
+                dept_id = en.Employees.Where(f => (f.Emp_CJ == v_empno)).Select(f => f.Department_Id).SingleOrDefault();
             }
             else
             {
-                dept_id = en.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.Department_Id).SingleOrDefault();
+                dept_id = en.Employees.Where(f => (f.Emp_CJ == session_emp)).Select(f => f.Department_Id).SingleOrDefault();
             }
             return dept_id;
         }
@@ -346,7 +346,7 @@ namespace Web_IT_HELPDESK.Controllers
          {
              var session_emp = Session["employee_id"];
              string a = Convert.ToString(Session["employee_id"]);
-             string dept_id = en.Employees.Where(f => (f.EmployeeID == a)).Select(f => f.DepartmentId).SingleOrDefault();
+             string dept_id = en.Employees.Where(f => (f.Emp_CJ == a)).Select(f => f.DepartmentId).SingleOrDefault();
              return dept_id;
          }*/
 
@@ -485,7 +485,7 @@ namespace Web_IT_HELPDESK.Controllers
                                                       "************** Cám ơn đã sử dụng chương trình **************");
                 }
 
-                //string v_department_id= en.Employees.Where(i  => i.EmployeeID==order.EmployeeID).SingleOrDefault().ToString();
+                //string v_department_id= en.Employees.Where(i  => i.Emp_CJ==order.Emp_CJ).SingleOrDefault().ToString();
                 //var dept = from i in en.Departments where i.DepartmentId == v_department_id select i.DepartmentName;
 
                 Information inf = new Information();
@@ -559,7 +559,7 @@ namespace Web_IT_HELPDESK.Controllers
                                          && j.OrderDate >= from_date && j.OrderDate <= to_date
                                          && ab.AlbumTypeId ==1)
                   //where //t.OrderId == j.OrderId && 
-                  //       j.Del != true && t.Quantity != 0 && j.EmployeeID != "admin" && j.OrderDate >= from_date && j.OrderDate <= to_date 
+                  //       j.Del != true && t.Quantity != 0 && j.Emp_CJ != "admin" && j.OrderDate >= from_date && j.OrderDate <= to_date 
                   group t by new
                   {
                       t.AlbumId,
@@ -809,7 +809,7 @@ namespace Web_IT_HELPDESK.Controllers
                                    OrderId = g.Key.OrderId,
                                    OrderDate = g.Key.OrderDate,
                                    Confirmed = g.Key.Confirmed,
-                                   EmployeeID = g.Key.EmployeeID,
+                                   Emp_CJ = g.Key.EmployeeID,
                                    Employe_Name = g.Key.Employee_Name,
                                    Plant = g.Key.Plant,
                                    OrderDetailId = g.Key.OrderDetailId,

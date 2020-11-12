@@ -16,7 +16,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         public ActionResult EmployeeList()
         {
-            var v_employee_list = en.Employees.Where(i => i.Deactive != true && i.EmployeeID != "admin"); //&& (i.EmployeeID == "hr" || i.EmployeeID == "pro" || i.EmployeeID == "qc"));
+            var v_employee_list = en.Employees.Where(i => i.Deactive != true && i.Emp_CJ != "admin"); //&& (i.Emp_CJ == "hr" || i.Emp_CJ == "pro" || i.Emp_CJ == "qc"));
             return View(v_employee_list);
         }
 
@@ -24,7 +24,7 @@ namespace Web_IT_HELPDESK.Controllers
         public PartialViewResult EditRoleViewModel(string v_emp_id)
         {
             Session["v_emp_id"] = v_emp_id;
-            var v_emp_list = en.Employee_Screen.Where(i => i.Employee.EmployeeID == v_emp_id).OrderBy(i => i.Id);//.SingleOrDefault();
+            var v_emp_list = en.Employee_Screen.Where(i => i.Employee.Emp_CJ == v_emp_id).OrderBy(i => i.Id);//.SingleOrDefault();
             return PartialView("EditRoleViewModel", v_emp_list);
         }
 
@@ -35,7 +35,7 @@ namespace Web_IT_HELPDESK.Controllers
             string emp_id = Convert.ToString(Session["v_emp_id"]);
 
             // set up all role to false
-            var v_employee_screen_list = en.Employee_Screen.Where(i => i.Employee.EmployeeID == emp_id);
+            var v_employee_screen_list = en.Employee_Screen.Where(i => i.Employee.Emp_CJ == emp_id);
             foreach (var item in v_employee_screen_list)
                 item.Use = false;
             en.SaveChanges();
@@ -45,19 +45,19 @@ namespace Web_IT_HELPDESK.Controllers
 
             foreach (var dup in dups)
             {
-                var a = //from i in en.Employee_Screen where i.Employee.EmployeeID == emp_id && i.Screen.ScreenId == int2 select i.Use;
-                    en.Employee_Screen.Where(i => i.Employee.EmployeeID == emp_id && i.Screen.ScreenId == dup).FirstOrDefault();
+                var a = //from i in en.Employee_Screen where i.Employee.Emp_CJ == emp_id && i.Screen.ScreenId == int2 select i.Use;
+                    en.Employee_Screen.Where(i => i.Employee.Emp_CJ == emp_id && i.Screen.ScreenId == dup).FirstOrDefault();
                 a.Use = true;
                 en.SaveChanges();
             }
-            return View("EmployeeList", en.Employees.Where(i => i.Deactive != true && i.EmployeeID != "admin"));
+            return View("EmployeeList", en.Employees.Where(i => i.Deactive != true && i.Emp_CJ != "admin"));
         }
 
 
         public ActionResult changepasword(string employeeid)
         {
             //Employee employee = en.Employees.Find(session_emp);
-            ViewBag.employeeid = session_emp;
+            ViewBag.Emp_CJ = session_emp;
             return View();
         }
 

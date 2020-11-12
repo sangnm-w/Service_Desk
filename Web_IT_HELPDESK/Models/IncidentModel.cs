@@ -39,13 +39,13 @@ namespace Web_IT_HELPDESK.Models
                 .Join(
                     en.Employees,
                     isld => isld.inc.User_create,
-                    e => e.EmployeeID,
+                    e => e.Emp_CJ,
                     (isld, e) => new { isld.inc, isld.StatusName, isld.LevelName, isld.Department_Name, e.EmployeeName }
                 )
                 .GroupJoin(
                     en.Employees,
                     i => i.inc.User_resolve,
-                    e => e.EmployeeID,
+                    e => e.Emp_CJ,
                     (i, employeesGroup) => new { i, employeesGroup }
                 )
                 .SelectMany(
@@ -111,6 +111,12 @@ namespace Web_IT_HELPDESK.Models
             string strIncidentCode = intIncidentCode.ToString("D5");
 
             return plantId + "-" + strIncidentCode;
+        }
+
+        public List<Rule> get_IncidentRules()
+        {
+            ServiceDeskEntities en = new ServiceDeskEntities();
+            return en.Rules.Where(r => r.Module_Name == Commons.ModuleConstant.INCIDENT && r.Deactive == false).ToList();
         }
     }
 }

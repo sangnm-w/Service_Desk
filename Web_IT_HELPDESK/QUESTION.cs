@@ -18,7 +18,6 @@ namespace Web_IT_HELPDESK
         public QUESTION()
         {
             this.EMP_ANSWER = new HashSet<EMP_ANSWER>();
-    
             OnConstructorInit();
         }
         partial void OnConstructorInit();

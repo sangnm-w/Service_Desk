@@ -18,7 +18,7 @@ namespace Web_IT_HELPDESK.Controllers
         // GET: Allocations
         public ActionResult Index()
         {
-            string curr_plantId = en.Employees.FirstOrDefault(e => e.EmployeeID == session_emp).Plant_Id;
+            string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
             List<AllocationViewModel> avm = AllocationModel.Instance.GetLastAllocationOfDeviceByPlantId(curr_plantId);
             return View(avm);
         }
@@ -54,14 +54,14 @@ namespace Web_IT_HELPDESK.Controllers
 
             ViewBag.Device = device;
 
-            string empPlantID = en.Employees.FirstOrDefault(e => e.EmployeeID == session_emp).Plant_Id;
+            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
 
             ViewBag.Deliver = session_emp;
-            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.EmployeeID == session_emp).EmployeeName;
+            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).EmployeeName;
 
             List<EmployeeFieldModel> employeeFields = EmployeeModel.Instance.EmployeeFieldsByPlant(empPlantID);
             List<SelectListItem> SLIEmployee = new List<SelectListItem>();
-            SLIEmployee.AddRange(new SelectList(employeeFields, "EmployeeID", "EmployeeField", ""));
+            SLIEmployee.AddRange(new SelectList(employeeFields, "Emp_CJ", "EmployeeField", ""));
             SLIEmployee.Insert(0, new SelectListItem { Text = "None", Value = "" });
             ViewBag.Receiver = SLIEmployee;
 
@@ -80,7 +80,7 @@ namespace Web_IT_HELPDESK.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Allocation allocation)
         {
-            string empPlantID = en.Employees.FirstOrDefault(e => e.EmployeeID == session_emp).Plant_Id;
+            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
 
             if (allocation.Return_Date != null)
             {
@@ -97,7 +97,7 @@ namespace Web_IT_HELPDESK.Controllers
                 allocation.Allocation_Id = Guid.NewGuid();
                 allocation.Create_Date = DateTime.Now;
                 allocation.Flag_ReAllocation = true;
-                allocation.Plant_Id = en.Employees.FirstOrDefault(e => e.EmployeeID == allocation.Receiver).Plant_Id;
+                allocation.Plant_Id = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).Plant_Id;
                 en.Allocations.Add(allocation);
                 en.SaveChanges();
                 return RedirectToAction("Index");
@@ -107,11 +107,11 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.Device = device;
 
             ViewBag.Deliver = session_emp;
-            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.EmployeeID == session_emp).EmployeeName;
+            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).EmployeeName;
 
             List<EmployeeFieldModel> employeeFields = EmployeeModel.Instance.EmployeeFieldsByPlant(empPlantID);
             List<SelectListItem> SLIEmployee = new List<SelectListItem>();
-            SLIEmployee.AddRange(new SelectList(employeeFields, "EmployeeID", "EmployeeField", ""));
+            SLIEmployee.AddRange(new SelectList(employeeFields, "Emp_CJ", "EmployeeField", ""));
             SLIEmployee.Insert(0, new SelectListItem { Text = "None", Value = "" });
             ViewBag.Receiver = SLIEmployee;
 
@@ -137,15 +137,15 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 return HttpNotFound();
             }
-            string empPlantID = en.Employees.FirstOrDefault(e => e.EmployeeID == session_emp).Plant_Id;
+            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
 
-            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.EmployeeID == allocation.Deliver).EmployeeName;
+            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).EmployeeName;
 
             ViewBag.DeviceTypeId = en.Devices.FirstOrDefault(d => d.Device_Id == allocation.Device_Id).Device_Type_Id;
 
             List<EmployeeFieldModel> employeeFields = EmployeeModel.Instance.EmployeeFieldsByPlant(empPlantID);
             List<SelectListItem> Receiver = new List<SelectListItem>();
-            Receiver.AddRange(new SelectList(employeeFields, "EmployeeID", "EmployeeField", allocation.Receiver));
+            Receiver.AddRange(new SelectList(employeeFields, "Emp_CJ", "EmployeeField", allocation.Receiver));
             Receiver.Insert(0, new SelectListItem { Text = "None", Value = "" });
             ViewBag.Receiver = Receiver;
 
@@ -177,21 +177,21 @@ namespace Web_IT_HELPDESK.Controllers
             }
             if (ModelState.IsValid)
             {
-                allocation.Plant_Id = en.Employees.FirstOrDefault(e => e.EmployeeID == allocation.Receiver).Plant_Id;
+                allocation.Plant_Id = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).Plant_Id;
                 en.Entry(allocation).State = EntityState.Modified;
                 en.SaveChanges();
                 return RedirectToAction("Index");
             }
-            string empPlantID = en.Employees.FirstOrDefault(e => e.EmployeeID == session_emp).Plant_Id;
+            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
             ViewBag.Plant_Name = en.Departments.FirstOrDefault(d => d.Plant_Id == empPlantID).Plant_Name;
 
-            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.EmployeeID == allocation.Deliver).EmployeeName;
+            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).EmployeeName;
 
             ViewBag.DeviceTypeId = en.Devices.FirstOrDefault(d => d.Device_Id == allocation.Device_Id).Device_Type_Id;
 
             List<EmployeeFieldModel> employeeFields = EmployeeModel.Instance.EmployeeFieldsByPlant(empPlantID);
             List<SelectListItem> Receiver = new List<SelectListItem>();
-            Receiver.AddRange(new SelectList(employeeFields, "EmployeeID", "EmployeeField", allocation.Receiver));
+            Receiver.AddRange(new SelectList(employeeFields, "Emp_CJ", "EmployeeField", allocation.Receiver));
             Receiver.Insert(0, new SelectListItem { Text = "None", Value = "" });
             ViewBag.Receiver = Receiver;
 
@@ -218,11 +218,11 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 return HttpNotFound();
             }
-            string empPlantID = en.Employees.FirstOrDefault(e => e.EmployeeID == session_emp).Plant_Id;
+            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
 
-            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.EmployeeID == allocation.Deliver).EmployeeName;
+            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).EmployeeName;
 
-            ViewBag.ReceiverName = en.Employees.FirstOrDefault(e => e.EmployeeID == allocation.Receiver).EmployeeName;
+            ViewBag.ReceiverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).EmployeeName;
 
             ViewBag.DeviceTypeId = en.Devices.FirstOrDefault(d => d.Device_Id == allocation.Device_Id).Device_Type_Id;
 
@@ -255,18 +255,18 @@ namespace Web_IT_HELPDESK.Controllers
             }
             if (ModelState.IsValid)
             {
-                allocation.Plant_Id = en.Employees.FirstOrDefault(e => e.EmployeeID == allocation.Receiver).Plant_Id;
+                allocation.Plant_Id = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).Plant_Id;
                 en.Entry(allocation).State = EntityState.Modified;
                 en.SaveChanges();
                 return RedirectToAction("Index");
             }
-            string empPlantID = en.Employees.FirstOrDefault(e => e.EmployeeID == session_emp).Plant_Id;
+            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
 
             ViewBag.Plant_Name = en.Departments.FirstOrDefault(d => d.Plant_Id == empPlantID).Plant_Name;
 
-            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.EmployeeID == allocation.Deliver).EmployeeName;
+            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).EmployeeName;
 
-            ViewBag.ReceiverName = en.Employees.FirstOrDefault(e => e.EmployeeID == allocation.Receiver).EmployeeName;
+            ViewBag.ReceiverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).EmployeeName;
 
             ViewBag.DeviceTypeId = en.Devices.FirstOrDefault(d => d.Device_Id == allocation.Device_Id).Device_Type_Id;
 
@@ -321,14 +321,14 @@ namespace Web_IT_HELPDESK.Controllers
 
             ViewBag.Device = device;
 
-            string empPlantID = en.Employees.FirstOrDefault(e => e.EmployeeID == session_emp).Plant_Id;
+            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
 
             ViewBag.Deliver = session_emp;
-            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.EmployeeID == session_emp).EmployeeName;
+            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).EmployeeName;
 
             List<EmployeeFieldModel> employeeFields = EmployeeModel.Instance.EmployeeFieldsByPlant(empPlantID);
             List<SelectListItem> SLIEmployee = new List<SelectListItem>();
-            SLIEmployee.AddRange(new SelectList(employeeFields, "EmployeeID", "EmployeeField", ""));
+            SLIEmployee.AddRange(new SelectList(employeeFields, "Emp_CJ", "EmployeeField", ""));
             SLIEmployee.Insert(0, new SelectListItem { Text = "None", Value = "" });
             ViewBag.Receiver = SLIEmployee;
 
@@ -368,21 +368,21 @@ namespace Web_IT_HELPDESK.Controllers
                 allocation.Allocation_Id = Guid.NewGuid();
                 allocation.Create_Date = DateTime.Now;
                 allocation.Flag_ReAllocation = true;
-                allocation.Plant_Id = en.Employees.FirstOrDefault(e => e.EmployeeID == allocation.Receiver).Plant_Id;
+                allocation.Plant_Id = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).Plant_Id;
                 en.Allocations.Add(allocation);
                 en.SaveChanges();
                 return RedirectToAction("Index");
             }
-            string empPlantID = en.Employees.FirstOrDefault(e => e.EmployeeID == session_emp).Plant_Id;
+            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
             Device device = en.Devices.Find(allocation.Device_Id);
             ViewBag.Device = device;
 
             ViewBag.Deliver = session_emp;
-            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.EmployeeID == session_emp).EmployeeName;
+            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).EmployeeName;
 
             List<EmployeeFieldModel> employeeFields = EmployeeModel.Instance.EmployeeFieldsByPlant(empPlantID);
             List<SelectListItem> SLIEmployee = new List<SelectListItem>();
-            SLIEmployee.AddRange(new SelectList(employeeFields, "EmployeeID", "EmployeeField", ""));
+            SLIEmployee.AddRange(new SelectList(employeeFields, "Emp_CJ", "EmployeeField", ""));
             SLIEmployee.Insert(0, new SelectListItem { Text = "None", Value = "" });
             ViewBag.Receiver = SLIEmployee;
 
@@ -404,7 +404,7 @@ namespace Web_IT_HELPDESK.Controllers
         public JsonResult getDeptVal(string receiverId)
         {
             string deptId = null;
-            deptId = en.Employees.FirstOrDefault(e => e.EmployeeID == receiverId).Department_Id;
+            deptId = en.Employees.FirstOrDefault(e => e.Emp_CJ == receiverId).Department_Id;
             return Json(deptId, JsonRequestBehavior.AllowGet);
         }
 

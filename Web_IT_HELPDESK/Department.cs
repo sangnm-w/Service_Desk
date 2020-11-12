@@ -18,7 +18,7 @@ namespace Web_IT_HELPDESK
         public Department()
         {
             this.Allocations = new HashSet<Allocation>();
-    
+            this.Rights_Management = new HashSet<Rights_Management>();
             OnConstructorInit();
         }
         partial void OnConstructorInit();
@@ -32,5 +32,7 @@ namespace Web_IT_HELPDESK
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Allocation> Allocations { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Rights_Management> Rights_Management { get; set; }
     }
 }

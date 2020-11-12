@@ -795,7 +795,7 @@ namespace Web_IT_HELPDESK.Controllers
                                    OrderId = g.Key.OrderId,
                                    OrderDate = g.Key.OrderDate,
                                    Confirmed = g.Key.Confirmed,
-                                   EmployeeID = g.Key.EmployeeID,
+                                   Emp_CJ = g.Key.EmployeeID,
                                    Employe_Name = g.Key.Employee_Name,
                                    Plant = g.Key.Plant,
                                    OrderDetailId = g.Key.OrderDetailId,

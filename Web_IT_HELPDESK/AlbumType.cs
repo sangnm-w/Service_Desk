@@ -18,7 +18,6 @@ namespace Web_IT_HELPDESK
         public AlbumType()
         {
             this.Albums = new HashSet<Album>();
-    
             OnConstructorInit();
         }
         partial void OnConstructorInit();

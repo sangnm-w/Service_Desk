@@ -44,7 +44,6 @@ namespace Web_IT_HELPDESK
         public virtual DbSet<Drinking_Request> Drinking_Request { get; set; }
         public virtual DbSet<EMP_ANSWER> EMP_ANSWER { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
-        public virtual DbSet<Employee_Screen> Employee_Screen { get; set; }
         public virtual DbSet<EmployeeInfo> EmployeeInfoes { get; set; }
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<hr_emp_infor> hr_emp_infor { get; set; }
@@ -55,11 +54,15 @@ namespace Web_IT_HELPDESK
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
         public virtual DbSet<PERIOD> PERIODs { get; set; }
         public virtual DbSet<QUESTION> QUESTIONs { get; set; }
+        public virtual DbSet<Rights_Management> Rights_Management { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<Rule> Rules { get; set; }
         public virtual DbSet<Screen> Screens { get; set; }
         public virtual DbSet<Seal_Using> Seal_Using { get; set; }
         public virtual DbSet<Status> Status { get; set; }
         public virtual DbSet<UserLogon> UserLogons { get; set; }
         public virtual DbSet<ORDER_TYPE_VIEW> ORDER_TYPE_VIEW { get; set; }
+        public virtual DbSet<Employee_Screen> Employee_Screen { get; set; }
     
         [DbFunction("ServiceDeskEntities", "func_report_detail")]
         public virtual IQueryable<func_report_detail_Result> func_report_detail(Nullable<System.DateTime> v_fromdate, Nullable<System.DateTime> v_todate, string v_plant)

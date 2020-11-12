@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Web_IT_HELPDESKModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="ServiceDeskModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Album">
           <Key>
             <PropertyRef Name="AlbumId" />
@@ -231,10 +231,10 @@
         </EntityType>
         <EntityType Name="Employee">
           <Key>
-            <PropertyRef Name="EmployeeID" />
+            <PropertyRef Name="Emp_CJ" />
           </Key>
-          <Property Name="Emp_CJ" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Emp_CJ" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
           <Property Name="EmployeeName" Type="nvarchar" MaxLength="50" />
           <Property Name="ID_Number" Type="nvarchar" MaxLength="50" />
           <Property Name="Birthday" Type="datetime" />
@@ -324,12 +324,12 @@
           <Property Name="datetime" Type="datetime" />
           <Property Name="StatusId" Type="nvarchar" MaxLength="50" />
           <Property Name="LevelId" Type="nvarchar" MaxLength="50" />
-          <Property Name="Reply" Type="nvarchar" MaxLength="200" />
+          <Property Name="Reply" Type="nvarchar(max)" />
           <Property Name="User_create" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="User_resolve" Type="nvarchar" MaxLength="50" />
-          <Property Name="Note" Type="nvarchar" MaxLength="200" />
+          <Property Name="Note" Type="nvarchar(max)" />
           <Property Name="FileAttched" Type="varbinary(max)" />
-          <Property Name="FileName" Type="nvarchar" MaxLength="100" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="500" />
           <Property Name="Del" Type="bit" />
           <Property Name="DepartmentId" Type="nvarchar" MaxLength="50" />
           <Property Name="Solved" Type="bit" />
@@ -388,6 +388,35 @@
           <Property Name="ANSWER_ID" Type="int" />
           <Property Name="NOTE" Type="nvarchar(max)" />
           <Property Name="DEL" Type="bit" />
+        </EntityType>
+        <EntityType Name="Rights_Management">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Role_Id" Type="int" />
+          <Property Name="Rule_Id" Type="int" />
+          <Property Name="Employee_Id" Type="nvarchar" MaxLength="50" />
+          <Property Name="Department_Id" Type="nvarchar" MaxLength="50" />
+          <Property Name="Plant_Id" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="Deactive" Type="bit" />
+        </EntityType>
+        <EntityType Name="Rule">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Rule_Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Module_Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Deactive" Type="bit" />
         </EntityType>
         <EntityType Name="Screen">
           <Key>
@@ -500,7 +529,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <End Role="BIZ_TRIP" Type="Self.BIZ_TRIP" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
-              <PropertyRef Name="EmployeeID" />
+              <PropertyRef Name="Emp_CJ" />
             </Principal>
             <Dependent Role="BIZ_TRIP">
               <PropertyRef Name="EMPNO" />
@@ -548,7 +577,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <End Role="CONTRACT" Type="Self.CONTRACT" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
-              <PropertyRef Name="EmployeeID" />
+              <PropertyRef Name="Emp_CJ" />
             </Principal>
             <Dependent Role="CONTRACT">
               <PropertyRef Name="USER_CREATE" />
@@ -632,7 +661,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <End Role="Document" Type="Self.Document" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
-              <PropertyRef Name="EmployeeID" />
+              <PropertyRef Name="Emp_CJ" />
             </Principal>
             <Dependent Role="Document">
               <PropertyRef Name="EmployeeID" />
@@ -644,7 +673,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <End Role="EMP_ANSWER" Type="Self.EMP_ANSWER" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
-              <PropertyRef Name="EmployeeID" />
+              <PropertyRef Name="Emp_CJ" />
             </Principal>
             <Dependent Role="EMP_ANSWER">
               <PropertyRef Name="EMPLOYEEID" />
@@ -663,12 +692,12 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Employee_Screen_EMPLOYEE_GHR">
+        <Association Name="FK_Employee_Screen_Employee">
           <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
           <End Role="Employee_Screen" Type="Self.Employee_Screen" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
-              <PropertyRef Name="EmployeeID" />
+              <PropertyRef Name="Emp_CJ" />
             </Principal>
             <Dependent Role="Employee_Screen">
               <PropertyRef Name="EmployeeId" />
@@ -692,7 +721,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <End Role="Order_" Type="Self.Order_" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
-              <PropertyRef Name="EmployeeID" />
+              <PropertyRef Name="Emp_CJ" />
             </Principal>
             <Dependent Role="Order_">
               <PropertyRef Name="EmployeeID" />
@@ -723,12 +752,62 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Rights_Management_Department">
+          <End Role="Department" Type="Self.Department" Multiplicity="0..1" />
+          <End Role="Rights_Management" Type="Self.Rights_Management" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="Department_Id" />
+              <PropertyRef Name="Plant_Id" />
+            </Principal>
+            <Dependent Role="Rights_Management">
+              <PropertyRef Name="Department_Id" />
+              <PropertyRef Name="Plant_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rights_Management_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Rights_Management" Type="Self.Rights_Management" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Emp_CJ" />
+            </Principal>
+            <Dependent Role="Rights_Management">
+              <PropertyRef Name="Employee_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rights_Management_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
+          <End Role="Rights_Management" Type="Self.Rights_Management" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Rights_Management">
+              <PropertyRef Name="Role_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rights_Management_Rule">
+          <End Role="Rule" Type="Self.Rule" Multiplicity="0..1" />
+          <End Role="Rights_Management" Type="Self.Rights_Management" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rule">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Rights_Management">
+              <PropertyRef Name="Rule_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_UserLogon_Employee">
           <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
           <End Role="UserLogon" Type="Self.UserLogon" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
-              <PropertyRef Name="EmployeeID" />
+              <PropertyRef Name="Emp_CJ" />
             </Principal>
             <Dependent Role="UserLogon">
               <PropertyRef Name="EmployeeID" />
@@ -784,7 +863,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </CollectionType>
           </ReturnType>
         </Function>
-        <EntityContainer Name="Web_IT_HELPDESKModelStoreContainer">
+        <EntityContainer Name="ServiceDeskModelStoreContainer">
           <EntitySet Name="Album" EntityType="Self.Album" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AlbumType" EntityType="Self.AlbumType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Allocation" EntityType="Self.Allocation" Schema="dbo" store:Type="Tables" />
@@ -813,6 +892,9 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <EntitySet Name="OrderDetail" EntityType="Self.OrderDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PERIOD" EntityType="Self.PERIOD" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QUESTION" EntityType="Self.QUESTION" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rights_Management" EntityType="Self.Rights_Management" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rule" EntityType="Self.Rule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Screen" EntityType="Self.Screen" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Seal_Using" EntityType="Self.Seal_Using" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Status" EntityType="Self.Status" Schema="dbo" store:Type="Tables" />
@@ -899,7 +981,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             <End Role="QUESTION" EntitySet="QUESTION" />
             <End Role="EMP_ANSWER" EntitySet="EMP_ANSWER" />
           </AssociationSet>
-          <AssociationSet Name="FK_Employee_Screen_EMPLOYEE_GHR" Association="Self.FK_Employee_Screen_EMPLOYEE_GHR">
+          <AssociationSet Name="FK_Employee_Screen_Employee" Association="Self.FK_Employee_Screen_Employee">
             <End Role="Employee" EntitySet="Employee" />
             <End Role="Employee_Screen" EntitySet="Employee_Screen" />
           </AssociationSet>
@@ -919,6 +1001,22 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             <End Role="Order_" EntitySet="Order_" />
             <End Role="OrderDetail" EntitySet="OrderDetail" />
           </AssociationSet>
+          <AssociationSet Name="FK_Rights_Management_Department" Association="Self.FK_Rights_Management_Department">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="Rights_Management" EntitySet="Rights_Management" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rights_Management_Employee" Association="Self.FK_Rights_Management_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Rights_Management" EntitySet="Rights_Management" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rights_Management_Role" Association="Self.FK_Rights_Management_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="Rights_Management" EntitySet="Rights_Management" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rights_Management_Rule" Association="Self.FK_Rights_Management_Rule">
+            <End Role="Rule" EntitySet="Rule" />
+            <End Role="Rights_Management" EntitySet="Rights_Management" />
+          </AssociationSet>
           <AssociationSet Name="FK_UserLogon_Employee" Association="Self.FK_UserLogon_Employee">
             <End Role="Employee" EntitySet="Employee" />
             <End Role="UserLogon" EntitySet="UserLogon" />
@@ -927,7 +1025,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="Web_IT_HELPDESKModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="ServiceDeskModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <ComplexType Name="func_report_detail_Result">
           <Property Name="ID" Type="Int32" />
           <Property Name="TITLE" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
@@ -1121,6 +1219,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="Deactive" Type="Boolean" />
           <Property Name="Manager_Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Allocations" Relationship="Self.FK_Allocation_Department1" FromRole="Department" ToRole="Allocation" />
+          <NavigationProperty Name="Rights_Management" Relationship="Self.FK_Rights_Management_Department" FromRole="Department" ToRole="Rights_Management" />
         </EntityType>
         <EntityType Name="Device">
           <Key>
@@ -1133,6 +1232,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="Device_Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Serial_No" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Purchase_Date" Type="DateTime" Precision="3" />
+          <Property Name="Computer_Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="CPU" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="RAM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DISK" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -1140,6 +1240,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="OS_License" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Office" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Office_License" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Depreciation" Type="DateTime" Precision="3" />
           <Property Name="Device_Status" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Addition_Information" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -1148,8 +1249,6 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <NavigationProperty Name="Allocations" Relationship="Self.FK_Allocation_Device" FromRole="Device" ToRole="Allocation" />
           <NavigationProperty Name="CONTRACT" Relationship="Self.FK_Device_CONTRACT" FromRole="Device" ToRole="CONTRACT" />
           <NavigationProperty Name="Device_Type" Relationship="Self.FK_Device_Device_Type" FromRole="Device" ToRole="Device_Type" />
-          <Property Name="Computer_Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Device_Type">
           <Key>
@@ -1216,10 +1315,10 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
         </EntityType>
         <EntityType Name="Employee">
           <Key>
-            <PropertyRef Name="EmployeeID" />
+            <PropertyRef Name="Emp_CJ" />
           </Key>
-          <Property Name="Emp_CJ" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeeID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Emp_CJ" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EmployeeID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="EmployeeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ID_Number" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Birthday" Type="DateTime" Precision="3" />
@@ -1239,21 +1338,10 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <NavigationProperty Name="CONTRACTs" Relationship="Self.FK_CONTRACT_Employee" FromRole="Employee" ToRole="CONTRACT" />
           <NavigationProperty Name="Documents" Relationship="Self.FK_Document_Employee" FromRole="Employee" ToRole="Document" />
           <NavigationProperty Name="EMP_ANSWER" Relationship="Self.FK_EMP_ANSWER_Employee" FromRole="Employee" ToRole="EMP_ANSWER" />
-          <NavigationProperty Name="Employee_Screen" Relationship="Self.FK_Employee_Screen_EMPLOYEE_GHR" FromRole="Employee" ToRole="Employee_Screen" />
           <NavigationProperty Name="Order_" Relationship="Self.FK_Order__Employee" FromRole="Employee" ToRole="Order_" />
+          <NavigationProperty Name="Rights_Management" Relationship="Self.FK_Rights_Management_Employee" FromRole="Employee" ToRole="Rights_Management" />
           <NavigationProperty Name="UserLogons" Relationship="Self.FK_UserLogon_Employee" FromRole="Employee" ToRole="UserLogon" />
-        </EntityType>
-        <EntityType Name="Employee_Screen">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Guid" Nullable="false" />
-          <Property Name="ScreenId" Type="Int32" />
-          <Property Name="EmployeeId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Use" Type="Boolean" />
-          <Property Name="Read" Type="Boolean" />
-          <NavigationProperty Name="Employee" Relationship="Self.FK_Employee_Screen_EMPLOYEE_GHR" FromRole="Employee_Screen" ToRole="Employee" />
-          <NavigationProperty Name="Screen" Relationship="Self.FK_Employee_Screen_Screen" FromRole="Employee_Screen" ToRole="Screen" />
+          <NavigationProperty Name="Employee_Screen" Relationship="ServiceDeskModel.FK_Employee_Screen_Employee" FromRole="Employee" ToRole="Employee_Screen" />
         </EntityType>
         <EntityType Name="EmployeeInfo">
           <Key>
@@ -1318,12 +1406,12 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="datetime" Type="DateTime" Precision="3" />
           <Property Name="StatusId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="LevelId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Reply" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Reply" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="User_create" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="User_resolve" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Note" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="FileAttched" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <Property Name="FileName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FileName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Del" Type="Boolean" />
           <Property Name="DepartmentId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Solved" Type="Boolean" />
@@ -1390,6 +1478,41 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="DEL" Type="Boolean" />
           <NavigationProperty Name="EMP_ANSWER" Relationship="Self.FK_EMP_ANSWER_QUESTION" FromRole="QUESTION" ToRole="EMP_ANSWER" />
         </EntityType>
+        <EntityType Name="Rights_Management">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Role_Id" Type="Int32" />
+          <Property Name="Rule_Id" Type="Int32" />
+          <Property Name="Employee_Id" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Department_Id" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Plant_Id" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Department" Relationship="Self.FK_Rights_Management_Department" FromRole="Rights_Management" ToRole="Department" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Rights_Management_Employee" FromRole="Rights_Management" ToRole="Employee" />
+          <NavigationProperty Name="Role" Relationship="Self.FK_Rights_Management_Role" FromRole="Rights_Management" ToRole="Role" />
+          <NavigationProperty Name="Rule" Relationship="Self.FK_Rights_Management_Rule" FromRole="Rights_Management" ToRole="Rule" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Deactive" Type="Boolean" />
+          <NavigationProperty Name="Rights_Management" Relationship="Self.FK_Rights_Management_Role" FromRole="Role" ToRole="Rights_Management" />
+        </EntityType>
+        <EntityType Name="Rule">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Rule_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Deactive" Type="Boolean" />
+          <NavigationProperty Name="Rights_Management" Relationship="Self.FK_Rights_Management_Rule" FromRole="Rule" ToRole="Rights_Management" />
+          <Property Name="Module_Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="Screen">
           <Key>
             <PropertyRef Name="ScreenId" />
@@ -1398,7 +1521,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="ScreenName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="HTMLcode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Note" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <NavigationProperty Name="Employee_Screen" Relationship="Self.FK_Employee_Screen_Screen" FromRole="Screen" ToRole="Employee_Screen" />
+          <NavigationProperty Name="Employee_Screen" Relationship="ServiceDeskModel.FK_Employee_Screen_Screen" FromRole="Screen" ToRole="Employee_Screen" />
         </EntityType>
         <EntityType Name="Seal_Using">
           <Key>
@@ -1525,7 +1648,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <End Role="BIZ_TRIP" Type="Self.BIZ_TRIP" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
-              <PropertyRef Name="EmployeeID" />
+              <PropertyRef Name="Emp_CJ" />
             </Principal>
             <Dependent Role="BIZ_TRIP">
               <PropertyRef Name="EMPNO" />
@@ -1561,7 +1684,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <End Role="CONTRACT" Type="Self.CONTRACT" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
-              <PropertyRef Name="EmployeeID" />
+              <PropertyRef Name="Emp_CJ" />
             </Principal>
             <Dependent Role="CONTRACT">
               <PropertyRef Name="USER_CREATE" />
@@ -1616,6 +1739,20 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Rights_Management_Department">
+          <End Role="Department" Type="Self.Department" Multiplicity="0..1" />
+          <End Role="Rights_Management" Type="Self.Rights_Management" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="Department_Id" />
+              <PropertyRef Name="Plant_Id" />
+            </Principal>
+            <Dependent Role="Rights_Management">
+              <PropertyRef Name="Department_Id" />
+              <PropertyRef Name="Plant_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Device_Device_Type">
           <End Role="Device_Type" Type="Self.Device_Type" Multiplicity="0..1" />
           <End Role="Device" Type="Self.Device" Multiplicity="*" />
@@ -1645,7 +1782,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <End Role="Document" Type="Self.Document" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
-              <PropertyRef Name="EmployeeID" />
+              <PropertyRef Name="Emp_CJ" />
             </Principal>
             <Dependent Role="Document">
               <PropertyRef Name="EmployeeID" />
@@ -1657,7 +1794,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <End Role="EMP_ANSWER" Type="Self.EMP_ANSWER" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
-              <PropertyRef Name="EmployeeID" />
+              <PropertyRef Name="Emp_CJ" />
             </Principal>
             <Dependent Role="EMP_ANSWER">
               <PropertyRef Name="EMPLOYEEID" />
@@ -1676,27 +1813,27 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Employee_Screen_EMPLOYEE_GHR">
-          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
-          <End Role="Employee_Screen" Type="Self.Employee_Screen" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="EmployeeID" />
-            </Principal>
-            <Dependent Role="Employee_Screen">
-              <PropertyRef Name="EmployeeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Order__Employee">
           <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
           <End Role="Order_" Type="Self.Order_" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
-              <PropertyRef Name="EmployeeID" />
+              <PropertyRef Name="Emp_CJ" />
             </Principal>
             <Dependent Role="Order_">
               <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rights_Management_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Rights_Management" Type="Self.Rights_Management" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Emp_CJ" />
+            </Principal>
+            <Dependent Role="Rights_Management">
+              <PropertyRef Name="Employee_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1705,22 +1842,10 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <End Role="UserLogon" Type="Self.UserLogon" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
-              <PropertyRef Name="EmployeeID" />
+              <PropertyRef Name="Emp_CJ" />
             </Principal>
             <Dependent Role="UserLogon">
               <PropertyRef Name="EmployeeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Employee_Screen_Screen">
-          <End Role="Screen" Type="Self.Screen" Multiplicity="0..1" />
-          <End Role="Employee_Screen" Type="Self.Employee_Screen" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Screen">
-              <PropertyRef Name="ScreenId" />
-            </Principal>
-            <Dependent Role="Employee_Screen">
-              <PropertyRef Name="ScreenId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1733,6 +1858,30 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </Principal>
             <Dependent Role="OrderDetail">
               <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rights_Management_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
+          <End Role="Rights_Management" Type="Self.Rights_Management" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Rights_Management">
+              <PropertyRef Name="Role_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rights_Management_Rule">
+          <End Role="Rule" Type="Self.Rule" Multiplicity="0..1" />
+          <End Role="Rights_Management" Type="Self.Rights_Management" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rule">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Rights_Management">
+              <PropertyRef Name="Rule_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1754,7 +1903,6 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <EntitySet Name="Drinking_Request" EntityType="Self.Drinking_Request" />
           <EntitySet Name="EMP_ANSWER" EntityType="Self.EMP_ANSWER" />
           <EntitySet Name="Employees" EntityType="Self.Employee" />
-          <EntitySet Name="Employee_Screen" EntityType="Self.Employee_Screen" />
           <EntitySet Name="EmployeeInfoes" EntityType="Self.EmployeeInfo" />
           <EntitySet Name="Events" EntityType="Self.Event" />
           <EntitySet Name="hr_emp_infor" EntityType="Self.hr_emp_infor" />
@@ -1765,6 +1913,9 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <EntitySet Name="OrderDetails" EntityType="Self.OrderDetail" />
           <EntitySet Name="PERIODs" EntityType="Self.PERIOD" />
           <EntitySet Name="QUESTIONs" EntityType="Self.QUESTION" />
+          <EntitySet Name="Rights_Management" EntityType="Self.Rights_Management" />
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="Rules" EntityType="Self.Rule" />
           <EntitySet Name="Screens" EntityType="Self.Screen" />
           <EntitySet Name="Seal_Using" EntityType="Self.Seal_Using" />
           <EntitySet Name="Status" EntityType="Self.Status" />
@@ -1822,6 +1973,10 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             <End Role="PERIOD" EntitySet="PERIODs" />
             <End Role="CONTRACT_SUB" EntitySet="CONTRACT_SUB" />
           </AssociationSet>
+          <AssociationSet Name="FK_Rights_Management_Department" Association="Self.FK_Rights_Management_Department">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="Rights_Management" EntitySet="Rights_Management" />
+          </AssociationSet>
           <AssociationSet Name="FK_Device_Device_Type" Association="Self.FK_Device_Device_Type">
             <End Role="Device_Type" EntitySet="Device_Type" />
             <End Role="Device" EntitySet="Devices" />
@@ -1842,41 +1997,90 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             <End Role="QUESTION" EntitySet="QUESTIONs" />
             <End Role="EMP_ANSWER" EntitySet="EMP_ANSWER" />
           </AssociationSet>
-          <AssociationSet Name="FK_Employee_Screen_EMPLOYEE_GHR" Association="Self.FK_Employee_Screen_EMPLOYEE_GHR">
-            <End Role="Employee" EntitySet="Employees" />
-            <End Role="Employee_Screen" EntitySet="Employee_Screen" />
-          </AssociationSet>
           <AssociationSet Name="FK_Order__Employee" Association="Self.FK_Order__Employee">
             <End Role="Employee" EntitySet="Employees" />
             <End Role="Order_" EntitySet="Order_" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rights_Management_Employee" Association="Self.FK_Rights_Management_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Rights_Management" EntitySet="Rights_Management" />
           </AssociationSet>
           <AssociationSet Name="FK_UserLogon_Employee" Association="Self.FK_UserLogon_Employee">
             <End Role="Employee" EntitySet="Employees" />
             <End Role="UserLogon" EntitySet="UserLogons" />
           </AssociationSet>
-          <AssociationSet Name="FK_Employee_Screen_Screen" Association="Self.FK_Employee_Screen_Screen">
-            <End Role="Screen" EntitySet="Screens" />
-            <End Role="Employee_Screen" EntitySet="Employee_Screen" />
-          </AssociationSet>
           <AssociationSet Name="FK_OrderDetail_Order_" Association="Self.FK_OrderDetail_Order_">
             <End Role="Order_" EntitySet="Order_" />
             <End Role="OrderDetail" EntitySet="OrderDetails" />
           </AssociationSet>
-          <FunctionImport Name="func_report_detail" IsComposable="true" ReturnType="Collection(Web_IT_HELPDESKModel.func_report_detail_Result)">
+          <AssociationSet Name="FK_Rights_Management_Role" Association="Self.FK_Rights_Management_Role">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="Rights_Management" EntitySet="Rights_Management" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rights_Management_Rule" Association="Self.FK_Rights_Management_Rule">
+            <End Role="Rule" EntitySet="Rules" />
+            <End Role="Rights_Management" EntitySet="Rights_Management" />
+          </AssociationSet>
+          <FunctionImport Name="func_report_detail" IsComposable="true" ReturnType="Collection(ServiceDeskModel.func_report_detail_Result)">
             <Parameter Name="v_fromdate" Mode="In" Type="DateTime" />
             <Parameter Name="v_todate" Mode="In" Type="DateTime" />
             <Parameter Name="v_plant" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="GetLastAllocationOfDevice" IsComposable="true" EntitySet="Allocations" ReturnType="Collection(Web_IT_HELPDESKModel.Allocation)" />
+          <FunctionImport Name="GetLastAllocationOfDevice" IsComposable="true" EntitySet="Allocations" ReturnType="Collection(ServiceDeskModel.Allocation)" />
+          <EntitySet Name="Employee_Screen" EntityType="ServiceDeskModel.Employee_Screen" />
+          <AssociationSet Name="FK_Employee_Screen_Employee" Association="ServiceDeskModel.FK_Employee_Screen_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Employee_Screen" EntitySet="Employee_Screen" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_Screen_Screen" Association="ServiceDeskModel.FK_Employee_Screen_Screen">
+            <End Role="Screen" EntitySet="Screens" />
+            <End Role="Employee_Screen" EntitySet="Employee_Screen" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Employee_Screen">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="ScreenId" Type="Int32" />
+          <Property Name="EmployeeId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Use" Type="Boolean" />
+          <Property Name="Read" Type="Boolean" />
+          <NavigationProperty Name="Employee" Relationship="ServiceDeskModel.FK_Employee_Screen_Employee" FromRole="Employee_Screen" ToRole="Employee" />
+          <NavigationProperty Name="Screen" Relationship="ServiceDeskModel.FK_Employee_Screen_Screen" FromRole="Employee_Screen" ToRole="Screen" />
+        </EntityType>
+        <Association Name="FK_Employee_Screen_Employee">
+          <End Type="ServiceDeskModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="ServiceDeskModel.Employee_Screen" Role="Employee_Screen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Emp_CJ" />
+            </Principal>
+            <Dependent Role="Employee_Screen">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employee_Screen_Screen">
+          <End Type="ServiceDeskModel.Screen" Role="Screen" Multiplicity="0..1" />
+          <End Type="ServiceDeskModel.Employee_Screen" Role="Employee_Screen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Screen">
+              <PropertyRef Name="ScreenId" />
+            </Principal>
+            <Dependent Role="Employee_Screen">
+              <PropertyRef Name="ScreenId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="Web_IT_HELPDESKModelStoreContainer" CdmEntityContainer="ServiceDeskEntities">
+        <EntityContainerMapping StorageEntityContainer="ServiceDeskModelStoreContainer" CdmEntityContainer="ServiceDeskEntities">
           <EntitySetMapping Name="Albums">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Album">
+            <EntityTypeMapping TypeName="ServiceDeskModel.Album">
               <MappingFragment StoreEntitySet="Album">
                 <ScalarProperty Name="AlbumId" ColumnName="AlbumId" />
                 <ScalarProperty Name="AlbumTypeId" ColumnName="AlbumTypeId" />
@@ -1888,7 +2092,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AlbumTypes">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.AlbumType">
+            <EntityTypeMapping TypeName="ServiceDeskModel.AlbumType">
               <MappingFragment StoreEntitySet="AlbumType">
                 <ScalarProperty Name="AlbumTypeId" ColumnName="AlbumTypeId" />
                 <ScalarProperty Name="AlbumType1" ColumnName="AlbumType" />
@@ -1896,7 +2100,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Allocations">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Allocation">
+            <EntityTypeMapping TypeName="ServiceDeskModel.Allocation">
               <MappingFragment StoreEntitySet="Allocation">
                 <ScalarProperty Name="Allocation_Id" ColumnName="Allocation_Id" />
                 <ScalarProperty Name="Device_Id" ColumnName="Device_Id" />
@@ -1917,7 +2121,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="BIZ_TRIP">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.BIZ_TRIP">
+            <EntityTypeMapping TypeName="ServiceDeskModel.BIZ_TRIP">
               <MappingFragment StoreEntitySet="BIZ_TRIP">
                 <ScalarProperty Name="EMPNO" ColumnName="EMPNO" />
                 <ScalarProperty Name="NAME" ColumnName="NAME" />
@@ -1945,7 +2149,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Carts">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Cart">
+            <EntityTypeMapping TypeName="ServiceDeskModel.Cart">
               <MappingFragment StoreEntitySet="Cart">
                 <ScalarProperty Name="RecordId" ColumnName="RecordId" />
                 <ScalarProperty Name="CartId" ColumnName="CartId" />
@@ -1957,7 +2161,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CONTRACTs">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.CONTRACT">
+            <EntityTypeMapping TypeName="ServiceDeskModel.CONTRACT">
               <MappingFragment StoreEntitySet="CONTRACT">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="VENDOR" ColumnName="VENDOR" />
@@ -1982,7 +2186,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CONTRACT_SUB">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.CONTRACT_SUB">
+            <EntityTypeMapping TypeName="ServiceDeskModel.CONTRACT_SUB">
               <MappingFragment StoreEntitySet="CONTRACT_SUB">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="CONTRACTID" ColumnName="CONTRACTID" />
@@ -1998,7 +2202,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CONTRACT_TYPE">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.CONTRACT_TYPE">
+            <EntityTypeMapping TypeName="ServiceDeskModel.CONTRACT_TYPE">
               <MappingFragment StoreEntitySet="CONTRACT_TYPE">
                 <ScalarProperty Name="CONTRACT_TYPE_ID" ColumnName="CONTRACT_TYPE_ID" />
                 <ScalarProperty Name="CONTRACT_TYPE_NAME" ColumnName="CONTRACT_TYPE_NAME" />
@@ -2006,7 +2210,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CONTRACT_TYPE_DETAIL">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.CONTRACT_TYPE_DETAIL">
+            <EntityTypeMapping TypeName="ServiceDeskModel.CONTRACT_TYPE_DETAIL">
               <MappingFragment StoreEntitySet="CONTRACT_TYPE_DETAIL">
                 <ScalarProperty Name="CONTRACT_TYPE_DT_ID" ColumnName="CONTRACT_TYPE_DT_ID" />
                 <ScalarProperty Name="CONTRACT_TYPE_NAME" ColumnName="CONTRACT_TYPE_NAME" />
@@ -2014,7 +2218,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Departments">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Department">
+            <EntityTypeMapping TypeName="ServiceDeskModel.Department">
               <MappingFragment StoreEntitySet="Department">
                 <ScalarProperty Name="Department_Id" ColumnName="Department_Id" />
                 <ScalarProperty Name="Department_Name" ColumnName="Department_Name" />
@@ -2026,10 +2230,8 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Devices">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Device">
+            <EntityTypeMapping TypeName="ServiceDeskModel.Device">
               <MappingFragment StoreEntitySet="Device">
-                <ScalarProperty Name="Note" ColumnName="Note" />
-                <ScalarProperty Name="Computer_Name" ColumnName="Computer_Name" />
                 <ScalarProperty Name="Device_Id" ColumnName="Device_Id" />
                 <ScalarProperty Name="Contract_Id" ColumnName="Contract_Id" />
                 <ScalarProperty Name="Device_Type_Id" ColumnName="Device_Type_Id" />
@@ -2037,6 +2239,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
                 <ScalarProperty Name="Device_Name" ColumnName="Device_Name" />
                 <ScalarProperty Name="Serial_No" ColumnName="Serial_No" />
                 <ScalarProperty Name="Purchase_Date" ColumnName="Purchase_Date" />
+                <ScalarProperty Name="Computer_Name" ColumnName="Computer_Name" />
                 <ScalarProperty Name="CPU" ColumnName="CPU" />
                 <ScalarProperty Name="RAM" ColumnName="RAM" />
                 <ScalarProperty Name="DISK" ColumnName="DISK" />
@@ -2044,6 +2247,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
                 <ScalarProperty Name="OS_License" ColumnName="OS_License" />
                 <ScalarProperty Name="Office" ColumnName="Office" />
                 <ScalarProperty Name="Office_License" ColumnName="Office_License" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
                 <ScalarProperty Name="Depreciation" ColumnName="Depreciation" />
                 <ScalarProperty Name="Device_Status" ColumnName="Device_Status" />
                 <ScalarProperty Name="Addition_Information" ColumnName="Addition_Information" />
@@ -2053,7 +2257,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Device_Type">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Device_Type">
+            <EntityTypeMapping TypeName="ServiceDeskModel.Device_Type">
               <MappingFragment StoreEntitySet="Device_Type">
                 <ScalarProperty Name="Device_Type_Id" ColumnName="Device_Type_Id" />
                 <ScalarProperty Name="Device_Type_Name" ColumnName="Device_Type_Name" />
@@ -2061,7 +2265,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Documents">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Document">
+            <EntityTypeMapping TypeName="ServiceDeskModel.Document">
               <MappingFragment StoreEntitySet="Document">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
@@ -2075,7 +2279,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="DocumentTypes">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.DocumentType">
+            <EntityTypeMapping TypeName="ServiceDeskModel.DocumentType">
               <MappingFragment StoreEntitySet="DocumentType">
                 <ScalarProperty Name="DocumentTypeId" ColumnName="DocumentTypeId" />
                 <ScalarProperty Name="DocumentTypeName" ColumnName="DocumentTypeName" />
@@ -2083,7 +2287,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Drinking_Request">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Drinking_Request">
+            <EntityTypeMapping TypeName="ServiceDeskModel.Drinking_Request">
               <MappingFragment StoreEntitySet="Drinking_Request">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
@@ -2103,7 +2307,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="EMP_ANSWER">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.EMP_ANSWER">
+            <EntityTypeMapping TypeName="ServiceDeskModel.EMP_ANSWER">
               <MappingFragment StoreEntitySet="EMP_ANSWER">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="QUESTION_ID" ColumnName="QUESTION_ID" />
@@ -2115,7 +2319,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Employees">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Employee">
+            <EntityTypeMapping TypeName="ServiceDeskModel.Employee">
               <MappingFragment StoreEntitySet="Employee">
                 <ScalarProperty Name="Emp_CJ" ColumnName="Emp_CJ" />
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
@@ -2137,19 +2341,8 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Employee_Screen">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Employee_Screen">
-              <MappingFragment StoreEntitySet="Employee_Screen">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ScreenId" ColumnName="ScreenId" />
-                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
-                <ScalarProperty Name="Use" ColumnName="Use" />
-                <ScalarProperty Name="Read" ColumnName="Read" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="EmployeeInfoes">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.EmployeeInfo">
+            <EntityTypeMapping TypeName="ServiceDeskModel.EmployeeInfo">
               <MappingFragment StoreEntitySet="EmployeeInfo">
                 <ScalarProperty Name="EMPNO" ColumnName="EMPNO" />
                 <ScalarProperty Name="DEPT_NAME" ColumnName="DEPT_NAME" />
@@ -2171,7 +2364,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Events">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Event">
+            <EntityTypeMapping TypeName="ServiceDeskModel.Event">
               <MappingFragment StoreEntitySet="Event">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="TITLE" ColumnName="TITLE" />
@@ -2182,7 +2375,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="hr_emp_infor">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.hr_emp_infor">
+            <EntityTypeMapping TypeName="ServiceDeskModel.hr_emp_infor">
               <MappingFragment StoreEntitySet="hr_emp_infor">
                 <ScalarProperty Name="Employee_Id" ColumnName="Employee_Id" />
                 <ScalarProperty Name="Employee_Name" ColumnName="Employee_Name" />
@@ -2193,7 +2386,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="hr_emp_meal">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.hr_emp_meal">
+            <EntityTypeMapping TypeName="ServiceDeskModel.hr_emp_meal">
               <MappingFragment StoreEntitySet="hr_emp_meal">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Num" ColumnName="Num" />
@@ -2207,7 +2400,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Incidents">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Incident">
+            <EntityTypeMapping TypeName="ServiceDeskModel.Incident">
               <MappingFragment StoreEntitySet="Incidents">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
@@ -2229,7 +2422,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Levels">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Level">
+            <EntityTypeMapping TypeName="ServiceDeskModel.Level">
               <MappingFragment StoreEntitySet="Level">
                 <ScalarProperty Name="LevelId" ColumnName="LevelId" />
                 <ScalarProperty Name="LevelName" ColumnName="LevelName" />
@@ -2239,7 +2432,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Order_">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Order_">
+            <EntityTypeMapping TypeName="ServiceDeskModel.Order_">
               <MappingFragment StoreEntitySet="Order_">
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
                 <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
@@ -2254,7 +2447,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="OrderDetails">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.OrderDetail">
+            <EntityTypeMapping TypeName="ServiceDeskModel.OrderDetail">
               <MappingFragment StoreEntitySet="OrderDetail">
                 <ScalarProperty Name="OrderDetailId" ColumnName="OrderDetailId" />
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
@@ -2265,7 +2458,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PERIODs">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.PERIOD">
+            <EntityTypeMapping TypeName="ServiceDeskModel.PERIOD">
               <MappingFragment StoreEntitySet="PERIOD">
                 <ScalarProperty Name="PERIOD_ID" ColumnName="PERIOD_ID" />
                 <ScalarProperty Name="PERIOD_NAME" ColumnName="PERIOD_NAME" />
@@ -2275,7 +2468,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QUESTIONs">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.QUESTION">
+            <EntityTypeMapping TypeName="ServiceDeskModel.QUESTION">
               <MappingFragment StoreEntitySet="QUESTION">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="NO" ColumnName="NO" />
@@ -2286,8 +2479,40 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Rights_Management">
+            <EntityTypeMapping TypeName="ServiceDeskModel.Rights_Management">
+              <MappingFragment StoreEntitySet="Rights_Management">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Role_Id" ColumnName="Role_Id" />
+                <ScalarProperty Name="Rule_Id" ColumnName="Rule_Id" />
+                <ScalarProperty Name="Employee_Id" ColumnName="Employee_Id" />
+                <ScalarProperty Name="Department_Id" ColumnName="Department_Id" />
+                <ScalarProperty Name="Plant_Id" ColumnName="Plant_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="ServiceDeskModel.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Deactive" ColumnName="Deactive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rules">
+            <EntityTypeMapping TypeName="ServiceDeskModel.Rule">
+              <MappingFragment StoreEntitySet="Rule">
+                <ScalarProperty Name="Module_Name" ColumnName="Module_Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Rule_Name" ColumnName="Rule_Name" />
+                <ScalarProperty Name="Deactive" ColumnName="Deactive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Screens">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Screen">
+            <EntityTypeMapping TypeName="ServiceDeskModel.Screen">
               <MappingFragment StoreEntitySet="Screen">
                 <ScalarProperty Name="ScreenId" ColumnName="ScreenId" />
                 <ScalarProperty Name="ScreenName" ColumnName="ScreenName" />
@@ -2297,7 +2522,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Seal_Using">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Seal_Using">
+            <EntityTypeMapping TypeName="ServiceDeskModel.Seal_Using">
               <MappingFragment StoreEntitySet="Seal_Using">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
@@ -2322,7 +2547,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Status">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.Status">
+            <EntityTypeMapping TypeName="ServiceDeskModel.Status">
               <MappingFragment StoreEntitySet="Status">
                 <ScalarProperty Name="StatusId" ColumnName="StatusId" />
                 <ScalarProperty Name="StatusName" ColumnName="StatusName" />
@@ -2331,7 +2556,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="UserLogons">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.UserLogon">
+            <EntityTypeMapping TypeName="ServiceDeskModel.UserLogon">
               <MappingFragment StoreEntitySet="UserLogon">
                 <ScalarProperty Name="UserLogIn" ColumnName="UserLogIn" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
@@ -2342,7 +2567,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ORDER_TYPE_VIEW">
-            <EntityTypeMapping TypeName="Web_IT_HELPDESKModel.ORDER_TYPE_VIEW">
+            <EntityTypeMapping TypeName="ServiceDeskModel.ORDER_TYPE_VIEW">
               <MappingFragment StoreEntitySet="ORDER_TYPE_VIEW">
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
                 <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
@@ -2357,9 +2582,9 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionName="Web_IT_HELPDESKModel.Store.func_report_detail" FunctionImportName="func_report_detail">
+          <FunctionImportMapping FunctionName="ServiceDeskModel.Store.func_report_detail" FunctionImportName="func_report_detail">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="Web_IT_HELPDESKModel.func_report_detail_Result">
+              <ComplexTypeMapping TypeName="ServiceDeskModel.func_report_detail_Result">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="TITLE" ColumnName="TITLE" />
                 <ScalarProperty Name="UNIT" ColumnName="UNIT" />
@@ -2378,8 +2603,19 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionName="Web_IT_HELPDESKModel.Store.GetLastAllocationOfDevice" FunctionImportName="GetLastAllocationOfDevice">
+          <FunctionImportMapping FunctionName="ServiceDeskModel.Store.GetLastAllocationOfDevice" FunctionImportName="GetLastAllocationOfDevice">
           </FunctionImportMapping>
+          <EntitySetMapping Name="Employee_Screen">
+            <EntityTypeMapping TypeName="ServiceDeskModel.Employee_Screen">
+              <MappingFragment StoreEntitySet="Employee_Screen">
+                <ScalarProperty Name="Read" ColumnName="Read" />
+                <ScalarProperty Name="Use" ColumnName="Use" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="ScreenId" ColumnName="ScreenId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

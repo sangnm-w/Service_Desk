@@ -25,7 +25,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         private string GetDept_id(string v_plant_id)
         {
-            string dept_id = en.Employees.Where(f => (f.EmployeeID == session_emp && f.Plant_Id == v_plant_id)).Select(f => f.Department_Id).SingleOrDefault();
+            string dept_id = en.Employees.Where(f => (f.Emp_CJ == session_emp && f.Plant_Id == v_plant_id)).Select(f => f.Department_Id).SingleOrDefault();
             return dept_id;
         }
 
@@ -220,8 +220,8 @@ namespace Web_IT_HELPDESK.Controllers
                 /*get employee name*/
                 ViewBag.EMPNO = session_emp;
                 ViewBag.PLANT = plant_id;
-                ViewBag.NAME = en.Employees.Where(f => (f.EmployeeID == session_emp.ToString() && f.Plant_Id == plant_id)).Select(f => f.EmployeeName).SingleOrDefault();
-                ViewBag.Job = en.Employees.Where(f => (f.EmployeeID == session_emp.ToString() && f.Plant_Id == plant_id)).Select(f => f.Job).SingleOrDefault();
+                ViewBag.NAME = en.Employees.Where(f => (f.Emp_CJ == session_emp.ToString() && f.Plant_Id == plant_id)).Select(f => f.EmployeeName).SingleOrDefault();
+                ViewBag.Job = en.Employees.Where(f => (f.Emp_CJ == session_emp.ToString() && f.Plant_Id == plant_id)).Select(f => f.Job).SingleOrDefault();
                 /*get employee name*/
                 return View(biz_trip);
             }
@@ -310,7 +310,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == biz_trip.DEPT
                                                          && o.Plant_Id == biz_trip.PLANT).Select(i => i.Department_Name).SingleOrDefault();
             /*get employee name*/
-            ViewBag.User_name = en.Employees.Where(f => (f.EmployeeID == session_emp.ToString() && f.Plant_Id == biz_trip.DEPT.ToString())).Select(f => f.EmployeeName).SingleOrDefault();
+            ViewBag.User_name = en.Employees.Where(f => (f.Emp_CJ == session_emp.ToString() && f.Plant_Id == biz_trip.DEPT.ToString())).Select(f => f.EmployeeName).SingleOrDefault();
             /*get employee name*/
             return View(biz_trip);
         }
@@ -431,7 +431,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == biz_trip.DEPT
                                                          && o.Plant_Id == biz_trip.PLANT).Select(i => i.Department_Name).SingleOrDefault();
             /*get employee name*/
-            ViewBag.User_name = en.Employees.Where(f => (f.EmployeeID == session_emp.ToString() && f.Plant_Id == biz_trip.DEPT.ToString())).Select(f => f.EmployeeName).SingleOrDefault();
+            ViewBag.User_name = en.Employees.Where(f => (f.Emp_CJ == session_emp.ToString() && f.Plant_Id == biz_trip.DEPT.ToString())).Select(f => f.EmployeeName).SingleOrDefault();
             /*get employee name*/
             return View(biz_trip);
         }
@@ -614,7 +614,7 @@ namespace Web_IT_HELPDESK.Controllers
             inf.email_send("user_email", "pass", biz_trip.DEPT, subject, body, "1", userManager.GetUserPlant(session_emp));
             //~~~~~~~~~~~~~~~~~~~~~
 
-            ViewBag.EmployeeID = biz_trip.NAME;
+            ViewBag.Emp_CJ = biz_trip.NAME;
             ViewBag.DeptID = dept.Single().ToString();
 
             return View("biz_trip_index");

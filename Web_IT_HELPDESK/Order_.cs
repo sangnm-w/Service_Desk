@@ -18,7 +18,6 @@ namespace Web_IT_HELPDESK
         public Order_()
         {
             this.OrderDetails = new HashSet<OrderDetail>();
-    
             OnConstructorInit();
         }
         partial void OnConstructorInit();
