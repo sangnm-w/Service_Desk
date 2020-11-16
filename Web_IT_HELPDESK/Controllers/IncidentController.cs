@@ -29,9 +29,6 @@ namespace Web_IT_HELPDESK.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.INDEX, Commons.ModuleConstant.INCIDENT);
-            if (hasPermission.Value == false)
-                return RedirectToAction("Index", "Home");
 
             bool IsAdmin = CurrentUser.Instance.isAdministrator.HasValue ? CurrentUser.Instance.isAdministrator.Value : false;
             ViewBag.IsAdmin = IsAdmin;

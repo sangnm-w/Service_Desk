@@ -10,14 +10,14 @@ namespace Web_IT_HELPDESK.Models
     {
         private CurrentUser()
         {
-            sessionUser = HttpContext.Current.User.Identity.Name;
+            sessionUserID = HttpContext.Current.User.Identity.Name;
             entity = new ServiceDeskEntities();
         }
         private static CurrentUser _instance;
 
         public static CurrentUser Instance { get { if (_instance == null || sessionUser_Changed()) _instance = new CurrentUser(); return _instance; } private set => _instance = value; }
 
-        private static string sessionUser = null;
+        private static string sessionUserID = null;
         private ServiceDeskEntities entity = null;
         private Employee _user;
         public Employee User
@@ -26,7 +26,7 @@ namespace Web_IT_HELPDESK.Models
             {
                 if (_user == null)
                 {
-                    _user = entity.Employees.FirstOrDefault(e => e.Emp_CJ == sessionUser);
+                    _user = entity.Employees.FirstOrDefault(e => e.Emp_CJ == sessionUserID);
                 }
                 return _user;
             }
@@ -41,7 +41,7 @@ namespace Web_IT_HELPDESK.Models
             {
                 if (_rights == null)
                 {
-                    _rights = entity.Rights_Management.Where(r => r.Employee_Id == sessionUser).ToList();
+                    _rights = entity.Rights_Management.Where(r => r.Employee_Id == sessionUserID).ToList();
                 }
                 return _rights;
             }
@@ -91,14 +91,14 @@ namespace Web_IT_HELPDESK.Models
                         b => b.Id,
                         (a, b) => new { a, b }
                     )
-                    .Where(temp0 => temp0.b.Module_Name == moduleName && temp0.a.Employee_Id == sessionUser)
+                    .Where(temp0 => temp0.b.Module_Name == moduleName && temp0.a.Employee_Id == sessionUserID)
                     .Select(temp0 => temp0.b)
                     .ToList();
         }
 
         private static bool sessionUser_Changed()
         {
-            return sessionUser != HttpContext.Current.User.Identity.Name;
+            return sessionUserID != HttpContext.Current.User.Identity.Name;
         }
 
 
