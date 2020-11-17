@@ -46,107 +46,110 @@ namespace Web_IT_HELPDESK.Controllers
 
         [Authorize]
         [HttpPost]
-        public ActionResult ContractIndex(string search_, DateTime? date_, ICollection<string> v_companys, string v_contract_type, int daynum_)//, DateTime fromdate_, DateTime todate_)
+        public ActionResult ContractIndex(string search_, DateTime? date_, ICollection<string> v_depts, string v_contract_type, int daynum_)//, DateTime fromdate_, DateTime todate_)
         {
-            string v_company_string = "";
-            string v_plant = GetPlant_id(System.Web.HttpContext.Current.User.Identity.Name);
-            if (v_companys != null)
+            string v_dept_string = "";
+            string curr_plantId = CurrentUser.Instance.User.Plant_Id;
+            IEnumerable<CONTRACT> contract_list;
+
+            if (v_depts != null)
             {
-                if ((search_ == "" || search_ == "search") && v_companys.Count == 12 && v_contract_type == "all")
+                if ((search_ == "" || search_ == "search") && v_depts.Count == 12 && v_contract_type == "ALL")
                 {
-                    var contract_list = en.CONTRACTs.Where(o => o.DEL != true
+                    contract_list = en.CONTRACTs.Where(o => o.DEL != true
                                                               && date_ <= DbFunctions.AddDays(o.DATE, daynum_)
-                                                              && o.PLANT == v_plant).OrderBy(i => i.DATE);
-                    return View(contract_list);
+                                                              && o.PLANT == curr_plantId).OrderBy(i => i.DATE);
                 }
-                else if ((search_ == "" || search_ == "search") && v_companys.Count == 12 && v_contract_type != "all")
+                else if ((search_ == "" || search_ == "search") && v_depts.Count == 12 && v_contract_type != "ALL")
                 {
-                    var contract_list = en.CONTRACTs.Where(o => o.DEL != true
+                    contract_list = en.CONTRACTs.Where(o => o.DEL != true
                                                              && o.CONTRACT_TYPE.CONTRACT_TYPE_NAME == v_contract_type
                                                              && date_ <= DbFunctions.AddDays(o.DATE, daynum_)
-                                                             && o.PLANT == v_plant).OrderBy(i => i.DATE);
-                    return View(contract_list);
+                                                             && o.PLANT == curr_plantId).OrderBy(i => i.DATE);
                 }
-                else if (search_ == "" || search_ == "search" && v_contract_type == "all")
+                else if (search_ == "" || search_ == "search" && v_contract_type == "ALL")
                 {
-                    foreach (var v_company in v_companys)
+                    foreach (var v_dept in v_depts)
                     {
-                        v_company_string += v_company.ToString() + " ";
+                        v_dept_string += v_dept.ToString() + " ";
                     }
 
-                    var contract_list = en.CONTRACTs.Where(o => o.DEL != true
-                                                                && v_company_string.Trim().Contains(o.DEPARTMENTID)
+                    contract_list = en.CONTRACTs.Where(o => o.DEL != true
+                                                                && v_dept_string.Trim().Contains(o.DEPARTMENTID)
                                                                 && date_ <= DbFunctions.AddDays(o.DATE, daynum_)
-                                                                && v_company_string.Trim().Contains(o.DEPARTMENTID)
-                                                                && o.PLANT == v_plant).OrderBy(i => i.DATE);
-                    return View(contract_list);
+                                                                && v_dept_string.Trim().Contains(o.DEPARTMENTID)
+                                                                && o.PLANT == curr_plantId).OrderBy(i => i.DATE);
                 }
-                else if (search_ == "" || search_ == "search" && v_contract_type != "all")
+                else if (search_ == "" || search_ == "search" && v_contract_type != "ALL")
                 {
-                    foreach (var v_company in v_companys)
+                    foreach (var v_dept in v_depts)
                     {
-                        v_company_string += v_company.ToString() + " ";
+                        v_dept_string += v_dept.ToString() + " ";
                     }
 
-                    var contract_list = en.CONTRACTs.Where(o => o.DEL != true
-                                                             && v_company_string.Trim().Contains(o.DEPARTMENTID)
+                    contract_list = en.CONTRACTs.Where(o => o.DEL != true
+                                                             && v_dept_string.Trim().Contains(o.DEPARTMENTID)
                                                              && o.CONTRACT_TYPE.CONTRACT_TYPE_NAME == v_contract_type
                                                              && date_ <= DbFunctions.AddDays(o.DATE, daynum_)
-                                                             && o.PLANT == v_plant
-                                                             && v_company_string.Trim().Contains(o.DEPARTMENTID)).OrderBy(i => i.DATE);
-                    return View(contract_list);
+                                                             && o.PLANT == curr_plantId
+                                                             && v_dept_string.Trim().Contains(o.DEPARTMENTID)).OrderBy(i => i.DATE);
                 }
-                else if (v_contract_type == "all" && (search_ != "" || search_ != "search"))
+                else if (v_contract_type == "ALL" && (search_ != "" || search_ != "search"))
                 {
-                    foreach (var v_company in v_companys)
+                    foreach (var v_dept in v_depts)
                     {
-                        v_company_string += v_company.ToString() + " ";
+                        v_dept_string += v_dept.ToString() + " ";
                     }
 
-                    var contract_list = en.CONTRACTs.Where(o => o.DEL != true
+                    contract_list = en.CONTRACTs.Where(o => o.DEL != true
                                                              && o.CONTRACT_TYPE.CONTRACT_TYPE_NAME == v_contract_type
-                                                             && o.CONTRACTNAME.Contains(search_) == true && v_company_string.Trim().Contains(o.DEPARTMENTID)
+                                                             && o.CONTRACTNAME.Contains(search_) == true && v_dept_string.Trim().Contains(o.DEPARTMENTID)
                                                              && date_ <= DbFunctions.AddDays(o.DATE, daynum_)
-                                                             && o.PLANT == v_plant
-                                                             && o.CONTRACTNAME.Contains(search_) == true && v_company_string.Trim().Contains(o.DEPARTMENTID)).OrderBy(i => i.DATE);
-                    return View(contract_list);
+                                                             && o.PLANT == curr_plantId
+                                                             && o.CONTRACTNAME.Contains(search_) == true && v_dept_string.Trim().Contains(o.DEPARTMENTID)).OrderBy(i => i.DATE);
                 }
-                else if (v_contract_type == "all")
+                else if (v_contract_type == "ALL")
                 {
-                    foreach (var v_company in v_companys)
+                    foreach (var v_dept in v_depts)
                     {
-                        v_company_string += v_company.ToString() + " ";
+                        v_dept_string += v_dept.ToString() + " ";
                     }
 
-                    var contract_list = en.CONTRACTs.Where(o => o.DEL != true
+                    contract_list = en.CONTRACTs.Where(o => o.DEL != true
                                                              && o.CONTRACT_TYPE.CONTRACT_TYPE_NAME == v_contract_type
                                                              && date_ <= DbFunctions.AddDays(o.DATE, daynum_)
-                                                             && o.PLANT == v_plant
-                                                             && o.CONTRACTNAME.Contains(search_) == true && v_company_string.Trim().Contains(o.DEPARTMENTID)).OrderBy(i => i.DATE);
-                    return View(contract_list);
+                                                             && o.PLANT == curr_plantId
+                                                             && o.CONTRACTNAME.Contains(search_) == true && v_dept_string.Trim().Contains(o.DEPARTMENTID)).OrderBy(i => i.DATE);
                 }
                 else
                 {
-                    foreach (var v_company in v_companys)
+                    foreach (var v_dept in v_depts)
                     {
-                        v_company_string += v_company.ToString() + " ";
+                        v_dept_string += v_dept.ToString() + " ";
                     }
 
-                    var contract_list = en.CONTRACTs.Where(o => o.DEL != true
+                    contract_list = en.CONTRACTs.Where(o => o.DEL != true
                                                              && date_ <= DbFunctions.AddDays(o.DATE, daynum_)
                                                              && o.CONTRACTNAME.Contains(search_) == true
-                                                             && o.PLANT == v_plant
-                                                             && v_company_string.Trim().Contains(o.DEPARTMENTID)).OrderBy(i => i.DATE);
-                    return View(contract_list);
+                                                             && o.PLANT == curr_plantId
+                                                             && v_dept_string.Trim().Contains(o.DEPARTMENTID)).OrderBy(i => i.DATE);
                 }
             }
             else
             {
-                var contract_list = en.CONTRACTs.Where(o => o.DEL != true
-                                                            && o.DEPARTMENTID == v_company_string
-                                                            && o.PLANT == v_plant).OrderBy(i => i.DATE);
-                return View(contract_list);
+                contract_list = en.CONTRACTs.Where(o => o.DEL != true
+                                                              && date_ <= DbFunctions.AddDays(o.DATE, daynum_)
+                                                              && o.PLANT == curr_plantId).OrderBy(i => i.DATE);
             }
+
+            var depts = en.Departments.Where(d => d.Plant_Id == curr_plantId && d.Deactive == false).Select(d => new DepartmentViewModel
+            {
+                Department_Id = d.Department_Id,
+                Department_Name = d.Department_Name
+            }).OrderByDescending(d => d.Department_Name).ToList();
+            ViewBag.Departments = depts;
+
+            return View(contract_list);
         }
 
         //public ActionResult ContractCreate()
@@ -203,8 +206,8 @@ namespace Web_IT_HELPDESK.Controllers
         //Create Import Model
         public ActionResult CreateCONTRACTViewModel2()
         {
-            ViewBag.User_create = System.Web.HttpContext.Current.User.Identity.Name;
-            ViewBag.DEPT_ID = GetDept_id(System.Web.HttpContext.Current.User.Identity.Name);
+            ViewBag.User_create = CurrentUser.Instance.User.Emp_CJ;
+            ViewBag.curr_deptId = CurrentUser.Instance.User.Department_Id;
 
             ContractViewModel _contractviewModel = new ContractViewModel();
             var c = new CONTRACT();
