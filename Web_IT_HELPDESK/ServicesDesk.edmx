@@ -383,7 +383,8 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="NO" Type="nvarchar" MaxLength="50" />
+          <Property Name="No" Type="int" />
+          <Property Name="Outlining" Type="nvarchar" MaxLength="50" />
           <Property Name="QUESTION_CONTENT" Type="nvarchar(max)" />
           <Property Name="ANSWER_ID" Type="int" />
           <Property Name="NOTE" Type="nvarchar(max)" />
@@ -853,7 +854,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
                 <Property Name="Delivery_Date" Type="datetime" />
                 <Property Name="Return_Date" Type="datetime" />
                 <Property Name="Department_Id" Type="nvarchar" MaxLength="50" />
-                <Property Name="Plant_Id" Type="nvarchar" MaxLength="4" />
+                <Property Name="Plant_Id" Type="nvarchar" MaxLength="50" />
                 <Property Name="Note" Type="nvarchar(max)" />
                 <Property Name="IP" Type="nvarchar" MaxLength="50" />
                 <Property Name="Create_Date" Type="datetime" />
@@ -1471,7 +1472,8 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Guid" Nullable="false" />
-          <Property Name="NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="No" Type="Int32" />
+          <Property Name="Outlining" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="QUESTION_CONTENT" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ANSWER_ID" Type="Int32" />
           <Property Name="NOTE" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -2470,8 +2472,9 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <EntitySetMapping Name="QUESTIONs">
             <EntityTypeMapping TypeName="ServiceDeskModel.QUESTION">
               <MappingFragment StoreEntitySet="QUESTION">
+                <ScalarProperty Name="Outlining" ColumnName="Outlining" />
+                <ScalarProperty Name="No" ColumnName="No" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="NO" ColumnName="NO" />
                 <ScalarProperty Name="QUESTION_CONTENT" ColumnName="QUESTION_CONTENT" />
                 <ScalarProperty Name="ANSWER_ID" ColumnName="ANSWER_ID" />
                 <ScalarProperty Name="NOTE" ColumnName="NOTE" />

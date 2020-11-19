@@ -1,0 +1,39 @@
+﻿body {
+    background-color: #f8f0c9;
+    color: black;
+}
+
+#header {
+    border: 1px solid #4f1f4f;
+    border-radius: 10px;
+    background-color: #f0f3f3;
+}
+
+#title {
+    color: #004bff;
+}
+
+#title-description {
+    font-size: 1.2em;
+    font-style: italic;
+    color: #393e46;
+}
+
+.container {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.row.question {
+    margin-top: 30px;
+    border-bottom: 1px dashed #707070;
+}
+
+.row.subquestion {
+    border-bottom: 1px dashed #707070;
+}
+
+    .row.subquestion > :first-child {
+        margin-top: 15px;
+        padding-left: 30px;
+    }

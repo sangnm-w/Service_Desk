@@ -202,6 +202,7 @@
     <Compile Include="CONTRACT_TYPE_DETAIL.cs">
       <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AllocationsController.cs" />
     <Compile Include="Controllers\BIZ_TRIPController.cs" />
     <Compile Include="Controllers\CheckoutController.cs" />
@@ -225,6 +226,7 @@
     <Compile Include="Controllers\ObjectManager\MailHelper.cs" />
     <Compile Include="Controllers\ObjectManager\UserManager.cs" />
     <Compile Include="Controllers\Order_Controller.cs" />
+    <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\SealUsingController.cs" />
     <Compile Include="Controllers\ShoppingCartController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
@@ -473,6 +475,7 @@
     <Content Include="css\forms.css" />
     <Content Include="css\stats.css" />
     <Content Include="css\styles.css" />
+    <Content Include="css\survey.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="js\calendar.js" />
@@ -1564,6 +1567,8 @@
     <Content Include="ServicesDesk.edmx.diagram">
       <DependentUpon>ServicesDesk.edmx</DependentUpon>
     </Content>
+    <Content Include="Views\Survey\SecuritySurvey.cshtml" />
+    <Content Include="Views\Survey\CanteenSurvey.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

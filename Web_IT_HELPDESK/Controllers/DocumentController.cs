@@ -55,7 +55,7 @@ namespace Web_IT_HELPDESK.Controllers
 
                         document.FileContext = binaryFile.ToArray();
                         document.FileName = System.IO.Path.GetFileName(Request.Files[upload].FileName);
-                    }       
+                    }
                     en.Documents.Add(document);
                     try
                     {
@@ -97,7 +97,7 @@ namespace Web_IT_HELPDESK.Controllers
         {
             if (session_emp != "")
             {
-                var emp_infor = en.EmployeeInfoes.Where(i => i.DE != true && i.Plant == "0301");
+                var emp_infor = en.Employees.Where(i => i.Deactive != true && i.Plant_Id == "V2010");
                 return View(emp_infor);
             }
             else return View();
@@ -110,7 +110,7 @@ namespace Web_IT_HELPDESK.Controllers
         {
             if (session_emp != "")
             {
-                var emp_infor = en.EmployeeInfoes.Where(i => i.DE != true && i.Plant == solved);
+                var emp_infor = en.Employees.Where(i => i.Deactive != true && i.Plant_Id == solved);
                 return View(emp_infor);
             }
             else return View();
