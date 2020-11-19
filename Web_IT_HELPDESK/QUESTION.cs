@@ -23,7 +23,8 @@ namespace Web_IT_HELPDESK
         partial void OnConstructorInit();
     
         public System.Guid ID { get; set; }
-        public string NO { get; set; }
+        public Nullable<int> No { get; set; }
+        public string Outlining { get; set; }
         public string QUESTION_CONTENT { get; set; }
         public Nullable<int> ANSWER_ID { get; set; }
         public string NOTE { get; set; }

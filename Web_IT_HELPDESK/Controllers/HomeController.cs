@@ -35,7 +35,7 @@ namespace Web_IT_HELPDESK.Controllers
                 //result += string.Format("Answer for question {0} is {1} and {2} <br />", index, answer, correct);
                 EMP_ANSWER emp_answer = new EMP_ANSWER();
                 emp_answer.ID = Guid.NewGuid();
-                emp_answer.QUESTION_ID = en.QUESTIONs.Where(o => o.NO == index.ToString()).Select(i => i.ID).SingleOrDefault();
+                emp_answer.QUESTION_ID = en.QUESTIONs.Where(o => o.No == index).Select(i => i.ID).SingleOrDefault();
                 emp_answer.EMPLOYEEID = session_emp;
                 emp_answer.DATE = DateTime.Now;
                 emp_answer.ANSWERID = Convert.ToInt32(answer.ToString());
@@ -80,7 +80,7 @@ namespace Web_IT_HELPDESK.Controllers
                 EMP_ANSWER emp_answer = new EMP_ANSWER();
 
                 emp_answer.ID = Guid.NewGuid();
-                emp_answer.QUESTION_ID = en.QUESTIONs.FirstOrDefault(q => q.NO == questionNo.ToString()).ID;
+                emp_answer.QUESTION_ID = en.QUESTIONs.FirstOrDefault(q => q.No == questionNo).ID;
                 emp_answer.EMPLOYEEID = session_emp;
                 emp_answer.DATE = DateTime.Now;
                 emp_answer.NOTE = answer.ToString();
@@ -108,7 +108,7 @@ namespace Web_IT_HELPDESK.Controllers
                 EMP_ANSWER emp_answer = new EMP_ANSWER();
 
                 emp_answer.ID = Guid.NewGuid();
-                emp_answer.QUESTION_ID = en.QUESTIONs.FirstOrDefault(q => q.NO == questionNo.ToString()).ID;
+                emp_answer.QUESTION_ID = en.QUESTIONs.FirstOrDefault(q => q.No == questionNo).ID;
                 emp_answer.EMPLOYEEID = session_emp;
                 emp_answer.DATE = DateTime.Now;
                 if (questionNo != 9)
