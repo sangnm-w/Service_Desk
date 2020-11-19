@@ -20,40 +20,34 @@
     <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
 
     <link href="~/css/survey.css" rel="stylesheet" />
-    <style>
-        .material {
-            border: none;
-            border-bottom: 1px solid #ccc;
-            box-shadow: rgb(128, 128, 128) 2px 2px inset;
-            background: none !important;
-            color: black;
-        }
 
-        textarea {
-            resize: vertical;
-            min-height: 34px;
-            max-height: 102px;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
-        <div class="row text-center" id="header">
-            <div id="title">
+        <div class="row text-center header">
+            <div class="title">
                 <h1>BẢNG ĐÁNH GIÁ CHẤT LƯỢNG DỊCH VỤ BẢO VỆ</h1>
                 <h1>CÔNG TY TNHH DỊCH VỤ BẢO VỆ VIỆT NHẬT - YUKI SEPRE 24</h1>
             </div>
-            <div id="title-description">
+            <div class="title-description">
                 <h4>
-                    - Trước tiên Phòng Nhân sự xin chân thành cảm ơn Anh/Chị đã tích cực tham gia đóng góp ý kiến và hoàn thành bảng đánh giá này.<br />
-                    Nhằm cải thiện chất lượng dịch vụ bảo vệ theo hướng tốt hơn, chúng tôi có chuẩn bị một số câu hỏi ngắn xin Anh/Chị vui lòng trả lời.<br />
+                    - Trước tiên Phòng Nhân sự xin chân thành cảm ơn Anh/Chị đã tích cực tham gia đóng góp ý kiến và hoàn thành bảng đánh giá này.
+                    Nhằm cải thiện chất lượng dịch vụ bảo vệ theo hướng tốt hơn, chúng tôi có chuẩn bị một số câu hỏi ngắn xin Anh/Chị vui lòng trả lời.
                     Sự đóng góp ý kiến của bạn sẽ là cơ sở quý báu để Chúng ta xem xét, điều chỉnh và nâng cao chất lượng dịch vụ bảo vệ về sau.<br />
                     - Anh chị vui lòng đánh giá theo mức <b><u> 1 ~ 5 </u></b> tương ứng với mức độ hài lòng từ <b><u> thấp đến cao </u></b>.<br />
+                </h4>
+                <h4>
                     <b>Xin trân trọng cảm ơn!</b>
                 </h4>
             </div>
         </div>
         <br />
+        <div class="row explain">
+            <pre>
+Anh/Chị vui lòng chọn câu trả lời với mức độ từ thấp lên cao (từ 1 đến 5) cho những câu hỏi dưới đây:
+1. Hoàn toàn không đồng ý       2. Không đồng ý       3. Bình thường       4. Đồng ý      5. Hoàn toàn đồng ý
+                </pre>
+        </div>
         <div class="row">
             <div class="container">
                 @using (Html.BeginForm("SecuritySurvey", "Survey", FormMethod.Post))
@@ -133,24 +127,14 @@
                         {
                             <div class="row question">
                                 <div class="col-sm-8">
-                                    @if (@item_question.Outlining.Contains('.'))
-                                    {
-                                        <label style="padding-left:30px">
-                                            @item_question.Outlining<span> ) .    </span>
-                                            @item_question.QUESTION_CONTENT.ToString().ToUpper()
-                                        </label>
-                                    }
-                                    else
-                                    {
-                                        <label>
-                                            @item_question.Outlining<span> ) .    </span>
-                                            @item_question.QUESTION_CONTENT.ToString().ToUpper()
-                                        </label>
-                                    }
+                                    <label>
+                                        <span>@item_question.Outlining</span>
+                                        @item_question.QUESTION_CONTENT.ToString().ToUpper()
+                                    </label>
                                 </div>
-                                <div class="col-sm-4">
-                                    <textarea class="form-control material" name="answertexts[0]" rows="3" placeholder="Đóng góp ý kiến"></textarea>
-                                    <input type="text" name="questions[0]" value="@item_question.ID" hidden="hidden" />
+                                <div class="col-sm-8 textanswer">
+                                    <textarea class="form-control material" name="answertexts[@textNo]" rows="3" placeholder="Nhập ý kiến"></textarea>
+                                    <input type="text" name="questions[@textNo]" value="@item_question.ID" hidden="hidden" />
                                 </div>
                             </div>
                             textNo++;

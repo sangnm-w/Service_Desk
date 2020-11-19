@@ -1,79 +1,129 @@
-﻿@model Web_IT_HELPDESK.QUESTION
-
+﻿@model IEnumerable<Web_IT_HELPDESK.QUESTION>
 @{
     Layout = null;
 }
-
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Edit</title>
+    <meta charset="utf-8">
+    <title>Survey</title>
+    <!-- Bootstrap -->
+    <link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- jQuery -->
+    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap -->
+    <script src="~/bootstrap/js/bootstrap.min.js"></script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="~/Scripts/jquery-3.5.1.min.js"></script>
+    <!-- jQuery UI -->
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+
+    <link href="~/css/survey.css" rel="stylesheet" />
+
 </head>
 <body>
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
-        
-        <div class="form-horizontal">
-            <h4>QUESTION</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.HiddenFor(model => model.ID)
-    
-            <div class="form-group">
-                @Html.LabelFor(model => model.NO, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.NO, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.NO, "", new { @class = "text-danger" })
-                </div>
+    <div class="container">
+        <div class="row text-center header">
+            <div class="title">
+                <h1>KHẢO SÁT NHÀ ĂN CJ VINA AGRI</h1>
             </div>
-    
-            <div class="form-group">
-                @Html.LabelFor(model => model.QUESTION_CONTENT, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.QUESTION_CONTENT, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.QUESTION_CONTENT, "", new { @class = "text-danger" })
-                </div>
-            </div>
-    
-            <div class="form-group">
-                @Html.LabelFor(model => model.ANSWER_ID, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.ANSWER_ID, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.ANSWER_ID, "", new { @class = "text-danger" })
-                </div>
-            </div>
-    
-            <div class="form-group">
-                @Html.LabelFor(model => model.NOTE, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.NOTE, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.NOTE, "", new { @class = "text-danger" })
-                </div>
-            </div>
-    
-            <div class="form-group">
-                @Html.LabelFor(model => model.DEL, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <div class="checkbox">
-                        @Html.EditorFor(model => model.DEL)
-                        @Html.ValidationMessageFor(model => model.DEL, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-            </div>
-    
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-default" />
-                </div>
+            <div class="title-description">
+                <h4>
+                    - Để tổng kết lại quá trình hoạt động của nhà ăn công ty trong năm 2020, cũng như chất lượng phục vụ, chất lượng bữa ăn của nhà ăn công ty. Nay phòng nhân sự tiến hành khảo sát thông tin ý kiến từ Anh/Chị công nhân viên công ty để cải thiện nhà ăn ngày càng tốt hơn.<br />
+                    - Anh/Chị vui lòng dành chút thời gian thực hiện bảng khảo sát dưới đây:<br />
+                </h4>
+                <h4><b>Xin trân trọng cảm ơn!</b></h4>
             </div>
         </div>
-    }
-    
-    <div>
-        @Html.ActionLink("Back to List", "Index")
+        <br />
+        <div class="row explain">
+            <pre>
+Anh/Chị vui lòng chọn câu trả lời với mức độ từ thấp lên cao (từ 1 đến 5) cho những câu hỏi dưới đây:
+1. Rất không hài lòng       2. Không hài lòng       3. Bình thường       4. Hài lòng      5. Rất hài lòng
+                </pre>
+        </div>
+        <div class="row">
+            <div class="container">
+                @using (Html.BeginForm("CanteenSurvey", "Survey", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    int radioNo = 0;
+                    int textNo = 0;
+                    foreach (var item_question in Model)
+                    {
+                        int questionNo = Convert.ToInt32(item_question.No);
+
+                        if (questionNo < (int)ViewBag.Switch)
+                        {
+                            <div class="row question">
+                                <div class="col-sm-8">
+                                    <label>
+                                        <span>@item_question.Outlining</span>
+                                        @item_question.QUESTION_CONTENT.ToString().ToUpper()
+                                    </label>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input type="radio" name="answerRadios[@radioNo]" value="Rất không hài lòng" />
+                                    <label style="color:blue; padding-right: 20px;"> (1) </label>
+                                    <input type="radio" name="answerRadios[@radioNo]" value="Không hài lòng" />
+                                    <label style="color:blue; padding-right: 20px;"> (2) </label>
+                                    <input type="radio" name="answerRadios[@radioNo]" value="Bình thường" checked="checked" />
+                                    <label style="color:blue; padding-right: 20px;"> (3) </label>
+                                    <input type="radio" name="answerRadios[@radioNo]" value="Hài lòng" />
+                                    <label style="color:blue; padding-right: 20px;"> (4) </label>
+                                    <input type="radio" name="answerRadios[@radioNo]" value="Rất hài lòng" />
+                                    <label style="color:blue; padding-right: 20px;"> (5)</label>
+                                </div>
+                            </div>
+                            radioNo++;
+                        }
+                        else
+                        {
+                            if (questionNo == 7)
+                            {
+                                <div class="row additionquestion">
+                                    <div class="col-sm-8">
+                                        <div class="col-sm-12">
+                                            <label>
+                                                <span>@item_question.Outlining</span>
+                                                @item_question.QUESTION_CONTENT.ToString().ToUpper()
+                                            </label>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <textarea class="form-control material" name="answertexts[@textNo]" rows="3" placeholder="Nhập ý kiến"></textarea>
+                                            <input type="text" name="questions[@textNo]" value="@item_question.ID" hidden="hidden" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="row question">
+                                    <div class="col-sm-8">
+                                        <label>
+                                            <span>@item_question.Outlining</span>
+                                            @item_question.QUESTION_CONTENT.ToString().ToUpper()
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-8 textanswer">
+                                        <textarea class="form-control material" name="answertexts[@textNo]" rows="3" placeholder="Nhập ý kiến"></textarea>
+                                        <input type="text" name="questions[@textNo]" value="@item_question.ID" hidden="hidden" />
+                                    </div>
+                                </div>
+                            }
+                            textNo++;
+                        }
+                    }
+                    <br />
+                    <div class="row text-center">
+                        <input type="submit" value="Submit" class="btn btn-primary" />
+                    </div>
+                }
+            </div>
+        </div>
     </div>
 </body>
 </html>
