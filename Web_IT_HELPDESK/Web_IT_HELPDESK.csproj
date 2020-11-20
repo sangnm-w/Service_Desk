@@ -1616,8 +1616,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Report\Report_Viewer.rdlc" />
-    <EmbeddedResource Include="Report\Report_BizTrip.rdlc" />
+    <Content Include="Report\Report_Viewer.rdlc" />
+    <Content Include="Report\Report_BizTrip.rdlc" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />
