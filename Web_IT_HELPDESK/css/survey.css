@@ -1,0 +1,88 @@
+﻿body {
+    background-color: #f8f0c9;
+    color: black;
+}
+
+.header {
+    border: 1px solid #4f1f4f;
+    border-radius: 10px;
+    background-color: #f0f3f3;
+}
+
+.title {
+    color: #004bff;
+}
+
+.title-description {
+    font-size: 1.2em;
+    font-style: italic;
+    color: #393e46;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+    .title-description :first-child{
+        text-align: left;
+    }
+
+.explain {
+    text-align: center;
+}
+
+    .explain pre {
+        margin: auto;
+        width: fit-content;
+    }
+
+.container {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.row.question {
+    margin-top: 50px;
+}
+
+    .row.question span {
+        padding: 0px;
+        margin: 0px;
+        white-space: nowrap;
+    }
+
+.row.subquestion {
+}
+
+    .row.subquestion > :first-child {
+        margin-top: 15px;
+        padding-left: 30px;
+    }
+
+.row.additionquestion div {
+    padding: 0px;
+    margin: 0px;
+}
+
+.row.additionquestion > :first-child {
+    padding-left: 90px;
+}
+
+.textanswer {
+    padding: 0px;
+    margin: 0px;
+    padding-left: 90px;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 34px;
+    max-height: 102px;
+}
+
+    textarea.material {
+        border: none;
+        border-bottom: 2px solid #ccc;
+        /*box-shadow: rgb(128, 128, 128) 2px 2px inset;*/
+        box-shadow: none;
+        background: none !important;
+        color: black;
+    }

@@ -1,0 +1,152 @@
+﻿@using Web_IT_HELPDESK
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Survey</title>
+    <!-- Bootstrap -->
+    <link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- jQuery -->
+    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap -->
+    <script src="~/bootstrap/js/bootstrap.min.js"></script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="~/Scripts/jquery-3.5.1.min.js"></script>
+    <!-- jQuery UI -->
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+
+    <link href="~/css/survey.css" rel="stylesheet" />
+
+</head>
+<body>
+    <div class="container">
+        <div class="row text-center header">
+            <div class="title">
+                <h1>BẢNG ĐÁNH GIÁ CHẤT LƯỢNG DỊCH VỤ BẢO VỆ</h1>
+                <h1>CÔNG TY TNHH DỊCH VỤ BẢO VỆ VIỆT NHẬT - YUKI SEPRE 24</h1>
+            </div>
+            <div class="title-description">
+                <h4>
+                    - Trước tiên Phòng Nhân sự xin chân thành cảm ơn Anh/Chị đã tích cực tham gia đóng góp ý kiến và hoàn thành bảng đánh giá này.
+                    Nhằm cải thiện chất lượng dịch vụ bảo vệ theo hướng tốt hơn, chúng tôi có chuẩn bị một số câu hỏi ngắn xin Anh/Chị vui lòng trả lời.
+                    Sự đóng góp ý kiến của bạn sẽ là cơ sở quý báu để Chúng ta xem xét, điều chỉnh và nâng cao chất lượng dịch vụ bảo vệ về sau.<br />
+                    - Anh chị vui lòng đánh giá theo mức <b><u> 1 ~ 5 </u></b> tương ứng với mức độ hài lòng từ <b><u> thấp đến cao </u></b>.<br />
+                </h4>
+                <h4>
+                    <b>Xin trân trọng cảm ơn!</b>
+                </h4>
+            </div>
+        </div>
+        <br />
+        <div class="row explain">
+            <pre>
+Anh/Chị vui lòng chọn câu trả lời với mức độ từ thấp lên cao (từ 1 đến 5) cho những câu hỏi dưới đây:
+1. Hoàn toàn không đồng ý       2. Không đồng ý       3. Bình thường       4. Đồng ý      5. Hoàn toàn đồng ý
+                </pre>
+        </div>
+        <div class="row">
+            <div class="container">
+                @using (Html.BeginForm("SecuritySurvey", "Survey", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    int radioNo = 0;
+                    int textNo = 0;
+                    foreach (var item_question in new ServiceDeskEntities().QUESTIONs.Where(i => i.DEL != true && i.NOTE == "SecuritySurvey"))
+                    {
+                        int questionNo = Convert.ToInt32(item_question.No);
+                        if (questionNo == 0)
+                        {
+                            <div class="row question">
+                                <div class="col-sm-8">
+                                    <label>
+                                        @item_question.Outlining<span> ) .    </span>
+                                        @item_question.QUESTION_CONTENT.ToString().ToUpper()
+                                    </label>
+                                </div>
+                                <div class="col-sm-4">
+                                </div>
+                            </div>
+                            continue;
+                        }
+                        if (questionNo <= 16)
+                        {
+                            if (@item_question.Outlining.Contains('.'))
+                            {
+                                <div class="row subquestion">
+                                    <div class="col-sm-8">
+                                        <label>
+                                            @item_question.Outlining<span> ) .    </span>
+                                            @item_question.QUESTION_CONTENT.ToString().ToUpper()
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input type="radio" name="answerRadios[@radioNo]" value="Hoàn toàn không đồng ý" />
+                                        <label style="color:blue; padding-right: 20px;"> (1) </label>
+                                        <input type="radio" name="answerRadios[@radioNo]" value="Không đồng ý" />
+                                        <label style="color:blue; padding-right: 20px;"> (2) </label>
+                                        <input type="radio" name="answerRadios[@radioNo]" value="Bình thường" checked="checked" />
+                                        <label style="color:blue; padding-right: 20px;"> (3) </label>
+                                        <input type="radio" name="answerRadios[@radioNo]" value="Đồng ý" />
+                                        <label style="color:blue; padding-right: 20px;"> (4) </label>
+                                        <input type="radio" name="answerRadios[@radioNo]" value="Hoàn toàn đồng ý" />
+                                        <label style="color:blue; padding-right: 20px;"> (5)</label>
+                                    </div>
+                                </div>
+                                radioNo++;
+                            }
+                            else
+                            {
+                                <div class="row question">
+                                    <div class="col-sm-8">
+                                        <label>
+                                            @item_question.Outlining<span> ) .    </span>
+                                            @item_question.QUESTION_CONTENT.ToString().ToUpper()
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input type="radio" name="answerRadios[@radioNo]" value="Hoàn toàn không đồng ý" />
+                                        <label style="color:blue; padding-right: 20px;"> (1) </label>
+                                        <input type="radio" name="answerRadios[@radioNo]" value="Không đồng ý" />
+                                        <label style="color:blue; padding-right: 20px;"> (2) </label>
+                                        <input type="radio" name="answerRadios[@radioNo]" value="Bình thường" checked="checked" />
+                                        <label style="color:blue; padding-right: 20px;"> (3) </label>
+                                        <input type="radio" name="answerRadios[@radioNo]" value="Đồng ý" />
+                                        <label style="color:blue; padding-right: 20px;"> (4) </label>
+                                        <input type="radio" name="answerRadios[@radioNo]" value="Hoàn toàn đồng ý" />
+                                        <label style="color:blue; padding-right: 20px;"> (5)</label>
+                                    </div>
+                                </div>
+                                radioNo++;
+                            }
+                        }
+                        else
+                        {
+                            <div class="row question">
+                                <div class="col-sm-8">
+                                    <label>
+                                        <span>@item_question.Outlining</span>
+                                        @item_question.QUESTION_CONTENT.ToString().ToUpper()
+                                    </label>
+                                </div>
+                                <div class="col-sm-8 textanswer">
+                                    <textarea class="form-control material" name="answertexts[@textNo]" rows="3" placeholder="Nhập ý kiến"></textarea>
+                                    <input type="text" name="questions[@textNo]" value="@item_question.ID" hidden="hidden" />
+                                </div>
+                            </div>
+                            textNo++;
+                        }
+                    }
+                    <br />
+                    <div class="row text-center">
+                        <input type="submit" value="Submit" class="btn btn-primary" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</body>
+</html>

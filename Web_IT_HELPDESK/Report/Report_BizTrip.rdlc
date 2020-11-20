@@ -629,7 +629,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>="Company (Tên công ty): " &amp; First(Fields!VEHICLE.Value, "DataSetBizTrip")</Value>
+                    <Value>="Company (Tên công ty): " &amp; First(Fields!CONTACT_COMPANY.Value, "DataSetBizTrip")</Value>
                     <Style>
                       <FontStyle>Normal</FontStyle>
                       <FontFamily>Times New Roman</FontFamily>
@@ -643,8 +643,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>4.81889in</Top>
-            <Left>0.53166in</Left>
+            <Top>4.805in</Top>
+            <Left>0.51777in</Left>
             <Height>0.25in</Height>
             <Width>3.4in</Width>
             <ZIndex>14</ZIndex>
@@ -743,7 +743,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>="Contact person (Người liên hệ): " &amp; First(Fields!CONTACT_COMPANY.Value, "DataSetBizTrip")</Value>
+                    <Value>="Contact person (Người liên hệ): " &amp; First(Fields!CONTACT_PERSON.Value, "DataSetBizTrip")</Value>
                     <Style>
                       <FontStyle>Normal</FontStyle>
                       <FontFamily>Times New Roman</FontFamily>
