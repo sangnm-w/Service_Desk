@@ -37,7 +37,7 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 Department_Id = d.Department_Id,
                 Department_Name = d.Department_Name
-            }).OrderByDescending(d => d.Department_Name).ToList();
+            }).OrderBy(d => d.Department_Name).ToList();
             ViewBag.Departments = depts;
 
             var contracts = en.CONTRACTs.Where(c => c.DEL == false);

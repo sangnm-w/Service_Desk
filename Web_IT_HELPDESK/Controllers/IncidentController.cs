@@ -29,10 +29,6 @@ namespace Web_IT_HELPDESK.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.INDEX, Commons.ModuleConstant.INCIDENT);
-            if (hasPermission.Value == false)
-                return RedirectToAction("Index", "Home");
-
             bool IsAdmin = CurrentUser.Instance.isAdministrator.HasValue ? CurrentUser.Instance.isAdministrator.Value : false;
             ViewBag.IsAdmin = IsAdmin;
             ViewBag.Rules = CurrentUser.Instance.RulesByModuleName(Commons.ModuleConstant.INCIDENT).Select(r => r.Rule_Name).ToList();
@@ -91,10 +87,6 @@ namespace Web_IT_HELPDESK.Controllers
         [HttpPost]
         public ActionResult Index(string solved, string _datetime, string plants)
         {
-            bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.INDEX, Commons.ModuleConstant.INCIDENT);
-            if (hasPermission.Value == false)
-                return RedirectToAction("Index", "Home");
-
             bool IsAdmin = CurrentUser.Instance.isAdministrator.HasValue ? CurrentUser.Instance.isAdministrator.Value : false;
             ViewBag.IsAdmin = IsAdmin;
             ViewBag.Rules = CurrentUser.Instance.RulesByModuleName(Commons.ModuleConstant.INCIDENT).Select(r => r.Rule_Name).ToList();
@@ -160,9 +152,9 @@ namespace Web_IT_HELPDESK.Controllers
         // GET: /Incident/Details
         public ActionResult Details(Guid? inc_id)
         {
-            bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.DETAILS, Commons.ModuleConstant.INCIDENT);
-            if (hasPermission.Value == false)
-                return RedirectToAction("Index", "Home");
+            //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.DETAILS, Commons.ModuleConstant.INCIDENT);
+            //if (hasPermission.Value == false)
+            //    return RedirectToAction("Index", "Home");
 
             Incident inc = en.Incidents.Find(inc_id);
 
@@ -181,42 +173,25 @@ namespace Web_IT_HELPDESK.Controllers
         // GET: /Incident/Create
         public ActionResult Create()
         {
-            bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.CREATE, Commons.ModuleConstant.INCIDENT);
-            if (hasPermission.Value == false)
-            {
-                TempData["message"] = "You do not have permission to access this module!";
-                return RedirectToAction("Index", "Home");
-            }
+            Incident inc = new Incident();
+            inc.Code = IncidentModel.Instance.Generate_IncidentCode(curr_plantId);
+            inc.User_create = session_emp;
+            inc.Plant = curr_plantId;
+            inc.DepartmentId = curr_deptId;
+            inc.StatusId = "ST1";
 
-            if (session_emp == "")
-                return RedirectToAction("LogOn", "LogOn");
-            else
-            {
-                Incident inc = new Incident();
-                inc.Code = IncidentModel.Instance.Generate_IncidentCode(curr_plantId);
-                inc.User_create = session_emp;
-                inc.Plant = curr_plantId;
-                inc.DepartmentId = curr_deptId;
-                inc.StatusId = "ST1";
-
-
-                ViewBag.UserCreateName = CurrentUser.Instance.User.EmployeeName;
-                ViewBag.plantName = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_plantId).Plant_Name;
-                ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", en.Levels.First().LevelId);
-                ViewBag.StatusName = en.Status.FirstOrDefault(s => s.StatusId == "ST1").StatusName;
-                ViewBag.DepartmentName = DepartmentModel.Instance.getDeptName(curr_plantId, curr_deptId);
-                return View(inc);
-            }
+            ViewBag.UserCreateName = CurrentUser.Instance.User.EmployeeName;
+            ViewBag.plantName = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_plantId).Plant_Name;
+            ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", en.Levels.First().LevelId);
+            ViewBag.StatusName = en.Status.FirstOrDefault(s => s.StatusId == "ST1").StatusName;
+            ViewBag.DepartmentName = DepartmentModel.Instance.getDeptName(curr_plantId, curr_deptId);
+            return View(inc);
         }
 
         // POST: /Incident/Create
         [HttpPost]
         public ActionResult Create(Incident incident, HttpPostedFileBase attachment)
         {
-            bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.CREATE, Commons.ModuleConstant.INCIDENT);
-            if (hasPermission.Value == false)
-                return RedirectToAction("Index", "Home");
-
             attachment = attachment ?? Request.Files["attachment"];
             if (ModelState.IsValid)
             {
@@ -269,9 +244,9 @@ namespace Web_IT_HELPDESK.Controllers
         // GET: /Incident/Edit
         public ActionResult Edit(Guid? inc_id)
         {
-            bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.EDIT, Commons.ModuleConstant.INCIDENT);
-            if (hasPermission.Value == false)
-                return RedirectToAction("Index", "Home");
+            //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.EDIT, Commons.ModuleConstant.INCIDENT);
+            //if (hasPermission.Value == false)
+            //    return RedirectToAction("Index", "Home");
 
             Incident inc = en.Incidents.Find(inc_id);
 
@@ -288,9 +263,9 @@ namespace Web_IT_HELPDESK.Controllers
         [HttpPost]
         public ActionResult Edit(Incident inc, HttpPostedFileBase attachment)
         {
-            bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.EDIT, Commons.ModuleConstant.INCIDENT);
-            if (hasPermission.Value == false)
-                return RedirectToAction("Index", "Home");
+            //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.EDIT, Commons.ModuleConstant.INCIDENT);
+            //if (hasPermission.Value == false)
+            //    return RedirectToAction("Index", "Home");
 
             attachment = attachment ?? Request.Files["attachment"];
             if (ModelState.IsValid)
@@ -339,9 +314,9 @@ namespace Web_IT_HELPDESK.Controllers
         // GET: /Incident/Solve
         public ActionResult Solve(Guid? inc_id)
         {
-            bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.SOLVE, Commons.ModuleConstant.INCIDENT);
-            if (hasPermission.Value == false)
-                return RedirectToAction("Index", "Home");
+            //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.SOLVE, Commons.ModuleConstant.INCIDENT);
+            //if (hasPermission.Value == false)
+            //    return RedirectToAction("Index", "Home");
 
             Incident inc = en.Incidents.Find(inc_id);
             inc.StatusId = "ST6";
@@ -360,9 +335,9 @@ namespace Web_IT_HELPDESK.Controllers
         [HttpPost]
         public ActionResult Solve(Incident inc)
         {
-            bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.SOLVE, Commons.ModuleConstant.INCIDENT);
-            if (hasPermission.Value == false)
-                return RedirectToAction("Index", "Home");
+            //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.SOLVE, Commons.ModuleConstant.INCIDENT);
+            //if (hasPermission.Value == false)
+            //    return RedirectToAction("Index", "Home");
 
             if (inc.StatusId == "ST6" && ModelState.IsValid)
             {
@@ -402,9 +377,9 @@ namespace Web_IT_HELPDESK.Controllers
         // GET: /Incident/Delete
         public ActionResult Delete(int id)
         {
-            bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.DELETE, Commons.ModuleConstant.INCIDENT);
-            if (hasPermission.Value == false)
-                return RedirectToAction("Index", "Home");
+            //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.DELETE, Commons.ModuleConstant.INCIDENT);
+            //if (hasPermission.Value == false)
+            //    return RedirectToAction("Index", "Home");
 
             return View();
         }
@@ -413,9 +388,9 @@ namespace Web_IT_HELPDESK.Controllers
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
-            bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.DELETE, Commons.ModuleConstant.INCIDENT);
-            if (hasPermission.Value == false)
-                return RedirectToAction("Index", "Home");
+            //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.DELETE, Commons.ModuleConstant.INCIDENT);
+            //if (hasPermission.Value == false)
+            //    return RedirectToAction("Index", "Home");
 
             try
             {
@@ -432,9 +407,9 @@ namespace Web_IT_HELPDESK.Controllers
         [HttpGet]
         public ActionResult Get_file(Guid? inc_id)
         {
-            bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.DOWNLOAD, Commons.ModuleConstant.INCIDENT);
-            if (hasPermission.Value == false)
-                return RedirectToAction("Index", "Home");
+            //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.DOWNLOAD, Commons.ModuleConstant.INCIDENT);
+            //if (hasPermission.Value == false)
+            //    return RedirectToAction("Index", "Home");
 
             Incident inc = en.Incidents.Find(inc_id);
             string inc_code = inc.Code;
@@ -457,9 +432,9 @@ namespace Web_IT_HELPDESK.Controllers
 
         public ActionResult Download()
         {
-            bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.DOWNLOAD, Commons.ModuleConstant.INCIDENT);
-            if (hasPermission.Value == false)
-                return RedirectToAction("Index", "Home");
+            //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.DOWNLOAD, Commons.ModuleConstant.INCIDENT);
+            //if (hasPermission.Value == false)
+            //    return RedirectToAction("Index", "Home");
 
             Dictionary<string, string> Params = (Dictionary<string, string>)Session["Params"];
 
