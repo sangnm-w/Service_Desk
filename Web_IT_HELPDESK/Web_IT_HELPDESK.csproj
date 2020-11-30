@@ -656,6 +656,13 @@
     </Content>
     <Content Include="vendors\BootstrapDatepicker\bootstrap-datepicker.min.css" />
     <Content Include="vendors\BootstrapDatepicker\bootstrap-datepicker.min.js" />
+    <Content Include="vendors\CustomInputFile\css\component.css" />
+    <Content Include="vendors\CustomInputFile\css\CustomInputFile.css" />
+    <Content Include="vendors\CustomInputFile\css\demo.css" />
+    <Content Include="vendors\CustomInputFile\css\normalize.css" />
+    <Content Include="vendors\CustomInputFile\js\custom-file-input.js" />
+    <Content Include="vendors\CustomInputFile\js\jquery-v1.min.js" />
+    <Content Include="vendors\CustomInputFile\js\jquery.custom-file-input.js" />
     <Content Include="vendors\datatables\css\demo_page.css" />
     <Content Include="vendors\datatables\css\demo_table.css" />
     <Content Include="vendors\datatables\css\demo_table_jui.css" />
@@ -1564,6 +1571,7 @@
     <Content Include="ServicesDesk.edmx.diagram">
       <DependentUpon>ServicesDesk.edmx</DependentUpon>
     </Content>
+    <Content Include="vendors\CustomInputFile\js\.DS_Store" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

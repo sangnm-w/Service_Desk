@@ -304,7 +304,6 @@ namespace Web_IT_HELPDESK.Controllers
                                         dc.SaveChanges();
                                     }
                                     j += 1;
-                                    //}
                                 }
                                 catch { }
                                 ViewBag.Message = "Data successfully saved!";
