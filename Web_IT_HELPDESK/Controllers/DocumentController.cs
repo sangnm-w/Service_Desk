@@ -6,6 +6,8 @@ using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
+using Web_IT_HELPDESK.Models;
+using Web_IT_HELPDESK.ViewModels;
 
 namespace Web_IT_HELPDESK.Controllers
 {
@@ -93,27 +95,50 @@ namespace Web_IT_HELPDESK.Controllers
             return View(employeeinfo);
         }
 
+
+        //GET: ContactList/Index
         public ActionResult Contactlist2()
         {
-            if (session_emp != "")
-            {
-                var emp_infor = en.Employees.Where(i => i.Deactive != true && i.Plant_Id == "V2010");
-                return View(emp_infor);
-            }
-            else return View();
+            string curr_PlantID = CurrentUser.Instance.User.Plant_Id;
+            var employeeList = en.Employees.Where(e => e.Deactive != true && e.Plant_Id == curr_PlantID);
+
+            List<PlantViewModel> plants = en.Departments.Select(d => new PlantViewModel { Plant_Id = d.Plant_Id, Plant_Name = d.Plant_Name }).Distinct().ToList();
+            ViewBag.plants = plants;
+
+            List<DepartmentViewModel> departments = en.Departments.Where(d => d.Plant_Id == curr_PlantID).Select(d => new DepartmentViewModel { Department_Id = d.Department_Id, Department_Name = d.Department_Name }).Distinct().ToList();
+            ViewBag.departments = departments;
+
+
+            ViewBag.curr_PlantID = curr_PlantID;
+            return View(employeeList);
         }
 
+        //POST: ContactList/Index
         private string session_emp = System.Web.HttpContext.Current.User.Identity.Name;
         [Authorize]
         [HttpPost]
-        public ActionResult Contactlist2(string solved)
+        public ActionResult Contactlist2(string plantid)
         {
-            if (session_emp != "")
-            {
-                var emp_infor = en.Employees.Where(i => i.Deactive != true && i.Plant_Id == solved);
-                return View(emp_infor);
-            }
-            else return View();
+            var employeeList = en.Employees.Where(e => e.Deactive != true && e.Plant_Id == plantid);
+
+            List<PlantViewModel> plants = en.Departments
+                .Select(d => new PlantViewModel
+                {
+                    Plant_Id = d.Plant_Id,
+                    Plant_Name = d.Plant_Name
+                }).Distinct().ToList();
+            ViewBag.plants = plants;
+
+            List<DepartmentViewModel> departments = en.Departments
+                .Where(d => d.Plant_Id == plantid)
+                .Select(d => new DepartmentViewModel
+                {
+                    Department_Id = d.Department_Id,
+                    Department_Name = d.Department_Name
+                }).Distinct().ToList();
+            ViewBag.departments = departments;
+
+            return View(employeeList);
         }
 
         [HttpGet]

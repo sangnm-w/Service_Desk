@@ -1,14 +1,14 @@
 ﻿@model IEnumerable<Web_IT_HELPDESK.Employee>
 
 @{
-    ViewBag.Title = "ContactList2";
+    ViewBag.Title = "Contacts";
 }
 
 <div class="content-box-large">
     <h4>IT Devices</h4>
     <div class="panel panel-default">
         <div class="panel-body">
-            @using (Html.BeginForm("Contactlist2", "Document", FormMethod.Post))
+            @using (Html.BeginForm("Index", "Contacts", FormMethod.Post))
             {
                 <div class="row">
                     @foreach (var item in ViewBag.plants)
@@ -34,8 +34,8 @@
         </div>
     </div>
     <div style="text-align:right">
-        <a href="@Url.Action("Download", "Contact")" data-rel="download" class="btn btn-default">
-            Download this contact file
+        <a href="@Url.Action("Download", "Contacts", new { plantid = ViewBag.curr_PlantID})" data-rel="download" class="btn btn-xs btn-warning">
+            Download &nbsp;
             <i class="glyphicon glyphicon-download-alt"></i>
         </a>
     </div>
@@ -52,19 +52,19 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        Employee_No
+                                        Employee No
                                     </th>
                                     <th>
-                                        FULL_NAME
+                                        Full Name
                                     </th>
                                     <th>
-                                        EMAIL
+                                        Email
                                     </th>
                                     <th>
-                                        PHONE
+                                        Phone
                                     </th>
                                     <th>
-                                        BIRTHDAY
+                                        Birthday
                                     </th>
                                 </tr>
                             </thead>
