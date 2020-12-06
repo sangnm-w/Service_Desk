@@ -208,6 +208,7 @@
     <Compile Include="Controllers\ContactEmployeeController.cs" />
     <Compile Include="Controllers\CONTRACTController.cs" />
     <Compile Include="Controllers\DevicesController.cs" />
+    <Compile Include="Controllers\Device_TypeController.cs" />
     <Compile Include="Controllers\ObjectManager\BizTripHelper.cs" />
     <Compile Include="Controllers\ObjectManager\ExcelTitle.cs" />
     <Compile Include="Controllers\DocumentController.cs" />
@@ -291,7 +292,7 @@
     <Compile Include="Models\AllocationModel.cs" />
     <Compile Include="Models\AutoCompleteModel.cs" />
     <Compile Include="Models\Biz_TripViewModel.cs" />
-    <Compile Include="Models\ContractViewModel.cs" />
+    <Compile Include="ViewModels\ContractViewModel.cs" />
     <Compile Include="Models\DepartmentModel.cs" />
     <Compile Include="Models\DeviceModel.cs" />
     <Compile Include="Models\DisplayNameViewModels.cs" />
@@ -376,6 +377,7 @@
       <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\AllocationViewModel.cs" />
+    <Compile Include="ViewModels\ContractSubViewModel.cs" />
     <Compile Include="ViewModels\DepartmentViewModel.cs" />
     <Compile Include="ViewModels\DeviceViewModel.cs" />
     <Compile Include="ViewModels\IncidentViewModel.cs" />
@@ -1572,6 +1574,13 @@
       <DependentUpon>ServicesDesk.edmx</DependentUpon>
     </Content>
     <Content Include="vendors\CustomInputFile\js\.DS_Store" />
+    <Content Include="Views\Device_Type\Create.cshtml" />
+    <Content Include="Views\Device_Type\Delete.cshtml" />
+    <Content Include="Views\Device_Type\Details.cshtml" />
+    <Content Include="Views\Device_Type\Edit.cshtml" />
+    <Content Include="Views\Device_Type\Index.cshtml" />
+    <Content Include="Views\CONTRACT\CreateCONTRACTViewModel2 - Copy.cshtml" />
+    <Content Include="Views\CONTRACT\EditCONTRACTViewModel - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
