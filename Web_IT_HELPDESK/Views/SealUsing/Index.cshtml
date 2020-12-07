@@ -1,146 +1,157 @@
-﻿@model IEnumerable<Web_IT_HELPDESK.Seal_Using>
+﻿@model IEnumerable<Web_IT_HELPDESK.ViewModels.SealUsingViewModel>
 @using Web_IT_HELPDESK
 
 @{
     ViewBag.Title = "Seal Using";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="content-box-large">
+    <h4>Seal Using Page</h4>
+    <div class="panel panel-default">
+        <div class="panel-body">
 
-<div class="page-content">
-    <div class="row">
-
-        <div class="col-md-10">
-            <div class="content-box-large">
-
-
-                <h2>Index - Trang chủ sử dụng con dấu</h2>
-
-                <p>
-                    @Html.ActionLink("Create New", "Create")
-                </p>
-
-                @using (Html.BeginForm())
-                {
-                    <p>
-                        Find (tìm theo tên, mã phòng ban): 
-                        @Html.TextBox("SearchString", "", new { @class = "text-box single-line", @style = "background-color:#A9BCF5;" })    
-                        Tháng năm: @Html.TextBox("_datetime", DateTime.Now.Month.ToString("00") + "/" + DateTime.Now.Year.ToString("0000"), new { @class = "text-box single-line", @MaxLength = "7", @style = "background-color:#A9BCF5;" })
-                        <input type="submit" value="Search" />
-                    </p>
-                }
-
-                <div class="panel-heading">
-                    <div class="panel-body">
-                        <table class="table table-hover" cellpadding="0" cellspacing="0" border="0" id="example" aria-describedby="example_info">
-                            <thead>
-                                <tr>
-                                    <td>
-                                        No.
-                                    </td>
-                                    <th>
-                                        Date-Ngày
-                                    </th>
-                                    <th>
-                                        Register-Người đăng ký
-                                    </th>
-                                    <th>
-                                        Type Doc-Loại VB
-                                    </th>
-                                    <th>
-                                        Name-Tên PB
-                                    </th>
-                                    <th>
-                                        Code-Số hiệu
-                                    </th>
-                                    <th>
-                                        Content-Nội dung
-                                    </th>
-                                    <th>
-                                        Receive Doc-Nơi nhận VB
-                                    </th>
-                                    <th>
-                                        Effective Date-Ngày hiệu lực
-                                    </th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @using (Html.BeginForm("Resend", "SealUsing", FormMethod.Post))
-                                {
-                                    int j = 0;
-                                    foreach (var item in Model)
-                                    {
-                                        j = (Int16)j + 1;
-                                        bool department_confirm = item.Department_confirm;
-                                        bool Employee_Seal_keep_confrim = item.Employee_Seal_keep_confrim;
-                                        string plant = item.Plant;
-                                        <tr style="@(department_confirm == false && plant == "0301" ? "Background-color:#99FF99" :
-                                     department_confirm==false  && (plant == "0304" || plant == "0302" || plant == "0305"
-                                                                                        || plant == "0303"|| plant == "0308")  ? "Background-color:#99FF99" :
-                                     department_confirm==true  &&  Employee_Seal_keep_confrim==false  && ( plant == "0304"  || plant == "0302" || plant == "0305"
-                                                                                        || plant == "0303"|| plant == "0308") ? "Background-color:#F3F781" : "")">
-                                            <td>
-                                                @j.ToString()
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Date)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Employee_name)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Type_document)
-                                            </td>
-                                            <td>
-                                                @Html.TextBox("DepartmentName", new ServiceDeskEntities().Departments.Where(i => i.Deactive != true
-                                                                                                        && i.Department_Id == item.DepartmentId
-                                                                                                        && i.Plant_Id == item.Plant).Select(o => o.Department_Name).SingleOrDefault().ToString(),
-                                                                                                        new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()", @style = "background-color:#DEDEDE;" })
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Code_number)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Context)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Place_Recipient)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Period_date)
-                                            </td>
-                                            <td>
-                                                <!--@Html.ActionLink("Edit", "Edit", new { id=item.Id }) |-->
-                                                <!-- @Html.ActionLink("Details", "Details", new { id=item.Id }) |-->
-                                                @Html.ActionLink("Delete", "Delete", new { id = item.Id })|
-                                                <!--@Html.ActionLink("Confirm", "Confirm", new { id=item.Id }) |-->
-
-                                                @if (@item.Department_confirm == false && (Convert.ToString(Session["employee_id"]) == "admin"
-                                                                                            || Convert.ToString(Session["employee_id"]) == "D83003"
-                                                                                            || Convert.ToString(Session["employee_id"]) == "V78157"
-                                                                                            || Convert.ToString(Session["employee_id"]) == "MK78072"
-                                                                                            || Convert.ToString(Session["employee_id"]) == "H88768"
-                                                                                            || Convert.ToString(Session["employee_id"]) == "HN91185"
-                                                                                            || Convert.ToString(Session["employee_id"]) == "HN92244"))
-                                                {
-                                                    <p>
-                                                        <!--[Resend]<input type="submit" value="item.Id.ToString()" name="seal_usings[0]"/>
-                                                        {Session[item.Id.ToString()] = item.Id;}-->
-
-                                                        @Html.ActionLink("Resend", "Resend", new { id = item.Id }, new { @class = "button" })
-
-                                                    </p>
-                                                }
-                                            </td>
-                                        </tr>
-                                    }
-                                }
-                            </tbody>
-                        </table>
+            @using (Html.BeginForm())
+            {
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        @Html.Label("Tên/mã phòng ban:")
+                        @Html.Editor("SearchString", "", new { htmlAttributes = new { @class = "form-control", @style = "background-color:#A9BCF5;" } })
                     </div>
-
+                    <div class="col-sm-12 col-md-6">
+                        @Html.Label("Tháng:")
+                        <div class="input-group date" id="_datetime">
+                            @Html.Editor("_datetime", new { htmlAttributes = new { @class = "form-control", @style = "background-color:#A9BCF5;" } })
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                <br />
+                <div class="row">
+                    <div class="col-sm-12">
+                        <input class="btn btn-default" type="submit" value="Search" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="content-box-header panel-heading">
+            <div class="panel-title">History</div>
+            @*<div class="panel-options">
+                    <a href="@Url.Action("Download", "Incident")" data-rel="download">
+                        <i class="glyphicon glyphicon-download-alt"></i>
+                    </a>
+                </div>*@
+        </div>
+        <div class="panel-body">
+            <table class="table table-bordered table-striped nowrap" id="sealusing" width="100%">
+                <thead>
+                    <tr>
+                        <th>
+                            No.
+                        </th>
+                        <th>
+                            Date
+                        </th>
+                        <th>
+                            Department
+                        </th>
+                        <th>
+                            Register
+                        </th>
+                        <th>
+                            Code
+                        </th>
+                        <th>
+                            Document Type
+                        </th>
+                        <th>
+                            Content
+                        </th>
+                        <th>
+                            Receiving place
+                        </th>
+                        <th>
+                            Effective Date
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @using (Html.BeginForm("Resend", "SealUsing", FormMethod.Post))
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SealUsing.Date)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DeptName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SealUsing.Employee_name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SealUsing.Code_number)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SealUsing.Type_document)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SealUsing.Context)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SealUsing.Place_Recipient)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SealUsing.Period_date)
+                                </td>
+                                <td>
+                            <!--@Html.ActionLink("Edit", "Edit", new { id=item.SealUsing.Id }) |-->
+                            @Html.ActionLink("Details", "Details", new { id = item.SealUsing.Id }, new { @class = "btn btn-primary btn-xs", @role = "button" })
+                            @*@Html.ActionLink("Delete", "Delete", new { id = item.Id })|*@
+                            <!--@Html.ActionLink("Confirm", "Confirm", new { id=item.SealUsing.Id }) |-->
+                            @* @Html.ActionLink("Resend", "Resend", new { id = item.Id }, new { @class = "btn btn-primary btn-xs", @role = "button" })*@
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
+
+@section Script {
+    <script type="text/javascript">
+        var t = $('#sealusing').DataTable({
+            "columnDefs": [{
+                "searchable": false,
+                "orderable": false,
+                "targets": 0
+            }],
+            "order": [[1, 'asc']],
+            "scrollX": true
+        });
+
+        t.on('order.dt search.dt', function () {
+            t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+
+        $('#_datetime').datepicker({
+            format: 'mm/yyyy',
+            autoclose: true,
+            startView: "months",
+            minViewMode: "months"
+        });
+
+        $('#_datetime').datepicker('setDate', 'today');
+    </script>
+}

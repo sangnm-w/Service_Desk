@@ -138,4 +138,10 @@ namespace Web_IT_HELPDESK
         [ScaffoldColumn(false)]
         public string EmployeeID { get; set; }
     }
+
+    public class Seal_UsingMetadata
+    {
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        public Nullable<System.DateTime> Date { get; set; }
+    }
 }

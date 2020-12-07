@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web.Mvc;
 using Web_IT_HELPDESK.Controllers.ObjectManager;
 using Web_IT_HELPDESK.Models;
+using Web_IT_HELPDESK.ViewModels;
 
 namespace Web_IT_HELPDESK.Controllers
 {
@@ -14,51 +15,45 @@ namespace Web_IT_HELPDESK.Controllers
         //
         // GET: /SealUsing/
         ServiceDeskEntities en = new ServiceDeskEntities();
-        private string session_emp = System.Web.HttpContext.Current.User.Identity.Name;
 
+        [Authorize]
         public ActionResult Index()
         {
-            var DepartmentName = from i in en.Departments where i.Deactive != true select i.Department_Name;
-            SelectList deptlist = new SelectList(DepartmentName);
-            ViewBag.DepartmentName = deptlist;
-            string plant_id = CurrentUser.Instance.User.Plant_Id;
+            string curr_PlantID = CurrentUser.Instance.User.Plant_Id;
+            string curr_DeptID = CurrentUser.Instance.User.Department_Id;
 
-            string dept_id = Convert.ToString(GetDept_id(plant_id));
-            string dept_name = en.Departments.Where(o => o.Department_Id == dept_id && o.Plant_Id == plant_id).Select(f => f.Department_Name).SingleOrDefault();
-            ViewBag.DepartmentNameview = dept_name;
-
-            IFormatProvider culture = new CultureInfo("en-US", true);
-            string _datetime = DateTime.Now.ToString("MM/yyyy");
-            from_date = DateTime.ParseExact("01/" + _datetime, "dd/MM/yyyy", culture);
+            from_date = DateTime.ParseExact("01/" + DateTime.Now.ToString("MM/yyyy"), "dd/MM/yyyy", null);
             to_date = from_date.AddMonths(1).AddSeconds(-1);
 
-            if (session_emp != "")
-            {
-                if (session_emp != "admin" && session_emp != "D83003" && session_emp != "MK78072" && session_emp != "H88768" && session_emp != "HN91185" && session_emp != "HN92244")
-                {
-                    var students = en.Seal_Using.Where(i => i.Del != true
-                                                    && i.DepartmentId == dept_id
-                                                    && i.Plant == plant_id
-                                                    && i.Date >= from_date
-                                                    && i.Date <= to_date
-                                                    && i.Plant == plant_id
-                                                    ).OrderByDescending(o => o.Id);
-                    return View(students);//.ToPagedList(pageNumber, pageSize));
-                }
-                else
-                {
-                    var students2 = en.Seal_Using.Where(i => i.Del != true
-                                                          && i.Date >= from_date
-                                                          && i.Date <= to_date
-                                                          && i.Plant == plant_id
-                                                          ).OrderByDescending(o => o.Id);
-                    return View(students2);//.ToPagedList(pageNumber, pageSize));
-                }
-            }
-            else return RedirectToAction("LogOn", "LogOn");
+            //+++++++ Repair for Right_Management +++++++
+            //if (!Admin)
+            //{
+            //    if (!hasPermission)
+            //    {
+            //        sealusings = sealusings.Where(s => s.DepartmentId == curr_DeptID && s.Plant == curr_PlantID).ToList();
+            //    }
+            //}
 
+            var suVM = en.Seal_Using
+                .Where(s => s.Del != true
+                        && s.Plant == curr_PlantID
+                        && s.DepartmentId == curr_DeptID
+                        && s.Date >= from_date
+                        && s.Date <= to_date
+                      )
+                .Join(en.Departments,
+                      s => new { deptID = s.DepartmentId, plantID = s.Plant },
+                      d => new { deptID = d.Department_Id, plantID = d.Plant_Id },
+                      (s, d) => new SealUsingViewModel()
+                      {
+                          SealUsing = s,
+                          DeptName = d.Department_Name
+                      }
+                      )
+                .ToList();
+
+            return View(suVM);
         }
-
 
         private DateTime to_date { get; set; }
         private DateTime from_date { get; set; }
@@ -66,45 +61,45 @@ namespace Web_IT_HELPDESK.Controllers
         [HttpPost]
         public ActionResult Index(string searchString, string _datetime, int? page)
         {
-            //http://www.asp.net/mvc/overview/getting-started/getting-started-with-ef-using-mvc/sorting-filtering-and-paging-with-the-entity-framework-in-an-asp-net-mvc-application
-            IFormatProvider culture = new CultureInfo("en-US", true);
-            from_date = DateTime.ParseExact("01/" + _datetime, "dd/MM/yyyy", culture);
+            string curr_PlantID = CurrentUser.Instance.User.Plant_Id;
+            string curr_DeptID = CurrentUser.Instance.User.Department_Id;
+
+            from_date = DateTime.ParseExact("01/" + _datetime, "dd/MM/yyyy", null);
             to_date = from_date.AddMonths(1).AddSeconds(-1);
 
-            string plant_id = CurrentUser.Instance.User.Plant_Id;
-            string dept_id = Convert.ToString(GetDept_id(plant_id));
-            ViewBag.DepartmentNameview = en.Departments.Where(o => o.Department_Id == dept_id && o.Plant_Id == plant_id).Select(f => f.Department_Name).SingleOrDefault();
+            var sealusings = en.Seal_Using
+                .Where(s => s.Del != true
+                        && s.Date >= from_date
+                        && s.Date <= to_date
+                ).ToList();
 
-            if (session_emp != "")
+            if (!String.IsNullOrEmpty(searchString))
             {
-                var students = from s in en.Seal_Using.Where(i => i.Del != true && i.Date >= from_date && i.Date <= to_date && i.Plant == plant_id).OrderByDescending(o => o.Id)
-                               select s;
-
-                if (session_emp != "admin" && String.IsNullOrEmpty(searchString) && session_emp != "D83003" && session_emp != "V78157"
-                                   || session_emp != "MK78072" || session_emp != "H88768" || session_emp != "HN91185" || session_emp != "HN92244")
-                    students = students.Where(s => s.DepartmentId == dept_id && s.Plant == plant_id).OrderByDescending(i => i.Id);
-                else if (session_emp != "admin" && !String.IsNullOrEmpty(searchString) && session_emp != "D83003" && session_emp != "V78157" // triển khai cho Đồng Nai
-                                               || session_emp != "MK78072" || session_emp != "H88768" || session_emp != "HN91185" || session_emp != "HN92244") // triem khai tat ca chi nhanh
-                    students = students.Where(s => s.DepartmentId == dept_id && (s.DepartmentId.Contains(searchString)
-                                       || s.Employee_name.Contains(searchString)) && s.Plant == plant_id).OrderByDescending(i => i.Id);
-                else if (!String.IsNullOrEmpty(searchString))
-                {
-                    students = students.Where(s => (s.DepartmentId.Contains(searchString)
-                                           || s.Employee_name.Contains(searchString)) && s.Plant == plant_id).OrderByDescending(i => i.Id);
-                    //|| Convert.ToString(s.Date).Contains(searchString));
-                }
-                return View(students);
+                sealusings = sealusings.Where(s => (s.DepartmentId.Contains(searchString) || s.Employee_name.Contains(searchString))).ToList();
             }
-            else return RedirectToAction("LogOn", "LogOn");
-        }
 
+            var suVM = sealusings
+              .Join(en.Departments,
+                    s => new { deptID = s.DepartmentId, plantID = s.Plant },
+                    d => new { deptID = d.Department_Id, plantID = d.Plant_Id },
+                    (s, d) => new SealUsingViewModel()
+                    {
+                        SealUsing = s,
+                        DeptName = d.Department_Name
+                    }
+                    )
+              .ToList();
 
+            //+++++++ Repair for Right_Management +++++++
+            //if (!Admin)
+            //{
+            //    if (!hasPermission)
+            //    {
+            //        sealusings = sealusings.Where(s => s.DepartmentId == curr_DeptID && s.Plant == curr_PlantID).ToList();
+            //    }
+            //}
 
-
-        private string GetDept_id(string v_plant_id)
-        {
-            string dept_id = en.Employees.Where(f => (f.Emp_CJ == session_emp && f.Plant_Id == v_plant_id)).Select(f => f.Department_Id).SingleOrDefault();
-            return dept_id;
+            return View(suVM);
         }
 
         //
@@ -118,24 +113,14 @@ namespace Web_IT_HELPDESK.Controllers
         //
         // GET: /SealUsing/Create
 
+        [Authorize]
         public ActionResult Create()
         {
-            string plant_id = CurrentUser.Instance.User.Plant_Id;
-            if (session_emp == "")
-                return RedirectToAction("LogOn", "LogOn");
-            else
-            {
-                Seal_Using seal_using = new Seal_Using();
-                ViewBag.DepartmentId = GetDept_id(plant_id);
-                string v_dept = GetDept_id(plant_id).ToString();
-                ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == v_dept && o.Plant_Id == plant_id).Select(f => f.Department_Name).SingleOrDefault();
-                /*get employee name*/
+            SealUsingViewModel suVM = new SealUsingViewModel();
 
-                ViewBag.Plant = plant_id;
-                ViewBag.User_name = en.Employees.Where(f => (f.Emp_CJ == session_emp.ToString() && f.Plant_Id == plant_id)).Select(f => f.EmployeeName).SingleOrDefault();
-                /*get employee name*/
-                return View(seal_using);
-            }
+            suVM.SealUsing = new Seal_Using();
+            //suVM.DeptName =
+            return View(suVM);
         }
 
         //
@@ -222,7 +207,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == seal_using.DepartmentId
                                                          && o.Plant_Id == seal_using.Plant).Select(i => i.Department_Name).SingleOrDefault();
             /*get employee name*/
-            ViewBag.User_name = en.Employees.Where(f => (f.Emp_CJ == session_emp.ToString() && f.Plant_Id == seal_using.DepartmentId.ToString())).Select(f => f.EmployeeName).SingleOrDefault();
+            ViewBag.User_name = en.Employees.Where(f => (f.Emp_CJ == CurrentUser.Instance.User.Emp_CJ && f.Plant_Id == seal_using.DepartmentId.ToString())).Select(f => f.EmployeeName).SingleOrDefault();
             /*get employee name*/
             return View(seal_using);
         }
@@ -284,7 +269,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == seal_using.DepartmentId
                                                          && o.Plant_Id == seal_using.Plant).Select(i => i.Department_Name).SingleOrDefault();
             /*get employee name*/
-            ViewBag.User_name = en.Employees.Where(f => (f.Emp_CJ == session_emp.ToString() && f.Plant_Id == seal_using.DepartmentId.ToString())).Select(f => f.EmployeeName).SingleOrDefault();
+            ViewBag.User_name = en.Employees.Where(f => (f.Emp_CJ == CurrentUser.Instance.User.Emp_CJ && f.Plant_Id == seal_using.DepartmentId.ToString())).Select(f => f.EmployeeName).SingleOrDefault();
             /*get employee name*/
             return View(seal_using);
         }
@@ -306,7 +291,7 @@ namespace Web_IT_HELPDESK.Controllers
             Seal_Using seal_using = en.Seal_Using.Find(id);
             ViewBag.Department_confirm_date = DateTime.Now;
             string plant_id = CurrentUser.Instance.User.Plant_Id;
-            ViewBag.DepartmentId = GetDept_id(plant_id);
+            ViewBag.DepartmentId = CurrentUser.Instance.User.Department_Id;
             return View(seal_using);
         }
 

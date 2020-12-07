@@ -90,7 +90,8 @@ namespace Web_IT_HELPDESK
     public partial class Employee { }
 
     [MetadataType(typeof(Order_Metadata))]
-    public partial class Order_ {
+    public partial class Order_
+    {
         partial void OnConstructorInit()
         {
             Confirmed = false;
@@ -98,6 +99,7 @@ namespace Web_IT_HELPDESK
         }
     }
 
+    [MetadataType(typeof(Seal_UsingMetadata))]
     public partial class Seal_Using
     {
         public Seal_Using()
