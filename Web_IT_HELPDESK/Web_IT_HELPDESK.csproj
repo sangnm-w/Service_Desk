@@ -206,6 +206,7 @@
     <Compile Include="Controllers\AllocationsController.cs" />
     <Compile Include="Controllers\BIZ_TRIPController.cs" />
     <Compile Include="Controllers\CheckoutController.cs" />
+    <Compile Include="Controllers\ContactsController.cs" />
     <Compile Include="Controllers\ContactEmployeeController.cs" />
     <Compile Include="Controllers\CONTRACTController.cs" />
     <Compile Include="Controllers\DevicesController.cs" />
@@ -378,6 +379,7 @@
       <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\AllocationViewModel.cs" />
+    <Compile Include="ViewModels\ContactsViewModel.cs" />
     <Compile Include="ViewModels\DepartmentViewModel.cs" />
     <Compile Include="ViewModels\DeviceViewModel.cs" />
     <Compile Include="ViewModels\IncidentViewModel.cs" />
@@ -1481,7 +1483,7 @@
     <Content Include="Views\Document\PortalIndex.cshtml" />
     <Content Include="Views\Document\PortalAdmin.cshtml" />
     <Content Include="Views\Document\Create.cshtml" />
-    <Content Include="Views\ContactEmployee\ContactList.cshtml" />
+    <Content Include="Views\ContactEmployee\Index.cshtml" />
     <Content Include="Views\Document\Contactlist.cshtml" />
     <Content Include="Views\Document\ContactList2.cshtml" />
     <Content Include="Views\Document\partial0000001.cshtml" />
@@ -1569,6 +1571,7 @@
     </Content>
     <Content Include="Views\Survey\SecuritySurvey.cshtml" />
     <Content Include="Views\Survey\CanteenSurvey.cshtml" />
+    <Content Include="Views\Contacts\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -494,15 +494,23 @@ namespace Web_IT_HELPDESK.Controllers
                         Plant = p.Plant_Name
                     }).ToList();
 
-                var stream = ExcelHelper.Instance.CreateExcelFile(null, lstInc);
-                var buffer = stream as MemoryStream;
-                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("Content-Disposition", "attachment; filename=IT Order Request.xlsx");
-                Response.BinaryWrite(buffer.ToArray());
-                Response.Flush();
-                Response.End();
+                //Col need format date
+                List<int> colsDate = new List<int>()
+                {
+                    2
+                };
 
-                return View(inc.OrderByDescending(i => i.Code));
+                if (lstInc.Count > 0)
+                {
+                    var stream = ExcelHelper.Instance.CreateExcelFile(null, lstInc, ExcelTitle.Instance.IncTitles(), colsDate);
+                    var buffer = stream as MemoryStream;
+                    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    Response.AddHeader("Content-Disposition", "attachment; filename=IT Order Request.xlsx");
+                    Response.BinaryWrite(buffer.ToArray());
+                    Response.Flush();
+                    Response.End();
+                }
+                return RedirectToAction("Index");
             }
             else return RedirectToAction("LogOn", "LogOn");
         }

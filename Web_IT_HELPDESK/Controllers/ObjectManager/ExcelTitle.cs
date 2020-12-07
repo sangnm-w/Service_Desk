@@ -23,8 +23,17 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             res.Add(11, "Plant");
             return res;
         }
-
-        private ExcelTitle() { }
+        public Dictionary<int, string> ContactsTitles()
+        {
+            Dictionary<int, string> res = new Dictionary<int, string>();
+            res.Add(1, "Employee No");
+            res.Add(2, "Full Name");
+            res.Add(3, "Email");
+            res.Add(4, "Phone");
+            res.Add(5, "Birthday");
+            return res;
+        }
+            private ExcelTitle() { }
 
         private static ExcelTitle _instance;
 
