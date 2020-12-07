@@ -223,7 +223,9 @@
     <Compile Include="Controllers\MealOrderController.cs" />
     <Compile Include="Controllers\ObjectManager\ExcelHelper.cs" />
     <Compile Include="Controllers\ObjectManager\IncidentHelper.cs" />
+    <Compile Include="Controllers\ObjectManager\InformationHelper.cs" />
     <Compile Include="Controllers\ObjectManager\MailHelper.cs" />
+    <Compile Include="Controllers\ObjectManager\SealUsingHelper.cs" />
     <Compile Include="Controllers\ObjectManager\UserManager.cs" />
     <Compile Include="Controllers\Order_Controller.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
@@ -1569,6 +1571,7 @@
     </Content>
     <Content Include="Views\Survey\SecuritySurvey.cshtml" />
     <Content Include="Views\Survey\CanteenSurvey.cshtml" />
+    <Content Include="Views\SealUsing\Index - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

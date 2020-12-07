@@ -88,7 +88,7 @@
           <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
           <Property Name="VENDOR" Type="nvarchar" MaxLength="200" />
           <Property Name="PERIODID" Type="nvarchar" MaxLength="50" />
-          <Property Name="ADREES" Type="nvarchar" MaxLength="200" />
+          <Property Name="ADDRESS" Type="nvarchar" MaxLength="200" />
           <Property Name="PHONE" Type="nvarchar" MaxLength="50" />
           <Property Name="REPRESENTATION" Type="nvarchar" MaxLength="200" />
           <Property Name="DATE" Type="datetime" />
@@ -102,7 +102,7 @@
           <Property Name="MONTHS" Type="int" />
           <Property Name="CONTRACT_TYPE_ID" Type="nvarchar" MaxLength="50" />
           <Property Name="DATE_MATURITY" Type="datetime" />
-          <Property Name="PLANT" Type="nvarchar" MaxLength="4" />
+          <Property Name="PLANT" Type="nvarchar" MaxLength="50" />
           <Property Name="CONTRACT_TYPE_DT_ID" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="CONTRACT_SUB">
@@ -118,7 +118,7 @@
           <Property Name="USER_CREATE" Type="nvarchar" MaxLength="50" />
           <Property Name="NOTE" Type="nvarchar(max)" />
           <Property Name="DEL" Type="bit" />
-          <Property Name="PLANT" Type="nvarchar" MaxLength="4" />
+          <Property Name="PLANT" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="CONTRACT_TYPE">
           <Key>
@@ -434,6 +434,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Date" Type="datetime" />
+          <Property Name="Employee_ID" Type="nvarchar" MaxLength="50" />
           <Property Name="Employee_name" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Type_document" Type="nvarchar" MaxLength="100" />
           <Property Name="DepartmentId" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -854,7 +855,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
                 <Property Name="Delivery_Date" Type="datetime" />
                 <Property Name="Return_Date" Type="datetime" />
                 <Property Name="Department_Id" Type="nvarchar" MaxLength="50" />
-                <Property Name="Plant_Id" Type="nvarchar" MaxLength="50" />
+                <Property Name="Plant_Id" Type="nvarchar" MaxLength="4" />
                 <Property Name="Note" Type="nvarchar(max)" />
                 <Property Name="IP" Type="nvarchar" MaxLength="50" />
                 <Property Name="Create_Date" Type="datetime" />
@@ -1152,7 +1153,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="ID" Type="Guid" Nullable="false" />
           <Property Name="VENDOR" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="PERIODID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ADREES" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ADDRESS" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="PHONE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="REPRESENTATION" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="DATE" Type="DateTime" Precision="3" />
@@ -1166,7 +1167,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="MONTHS" Type="Int32" />
           <Property Name="CONTRACT_TYPE_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DATE_MATURITY" Type="DateTime" Precision="3" />
-          <Property Name="PLANT" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="PLANT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CONTRACT_TYPE_DT_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="CONTRACT_TYPE" Relationship="Self.FK_CONTRACT_CONTRACT_TYPE" FromRole="CONTRACT" ToRole="CONTRACT_TYPE" />
           <NavigationProperty Name="CONTRACT_TYPE_DETAIL" Relationship="Self.FK_CONTRACT_CONTRACT_TYPE_DETAIL" FromRole="CONTRACT" ToRole="CONTRACT_TYPE_DETAIL" />
@@ -1188,7 +1189,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="USER_CREATE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="NOTE" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DEL" Type="Boolean" />
-          <Property Name="PLANT" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="PLANT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="CONTRACT" Relationship="Self.FK_CONTRACT_SUB_CONTRACT" FromRole="CONTRACT_SUB" ToRole="CONTRACT" />
           <NavigationProperty Name="PERIOD" Relationship="Self.FK_CONTRACT_SUB_PERIOD" FromRole="CONTRACT_SUB" ToRole="PERIOD" />
         </EntityType>
@@ -1531,6 +1532,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="Employee_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Employee_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Type_document" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="DepartmentId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
@@ -2165,10 +2167,10 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <EntitySetMapping Name="CONTRACTs">
             <EntityTypeMapping TypeName="ServiceDeskModel.CONTRACT">
               <MappingFragment StoreEntitySet="CONTRACT">
+                <ScalarProperty Name="ADDRESS" ColumnName="ADDRESS" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="VENDOR" ColumnName="VENDOR" />
                 <ScalarProperty Name="PERIODID" ColumnName="PERIODID" />
-                <ScalarProperty Name="ADREES" ColumnName="ADREES" />
                 <ScalarProperty Name="PHONE" ColumnName="PHONE" />
                 <ScalarProperty Name="REPRESENTATION" ColumnName="REPRESENTATION" />
                 <ScalarProperty Name="DATE" ColumnName="DATE" />
@@ -2527,6 +2529,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <EntitySetMapping Name="Seal_Using">
             <EntityTypeMapping TypeName="ServiceDeskModel.Seal_Using">
               <MappingFragment StoreEntitySet="Seal_Using">
+                <ScalarProperty Name="Employee_ID" ColumnName="Employee_ID" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Employee_name" ColumnName="Employee_name" />

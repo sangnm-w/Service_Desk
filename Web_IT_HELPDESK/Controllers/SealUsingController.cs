@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using Web_IT_HELPDESK.Controllers.ObjectManager;
+using Web_IT_HELPDESK.Models;
 
 namespace Web_IT_HELPDESK.Controllers
 {
@@ -20,7 +21,7 @@ namespace Web_IT_HELPDESK.Controllers
             var DepartmentName = from i in en.Departments where i.Deactive != true select i.Department_Name;
             SelectList deptlist = new SelectList(DepartmentName);
             ViewBag.DepartmentName = deptlist;
-            string plant_id = userManager.GetUserPlant(session_emp);
+            string plant_id = CurrentUser.Instance.User.Plant_Id;
 
             string dept_id = Convert.ToString(GetDept_id(plant_id));
             string dept_name = en.Departments.Where(o => o.Department_Id == dept_id && o.Plant_Id == plant_id).Select(f => f.Department_Name).SingleOrDefault();
@@ -29,52 +30,8 @@ namespace Web_IT_HELPDESK.Controllers
             IFormatProvider culture = new CultureInfo("en-US", true);
             string _datetime = DateTime.Now.ToString("MM/yyyy");
             from_date = DateTime.ParseExact("01/" + _datetime, "dd/MM/yyyy", culture);
-            string v_mm = _datetime.Substring(0, 2);
+            to_date = from_date.AddMonths(1).AddSeconds(-1);
 
-            switch (v_mm)
-            {
-                case "01":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "02":
-                    to_date = DateTime.ParseExact("28/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "03":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "04":
-                    to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "05":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "06":
-                    to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "07":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "08":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "09":
-                    to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "10":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "11":
-                    to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "12":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-            }
-
-            // https://www.nuget.org/packages/PagedList.Mvc/3.0.0 --Install-Package PagedList.Mvc -Version 3.0.0
-
-            //int pageSize = 20;
-            //int pageNumber = (page ?? 1);
             if (session_emp != "")
             {
                 if (session_emp != "admin" && session_emp != "D83003" && session_emp != "MK78072" && session_emp != "H88768" && session_emp != "HN91185" && session_emp != "HN92244")
@@ -112,48 +69,9 @@ namespace Web_IT_HELPDESK.Controllers
             //http://www.asp.net/mvc/overview/getting-started/getting-started-with-ef-using-mvc/sorting-filtering-and-paging-with-the-entity-framework-in-an-asp-net-mvc-application
             IFormatProvider culture = new CultureInfo("en-US", true);
             from_date = DateTime.ParseExact("01/" + _datetime, "dd/MM/yyyy", culture);
-            string v_mm = _datetime.Substring(0, 2);
+            to_date = from_date.AddMonths(1).AddSeconds(-1);
 
-            switch (v_mm)
-            {
-                case "01":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "02":
-                    to_date = DateTime.ParseExact("28/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "03":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "04":
-                    to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "05":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "06":
-                    to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "07":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "08":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "09":
-                    to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "10":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "11":
-                    to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "12":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-            }
-            string plant_id = userManager.GetUserPlant(session_emp);
+            string plant_id = CurrentUser.Instance.User.Plant_Id;
             string dept_id = Convert.ToString(GetDept_id(plant_id));
             ViewBag.DepartmentNameview = en.Departments.Where(o => o.Department_Id == dept_id && o.Plant_Id == plant_id).Select(f => f.Department_Name).SingleOrDefault();
 
@@ -202,7 +120,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         public ActionResult Create()
         {
-            string plant_id = userManager.GetUserPlant(session_emp);
+            string plant_id = CurrentUser.Instance.User.Plant_Id;
             if (session_emp == "")
                 return RedirectToAction("LogOn", "LogOn");
             else
@@ -230,9 +148,12 @@ namespace Web_IT_HELPDESK.Controllers
         [HttpPost]
         public string Create(Seal_Using seal_using)
         {
-            string plantid = userManager.GetUserPlant(session_emp);
+            string result = "";
+            string plantid = CurrentUser.Instance.User.Plant_Id;
             var dept = from i in en.Departments where i.Department_Id == seal_using.DepartmentId && i.Plant_Id == plantid select i.Department_Name;
+            seal_using.Employee_ID = CurrentUser.Instance.User.Emp_CJ;
             en.Seal_Using.Add(seal_using);
+
             try
             {
                 en.SaveChanges();
@@ -244,123 +165,53 @@ namespace Web_IT_HELPDESK.Controllers
                         .Select(x => x.ErrorMessage);
                 var fullErrorMessage = string.Join("; ", errorMessages);
                 var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
-                throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
+
+                result = string.Format("Thông báo! <br /> <br />" +
+                                              "Có lỗi khi tạo yêu cầu. Liên hệ hỗ trợ: minhsang.it@cjvina.com <br />" +
+                                              "************** Cám ơn đã sử dụng chương trình **************");
+                return result;
             }
 
-            string result, status = "";
-            //~~~~~~~~~~~~~~~~~~~~~
-            /*if (search.Contains("HR") == true)
+            Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == seal_using.Employee_ID);
+            bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(seal_using, 1, userRequest);
+
+            if (resultMailing)
             {
-                subject = "[Duyệt hỗ trợ] - Phiếu yêu cầu sử dụng con dấu: " + seal_using.Employee_name + " - tạo ngày: " + seal_using.Date;
                 result = string.Format("Thông báo! <br /> <br />" +
-                                                  "Đã gởi email xác nhận đến trưởng phòng nhân sự để duyệt sử dụng con dấu <br />" +
-                                                  "************** Cám ơn đã sử dụng chương trình **************");
-                status = "1.1";
+                                              "Đã gởi email xác nhận đến trưởng phòng nhân sự để duyệt sử dụng con dấu <br />" +
+                                              "************** Cám ơn đã sử dụng chương trình **************");
             }
             else
-            {*/
-            subject = "[Duyệt] - Phiếu yêu cầu sử dụng con dấu: " + seal_using.Employee_name + " - tạo ngày: " + seal_using.Date;
-            result = string.Format("Thông báo! <br /> <br />" +
-                                              "Đã gởi email xác nhận sử dụng con dấu đến trưởng phòng bộ phận: " + dept.Single().ToString() + " <br />" +
+            {
+                result = string.Format("Thông báo! <br /> <br />" +
+                                              "Có lỗi khi gửi mail. Liên hệ hỗ trợ: minhsang.it@cjvina.com <br />" +
                                               "************** Cám ơn đã sử dụng chương trình **************");
-            status = "1";
-            //}
-            body = "Tên người yêu cầu: " + seal_using.Employee_name + "\n" +
-                    "          Bộ phận: " + dept.Single().ToString() + "\n" +
-                    "     Ngày yêu cầu: " + seal_using.Date + "\n" +
-                    "  Ngày ký văn bản: " + seal_using.Date_signature + "\n" +
-                    "     Loại văn bản: " + seal_using.Type_document + "\n" +
-                    " Nội dung văn bản: " + seal_using.Context + "\n" +
-                    "         Nơi nhận: " + seal_using.Place_Recipient + "\n" +
-                    " Người ký văn bản: " + seal_using.Name_signature + "\n" +
-                    "   Theo đường dẫn: " + "http://52.213.3.168/servicedesk/SealUsing/Edit/" + seal_using.Id + "\n" + "\n" +
-                    "Trân trọng!" + "\n" + "\n" + "\n" +
-
-                    "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";
-
-
-
-            inf.email_send("user_email", "pass", seal_using.DepartmentId, subject, body, status, userManager.GetUserPlant(session_emp));
-            //~~~~~~~~~~~~~~~~~~~~~
-            //return RedirectToAction("Index", "SealUsing");
-
+            }
 
             return result;
         }
 
-
-
-        // resend email to manager
-        /*[HttpPost, ActionName("Resend")]
-        public String Resend(IEnumerable<string> seal_usings)
-        {
-            int seal_id = 0;
-            foreach (var seal_using_ in seal_usings)
-            {
-                seal_id = Convert.ToInt32(Session[seal_using_]);
-            }
-            var seal_using = en.Seal_Using.Where(i => i.Id == seal_id).FirstOrDefault();
-            var dept = from i in en.Departments where i.DepartmentId == seal_using.DepartmentId select i.DepartmentName;
-            //~~~~~~~~~~~~~~~~~~~~~
-            subject = "<<Gấp>> [Cần duyệt] - Phiếu yêu cầu sử dụng con dấu: " + seal_using.Employee_name + " - tạo ngày: " + seal_using.Date;
-            body = "Tên người yêu cầu: " + seal_using.Employee_name + "\n" +
-                    "          Bộ phận: " + dept.Single().ToString() + "\n" +
-                    "     Ngày yêu cầu: " + seal_using.Date + "\n" +
-                    "  Ngày ký văn bản: " + seal_using.Date_signature + "\n" +
-                    "     Loại văn bản: " + seal_using.Type_document + "\n" +
-                    " Nội dung văn bản: " + seal_using.Context + "\n" +
-                    "         Nơi nhận: " + seal_using.Place_Recipient + "\n" +
-                    " Người ký văn bản: " + seal_using.Name_signature + "\n" +
-                    "   Theo đường dẫn: " + "http://52.213.3.168/servicedesk/SealUsing/Edit/" + seal_using.Id + "\n" + "\n" +
-                    "Trân trọng!" + "\n" + "\n" + "\n" +
-                    "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";
-
-
-
-            inf.email_send("user_email", "pass", seal_using.DepartmentId, subject, body, "1");
-            //~~~~~~~~~~~~~~~~~~~~~
-
-            string result = string.Format("Thông báo! <br /> Gởi tin nhắn thành công <br /> Tên người yêu cầu: " + seal_using.Employee_name + " <br />" +
-                                          "Bộ phận: " + dept.Single().ToString());
-
-            return result; //RedirectToAction("Index", "SealUsing");
-        }*/
-
-        public ActionResult Resend(int? id)
+        public string Resend(int? id)
         {
             var seal_using = en.Seal_Using.Where(i => i.Id == id).FirstOrDefault();
-            string plantid = userManager.GetUserPlant(session_emp);
-            var dept = from i in en.Departments where i.Department_Id == seal_using.DepartmentId && i.Plant_Id == plantid select i.Department_Name;
-            //~~~~~~~~~~~~~~~~~~~~~
-            subject = "<<Gấp>> [Cần duyệt] - Phiếu yêu cầu sử dụng con dấu: " + seal_using.Employee_name + " - tạo ngày: " + seal_using.Date;
-            body = "Tên người yêu cầu: " + seal_using.Employee_name + "\n" +
-                    "          Bộ phận: " + dept.Single().ToString() + "\n" +
-                    "     Ngày yêu cầu: " + seal_using.Date + "\n" +
-                    "  Ngày ký văn bản: " + seal_using.Date_signature + "\n" +
-                    "     Loại văn bản: " + seal_using.Type_document + "\n" +
-                    " Nội dung văn bản: " + seal_using.Context + "\n" +
-                    "         Nơi nhận: " + seal_using.Place_Recipient + "\n" +
-                    " Người ký văn bản: " + seal_using.Name_signature + "\n" +
-                    "   Theo đường dẫn: " + "http://52.213.3.168/servicedesk/SealUsing/Edit/" + seal_using.Id + "\n" + "\n" +
-                    "Trân trọng!" + "\n" + "\n" + "\n" +
-                    "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";
+            string result = "";
 
-
-
-            inf.email_send("user_email", "pass", seal_using.DepartmentId, subject, body, "1", userManager.GetUserPlant(session_emp));
-            //~~~~~~~~~~~~~~~~~~~~~
-
-            ViewBag.Emp_CJ = seal_using.Employee_name;
-            ViewBag.DeptID = dept.Single().ToString();
-
-            return View();
+            Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == seal_using.Employee_ID);
+            bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(seal_using, 2, userRequest);
+            if (resultMailing)
+            {
+                result = string.Format("Thông báo! <br /> <br />" +
+                                              "Đã gởi lại email xác nhận đến trưởng phòng nhân sự để duyệt sử dụng con dấu <br />" +
+                                              "************** Cám ơn đã sử dụng chương trình **************");
+            }
+            else
+            {
+                result = string.Format("Thông báo! <br /> <br />" +
+                                              "Có lỗi khi gửi mail. Liên hệ hỗ trợ: minhsang.it@cjvina.com <br />" +
+                                              "************** Cám ơn đã sử dụng chương trình **************");
+            }
+            return result;
         }
-
-
-
-        //
-        // GET: /SealUsing/Edit/5
-        public UserManager userManager = new UserManager();
 
         public ActionResult Edit(int? id)
         {
@@ -382,64 +233,46 @@ namespace Web_IT_HELPDESK.Controllers
         [HttpPost]
         public string Edit(Seal_Using seal_using)
         {
-            //string plantid = userManager.GetUserPlant(session_emp);
-            var dept = from i in en.Departments where i.Department_Id == seal_using.DepartmentId && i.Plant_Id == seal_using.Plant select i.Department_Name;
             string result;
+            string departmentName = DepartmentModel.Instance.getDeptName(seal_using.Plant, seal_using.DepartmentId);
 
-            en.Entry(seal_using).State = System.Data.Entity.EntityState.Modified;
+            Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == seal_using.Employee_ID);
             if (seal_using.Department_confirm == true)
             {
+                en.Entry(seal_using).State = System.Data.Entity.EntityState.Modified;
                 en.SaveChanges();
-                //~~~~~~~~~~~~~~~~~~~~~
-                subject = "[Duyệt] - Phiếu yêu cầu sử dụng con dấu: " + seal_using.Employee_name + " - tạo ngày: " + seal_using.Date;
-                body = "Tên người yêu cầu: " + seal_using.Employee_name + "\n" +
-                        "          Bộ phận: " + dept.Single().ToString() + "\n" +
-                        "     Ngày yêu cầu: " + seal_using.Date + "\n" +
-                        "  Ngày ký văn bản: " + seal_using.Date_signature + "\n" +
-                        "     Loại văn bản: " + seal_using.Type_document + "\n" +
-                        " Nội dung văn bản: " + seal_using.Context + "\n" +
-                        "         Nơi nhận: " + seal_using.Place_Recipient + "\n" +
-                        " Người ký văn bản: " + seal_using.Name_signature + "\n" +
-                        "-------------------------------------" + "\n" +
-                        "Đã được trưởng phòng duyệt" + "\n" +
-                        "   Theo đường dẫn: " + "http://52.213.3.168/servicedesk/SealUsing/Confirm/" + seal_using.Id + "\n" +
-                        "Trân trọng!" + "\n" + "\n" + "\n" +
 
-                        "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";
-
-                //~~~~~~~~~~~~~~~~~~~~~
-
-                confirm_status = "Đồng ý xác nhận";
-                inf.email_send("user_email", "pass", seal_using.DepartmentId, subject, body, "2", seal_using.Plant);
-
-                result = string.Format("Thông báo! <br /> Trạng thái được duyệt đã chọn: " + confirm_status + " <br />" +
-                                                  "Bộ phận: " + dept.Single().ToString()) + " <br />" +
-                                                  "Email xác nhận đã được gởi sang bộ phận quản lý con dấu.";
+                bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(seal_using, 5, userRequest);
+                if (resultMailing)
+                {
+                    result = string.Format("Thông báo! <br /> Trạng thái được duyệt đã chọn: Đồng ý xác nhận <br />" +
+                                                      "Bộ phận: " + departmentName + " <br />" +
+                                                      "Email xác nhận đã được gởi sang bộ phận quản lý con dấu.");
+                }
+                else
+                {
+                    result = string.Format("Thông báo! <br /> <br />" +
+                                                  "Có lỗi khi gửi mail. Liên hệ hỗ trợ: minhsang.it@cjvina.com <br />" +
+                                                  "************** Cám ơn đã sử dụng chương trình **************");
+                }
             }
             else
             {
-                subject = "[Kiểm tra chưa duyệt] - Phiếu yêu cầu sử dụng con dấu: " + seal_using.Employee_name + " - tạo ngày: " + seal_using.Date;
-                body = "Tên người yêu cầu: " + seal_using.Employee_name + "\n" +
-                   "          Bộ phận: " + dept.Single().ToString() + "\n" +
-                   "     Ngày yêu cầu: " + seal_using.Date + "\n" +
-                   "  Ngày ký văn bản: " + seal_using.Date_signature + "\n" +
-                   "     Loại văn bản: " + seal_using.Type_document + "\n" +
-                   " Nội dung văn bản: " + seal_using.Context + "\n" +
-                   "         Nơi nhận: " + seal_using.Place_Recipient + "\n" +
-                   " Người ký văn bản: " + seal_using.Name_signature + "\n" +
-                   "   Theo đường dẫn: " + "http://52.213.3.168/servicedesk/SealUsing/Edit/" + seal_using.Id + "\n" + "\n" +
-                   "Trân trọng!" + "\n" + "\n" + "\n" +
-
-                   "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";
-                inf.email_send("user_email", "pass", seal_using.DepartmentId, subject, body, "1", userManager.GetUserPlant(session_emp));
-                confirm_status = "KHÔNG ĐỒNG Ý XÁC NHẬN";
-                result = string.Format("Thông báo! <br /> Trạng thái được duyệt đã chọn: " + confirm_status + " <br />" +
-                                                  "Bộ phận: " + dept.Single().ToString() + " <br />" +
+                bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(seal_using, 6, userRequest);
+                if (resultMailing)
+                {
+                    result = string.Format("Thông báo! <br /> Trạng thái được duyệt đã chọn: KHÔNG ĐỒNG Ý XÁC NHẬN <br />" +
+                                                  "Bộ phận: " + departmentName + " <br />" +
                                                   "Email xác nhận không được gởi sang bộ phận quản lý con dấu.");
+                }
+                else
+                {
+                    result = string.Format("Thông báo! <br /> <br />" +
+                                                  "Có lỗi khi gửi mail. Liên hệ hỗ trợ: minhsang.it@cjvina.com <br />" +
+                                                  "************** Cám ơn đã sử dụng chương trình **************");
+                }
             }
-
-
-            return result; ; //RedirectToAction("Index", "SealUsing");
+            return result;
         }
 
         public ActionResult Confirm(int? id)
@@ -456,19 +289,13 @@ namespace Web_IT_HELPDESK.Controllers
             return View(seal_using);
         }
 
-        //
-        // POST: /SealUsing/Edit/5
-
         [HttpPost]
         public ActionResult Confirm(Seal_Using seal_using)
         {
             seal_using.Employee_Seal_keep = DateTime.Now;
-            en.Entry(seal_using).State = System.Data.Entity.EntityState.Modified;  // entity 6 thêm System.Data.Entity Entity chứa các function
+            en.Entry(seal_using).State = System.Data.Entity.EntityState.Modified;
             en.SaveChanges();
-            //~~~~~~~~~~~~~~~~~~~~~
-            //~~~~~~~~~~~~~~~~~~~~~
             return RedirectToAction("Index", "SealUsing");
-            //return View("Index");
         }
 
         //
@@ -478,7 +305,7 @@ namespace Web_IT_HELPDESK.Controllers
         {
             Seal_Using seal_using = en.Seal_Using.Find(id);
             ViewBag.Department_confirm_date = DateTime.Now;
-            string plant_id = userManager.GetUserPlant(session_emp);
+            string plant_id = CurrentUser.Instance.User.Plant_Id;
             ViewBag.DepartmentId = GetDept_id(plant_id);
             return View(seal_using);
         }
