@@ -141,7 +141,7 @@ namespace Web_IT_HELPDESK.Controllers
                     bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(su, 1, userRequest);
                     if (resultMailing)
                     {
-                        result = string.Format("Đã gởi email xác nhận đến trưởng phòng nhân sự để duyệt sử dụng con dấu <br />");
+                        result = string.Format("Đã gửi email xác nhận đến trưởng phòng để duyệt sử dụng con dấu.");
                     }
                     else
                     {
@@ -256,13 +256,11 @@ namespace Web_IT_HELPDESK.Controllers
                     bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(sealUsing, 5, userRequest);
                     if (resultMailing)
                     {
-                        result = string.Format("Trạng thái được duyệt đã chọn: Đồng ý xác nhận." +
-                                                          "Bộ phận: " + deptName + "." +
-                                                          "Email xác nhận đã được gởi sang bộ phận quản lý con dấu.");
+                        result = string.Format("Trạng thái được duyệt đã chọn: Đồng ý xác nhận. Email xác nhận đã được gởi sang bộ phận quản lý con dấu.");
                     }
                     else
                     {
-                        result = string.Format("Không gửi được email.Vui lòng kiểm tra lại.Liên hệ hỗ trợ: minhsang.it@cjvina.com");
+                        result = string.Format("Không gửi được email.Vui lòng kiểm tra lại. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
                     }
                 }
                 else
@@ -270,9 +268,7 @@ namespace Web_IT_HELPDESK.Controllers
                     bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(sealUsing, 6, userRequest);
                     if (resultMailing)
                     {
-                        result = string.Format("Trạng thái được duyệt đã chọn: KHÔNG ĐỒNG Ý XÁC NHẬN." +
-                                                              "Bộ phận: " + deptName + "." +
-                                                      "Email xác nhận không được gởi sang bộ phận quản lý con dấu.");
+                        result = string.Format("Trạng thái được duyệt đã chọn: KHÔNG ĐỒNG Ý XÁC NHẬN. Email xác nhận không được gởi sang bộ phận quản lý con dấu.");
                     }
                     else
                     {
@@ -315,14 +311,14 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         [HttpPost]
-        public ActionResult Confirm(SealUsingViewModel.ConfirmSealUsing model, bool approved)
+        public ActionResult Confirm(SealUsingViewModel.ConfirmSealUsing model, bool HRapproved)
         {
             string result = "";
             var sealUsing = en.Seal_Using.FirstOrDefault(s => s.Id == model.Id);
             if (sealUsing != default(Seal_Using))
             {
                 sealUsing = model.ConfirmSealUsing_To_SealUsing(sealUsing);
-                sealUsing.Department_confirm = approved;
+                sealUsing.Employee_Seal_keep_confrim = HRapproved;
             }
 
             string deptName = DepartmentModel.Instance.getDeptName(sealUsing.Plant, sealUsing.DepartmentId);
@@ -351,12 +347,10 @@ namespace Web_IT_HELPDESK.Controllers
 
                 if (sealUsing.Employee_Seal_keep_confrim == true)
                 {
-                    bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(sealUsing, 5, userRequest);
+                    bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(sealUsing, 6, userRequest);
                     if (resultMailing)
                     {
-                        result = string.Format("Trạng thái được duyệt đã chọn: Đồng ý xác nhận." +
-                                                          "Bộ phận: " + deptName + "." +
-                                                          "Email xác nhận đã được gởi sang bộ phận quản lý con dấu.");
+                        result = string.Format("Trạng thái được duyệt đã chọn: Đồng ý xác nhận.");
                     }
                     else
                     {
@@ -365,12 +359,10 @@ namespace Web_IT_HELPDESK.Controllers
                 }
                 else
                 {
-                    bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(sealUsing, 6, userRequest);
+                    bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(sealUsing, 7, userRequest);
                     if (resultMailing)
                     {
-                        result = string.Format("Trạng thái được duyệt đã chọn: KHÔNG ĐỒNG Ý XÁC NHẬN." +
-                                                              "Bộ phận: " + deptName + "." +
-                                                      "Email xác nhận không được gởi sang bộ phận quản lý con dấu.");
+                        result = string.Format("Trạng thái được duyệt đã chọn: KHÔNG ĐỒNG Ý XÁC NHẬN. ");
                     }
                     else
                     {

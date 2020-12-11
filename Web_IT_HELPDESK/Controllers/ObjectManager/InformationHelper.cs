@@ -53,7 +53,13 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                 ccMails.Add("test01.it@cjvina.com");
                 bccMails.Add("it-servicedesk@cjvina.com");
             }
-            else if (level_confirm == 6) // Level 6: Return result
+            else if (level_confirm == 6) // Level 6: Return NOT APPROVED
+            {
+                toMails.Add(userRequest.Email);
+                ccMails.Add("test01.it@cjvina.com");
+                bccMails.Add("it-servicedesk@cjvina.com");
+            }
+            else if (level_confirm == 7) // Level 7: Return APPROVED
             {
                 toMails.Add(userRequest.Email);
                 ccMails.Add("test01.it@cjvina.com");

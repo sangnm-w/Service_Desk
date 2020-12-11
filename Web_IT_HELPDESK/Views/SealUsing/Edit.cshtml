@@ -177,11 +177,11 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="col-sm-12 col-md-6">
-                                            @Html.RadioButton("approved", true, true, new { id = "approved1" })
+                                            @Html.RadioButton("approved", true, Model.Department_confirm == true ? true : false, new { id = "approved1" })
                                             @Html.Label("APPROVE", htmlAttributes: new { @style = "vertical-align: middle; margin-left: 7px;" })
                                         </div>
                                         <div class="col-sm-12 col-md-6">
-                                            @Html.RadioButton("approved", false, false, new { id = "approved2" })
+                                            @Html.RadioButton("approved", false, Model.Department_confirm != true ? true : false, new { id = "approved2" })
                                             @Html.Label("NOT APPROVE", htmlAttributes: new { @style = "vertical-align: middle; margin-left: 7px;" })
                                         </div>
                                         @Html.ValidationMessageFor(model => model.Department_confirm)

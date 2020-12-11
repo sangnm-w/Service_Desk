@@ -68,17 +68,26 @@ namespace Web_IT_HELPDESK.ViewModels
             public EditSealUsing() { }
             public EditSealUsing(Seal_Using su)
             {
+                Id = su.Id;
                 Date = su.Date;
+                Employee_ID = su.Employee_ID;
                 Employee_name = su.Employee_name;
                 Type_document = su.Type_document;
+                DepartmentId = su.DepartmentId;
                 Code_number = su.Code_number;
                 Context = su.Context;
                 Place_Recipient = su.Place_Recipient;
+                Period_date = su.Period_date;
+                Employee_Seal_keep = su.Employee_Seal_keep;
                 Department_confirm = su.Department_confirm;
+                Employee_Seal_keep_confrim = su.Employee_Seal_keep_confrim;
+                Del = su.Del;
                 Department_note = su.Department_note;
                 Department_confirm_date = su.Department_confirm_date;
+                Employee_Seal_keep_note = su.Employee_Seal_keep_note;
                 Date_signature = su.Date_signature;
                 Name_signature = su.Name_signature;
+                Plant = su.Plant;
             }
             public Seal_Using EditSealUsing_To_SealUsing(Seal_Using su)
             {
@@ -100,17 +109,26 @@ namespace Web_IT_HELPDESK.ViewModels
             public ConfirmSealUsing() { }
             public ConfirmSealUsing(Seal_Using su)
             {
+                Id = su.Id;
                 Date = su.Date;
+                Employee_ID = su.Employee_ID;
                 Employee_name = su.Employee_name;
                 Type_document = su.Type_document;
+                DepartmentId = su.DepartmentId;
                 Code_number = su.Code_number;
                 Context = su.Context;
                 Place_Recipient = su.Place_Recipient;
+                Period_date = su.Period_date;
+                Employee_Seal_keep = su.Employee_Seal_keep;
                 Department_confirm = su.Department_confirm;
+                Employee_Seal_keep_confrim = su.Employee_Seal_keep_confrim;
+                Del = su.Del;
                 Department_note = su.Department_note;
                 Department_confirm_date = su.Department_confirm_date;
+                Employee_Seal_keep_note = su.Employee_Seal_keep_note;
                 Date_signature = su.Date_signature;
                 Name_signature = su.Name_signature;
+                Plant = su.Plant;
             }
             public Seal_Using ConfirmSealUsing_To_SealUsing(Seal_Using su)
             {

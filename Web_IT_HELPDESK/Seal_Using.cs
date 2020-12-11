@@ -11,7 +11,7 @@ namespace Web_IT_HELPDESK
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class Seal_Using
     {
         public int Id { get; set; }

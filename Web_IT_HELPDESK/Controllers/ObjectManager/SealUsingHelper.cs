@@ -45,9 +45,8 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                         "         Nơi nhận: " + sealUsing.Place_Recipient + "\n" +
                         " Người ký văn bản: " + sealUsing.Name_signature + "\n" +
                         "   Theo đường dẫn: " + domainName + "/servicedesk/SealUsing/Edit/" + sealUsing.Id + "\n" + "\n" +
-                        "Trân trọng!" + "\n" + "\n" + "\n" +
+                        "Trân trọng!" + "\n" + "\n" + "\n";
 
-                        "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";
             }
             else if (level == 2) // Level 2: Resend
             {
@@ -61,8 +60,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                         "         Nơi nhận: " + sealUsing.Place_Recipient + "\n" +
                         " Người ký văn bản: " + sealUsing.Name_signature + "\n" +
                         "   Theo đường dẫn: " + domainName + "/servicedesk/SealUsing/Edit/" + sealUsing.Id + "\n" + "\n" +
-                        "Trân trọng!" + "\n" + "\n" + "\n" +
-                        "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";
+                        "Trân trọng!" + "\n" + "\n" + "\n";
             }
             else if (level == 5) // Level 5: HR Admin
             {
@@ -78,9 +76,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                         "-------------------------------------" + "\n" +
                         "Đã được trưởng phòng duyệt" + "\n" +
                         "   Theo đường dẫn: " + domainName + "/servicedesk/SealUsing/Confirm/" + sealUsing.Id + "\n" +
-                        "Trân trọng!" + "\n" + "\n" + "\n" +
-
-                        "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";
+                        "Trân trọng!" + "\n" + "\n" + "\n";
             }
             else if (level == 6)
             {
@@ -93,10 +89,20 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                    " Nội dung văn bản: " + sealUsing.Context + "\n" +
                    "         Nơi nhận: " + sealUsing.Place_Recipient + "\n" +
                    " Người ký văn bản: " + sealUsing.Name_signature + "\n" +
-                   "   Theo đường dẫn: " + domainName + "/servicedesk/SealUsing/Details/" + sealUsing.Id + "\n" + "\n" +
-                   "Trân trọng!" + "\n" + "\n" + "\n" +
-
-                   "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";
+                   "Trân trọng!" + "\n" + "\n" + "\n";
+            }
+            else if (level == 7)
+            {
+                subject = "[Đã được duyệt] - Phiếu yêu cầu sử dụng con dấu: " + sealUsing.Employee_name + " - tạo ngày: " + sealUsing.Date;
+                body = "Tên người yêu cầu: " + sealUsing.Employee_name + "\n" +
+                   "          Bộ phận: " + departmentName + "\n" +
+                   "     Ngày yêu cầu: " + sealUsing.Date + "\n" +
+                   "  Ngày ký văn bản: " + sealUsing.Date_signature + "\n" +
+                   "     Loại văn bản: " + sealUsing.Type_document + "\n" +
+                   " Nội dung văn bản: " + sealUsing.Context + "\n" +
+                   "         Nơi nhận: " + sealUsing.Place_Recipient + "\n" +
+                   " Người ký văn bản: " + sealUsing.Name_signature + "\n" +
+                   "Trân trọng!" + "\n" + "\n" + "\n";
             }
         }
     }
