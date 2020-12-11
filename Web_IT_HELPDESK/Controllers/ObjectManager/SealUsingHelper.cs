@@ -93,7 +93,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                    " Nội dung văn bản: " + sealUsing.Context + "\n" +
                    "         Nơi nhận: " + sealUsing.Place_Recipient + "\n" +
                    " Người ký văn bản: " + sealUsing.Name_signature + "\n" +
-                   "   Theo đường dẫn: " + domainName + "/servicedesk/SealUsing/Edit/" + sealUsing.Id + "\n" + "\n" +
+                   "   Theo đường dẫn: " + domainName + "/servicedesk/SealUsing/Details/" + sealUsing.Id + "\n" + "\n" +
                    "Trân trọng!" + "\n" + "\n" + "\n" +
 
                    "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";

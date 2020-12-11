@@ -21,7 +21,6 @@ namespace Web_IT_HELPDESK.ViewModels
             {
                 Date = DateTime.Now;
                 Period_date = DateTime.Now;
-                Department_confirm = false;
                 Employee_Seal_keep_confrim = false;
                 Date_signature = DateTime.Now;
                 Del = false;
@@ -83,23 +82,47 @@ namespace Web_IT_HELPDESK.ViewModels
             }
             public Seal_Using EditSealUsing_To_SealUsing(Seal_Using su)
             {
-                su.Date = Date;
-                su.Employee_name = Employee_name;
-                su.Type_document = Type_document;
-                su.Code_number = Code_number;
-                su.Context = Context;
-                su.Place_Recipient = Place_Recipient;
                 su.Department_confirm = Department_confirm;
                 su.Department_note = Department_note;
                 su.Department_confirm_date = Department_confirm_date;
-                su.Date_signature = Date_signature;
-                su.Name_signature = Name_signature;
 
                 return su;
             }
             public new bool Department_confirm { get; set; }
             public new string Department_note { get; set; }
             public new DateTime? Department_confirm_date { get; set; }
+            public string DeptName { get; set; }
+            public string PlantName { get; set; }
+        }
+
+        public class ConfirmSealUsing : Seal_Using
+        {
+            public ConfirmSealUsing() { }
+            public ConfirmSealUsing(Seal_Using su)
+            {
+                Date = su.Date;
+                Employee_name = su.Employee_name;
+                Type_document = su.Type_document;
+                Code_number = su.Code_number;
+                Context = su.Context;
+                Place_Recipient = su.Place_Recipient;
+                Department_confirm = su.Department_confirm;
+                Department_note = su.Department_note;
+                Department_confirm_date = su.Department_confirm_date;
+                Date_signature = su.Date_signature;
+                Name_signature = su.Name_signature;
+            }
+            public Seal_Using ConfirmSealUsing_To_SealUsing(Seal_Using su)
+            {
+                su.Employee_Seal_keep = Employee_Seal_keep;
+                su.Employee_Seal_keep_confrim = Employee_Seal_keep_confrim;
+                su.Employee_Seal_keep_note = Employee_Seal_keep_note;
+
+                return su;
+            }
+            public new DateTime? Employee_Seal_keep { get; set; }
+            public new bool Employee_Seal_keep_confrim { get; set; }
+            public new string Employee_Seal_keep_note { get; set; }
             public string DeptName { get; set; }
             public string PlantName { get; set; }
         }

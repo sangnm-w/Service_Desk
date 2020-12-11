@@ -208,9 +208,6 @@ namespace Web_IT_HELPDESK.Controllers
                 return HttpNotFound();
             }
 
-            string DeptName = DepartmentModel.Instance.getDeptName(seal_Using.Plant, seal_Using.DepartmentId);
-            string PlantName = DepartmentModel.Instance.getPlantName(seal_Using.Plant);
-
             SealUsingViewModel.EditSealUsing esuVM = new SealUsingViewModel.EditSealUsing(seal_Using);
 
             ViewBag.ModalState = "hide";
@@ -220,47 +217,52 @@ namespace Web_IT_HELPDESK.Controllers
 
         //POST: /SealUsing/Edit/5
         [HttpPost]
-        public ActionResult Edit(SealUsingViewModel.EditSealUsing model)
+        public ActionResult Edit(SealUsingViewModel.EditSealUsing model, bool approved)
         {
             string result = "";
             var sealUsing = en.Seal_Using.FirstOrDefault(s => s.Id == model.Id);
             if (sealUsing != default(Seal_Using))
             {
                 sealUsing = model.EditSealUsing_To_SealUsing(sealUsing);
+                sealUsing.Department_confirm = approved;
             }
 
+            string deptName = DepartmentModel.Instance.getDeptName(sealUsing.Plant, sealUsing.DepartmentId);
             if (ModelState.IsValid)
             {
                 Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == sealUsing.Employee_ID);
 
+                try
+                {
+                    en.Entry(sealUsing).State = System.Data.Entity.EntityState.Modified;
+                    en.SaveChanges();
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    var errorMessages = ex.EntityValidationErrors
+                            .SelectMany(x => x.ValidationErrors)
+                            .Select(x => x.ErrorMessage);
+                    var fullErrorMessage = string.Join("; ", errorMessages);
+                    var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
+
+                    result = string.Format("Có lỗi khi xác nhận đăng ký. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
+                    ViewBag.ModalState = "show";
+                    ViewBag.Message = result;
+                    return View(model);
+                }
+
                 if (sealUsing.Department_confirm == true)
                 {
-                    try
+                    bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(sealUsing, 5, userRequest);
+                    if (resultMailing)
                     {
-                        en.Entry(sealUsing).State = System.Data.Entity.EntityState.Modified;
-                        en.SaveChanges();
-                        bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(sealUsing, 5, userRequest);
-                        if (resultMailing)
-                        {
-                            result = string.Format("Trạng thái được duyệt đã chọn: Đồng ý xác nhận <br />" +
-                                                              "Bộ phận: " + model.DeptName + " <br />" +
-                                                              "Email xác nhận đã được gởi sang bộ phận quản lý con dấu.");
-                        }
-                        else
-                        {
-                            result = string.Format("Không gửi được email.Vui lòng kiểm tra lại.Liên hệ hỗ trợ: minhsang.it@cjvina.com < br /> ");
-                        }
+                        result = string.Format("Trạng thái được duyệt đã chọn: Đồng ý xác nhận." +
+                                                          "Bộ phận: " + deptName + "." +
+                                                          "Email xác nhận đã được gởi sang bộ phận quản lý con dấu.");
                     }
-                    catch (DbEntityValidationException ex)
+                    else
                     {
-                        var errorMessages = ex.EntityValidationErrors
-                                .SelectMany(x => x.ValidationErrors)
-                                .Select(x => x.ErrorMessage);
-                        var fullErrorMessage = string.Join("; ", errorMessages);
-                        var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
-
-                        result = string.Format("Có lỗi khi xác nhận đăng ký. Liên hệ hỗ trợ: minhsang.it@cjvina.com <br />");
-                        return View(model);
+                        result = string.Format("Không gửi được email.Vui lòng kiểm tra lại.Liên hệ hỗ trợ: minhsang.it@cjvina.com");
                     }
                 }
                 else
@@ -268,8 +270,8 @@ namespace Web_IT_HELPDESK.Controllers
                     bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(sealUsing, 6, userRequest);
                     if (resultMailing)
                     {
-                        result = string.Format("Trạng thái được duyệt đã chọn: KHÔNG ĐỒNG Ý XÁC NHẬN <br />" +
-                                                      "Bộ phận: " + model.DeptName + " <br />" +
+                        result = string.Format("Trạng thái được duyệt đã chọn: KHÔNG ĐỒNG Ý XÁC NHẬN." +
+                                                              "Bộ phận: " + deptName + "." +
                                                       "Email xác nhận không được gởi sang bộ phận quản lý con dấu.");
                     }
                     else
@@ -293,25 +295,100 @@ namespace Web_IT_HELPDESK.Controllers
 
         public ActionResult Confirm(int? id)
         {
-            Seal_Using seal_using = en.Seal_Using.Find(id);
-            ViewBag.Employee_Seal_keep = DateTime.Now;
-            ViewBag.DepartmentId = ViewBag.DepartmentId = seal_using.DepartmentId;
-            ViewBag.Plant = seal_using.Plant;
-            ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == seal_using.DepartmentId
-                                                         && o.Plant_Id == seal_using.Plant).Select(i => i.Department_Name).SingleOrDefault();
-            /*get employee name*/
-            ViewBag.User_name = en.Employees.Where(f => (f.Emp_CJ == CurrentUser.Instance.User.Emp_CJ && f.Plant_Id == seal_using.DepartmentId.ToString())).Select(f => f.EmployeeName).SingleOrDefault();
-            /*get employee name*/
-            return View(seal_using);
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var seal_Using = en.Seal_Using.FirstOrDefault(s => s.Id == id);
+
+            if (seal_Using == null)
+            {
+                return HttpNotFound();
+            }
+
+            SealUsingViewModel.ConfirmSealUsing esuVM = new SealUsingViewModel.ConfirmSealUsing(seal_Using);
+
+            ViewBag.ModalState = "hide";
+            ViewBag.Message = "";
+            return View(esuVM);
         }
 
         [HttpPost]
-        public ActionResult Confirm(Seal_Using seal_using)
+        public ActionResult Confirm(SealUsingViewModel.ConfirmSealUsing model, bool approved)
         {
-            seal_using.Employee_Seal_keep = DateTime.Now;
-            en.Entry(seal_using).State = System.Data.Entity.EntityState.Modified;
-            en.SaveChanges();
-            return RedirectToAction("Index", "SealUsing");
+            string result = "";
+            var sealUsing = en.Seal_Using.FirstOrDefault(s => s.Id == model.Id);
+            if (sealUsing != default(Seal_Using))
+            {
+                sealUsing = model.ConfirmSealUsing_To_SealUsing(sealUsing);
+                sealUsing.Department_confirm = approved;
+            }
+
+            string deptName = DepartmentModel.Instance.getDeptName(sealUsing.Plant, sealUsing.DepartmentId);
+            if (ModelState.IsValid)
+            {
+                Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == sealUsing.Employee_ID);
+
+                try
+                {
+                    en.Entry(sealUsing).State = System.Data.Entity.EntityState.Modified;
+                    en.SaveChanges();
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    var errorMessages = ex.EntityValidationErrors
+                            .SelectMany(x => x.ValidationErrors)
+                            .Select(x => x.ErrorMessage);
+                    var fullErrorMessage = string.Join("; ", errorMessages);
+                    var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
+
+                    result = string.Format("Có lỗi khi xác nhận đăng ký. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
+                    ViewBag.ModalState = "show";
+                    ViewBag.Message = result;
+                    return View(model);
+                }
+
+                if (sealUsing.Employee_Seal_keep_confrim == true)
+                {
+                    bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(sealUsing, 5, userRequest);
+                    if (resultMailing)
+                    {
+                        result = string.Format("Trạng thái được duyệt đã chọn: Đồng ý xác nhận." +
+                                                          "Bộ phận: " + deptName + "." +
+                                                          "Email xác nhận đã được gởi sang bộ phận quản lý con dấu.");
+                    }
+                    else
+                    {
+                        result = string.Format("Không gửi được email.Vui lòng kiểm tra lại.Liên hệ hỗ trợ: minhsang.it@cjvina.com");
+                    }
+                }
+                else
+                {
+                    bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(sealUsing, 6, userRequest);
+                    if (resultMailing)
+                    {
+                        result = string.Format("Trạng thái được duyệt đã chọn: KHÔNG ĐỒNG Ý XÁC NHẬN." +
+                                                              "Bộ phận: " + deptName + "." +
+                                                      "Email xác nhận không được gởi sang bộ phận quản lý con dấu.");
+                    }
+                    else
+                    {
+                        result = string.Format("Có lỗi khi gửi mail. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
+                    }
+                }
+            }
+            if (!string.IsNullOrEmpty(result))
+            {
+                ViewBag.ModalState = "show";
+                ViewBag.Message = result;
+            }
+            else
+            {
+                ViewBag.ModalState = "hide";
+                ViewBag.Message = "";
+            }
+            return View(model);
         }
 
         //
@@ -342,7 +419,6 @@ namespace Web_IT_HELPDESK.Controllers
                     seal_using.Del = true;
                     en.SaveChanges();
                 }
-
             }
             catch
             {
