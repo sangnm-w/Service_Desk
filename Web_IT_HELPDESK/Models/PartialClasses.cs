@@ -98,18 +98,8 @@ namespace Web_IT_HELPDESK
             OrderDate = DateTime.Now;
         }
     }
-
     [MetadataType(typeof(Seal_UsingMetadata))]
     public partial class Seal_Using
     {
-        public Seal_Using()
-        {
-            Date = DateTime.Now;
-            Period_date = DateTime.Now;
-            Department_confirm = false;
-            Employee_Seal_keep_confrim = false;
-            Date_signature = DateTime.Now;
-            Del = false;
-        }
     }
 }

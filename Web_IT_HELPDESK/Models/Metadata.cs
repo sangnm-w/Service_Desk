@@ -86,7 +86,7 @@ namespace Web_IT_HELPDESK
         public string PERIODID { get; set; }
 
         [Required(ErrorMessage = "This field can not be empty.")]
-        public string ADREES { get; set; }
+        public string ADDRESS { get; set; }
 
         [Required(ErrorMessage = "This field can not be empty.")]
         public string PHONE { get; set; }
@@ -141,7 +141,7 @@ namespace Web_IT_HELPDESK
 
     public class Seal_UsingMetadata
     {
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
-        public Nullable<System.DateTime> Date { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime? Date { get; set; }
     }
 }

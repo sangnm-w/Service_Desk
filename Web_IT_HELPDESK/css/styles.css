@@ -644,6 +644,12 @@ body {
     clear: both;
 }
 
+textarea {
+    resize: vertical;
+    min-height: 34px;
+    max-height: 102px;
+}
+
 /* Responsive CSS */
 
 /* Mobile phones */

@@ -451,7 +451,7 @@
           <Property Name="Employee_Seal_keep_note" Type="nvarchar" MaxLength="250" />
           <Property Name="Date_signature" Type="datetime" />
           <Property Name="Name_signature" Type="nvarchar" MaxLength="250" />
-          <Property Name="Plant" Type="nvarchar" MaxLength="4" />
+          <Property Name="Plant" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Status">
           <Key>
@@ -1549,7 +1549,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="Employee_Seal_keep_note" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Date_signature" Type="DateTime" Precision="3" />
           <Property Name="Name_signature" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Plant" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="Plant" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Status">
           <Key>

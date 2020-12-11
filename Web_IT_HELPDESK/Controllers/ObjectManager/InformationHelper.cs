@@ -28,7 +28,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                 ccMails.Add("test01.it@cjvina.com");
                 bccMails.Add("test02.it@cjvina.com");
             }
-            if (level_confirm == 2) // Level 2: Resend
+            else if (level_confirm == 2) // Level 2: Resend
             {
                 toMails.Add(en.Departments.FirstOrDefault(d => d.Plant_Id == userRequest.Plant_Id && d.Department_Id == userRequest.Department_Id).Manager_Email);
                 ccMails.Add("test01.it@cjvina.com");
