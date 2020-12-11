@@ -4,9 +4,6 @@
     ViewBag.Title = "Create Other Devices";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@section Style{
-    <link href="~/vendors/Selectron/selectron.css" rel="stylesheet" />
-}
 
 <div class="col-md-12 panel-info">
     <div class="content-box-header panel-heading">
@@ -97,7 +94,6 @@
     </div>
 </div>
 @section Script {
-    <script src="~/vendors/Selectron/selectron.js"></script>
     <script type="text/javascript">
         $('#purdatepicker').datepicker({
             format: 'dd/mm/yyyy',

@@ -11,11 +11,12 @@ namespace Web_IT_HELPDESK
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class Seal_Using
     {
         public int Id { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
+        public string Employee_ID { get; set; }
         public string Employee_name { get; set; }
         public string Type_document { get; set; }
         public string DepartmentId { get; set; }
