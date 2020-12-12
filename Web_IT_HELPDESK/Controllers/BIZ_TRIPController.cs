@@ -43,6 +43,7 @@ namespace Web_IT_HELPDESK.Controllers
             IFormatProvider culture = new CultureInfo("en-US", true);
             string _datetime = DateTime.Now.ToString("MM/yyyy");
             from_date = DateTime.ParseExact("01/" + _datetime, "dd/MM/yyyy", culture);
+
             string v_mm = _datetime.Substring(0, 2);
 
             switch (v_mm)
@@ -263,39 +264,21 @@ namespace Web_IT_HELPDESK.Controllers
 
             string result;
             string department_name = en.Departments.Where(o => o.Department_Id == v_dept.ToString() && o.Plant_Id == plantid).Select(f => f.Department_Name).SingleOrDefault();
-            subject = "[APPROVE] - Phiếu đăng ký đi công tác: " + biz_trip.NAME + " - tạo ngày: " + biz_trip.DATE;
-            result = string.Format("Thông báo! <br /> <br />" +
-                                              "Đã gởi email phiếu đăng ký đi công tác đến trưởng phòng bộ phận: " + department_name + " <br />" +
-                                              "************** Cám ơn đã sử dụng chương trình **************");
-            #region SendMail Biztrip
-            //string result, status = "";
-            //string department_name = en.Departments.Where(o => o.Department_Id == v_dept.ToString() && o.Plant_Id == plantid).Select(f => f.Department_Name).SingleOrDefault();
-            //subject = "[APPROVE] - Phiếu đăng ký đi công tác: " + biz_trip.NAME + " - tạo ngày: " + biz_trip.DATE;
-            //result = string.Format("Thông báo! <br /> <br />" +
-            //                                  "Đã gởi email phiếu đăng ký đi công tác đến trưởng phòng bộ phận: " + department_name + " <br />" +
-            //                                  "************** Cám ơn đã sử dụng chương trình **************");
-            //status = "1";
-            //body = "     Employee Name: " + biz_trip.NAME + "\n" +
-            //       "        Department: " + department_name + "\n" +
-            //       "              Date: " + biz_trip.DATE + "\n" +
-            //       "       Description: " + biz_trip.DESCRIPTION + "\n" +
-            //       "           Vehicle: " + biz_trip.VEHICLE + "\n" +
-            //       "  Conctact Company: " + biz_trip.CONTACT_COMPANY + "\n" +
-            //       "Conctact Departent: " + biz_trip.CONTACT_DEPT + "\n" +
-            //       "    Contact person: " + biz_trip.CONTACT_PERSON + "\n" +
-            //       "         From date: " + biz_trip.FROM_DATE + "       To date: " + biz_trip.TO_DATE + "\n" +
-            //       "    Used equipemnt: " + biz_trip.USED_EQUIPMENT.ToString() + "\n" +
-            //       " Equipemnt remarks: " + biz_trip.REMARK.ToString() + "\n" +
-            //       "-------------------------------------" + "\n" +
-            //       "   Follow link to confirm: " + "http://52.213.3.168/servicedesk/BIZ_TRIP/dept_confirm/" + biz_trip.ID + "\n" + "\n" +
-            //       "Regards!" + "\n" + "\n" + "\n" +
 
-            //       "Copy right by IT TEAM: contact Nguyen Thai Binh - IT Software for supporting";
+            result = string.Format("Đã gởi email phiếu đăng ký đi công tác đến trưởng phòng bộ phận: " + department_name);
 
+            string linkConfirm = @"http://52.213.3.168/servicedesk/BIZ_TRIP/dept_confirm/";
 
-            //inf.email_send("user_email", "pass", biz_trip.DEPT, subject, body, status, userManager.GetUserPlant(session_emp)); 
-            #endregion
-
+            if (!string.IsNullOrEmpty(result))
+            {
+                ViewBag.ModalState = "show";
+                ViewBag.Message = result;
+            }
+            else
+            {
+                ViewBag.ModalState = "hide";
+                ViewBag.Message = "";
+            }
             return result;
         }
 
@@ -321,43 +304,6 @@ namespace Web_IT_HELPDESK.Controllers
         {
             //string plantid = userManager.GetUserPlant(session_emp);
             var dept = from i in en.Departments where i.Department_Id == biz_trip.DEPT && i.Plant_Id == biz_trip.PLANT select i.Department_Name;
-            /*string result;
-
-            en.Entry(biz_trip).State = System.Data.Entity.EntityState.Modified;
-            if (biz_trip.DEPT_CONFIRM == true)
-            {
-                en.SaveChanges();
-                //~~~~~~~~~~~~~~~~~~~~~
-                subject = "[Duyệt] - Phiếu yêu cầu đăng ký đi công tác: " + biz_trip.NAME + " - tạo ngày: " + biz_trip.DATE;
-                body = "Tên người yêu cầu: " + biz_trip.NAME + "\n" +
-                        "          Bộ phận: " + dept.Single().ToString() + "\n" +
-                        "     Ngày yêu cầu: " + biz_trip.DATE + "\n" +
-                        /*"  Ngày ký văn bản: " + biz_trip.Date_signature + "\n" +
-                        "     Loại văn bản: " + biz_trip.Type_document + "\n" +
-                        " Nội dung văn bản: " + biz_trip.Context + "\n" +
-                        "         Nơi nhận: " + biz_trip.Place_Recipient + "\n" +
-                        " Người ký văn bản: " + biz_trip.Name_signature + "\n" +
-                        "-------------------------------------" + "\n" +
-                        "Đã được trưởng phòng duyệt" + "\n" +
-                        "   Theo đường dẫn: " + "http://52.213.3.168/servicedesk/BIZ_TRIP/dept_confirm/" + biz_trip.ID + "\n" +
-                        "Trân trọng!" + "\n" + "\n" + "\n" +
-
-                        "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";
-
-                //~~~~~~~~~~~~~~~~~~~~~
-
-                confirm_status = "Đồng ý xác nhận";
-                inf.email_send("user_email", "pass", biz_trip.DEPT, subject, body, "2", biz_trip.PLANT);
-
-                result = string.Format("Thông báo! <br /> Trạng thái được duyệt đã chọn: " + confirm_status + " <br />" +
-                                                  "Bộ phận: " + dept.Single().ToString()) + " <br />" +
-                                                  "Email xác nhận đã được gởi sang bộ phận nhân sự.";
-            }
-         
-
-
-            return result;*/
-
 
             string result = "********ALERT! ******** ;<br /> Not yet Finished";
 
@@ -379,7 +325,7 @@ namespace Web_IT_HELPDESK.Controllers
                     var existingCart = en.BIZ_TRIP.Find(biz_trip.ID);
 
                     Guid v_ID_num = biz_trip.ID;
-                    ///update salary reprot
+                    ///update salary report
 
                     en.Entry(existingCart).CurrentValues.SetValues(biz_trip);
                     en.SaveChanges();
@@ -399,9 +345,7 @@ namespace Web_IT_HELPDESK.Controllers
                        "-------------------------------------" + "\n" +
                        "Confirmed by department manager" + "\n" +
                        "   Follow to confirm by link: " + "http://52.213.3.168/servicedesk/BIZ_TRIP/hr_confirm/" + biz_trip.ID + "\n" +
-                       "Regards!" + "\n" + "\n" + "\n" +
-
-                       "Copy right by IT TEAM: contact Nguyen Thai Binh - IT Software for supporting";
+                       "Regards!";
 
                     //~~~~~~~~~~~~~~~~~~~~~
 

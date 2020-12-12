@@ -210,6 +210,7 @@
     <Compile Include="Controllers\CONTRACTController.cs" />
     <Compile Include="Controllers\DevicesController.cs" />
     <Compile Include="Controllers\ObjectManager\BizTripHelper.cs" />
+    <Compile Include="Controllers\ObjectManager\Biz_TripHelper.cs" />
     <Compile Include="Controllers\ObjectManager\ExcelTitle.cs" />
     <Compile Include="Controllers\DrinkingRequestController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />

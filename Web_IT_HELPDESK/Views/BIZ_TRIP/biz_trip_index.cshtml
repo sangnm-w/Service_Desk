@@ -12,7 +12,25 @@
         });
     });
 </script>
-
+<!-- Modal -->
+<div id="messageModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông báo!!!</h4>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center">
+                    <p id="msgNotify">This is message.</p>
+                    <p>************** Cám ơn đã sử dụng chương trình **************</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @Html.ActionLink("Close", "Index", "SealUsing", null, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    </div>
+</div>
 <div class="content-box-large">
     <h2>biz_trip_index</h2>
 
@@ -194,6 +212,14 @@
 
 @section Script {
     <script type="text/javascript">
+         $('#messageModal').on('shown.bs.modal', function (e) {
+            var message = '@Html.Raw(ViewBag.Message)';
+            var modal = $(this);
+            var msgPlace = modal.find('.modal-body p#msgNotify');
+            msgPlace.text(message);
+        });
+
+        $('#messageModal').modal('@ViewBag.ModalState');
 
         $('#biztrip').DataTable({
             "scrollX": true

@@ -145,6 +145,8 @@
           <Property Name="Plant_Name" Type="nvarchar" MaxLength="100" />
           <Property Name="Deactive" Type="bit" />
           <Property Name="Manager_Email" Type="nvarchar" MaxLength="100" />
+          <Property Name="Manager_Id" Type="nvarchar" MaxLength="50" />
+          <Property Name="BOD_Email" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="Device">
           <Key>
@@ -1222,6 +1224,8 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="Manager_Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Allocations" Relationship="Self.FK_Allocation_Department1" FromRole="Department" ToRole="Allocation" />
           <NavigationProperty Name="Rights_Management" Relationship="Self.FK_Rights_Management_Department" FromRole="Department" ToRole="Rights_Management" />
+          <Property Name="Manager_Id" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BOD_Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Device">
           <Key>
@@ -2224,6 +2228,8 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <EntitySetMapping Name="Departments">
             <EntityTypeMapping TypeName="ServiceDeskModel.Department">
               <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="BOD_Email" ColumnName="BOD_Email" />
+                <ScalarProperty Name="Manager_Id" ColumnName="Manager_Id" />
                 <ScalarProperty Name="Department_Id" ColumnName="Department_Id" />
                 <ScalarProperty Name="Department_Name" ColumnName="Department_Name" />
                 <ScalarProperty Name="Plant_Id" ColumnName="Plant_Id" />
