@@ -95,16 +95,16 @@ namespace Web_IT_HELPDESK
         public string REPRESENTATION { get; set; }
 
         [Required(ErrorMessage = "This field can not be empty.")]
-        public byte[] CONTENT { get; set; }
-
-        [Required(ErrorMessage = "This field can not be empty.")]
         public Nullable<int> MONTHS { get; set; }
     }
 
     public class Contract_SubMetadata
     {
         [Required(ErrorMessage = "This field can not be empty.")]
-        public Nullable<System.DateTime> DATE { get; set; }
+        public string SUBNAME { get; set; }
+        [Required(ErrorMessage = "This field can not be empty.")]
+        public DateTime DATE { get; set; }
+        
     }
 
     public class EmployeeMetadata
