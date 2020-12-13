@@ -26,5 +26,12 @@ namespace Web_IT_HELPDESK.Models
 
             return en.Departments.FirstOrDefault(d => d.Plant_Id == plantId && d.Department_Id == deptId).Department_Name;
         }
+
+        internal string getManagerEmail(string plantId, string deptId)
+        {
+            ServiceDeskEntities en = new ServiceDeskEntities();
+
+            return en.Departments.FirstOrDefault(d => d.Plant_Id == plantId && d.Department_Id == deptId).Manager_Email;
+        }
     }
 }

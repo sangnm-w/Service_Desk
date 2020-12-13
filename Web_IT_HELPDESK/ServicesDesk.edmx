@@ -63,8 +63,10 @@
           <Property Name="PLANT" Type="nvarchar" MaxLength="50" />
           <Property Name="DEPT_CONFIRM" Type="bit" />
           <Property Name="DEPT_CONFIRM_IMAGE" Type="varbinary(max)" />
+          <Property Name="DEPT_CONFIRM_DATE" Type="datetime" />
           <Property Name="HR_CONFIRM" Type="bit" />
           <Property Name="HR_CONFIRM_IMAGE" Type="varbinary(max)" />
+          <Property Name="HR_CONFIRM_DATE" Type="datetime" />
           <Property Name="DEL" Type="bit" />
           <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
           <Property Name="NO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
@@ -1135,6 +1137,8 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="NO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IT_CONFIRM" Type="Boolean" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_BIZ_TRIP_Employee" FromRole="BIZ_TRIP" ToRole="Employee" />
+          <Property Name="DEPT_CONFIRM_DATE" Type="DateTime" Precision="3" />
+          <Property Name="HR_CONFIRM_DATE" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Cart">
           <Key>
@@ -2131,6 +2135,8 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <EntitySetMapping Name="BIZ_TRIP">
             <EntityTypeMapping TypeName="ServiceDeskModel.BIZ_TRIP">
               <MappingFragment StoreEntitySet="BIZ_TRIP">
+                <ScalarProperty Name="HR_CONFIRM_DATE" ColumnName="HR_CONFIRM_DATE" />
+                <ScalarProperty Name="DEPT_CONFIRM_DATE" ColumnName="DEPT_CONFIRM_DATE" />
                 <ScalarProperty Name="EMPNO" ColumnName="EMPNO" />
                 <ScalarProperty Name="NAME" ColumnName="NAME" />
                 <ScalarProperty Name="DEPT" ColumnName="DEPT" />

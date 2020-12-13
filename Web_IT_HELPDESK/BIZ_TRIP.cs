@@ -36,6 +36,8 @@ namespace Web_IT_HELPDESK
         public System.Guid ID { get; set; }
         public int NO { get; set; }
         public Nullable<bool> IT_CONFIRM { get; set; }
+        public Nullable<System.DateTime> DEPT_CONFIRM_DATE { get; set; }
+        public Nullable<System.DateTime> HR_CONFIRM_DATE { get; set; }
     
         public virtual Employee Employee { get; set; }
     }

@@ -4,6 +4,26 @@
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<!-- Modal -->
+<div id="messageModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông báo!!!</h4>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center">
+                    <p id="msgNotify">This is message.</p>
+                    <p>************** Cám ơn đã sử dụng chương trình **************</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @Html.ActionLink("Close", "biz_trip_index", "BIZ_TRIP", null, new { @class = "btn btn-default" })
+                @Html.ActionLink("Create new", "Create", "BIZ_TRIP", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="col-md-12 panel-info">
     <div class="content-box-header panel-heading">
@@ -325,3 +345,15 @@
     });
 </script>
 
+@section Script {
+    <script type="text/javascript">
+         $('#messageModal').on('shown.bs.modal', function (e) {
+            var message = '@Html.Raw(ViewBag.Message)';
+            var modal = $(this);
+            var msgPlace = modal.find('.modal-body p#msgNotify');
+            msgPlace.text(message);
+        });
+
+        $('#messageModal').modal('@ViewBag.ModalState');
+    </script>
+}
