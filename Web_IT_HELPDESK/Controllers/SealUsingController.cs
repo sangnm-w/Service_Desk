@@ -35,6 +35,7 @@ namespace Web_IT_HELPDESK.Controllers
             //        sealusings = sealusings.Where(s => s.DepartmentId == curr_DeptID && s.Plant == curr_PlantID).ToList();
             //    }
             //}
+            bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantID && d.Department_Id == curr_DeptID && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
 
             var suVM = en.Seal_Using
                 .Where(s => s.Del != true
@@ -54,6 +55,10 @@ namespace Web_IT_HELPDESK.Controllers
                       )
                 .ToList();
 
+            if (currUserIsManager == false)
+            {
+                suVM = suVM.Where(i => i.SealUsing.Employee_ID == CurrentUser.Instance.User.Emp_CJ).ToList();
+            }
             return View(suVM);
         }
 
@@ -69,15 +74,11 @@ namespace Web_IT_HELPDESK.Controllers
 
             var sealusings = en.Seal_Using
                 .Where(s => s.Del != true
+                        && s.Plant == curr_PlantID
+                        && s.DepartmentId == curr_DeptID
                         && s.Date >= from_date
                         && s.Date <= to_date
                 ).ToList();
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                sealusings = sealusings.Where(s => (s.DepartmentId.Contains(searchString) || s.Employee_name.Contains(searchString))).ToList();
-            }
-
             var suVM = sealusings
               .Join(en.Departments,
                     s => new { deptID = s.DepartmentId, plantID = s.Plant },
@@ -86,9 +87,10 @@ namespace Web_IT_HELPDESK.Controllers
                     {
                         SealUsing = s,
                         DeptName = d.Department_Name
-                    }
-                    )
+                    })
               .ToList();
+
+            bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantID && d.Department_Id == curr_DeptID && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
 
             //+++++++ Repair for Right_Management +++++++
             //if (!Admin)
@@ -98,7 +100,16 @@ namespace Web_IT_HELPDESK.Controllers
             //        sealusings = sealusings.Where(s => s.DepartmentId == curr_DeptID && s.Plant == curr_PlantID).ToList();
             //    }
             //}
+            if (currUserIsManager == false)
+            {
+                suVM = suVM.Where(i => i.SealUsing.Employee_ID == CurrentUser.Instance.User.Emp_CJ).ToList();
+            }
 
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                suVM = suVM.Where(s => (s.DeptName.Trim().ToUpper().Contains(searchString.Trim().ToUpper())
+                                         || s.SealUsing.Employee_name.Trim().ToUpper().Contains(searchString.Trim().ToUpper()))).ToList();
+            }
             return View(suVM);
         }
 

@@ -18,6 +18,7 @@ namespace Web_IT_HELPDESK.Controllers
     {
         ServiceDeskEntities en = new ServiceDeskEntities();
         // GET: ContractIndex
+        [Authorize]
         public ActionResult ContractIndex()//int? page)
         {
             #region closed - M$ 20201103
@@ -33,9 +34,12 @@ namespace Web_IT_HELPDESK.Controllers
             ////int pageNumber = (page ?? 1);
             #endregion
 
-            string curr_plantId = CurrentUser.Instance.User.Plant_Id;
+            string curr_PlantId = CurrentUser.Instance.User.Plant_Id;
+            string curr_DeptId = CurrentUser.Instance.User.Department_Id;
+            bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantId && d.Department_Id == curr_DeptId && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
+            ViewBag.currUserIsManager = currUserIsManager;
 
-            var depts = en.Departments.Where(d => d.Plant_Id == curr_plantId && d.Deactive == false).Select(d => new DepartmentViewModel
+            var depts = en.Departments.Where(d => d.Plant_Id == curr_PlantId && d.Deactive == false).Select(d => new DepartmentViewModel
             {
                 Department_Id = d.Department_Id,
                 Department_Name = d.Department_Name
@@ -46,7 +50,13 @@ namespace Web_IT_HELPDESK.Controllers
             var contract_types = en.CONTRACT_TYPE;
             ViewBag.Contract_Types = contract_types;
 
-            var contracts = en.CONTRACTs.Where(c => c.DEL == false);
+            var contracts = en.CONTRACTs.Where(c => c.DEL != true && c.PLANT == curr_PlantId && c.DEPARTMENTID == curr_DeptId);
+
+            if (currUserIsManager == false)
+            {
+                contracts = contracts.Where(c => c.USER_CREATE == CurrentUser.Instance.User.Emp_CJ);
+            }
+
             return View(contracts);
         }
 
@@ -54,26 +64,52 @@ namespace Web_IT_HELPDESK.Controllers
         [HttpPost]
         public ActionResult ContractIndex(string search_, DateTime? date_, ICollection<string> v_depts, string v_contract_type, int daynum_)//, DateTime fromdate_, DateTime todate_)
         {
-            string curr_plantId = CurrentUser.Instance.User.Plant_Id;
+            string curr_PlantId = CurrentUser.Instance.User.Plant_Id;
+            string curr_DeptId = CurrentUser.Instance.User.Department_Id;
+            bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantId && d.Department_Id == curr_DeptId && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
+            ViewBag.currUserIsManager = currUserIsManager;
+
+            var depts = en.Departments.Where(d => d.Plant_Id == curr_PlantId && d.Deactive == false)
+               .Select(d => new DepartmentViewModel
+               {
+                   Department_Id = d.Department_Id,
+                   Department_Name = d.Department_Name
+               }
+               ).OrderByDescending(d => d.Department_Name).ToList();
+            ViewBag.Departments = depts;
+
+            var contract_types = en.CONTRACT_TYPE;
+            ViewBag.Contract_Types = contract_types;
+
             IEnumerable<CONTRACT> contract_list;
 
             contract_list = en.CONTRACTs.Where(c => c.DEL != true
-                                                 && c.PLANT == curr_plantId
+                                                 && c.PLANT == curr_PlantId
                                                  && date_ <= DbFunctions.AddDays(c.DATE, daynum_));
+
+
+
+            if (currUserIsManager == true)
+            {
+                string v_dept_string = "";
+                if (v_depts != null)
+                {
+                    foreach (var v_dept in v_depts)
+                    {
+                        v_dept_string += v_dept.ToString() + " ";
+                    }
+                    contract_list = contract_list.Where(c => v_dept_string.Trim().Contains(c.DEPARTMENTID));
+                }
+            }
+            else
+            {
+                contract_list = contract_list.Where(c => c.USER_CREATE == CurrentUser.Instance.User.Emp_CJ);
+            }
+
 
             if (v_contract_type != "ALL")
             {
                 contract_list = contract_list.Where(c => c.CONTRACT_TYPE_ID == v_contract_type);
-            }
-
-            string v_dept_string = "";
-            if (v_depts != null)
-            {
-                foreach (var v_dept in v_depts)
-                {
-                    v_dept_string += v_dept.ToString() + " ";
-                }
-                contract_list = contract_list.Where(c => v_dept_string.Trim().Contains(c.DEPARTMENTID));
             }
 
             if (search_ != "")
@@ -172,18 +208,6 @@ namespace Web_IT_HELPDESK.Controllers
             //                                                  && o.PLANT == curr_plantId).OrderBy(i => i.DATE);
             //} 
             #endregion
-
-            var depts = en.Departments.Where(d => d.Plant_Id == curr_plantId && d.Deactive == false)
-                .Select(d => new DepartmentViewModel
-                {
-                    Department_Id = d.Department_Id,
-                    Department_Name = d.Department_Name
-                }
-                ).OrderByDescending(d => d.Department_Name).ToList();
-            ViewBag.Departments = depts;
-
-            var contract_types = en.CONTRACT_TYPE;
-            ViewBag.Contract_Types = contract_types;
 
             return View(contract_list);
         }
@@ -353,7 +377,7 @@ namespace Web_IT_HELPDESK.Controllers
             //Clear error of contractSubs file
             for (int i = 0; i < countContractSub; i++)
             {
-                string subFileKey = "ContractSubViewModel[" + i +"].ContentSubFile";
+                string subFileKey = "ContractSubViewModel[" + i + "].ContentSubFile";
                 ModelState[subFileKey].Errors.Clear();
             }
             if (countContractSub != 10)
@@ -421,7 +445,7 @@ namespace Web_IT_HELPDESK.Controllers
                     }
                     else
                     {
-                       
+
                     }
                 }
 

@@ -85,7 +85,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                    "    Used equipemnt: " + biztrip.USED_EQUIPMENT.ToString() + "\n" +
                    " Equipemnt remarks: " + biztrip.REMARK.ToString() + "\n" +
                    "-------------------------------------" + "\n" +
-                   "Confirmed by BOD" + "\n" +
+                   "Confirmed by Head of Department" + "\n" +
                    "   Follow to confirm by link: " + domainName + "/servicedesk/BIZ_TRIP/bod_confirm/" + biztrip.ID + "\n" +
                    "Regards!";
 
@@ -106,7 +106,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                    "    Used equipemnt: " + biztrip.USED_EQUIPMENT.ToString() + "\n" +
                    " Equipemnt remarks: " + biztrip.REMARK.ToString() + "\n" +
                    "-------------------------------------" + "\n" +
-                   "Confirmed by HR manager" + "\n" +
+                   "Confirmed by Head of Department" + "\n" +
                    "   Follow to confirm by link: " + domainName + "/servicedesk/BIZ_TRIP/hr_confirm/" + biztrip.ID + "\n" +
                    "Regards!";
 
@@ -127,6 +127,8 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                    "    Used equipemnt: " + biztrip.USED_EQUIPMENT.ToString() + "\n" +
                    " Equipemnt remarks: " + biztrip.REMARK.ToString() + "\n" +
                    "-------------------------------------" + "\n" +
+                   "Confirmed" + "\n" +
+                   "   Follow to add information by link: " + domainName + "/servicedesk/BIZ_TRIP/hr_admin/" + biztrip.ID + "\n" +
                    "Regards!";
 
             }

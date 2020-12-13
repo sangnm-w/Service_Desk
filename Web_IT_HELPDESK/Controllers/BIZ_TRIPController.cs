@@ -39,87 +39,25 @@ namespace Web_IT_HELPDESK.Controllers
             string plant_id = userManager.GetUserPlant(session_emp);
 
             string dept_id = Convert.ToString(GetDept_id(plant_id));
-            string dept_name = en.Departments.Where(o => o.Department_Id == dept_id && o.Plant_Id == plant_id).Select(f => f.Department_Name).SingleOrDefault();
-            ViewBag.DepartmentNameview = dept_name;
 
             IFormatProvider culture = new CultureInfo("en-US", true);
             string _datetime = DateTime.Now.ToString("MM/yyyy");
             from_date = DateTime.ParseExact("01/" + _datetime, "dd/MM/yyyy", culture);
+            to_date = from_date.AddMonths(1).AddSeconds(-1);
 
-            string v_mm = _datetime.Substring(0, 2);
-
-            switch (v_mm)
-            {
-                case "01":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "02":
-                    to_date = DateTime.ParseExact("28/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "03":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "04":
-                    to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "05":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "06":
-                    to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "07":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "08":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "09":
-                    to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "10":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "11":
-                    to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "12":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-            }
-
-            // https://www.nuget.org/packages/PagedList.Mvc/3.0.0 --Install-Package PagedList.Mvc -Version 3.0.0
-
-            //int pageSize = 20;
-            //int pageNumber = (page ?? 1);
             if (session_emp != "")
             {
-                /*if (session_emp != "admin" && session_emp != "D83003")
+                bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == plant_id && d.Department_Id == dept_id && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
+                var bizz = en.BIZ_TRIP.Where(i => i.DEL != true
+                                               && i.DEPT == dept_id
+                                               && i.DATE >= from_date
+                                               && i.DATE <= to_date
+                                               && i.PLANT == plant_id);
+                if (currUserIsManager == false)
                 {
-                    var students = en.BIZ_TRIP.Where(i => i.DEL != true 
-                                                    && i.DEPT == dept_id 
-                                                    && i.PLANT == plant_id 
-                                                    && i.DATE >= from_date 
-                                                    && i.DATE <= to_date 
-                                                    && i.PLANT == plant_id).OrderBy(o => o.NO);
-                    return View(students);//.ToPagedList(pageNumber, pageSize));
+                    bizz = bizz.Where(i => i.EMPNO == CurrentUser.Instance.User.Emp_CJ);
                 }
-                else
-                {
-                    var students2 = en.BIZ_TRIP.Where(i => i.DEL != true
-                                                          && i.DATE >= from_date
-                                                          && i.DATE <= to_date
-                                                          && i.PLANT == plant_id
-                                                          ).OrderBy(o => o.NO);
-                    return View(students2);//.ToPagedList(pageNumber, pageSize));
-                }*/
-                var students = en.BIZ_TRIP.Where(i => i.DEL != true
-                                                //&& i.DEPT == dept_id
-                                                && i.PLANT == plant_id
-                                                && i.DATE >= from_date
-                                                && i.DATE <= to_date
-                                                && i.PLANT == plant_id).OrderBy(o => o.NO);
-                return View(students);//.ToPagedList(pageNumber, pageSize));
+                return View(bizz);
             }
             else return RedirectToAction("LogOn", "LogOn");
         }
@@ -130,78 +68,34 @@ namespace Web_IT_HELPDESK.Controllers
         {
             ViewBag.ModalState = "hide";
             ViewBag.Message = "";
-            //http://www.asp.net/mvc/overview/getting-started/getting-started-with-ef-using-mvc/sorting-filtering-and-paging-with-the-entity-framework-in-an-asp-net-mvc-application
+
             IFormatProvider culture = new CultureInfo("en-US", true);
             from_date = DateTime.ParseExact("01/" + _datetime, "dd/MM/yyyy", culture);
-            string v_mm = _datetime.Substring(0, 2);
+            to_date = from_date.AddMonths(1).AddSeconds(-1);
 
-            switch (v_mm)
-            {
-                case "01":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "02":
-                    to_date = DateTime.ParseExact("28/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "03":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "04":
-                    to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "05":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "06":
-                    to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "07":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "08":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "09":
-                    to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "10":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "11":
-                    to_date = DateTime.ParseExact("30/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-                case "12":
-                    to_date = DateTime.ParseExact("31/" + _datetime + " 23:59:59", "dd/MM/yyyy HH:mm:ss", culture);
-                    break;
-            }
             string plant_id = userManager.GetUserPlant(session_emp);
             string dept_id = Convert.ToString(GetDept_id(plant_id));
             ViewBag.DepartmentNameview = en.Departments.Where(o => o.Department_Id == dept_id && o.Plant_Id == plant_id).Select(f => f.Department_Name).SingleOrDefault();
 
             if (session_emp != "")
             {
-                var students = from s in en.BIZ_TRIP.Where(i => i.DEL != true && i.DATE >= from_date && i.DATE <= to_date && i.PLANT == plant_id)
-                               select s;
-
-                /*if (session_emp != "admin" && String.IsNullOrEmpty(searchString) && session_emp != "D83003")
-                    students = students.Where(s => s.DEPT == dept_id && s.PLANT == plant_id);
-                else if (session_emp != "admin" && !String.IsNullOrEmpty(searchString) && session_emp != "D83003") // triển khai cho Đồng Nai
-                    students = students.Where(s => s.DEPT == dept_id && (s.DEPT.Contains(searchString)
-                                       || s.Employee.EmployeeName.Contains(searchString)) && s.PLANT == plant_id);
-                else if (!String.IsNullOrEmpty(searchString))
+                bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == plant_id && d.Department_Id == dept_id && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
+                var bizz = en.BIZ_TRIP.Where(i => i.DEL != true
+                                               && i.DEPT == dept_id
+                                               && i.DATE >= from_date
+                                               && i.DATE <= to_date
+                                               && i.PLANT == plant_id);
+                if (currUserIsManager == false)
                 {
-                    students = students.Where(s => (s.DEPT.Contains(searchString)
-                                           || s.Employee.EmployeeName.Contains(searchString)) && s.PLANT == plant_id);
-                    //|| Convert.ToString(s.Date).Contains(searchString));
-                }*/
+                    bizz = bizz.Where(i => i.EMPNO == CurrentUser.Instance.User.Emp_CJ);
+                }
 
                 if (!String.IsNullOrEmpty(searchString))
                 {
-                    students = students.Where(s => (s.DEPT.Contains(searchString)
-                                           || s.Employee.EmployeeName.Contains(searchString)) && s.PLANT == plant_id);
-                    //|| Convert.ToString(s.Date).Contains(searchString));
+                    bizz = bizz.Where(s => (s.DEPT.Trim().ToUpper().Contains(searchString.Trim().ToUpper())
+                                             || s.Employee.EmployeeName.Trim().ToUpper().Contains(searchString.Trim().ToUpper())) && s.PLANT == plant_id);
                 }
-                return View(students);
+                return View(bizz);
             }
             else return RedirectToAction("LogOn", "LogOn");
         }
@@ -258,11 +152,12 @@ namespace Web_IT_HELPDESK.Controllers
             try
             {
                 en.SaveChanges();
-                string department_name = DepartmentModel.Instance.getDeptName(biz_trip.PLANT, biz_trip.DEPT);
-                string deptManagerEmail = DepartmentModel.Instance.getManagerEmail(biz_trip.PLANT, biz_trip.DEPT);
-                string currentUserEmail = CurrentUser.Instance.User.Email;
+                string dept_name = DepartmentModel.Instance.getDeptName(biz_trip.PLANT, biz_trip.DEPT);
+                //string deptManagerEmail = DepartmentModel.Instance.getManagerEmail(biz_trip.PLANT, biz_trip.DEPT);
+                //string deptManagerEmail = DepartmentModel.Instance.getManagerEmailbyID(biz_trip.PLANT, biz_trip.DEPT, biz_trip.EMPNO);
+                bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == biz_trip.PLANT && d.Department_Id == biz_trip.DEPT && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
                 string domainName = System.Web.HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
-                if (string.Equals(deptManagerEmail.Trim(), currentUserEmail.Trim()))
+                if (currUserIsManager)
                 {
                     linkConfirm = domainName + @"/servicedesk/BIZ_TRIP/bod_confirm/";
                 }
@@ -275,7 +170,7 @@ namespace Web_IT_HELPDESK.Controllers
                 bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(biz_trip, 1, userRequest, linkConfirm);
                 if (resultMailing)
                 {
-                    result = string.Format("Đã gởi email phiếu đăng ký đi công tác đến trưởng phòng bộ phận: " + department_name);
+                    result = string.Format("Đã gởi email phiếu đăng ký đi công tác đến trưởng phòng bộ phận: " + dept_name);
                 }
                 else
                 {

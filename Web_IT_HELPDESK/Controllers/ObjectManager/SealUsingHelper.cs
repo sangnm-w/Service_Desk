@@ -34,7 +34,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             string departmentName = DepartmentModel.Instance.getDeptName(sealUsing.Plant, sealUsing.DepartmentId);
             if (level == 1) // Level 1: Department Manager
             {
-                subject = "[Duyệt] - Phiếu yêu cầu sử dụng con dấu: " + sealUsing.Employee_name + " - tạo ngày: " + sealUsing.Date;
+                subject = "[Cần Duyệt] - Phiếu yêu cầu sử dụng con dấu: " + sealUsing.Employee_name + " - tạo ngày: " + sealUsing.Date;
 
                 body = "Tên người yêu cầu: " + sealUsing.Employee_name + "\n" +
                         "          Bộ phận: " + departmentName + "\n" +
@@ -64,7 +64,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             }
             else if (level == 5) // Level 5: HR Admin
             {
-                subject = "[Duyệt] - Phiếu yêu cầu sử dụng con dấu: " + sealUsing.Employee_name + " - tạo ngày: " + sealUsing.Date;
+                subject = "[Cần Duyệt] - Phiếu yêu cầu sử dụng con dấu: " + sealUsing.Employee_name + " - tạo ngày: " + sealUsing.Date;
                 body = "Tên người yêu cầu: " + sealUsing.Employee_name + "\n" +
                         "          Bộ phận: " + departmentName + "\n" +
                         "     Ngày yêu cầu: " + sealUsing.Date + "\n" +
