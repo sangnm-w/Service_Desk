@@ -104,7 +104,7 @@ namespace Web_IT_HELPDESK
         public string SUBNAME { get; set; }
         [Required(ErrorMessage = "This field can not be empty.")]
         public DateTime DATE { get; set; }
-        
+
     }
 
     public class EmployeeMetadata
@@ -146,5 +146,15 @@ namespace Web_IT_HELPDESK
     {
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? Date { get; set; }
+    }
+
+    public class BIZ_TRIPMetadata
+    {
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm}")]
+        public DateTime? DATE { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm}")]
+        public DateTime? FROM_DATE { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm}")]
+        public DateTime? TO_DATE { get; set; }
     }
 }

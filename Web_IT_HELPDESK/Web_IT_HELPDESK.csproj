@@ -1718,6 +1718,7 @@
     <Content Include="Views\SealUsing\Edit.cshtml" />
     <Content Include="Views\Contacts\Index.cshtml" />
     <Content Include="Views\BIZ_TRIP\dept_confirm - Copy.cshtml" />
+    <Content Include="Views\BIZ_TRIP\hr_admin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

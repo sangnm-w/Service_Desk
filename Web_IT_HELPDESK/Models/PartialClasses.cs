@@ -24,7 +24,7 @@ namespace Web_IT_HELPDESK
             Del = false;
         }
     }
-
+    [MetadataType(typeof(BIZ_TRIPMetadata))]
     public partial class BIZ_TRIP
     {
         public BIZ_TRIP()

@@ -261,13 +261,14 @@ namespace Web_IT_HELPDESK.Controllers
                 string department_name = DepartmentModel.Instance.getDeptName(biz_trip.PLANT, biz_trip.DEPT);
                 string deptManagerEmail = DepartmentModel.Instance.getManagerEmail(biz_trip.PLANT, biz_trip.DEPT);
                 string currentUserEmail = CurrentUser.Instance.User.Email;
+                string domainName = System.Web.HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
                 if (string.Equals(deptManagerEmail.Trim(), currentUserEmail.Trim()))
                 {
-                    linkConfirm = @"http://52.213.3.168/servicedesk/BIZ_TRIP/bod_confirm/";
+                    linkConfirm = domainName + @"/servicedesk/BIZ_TRIP/bod_confirm/";
                 }
                 else
                 {
-                    linkConfirm = @"http://52.213.3.168/servicedesk/BIZ_TRIP/dept_confirm/";
+                    linkConfirm = domainName + @"/servicedesk/BIZ_TRIP/dept_confirm/";
                 }
 
                 Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO);
@@ -304,7 +305,6 @@ namespace Web_IT_HELPDESK.Controllers
             return View(biz_trip);
         }
 
-
         public ActionResult dept_confirm(Guid? id)
         {
             BIZ_TRIP biz_trip = en.BIZ_TRIP.Find(id);
@@ -326,57 +326,71 @@ namespace Web_IT_HELPDESK.Controllers
 
         // POST: /BIZ_TRIP/dept_confirm/GUID
         [HttpPost]
-        public ActionResult dept_confirm(BIZ_TRIP biz_trip, HttpPostedFileBase image)
+        public ActionResult dept_confirm(BIZ_TRIP biz_trip, HttpPostedFileBase signatureimage, bool approved)
         {
             string result = "";
             var dept = from i in en.Departments where i.Department_Id == biz_trip.DEPT && i.Plant_Id == biz_trip.PLANT select i.Department_Name;
+            string plantid = userManager.GetUserPlant(session_emp);
 
             //if (ModelState.IsValid)
             //{
-            string plantid = userManager.GetUserPlant(session_emp);
-            image = image ?? Request.Files["image"];
-            if (image != null && image.ContentLength > 0)
+            biz_trip.DEPT_CONFIRM = approved;
+            var existingCart = en.BIZ_TRIP.Find(biz_trip.ID);
+            if (biz_trip.DEPT_CONFIRM == true)
             {
-                //en.Entry(recruiment).State = System.Data.Entity.EntityState.Modified;
-                if (biz_trip.DEPT_CONFIRM == true)
+                existingCart.DEPT_CONFIRM = biz_trip.DEPT_CONFIRM;
+                existingCart.DEPT_CONFIRM_DATE = biz_trip.DEPT_CONFIRM_DATE;
+                existingCart.DEPT_CONFIRM_IMAGE = biz_trip.DEPT_CONFIRM_IMAGE;
+
+                signatureimage = signatureimage ?? Request.Files["signatureimage"];
+                if (signatureimage != null && signatureimage.ContentLength > 0)
                 {
-                    byte[] fileData = new byte[Request.Files["image"].InputStream.Length];
-                    Request.Files["image"].InputStream.Read(fileData, 0, Convert.ToInt32(Request.Files["image"].InputStream.Length));
+                    byte[] fileData = new byte[Request.Files["signatureimage"].InputStream.Length];
+                    Request.Files["signatureimage"].InputStream.Read(fileData, 0, Convert.ToInt32(Request.Files["signatureimage"].InputStream.Length));
                     System.Data.Linq.Binary binaryFile = new System.Data.Linq.Binary(fileData);
-                    biz_trip.PLANT = plantid;
-                    biz_trip.DEPT_CONFIRM_IMAGE = binaryFile.ToArray();
-                    biz_trip.DEPT_CONFIRM = true;
-                    var existingCart = en.BIZ_TRIP.Find(biz_trip.ID);
 
-                    Guid v_ID_num = biz_trip.ID;
-                    ///update salary report
-
-                    en.Entry(existingCart).CurrentValues.SetValues(biz_trip);
-                    en.SaveChanges();
-
-                    Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO);
-                    bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(biz_trip, 4, userRequest); // Level 4: HR Manager
-                    if (resultMailing)
-                    {
-                        result = string.Format("Đã đồng ý. Email xác nhận đã được gửi đến trưởng phòng nhân sự");
-                    }
-                    else
-                    {
-                        result = string.Format("Không gửi được email. Vui lòng kiểm tra lại. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
-                    }
+                    existingCart.DEPT_CONFIRM_IMAGE_NAME = Request.Files["signatureimage"].FileName;
+                    existingCart.DEPT_CONFIRM_IMAGE = binaryFile.ToArray();
                 }
                 else
                 {
-                    Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO);
-                    bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(biz_trip, 6, userRequest);
-                    if (resultMailing)
-                    {
-                        result = string.Format("Không đồng ý. Đã gửi email phản hồi đến nhân viên");
-                    }
-                    else
-                    {
-                        result = string.Format("Không gửi được email. Vui lòng kiểm tra lại. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
-                    }
+                    ModelState.AddModelError("DEPT_CONFIRM_IMAGE", "Please select signature");
+                    existingCart.DEPT_CONFIRM_DATE = null;
+                    ViewBag.ModalState = "hide";
+                    ViewBag.Message = "";
+                    return View(existingCart);
+                }
+
+                en.Entry(existingCart).State = System.Data.Entity.EntityState.Modified;
+                en.SaveChanges();
+
+                Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
+                bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(existingCart, 4, userRequest); // Level 4: HR Manager
+                if (resultMailing)
+                {
+                    result = string.Format("Đã đồng ý. Email xác nhận đã được gửi đến trưởng phòng nhân sự");
+                }
+                else
+                {
+                    result = string.Format("Không gửi được email. Vui lòng kiểm tra lại. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
+                }
+            }
+            else
+            {
+                existingCart.DEPT_CONFIRM = biz_trip.DEPT_CONFIRM;
+                existingCart.DEPT_CONFIRM_DATE = biz_trip.DEPT_CONFIRM_DATE;
+                en.Entry(existingCart).State = System.Data.Entity.EntityState.Modified;
+                en.SaveChanges();
+
+                Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
+                bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(existingCart, 6, userRequest);
+                if (resultMailing)
+                {
+                    result = string.Format("Không đồng ý. Đã gửi email phản hồi đến nhân viên");
+                }
+                else
+                {
+                    result = string.Format("Không gửi được email. Vui lòng kiểm tra lại. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
                 }
             }
             if (!string.IsNullOrEmpty(result))
@@ -389,7 +403,7 @@ namespace Web_IT_HELPDESK.Controllers
                 ViewBag.ModalState = "hide";
                 ViewBag.Message = "";
             }
-            return View(biz_trip);
+            return View(existingCart);
         }
 
         public ActionResult hr_confirm(Guid? id)
@@ -410,62 +424,125 @@ namespace Web_IT_HELPDESK.Controllers
             return View(biz_trip);
         }
 
-        // POST: /BIZ_TRIP/dept_confirm/GUID
+        // POST: /BIZ_TRIP/hr_confirm/GUID
         [HttpPost]
-        public ActionResult hr_confirm(BIZ_TRIP biz_trip, HttpPostedFileBase image)
+        public ActionResult hr_confirm(BIZ_TRIP biz_trip, HttpPostedFileBase HRsignatureimage, bool HRapproved)
         {
             string result = "";
-
-            string plantid = userManager.GetUserPlant(session_emp);
             var dept = from i in en.Departments where i.Department_Id == biz_trip.DEPT && i.Plant_Id == biz_trip.PLANT select i.Department_Name;
+            string plantid = userManager.GetUserPlant(session_emp);
 
-            image = image ?? Request.Files["image"];
-            if (image != null && image.ContentLength > 0)
+            //if (ModelState.IsValid)
+            //{
+            biz_trip.HR_CONFIRM = HRapproved;
+            var existingCart = en.BIZ_TRIP.Find(biz_trip.ID);
+            if (biz_trip.HR_CONFIRM == true)
             {
-                //en.Entry(recruiment).State = System.Data.Entity.EntityState.Modified;
-                if (biz_trip.HR_CONFIRM == true)
+                existingCart.HR_CONFIRM = biz_trip.HR_CONFIRM;
+                existingCart.HR_CONFIRM_DATE = biz_trip.HR_CONFIRM_DATE;
+                existingCart.HR_CONFIRM_IMAGE = biz_trip.HR_CONFIRM_IMAGE;
+
+                HRsignatureimage = HRsignatureimage ?? Request.Files["HRsignatureimage"];
+                if (HRsignatureimage != null && HRsignatureimage.ContentLength > 0)
                 {
-                    byte[] fileData = new byte[Request.Files["image"].InputStream.Length];
-                    Request.Files["image"].InputStream.Read(fileData, 0, Convert.ToInt32(Request.Files["image"].InputStream.Length));
+                    byte[] fileData = new byte[Request.Files["HRsignatureimage"].InputStream.Length];
+                    Request.Files["HRsignatureimage"].InputStream.Read(fileData, 0, Convert.ToInt32(Request.Files["HRsignatureimage"].InputStream.Length));
                     System.Data.Linq.Binary binaryFile = new System.Data.Linq.Binary(fileData);
-                    biz_trip.HR_CONFIRM_IMAGE = binaryFile.ToArray();
-                    biz_trip.HR_CONFIRM = true;
-                    biz_trip.PLANT = plantid;
-                    var existingCart = en.BIZ_TRIP.Find(biz_trip.ID);
-                    biz_trip.DEPT_CONFIRM = existingCart.DEPT_CONFIRM;
-                    biz_trip.DEPT_CONFIRM_IMAGE = existingCart.DEPT_CONFIRM_IMAGE;
 
-                    Guid v_ID_num = biz_trip.ID;
-                    ///update salary reprot
-
-                    en.Entry(existingCart).CurrentValues.SetValues(biz_trip);
-                    en.SaveChanges();
-
-                    Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO);
-                    bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(biz_trip, 5, userRequest); // Level 5: HR Admin
-                    if (resultMailing)
-                    {
-                        result = string.Format("Đã đồng ý. Email xác nhận đã được gửi đến trưởng phòng nhân sự");
-                    }
-                    else
-                    {
-                        result = string.Format("Không gửi được email. Vui lòng kiểm tra lại. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
-                    }
+                    existingCart.HR_CONFIRM_IMAGE_NAME = Request.Files["HRsignatureimage"].FileName;
+                    existingCart.HR_CONFIRM_IMAGE = binaryFile.ToArray();
                 }
                 else
                 {
-                    Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO);
-                    bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(biz_trip, 6, userRequest);
-                    if (resultMailing)
-                    {
-                        result = string.Format("Không đồng ý. Đã gửi email phản hồi đến nhân viên");
-                    }
-                    else
-                    {
-                        result = string.Format("Không gửi được email. Vui lòng kiểm tra lại. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
-                    }
+                    ModelState.AddModelError("HR_CONFIRM_IMAGE", "Please select signature");
+                    existingCart.HR_CONFIRM_DATE = null;
+                    ViewBag.ModalState = "hide";
+                    ViewBag.Message = "";
+                    return View(existingCart);
+                }
+
+                en.Entry(existingCart).State = System.Data.Entity.EntityState.Modified;
+                en.SaveChanges();
+
+                Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
+                bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(existingCart, 5, userRequest); // Level 4: HR Manager
+                if (resultMailing)
+                {
+                    result = string.Format("Đã đồng ý. Email xác nhận đã được gửi đến HR Admin");
+                }
+                else
+                {
+                    result = string.Format("Không gửi được email. Vui lòng kiểm tra lại. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
                 }
             }
+            else
+            {
+                existingCart.HR_CONFIRM = biz_trip.HR_CONFIRM;
+                existingCart.HR_CONFIRM_DATE = biz_trip.HR_CONFIRM_DATE;
+                en.Entry(existingCart).State = System.Data.Entity.EntityState.Modified;
+                en.SaveChanges();
+
+                Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
+                bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(existingCart, 6, userRequest);
+                if (resultMailing)
+                {
+                    result = string.Format("Không đồng ý. Đã gửi email phản hồi đến nhân viên");
+                }
+                else
+                {
+                    result = string.Format("Không gửi được email. Vui lòng kiểm tra lại. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
+                }
+            }
+            if (!string.IsNullOrEmpty(result))
+            {
+                ViewBag.ModalState = "show";
+                ViewBag.Message = result;
+            }
+            else
+            {
+                ViewBag.ModalState = "hide";
+                ViewBag.Message = "";
+            }
+            return View(existingCart);
+        }
+
+        public ActionResult hr_admin(Guid? id)
+        {
+            BIZ_TRIP biz_trip = en.BIZ_TRIP.Find(id);
+            ViewBag.EMPNO = session_emp;
+            ViewBag.DEPT = biz_trip.DEPT;
+            ViewBag.PLANT = biz_trip.PLANT;
+            ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == biz_trip.DEPT
+                                                         && o.Plant_Id == biz_trip.PLANT).Select(i => i.Department_Name).SingleOrDefault();
+            ViewBag.User_name = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).EmployeeName;
+
+            ViewBag.ModalState = "hide";
+            ViewBag.Message = "";
+            return View(biz_trip);
+        }
+
+        [HttpPost]
+        public ActionResult hr_admin(BIZ_TRIP biz_trip)
+        {
+            string result = "";
+
+            var existingCart = en.BIZ_TRIP.Find(biz_trip.ID);
+            existingCart.Vehicle_Infor = biz_trip.Vehicle_Infor;
+
+            en.Entry(existingCart).State = System.Data.Entity.EntityState.Modified;
+            en.SaveChanges();
+
+            Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
+            bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(existingCart, 7, userRequest);
+            if (resultMailing)
+            {
+                result = string.Format("Email phản hồi đã được gửi đến nhân viên");
+            }
+            else
+            {
+                result = string.Format("Không gửi được email. Vui lòng kiểm tra lại. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
+            }
+
             if (!string.IsNullOrEmpty(result))
             {
                 ViewBag.ModalState = "show";

@@ -1,7 +1,7 @@
 ﻿@model Web_IT_HELPDESK.BIZ_TRIP
 
 @{
-    ViewBag.Title = "Department Manager Confirmation";
+    ViewBag.Title = "HR Admin";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section Style {
@@ -145,7 +145,7 @@
                                         @Html.Editor("Confirmation Date", new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", id = "ConfDate" } })
                                         @Html.HiddenFor(model => model.DEPT_CONFIRM_DATE, new { id = "ConfDate_val" })
 
-                                        @Html.Label("Signature File", htmlAttributes: new { @class = "control-label" })
+                                        @Html.Label("Signature File", htmlAttributes: new { @class = "control-label" }) :
                                         <div class="box-inputfile-left">
                                             @Html.TextBox("signatureimage", null, new { @class = "inputfile inputfile-1", id = "signatureimage", type = "file", data_multiple_caption = "{count} files selected" })
                                             <label for="signatureimage"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z" /></svg> <span>Choose a file&hellip;</span></label>
@@ -155,7 +155,7 @@
 
                                     <div class="form-group">
                                         <div class="col-sm-12 col-md-6">
-                                            @Html.RadioButton("approved", true, true, new { id = "approved1" });
+                                            @Html.RadioButton("approved", true, true, new { id = "approved1" })
                                             @Html.Label("APPROVE", htmlAttributes: new { @style = "vertical-align: middle; margin-left: 7px;" })
                                         </div>
                                         <div class="col-sm-12 col-md-6">
@@ -185,6 +185,7 @@
                                         @Html.LabelFor(model => model.DEPT_CONFIRM_DATE, "Confirmation Date", htmlAttributes: new { @class = "control-label" })
                                         @Html.Editor("Confirmation Date", new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", id = "ConfDate" } })
                                         @Html.HiddenFor(model => model.DEPT_CONFIRM_DATE, new { id = "ConfDate_val" })
+
                                         @if (Model.DEPT_CONFIRM == true)
                                         {
                                             @Html.Label("Signature File", htmlAttributes: new { @class = "control-label" })
@@ -200,6 +201,7 @@
                                             @Html.ValidationMessageFor(model => model.DEPT_CONFIRM_IMAGE, "", new { @class = "text-danger" })
                                         }
                                     </div>
+
                                     <div class="form-group">
                                         <div class="col-sm-12 col-md-6">
                                             @Html.RadioButton("approved", true, Model.DEPT_CONFIRM == true ? true : false, new { id = "approved1" })
@@ -228,6 +230,136 @@
                 }
             </div>
         </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"><h5><b>HR manager confirm</b></h5></div>
+            <div class="panel-body">
+                @if (Model.HR_CONFIRM_DATE == null)
+                {
+                    using (Html.BeginForm("hr_confirm", "BIZ_TRIP", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.ID)
+                            @Html.HiddenFor(model => model.NO)
+                            <div class="row middlebtn">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.HR_CONFIRM_DATE, "Confirmation Date", htmlAttributes: new { @class = "control-label" })
+                                        @Html.Editor("Confirmation Date", new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", id = "HRConfDate" } })
+                                        @Html.HiddenFor(model => model.HR_CONFIRM_DATE, new { id = "HRConfDate_val" })
+
+                                        @Html.Label("Signature File", htmlAttributes: new { @class = "control-label" })
+                                        <div class="box-inputfile-left">
+                                            @Html.TextBox("HRsignatureimage", null, new { @class = "inputfile inputfile-1", id = "HRsignatureimage", type = "file", data_multiple_caption = "{count} files selected" })
+                                            <label for="HRsignatureimage"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z" /></svg> <span>Choose a file&hellip;</span></label>
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.HR_CONFIRM_IMAGE, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-12 col-md-6">
+                                            @Html.RadioButton("HRapproved", true, true, new { id = "approved1" })
+                                            @Html.Label("APPROVE", htmlAttributes: new { @style = "vertical-align: middle; margin-left: 7px;" })
+                                        </div>
+                                        <div class="col-sm-12 col-md-6">
+                                            @Html.RadioButton("HRapproved", false, false, new { id = "approved2" })
+                                            @Html.Label("NOT APPROVE", htmlAttributes: new { @style = "vertical-align: middle; margin-left: 7px;" })
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.HR_CONFIRM)
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="submit" value="Submit" class="btn btn-primary" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <fieldset disabled>
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.ID)
+                            @Html.HiddenFor(model => model.NO)
+                            <div class="row middlebtn">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.HR_CONFIRM_DATE, "Confirmation Date", htmlAttributes: new { @class = "control-label" })
+                                        @Html.Editor("Confirmation Date", new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", id = "HRConfDate" } })
+                                        @Html.HiddenFor(model => model.HR_CONFIRM_DATE, new { id = "HRConfDate_val" })
+
+                                        @if (Model.HR_CONFIRM == true)
+                                        {
+                                            @Html.Label("Signature File", htmlAttributes: new { @class = "control-label" })
+                                            @Html.EditorFor(model => model.HR_CONFIRM_IMAGE_NAME, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly" } })
+                                        }
+                                        else
+                                        {
+                                            @Html.Label("Signature File", htmlAttributes: new { @class = "control-label" })
+                                            <div class="box-inputfile-left">
+                                                @Html.TextBox("HRsignatureimage", null, new { @class = "inputfile inputfile-1", id = "HRsignatureimage", type = "file", data_multiple_caption = "{count} files selected" })
+                                                <label for="HRsignatureimage"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z" /></svg> <span>Choose a file&hellip;</span></label>
+                                            </div>
+                                            @Html.ValidationMessageFor(model => model.HR_CONFIRM_IMAGE, "", new { @class = "text-danger" })
+                                        }
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-12 col-md-6">
+                                            @Html.RadioButton("HRapproved", true, Model.HR_CONFIRM == true ? true : false, new { id = "approved1" })
+                                            @Html.Label("APPROVE", htmlAttributes: new { @style = "vertical-align: middle; margin-left: 7px;" })
+                                        </div>
+                                        <div class="col-sm-12 col-md-6">
+                                            @Html.RadioButton("HRapproved", false, Model.HR_CONFIRM != true ? true : false, new { id = "approved2" })
+                                            @Html.Label("NOT APPROVE", htmlAttributes: new { @style = "vertical-align: middle; margin-left: 7px;" })
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.HR_CONFIRM)
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    @if (Model.HR_CONFIRM == true)
+                                    {
+                                        <input type="submit" value="APPROVED" class="btn btn-primary" />
+                                    }
+                                    else
+                                    {
+                                        <input type="submit" value="NOT APPROVED" class="btn btn-primary" />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                }
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"><h5><b>HR Admin</b></h5></div>
+            <div class="panel-body">
+                @using (Html.BeginForm("hr_admin", "BIZ_TRIP", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.ID)
+                        @Html.HiddenFor(model => model.NO)
+                        <div class="row middlebtn">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Vehicle_Infor, "Vehicel Information", htmlAttributes: new { @class = "control-label" })
+                                    @Html.TextAreaFor(model => model.Vehicle_Infor, new { @class = "form-control material", @rows = 2, @required = "required" })
+                                    @Html.ValidationMessageFor(model => model.Vehicle_Infor, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="submit" value="Submit" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
     </div>
 </div>
 
@@ -247,7 +379,12 @@
         $("#fromdate").val(moment($("#fromdate").val()).format("DD/MM/YYYY HH:mm"));
         $("#todate").val(moment($("#todate").val()).format("DD/MM/YYYY HH:mm"));
 
+        $("#SignDate").val(moment($("#SignDate_val").val()).format("DD/MM/YYYY"));
+
         var ConfDate_val = $("#ConfDate_val").val(moment(Date.now()).format());
         $("#ConfDate").val(moment(ConfDate_val).format("DD/MM/YYYY"));
+
+        var HRConfDate_val = $("#HRConfDate_val").val(moment(Date.now()).format());
+        $("#HRConfDate").val(moment(ConfDate_val).format("DD/MM/YYYY"));
     </script>
 }
