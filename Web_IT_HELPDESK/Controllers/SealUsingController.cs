@@ -35,6 +35,7 @@ namespace Web_IT_HELPDESK.Controllers
             //        sealusings = sealusings.Where(s => s.DepartmentId == curr_DeptID && s.Plant == curr_PlantID).ToList();
             //    }
             //}
+            bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantID && d.Department_Id == curr_DeptID && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
 
             var suVM = en.Seal_Using
                 .Where(s => s.Del != true
@@ -54,6 +55,10 @@ namespace Web_IT_HELPDESK.Controllers
                       )
                 .ToList();
 
+            if (currUserIsManager == false)
+            {
+                suVM = suVM.Where(i => i.SealUsing.Employee_ID == CurrentUser.Instance.User.Emp_CJ).ToList();
+            }
             return View(suVM);
         }
 
@@ -69,15 +74,11 @@ namespace Web_IT_HELPDESK.Controllers
 
             var sealusings = en.Seal_Using
                 .Where(s => s.Del != true
+                        && s.Plant == curr_PlantID
+                        && s.DepartmentId == curr_DeptID
                         && s.Date >= from_date
                         && s.Date <= to_date
                 ).ToList();
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                sealusings = sealusings.Where(s => (s.DepartmentId.Contains(searchString) || s.Employee_name.Contains(searchString))).ToList();
-            }
-
             var suVM = sealusings
               .Join(en.Departments,
                     s => new { deptID = s.DepartmentId, plantID = s.Plant },
@@ -86,9 +87,10 @@ namespace Web_IT_HELPDESK.Controllers
                     {
                         SealUsing = s,
                         DeptName = d.Department_Name
-                    }
-                    )
+                    })
               .ToList();
+
+            bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantID && d.Department_Id == curr_DeptID && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
 
             //+++++++ Repair for Right_Management +++++++
             //if (!Admin)
@@ -98,7 +100,16 @@ namespace Web_IT_HELPDESK.Controllers
             //        sealusings = sealusings.Where(s => s.DepartmentId == curr_DeptID && s.Plant == curr_PlantID).ToList();
             //    }
             //}
+            if (currUserIsManager == false)
+            {
+                suVM = suVM.Where(i => i.SealUsing.Employee_ID == CurrentUser.Instance.User.Emp_CJ).ToList();
+            }
 
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                suVM = suVM.Where(s => (s.DeptName.Trim().ToUpper().Contains(searchString.Trim().ToUpper())
+                                         || s.SealUsing.Employee_name.Trim().ToUpper().Contains(searchString.Trim().ToUpper()))).ToList();
+            }
             return View(suVM);
         }
 
@@ -145,7 +156,7 @@ namespace Web_IT_HELPDESK.Controllers
                     }
                     else
                     {
-                        result = string.Format("Không gửi được email. Vui lòng kiểm tra lại. Liên hệ hỗ trợ: minhsang.it@cjvina.com <br />");
+                        result = string.Format("Không gửi được email. Vui lòng kiểm tra lại. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
                     }
                 }
                 catch (DbEntityValidationException ex)
@@ -156,7 +167,7 @@ namespace Web_IT_HELPDESK.Controllers
                     var fullErrorMessage = string.Join("; ", errorMessages);
                     var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
 
-                    result = string.Format("Có lỗi khi tạo đăng ký. Liên hệ hỗ trợ: minhsang.it@cjvina.com <br />");
+                    result = string.Format("Có lỗi khi tạo đăng ký. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
                 }
             }
             if (!string.IsNullOrEmpty(result))
@@ -172,26 +183,46 @@ namespace Web_IT_HELPDESK.Controllers
             return View(csuVM);
         }
         [Authorize]
-        public string Resend(int? id)
+        public ActionResult Resend(int? id)
         {
-            var seal_using = en.Seal_Using.Where(i => i.Id == id).FirstOrDefault();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var seal_Using = en.Seal_Using.FirstOrDefault(s => s.Id == id);
+
+            if (seal_Using == null)
+            {
+                return HttpNotFound();
+            }
+
+            SealUsingViewModel.EditSealUsing esuVM = new SealUsingViewModel.EditSealUsing(seal_Using);
+
             string result = "";
 
-            Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == seal_using.Employee_ID);
-            bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(seal_using, 2, userRequest);
+            Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == seal_Using.Employee_ID);
+            bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(seal_Using, 2, userRequest);
             if (resultMailing)
             {
-                result = string.Format("Thông báo! <br /> <br />" +
-                                              "Đã gởi lại email xác nhận đến trưởng phòng nhân sự để duyệt sử dụng con dấu <br />" +
-                                              "************** Cám ơn đã sử dụng chương trình **************");
+                result = string.Format("Đã gửi lại email xác nhận đến trưởng phòng để duyệt sử dụng con dấu.");
             }
             else
             {
-                result = string.Format("Thông báo! <br /> <br />" +
-                                              "Có lỗi khi gửi mail. Liên hệ hỗ trợ: minhsang.it@cjvina.com <br />" +
-                                              "************** Cám ơn đã sử dụng chương trình **************");
+                result = string.Format("Không gửi được email. Vui lòng kiểm tra lại. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
             }
-            return result;
+
+            if (!string.IsNullOrEmpty(result))
+            {
+                ViewBag.ModalState = "show";
+                ViewBag.Message = result;
+            }
+            else
+            {
+                ViewBag.ModalState = "hide";
+                ViewBag.Message = "";
+            }
+            return View("Index", esuVM);
         }
 
         public ActionResult Edit(int? id)

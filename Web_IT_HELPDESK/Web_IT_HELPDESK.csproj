@@ -209,6 +209,7 @@
     <Compile Include="Controllers\ContactsController.cs" />
     <Compile Include="Controllers\CONTRACTController.cs" />
     <Compile Include="Controllers\DevicesController.cs" />
+    <Compile Include="Controllers\Device_TypeController.cs" />
     <Compile Include="Controllers\ObjectManager\BizTripHelper.cs" />
     <Compile Include="Controllers\ObjectManager\Biz_TripHelper.cs" />
     <Compile Include="Controllers\ObjectManager\ExcelTitle.cs" />
@@ -296,7 +297,8 @@
     <Compile Include="Models\AllocationModel.cs" />
     <Compile Include="Models\AutoCompleteModel.cs" />
     <Compile Include="Models\Biz_TripViewModel.cs" />
-    <Compile Include="Models\ContractViewModel.cs" />
+    <Compile Include="ViewModels\ChangePasswordViewModel.cs" />
+    <Compile Include="ViewModels\ContractViewModel.cs" />
     <Compile Include="Models\DepartmentModel.cs" />
     <Compile Include="Models\DeviceModel.cs" />
     <Compile Include="Models\DisplayNameViewModels.cs" />
@@ -381,7 +383,7 @@
       <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\AllocationViewModel.cs" />
-    <Compile Include="ViewModels\ContactsViewModel.cs" />
+    <Compile Include="ViewModels\ContractSubViewModel.cs" />
     <Compile Include="ViewModels\DepartmentViewModel.cs" />
     <Compile Include="ViewModels\DeviceViewModel.cs" />
     <Compile Include="ViewModels\IncidentViewModel.cs" />
@@ -479,6 +481,7 @@
     <Content Include="css\calendar.css" />
     <Content Include="css\forms.css" />
     <Content Include="css\stats.css" />
+    <Content Include="css\styles - Copy.css" />
     <Content Include="css\styles.css" />
     <Content Include="css\survey.css" />
     <Content Include="Global.asax" />
@@ -748,6 +751,13 @@
     <Content Include="vendors\Bootstrap-Select-1.13.14\js\i18n\defaults-zh_TW.min.js" />
     <Content Include="vendors\BootstrapDatepicker\bootstrap-datepicker.min.css" />
     <Content Include="vendors\BootstrapDatepicker\bootstrap-datepicker.min.js" />
+    <Content Include="vendors\CustomInputFile\css\component.css" />
+    <Content Include="vendors\CustomInputFile\css\CustomInputFile.css" />
+    <Content Include="vendors\CustomInputFile\css\demo.css" />
+    <Content Include="vendors\CustomInputFile\css\normalize.css" />
+    <Content Include="vendors\CustomInputFile\js\custom-file-input.js" />
+    <Content Include="vendors\CustomInputFile\js\jquery-v1.min.js" />
+    <Content Include="vendors\CustomInputFile\js\jquery.custom-file-input.js" />
     <Content Include="vendors\datatables\css\demo_page.css" />
     <Content Include="vendors\datatables\css\demo_table.css" />
     <Content Include="vendors\datatables\css\demo_table_jui.css" />
@@ -1586,7 +1596,7 @@
     <Content Include="Views\LaborContract\hr_approve.cshtml" />
     <Content Include="Views\LaborContract\sales_approve.cshtml" />
     <Content Include="Views\Order_\OrderPrint.cshtml" />
-    <Content Include="Views\Employee\changepasword.cshtml" />
+    <Content Include="Views\Employee\ChangePasword.cshtml" />
     <Content Include="Views\DrinkingRequest\Resend.cshtml" />
     <Content Include="Views\BIZ_TRIP\biz_trip_index.cshtml" />
     <Content Include="Views\BIZ_TRIP\Create.cshtml" />
@@ -1709,6 +1719,10 @@
     <Content Include="Views\SealUsing\Edit - Copy.cshtml" />
     <Content Include="Views\SealUsing\Edit.cshtml" />
     <Content Include="Views\Contacts\Index.cshtml" />
+    <Content Include="Views\BIZ_TRIP\dept_confirm - Copy.cshtml" />
+    <Content Include="Views\BIZ_TRIP\hr_admin.cshtml" />
+    <Content Include="Views\BIZ_TRIP\biz_trip_index - Copy.cshtml" />
+    <Content Include="Views\Shared\_Layout - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -16,31 +16,36 @@
                 <div class="form-group">
                     <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Contract Type :</label>
                     <div class="row">
-                        <div class="col-md-2">
-                            <input name="v_contract_type" type="radio" value="SALES"><label style="vertical-align: middle; margin-left: 7px;">Sales Type</label>
-                        </div>
-                        <div class="col-md-2">
-                            <input name="v_contract_type" type="radio" value="PURCHASE">
-                            <label style="vertical-align: middle; margin-left: 7px;">Purchase Type</label>
-                        </div>
+                        @foreach (var item in ViewBag.Contract_Types)
+                        {
+                            <div class="col-md-2">
+                                <input value="@item.CONTRACT_TYPE_ID" name="v_contract_type" type="radio" />
+                                <label style="vertical-align: middle; margin-left: 7px;">
+                                    @item.CONTRACT_TYPE_NAME
+                                </label>
+                            </div>
+                        }
                         <div class="col-md-2">
                             <input name="v_contract_type" type="radio" value="ALL" checked="checked"><label style="vertical-align: middle; margin-left: 7px;">All</label>
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Departments :</label>
-                    <br />
-                    <input type="button" name="deptCheck" id="checkall" value="Check all" />
-                    <div class="row">
-                        @foreach (var item in ViewBag.Departments)
-                        {
-                            <div class="col-md-3 col-sm-2">
-                                <input value="@item.Department_Id" name="v_dept" type="checkbox"><label style="margin-left:5px;">@item.Department_Name</label>
-                            </div>
-                        }
+                if (ViewBag.currUserIsManager == true)
+                {
+                    <div class="form-group">
+                        <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Departments :</label>
+                        <br />
+                        <input type="button" name="deptCheck" id="uncheckall" value="Uncheck all" />
+                        <div class="row">
+                            @foreach (var item in ViewBag.Departments)
+                            {
+                                <div class="col-md-3 col-sm-2">
+                                    <input value="@item.Department_Id" name="v_depts" type="checkbox" checked><label style="margin-left:5px;">@item.Department_Name</label>
+                                </div>
+                            }
+                        </div>
                     </div>
-                </div>
+                }
                 <div class="form-group">
                     <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Filter :</label>
                     <div class="row">
@@ -59,7 +64,7 @@
                         </div>
                         <div class="col-md-3">
                             <label class="control-label">Day number</label>
-                            <input type="number" id="daynum" name="daynum_" class="form-control" style="background:#A9BCF5;" value="30" placeholder="30">
+                            <input type="number" id="daynum" name="daynum_" class="form-control" style="background:#A9BCF5;" value="30" max="999999" required>
                         </div>
                     </div>
                 </div>
@@ -72,15 +77,112 @@
             <div class="panel-title">Contract List</div>
 
             <div class="panel-options">
-                <a href="@Url.Action("Download", "Contract")" data-rel="download">
-                    <i class="glyphicon glyphicon-download-alt"></i>
+                <a href="@Url.Action("Download", "Contract")">
+                    <i class="glyphicon glyphicon glyphicon-download"></i>
                 </a>
             </div>
         </div>
         <div class="panel-body">
+            <table cellpadding="0" cellspacing="0" border="0" class="display nowrap" id="contract" aria-describedby="example_info">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.VENDOR)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CONTRACT_TYPE.CONTRACT_TYPE_NAME)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.PERIOD.PERIOD_NAME)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.MONTHS)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ADDRESS)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.PHONE)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.REPRESENTATION)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.DATE)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CONTRACTNAME)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.USER_CREATE)
+                        </th>
+                        <th>
+                            Files
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                <thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.VENDOR)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CONTRACT_TYPE.CONTRACT_TYPE_NAME)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PERIOD.PERIOD_NAME)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MONTHS)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ADDRESS)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PHONE)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.REPRESENTATION)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DATE)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CONTRACTNAME)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.USER_CREATE)
+                            </td>
+                            <td>
+                                @if (item.CONTENT != null)
+                                {
+                                    @Html.ActionLink("Getfile", "Get_file", new { con_id = item.ID }, new { @class = "button" })
+                                }
+                                @foreach (var sub in new Web_IT_HELPDESK.ServiceDeskEntities().CONTRACT_SUB.Where(o => o.CONTRACTID == item.ID))
+                                {
+                                    if (sub.CONTENT != null)
+                                    {
+                                        @Html.ActionLink(@sub.SUBNAME.ToString(), "Get_sub", new { sub_id = sub.ID })
+                                    }
+                                    <br />
+                                }
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "EditCONTRACTViewModel", new { id = item.ID }, new { @class = "btn btn-default btn-xs", @role = "button" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
+
 @section Script{
     <script>
         $("input[name='deptCheck']").click(function () {
@@ -94,6 +196,16 @@
                 $(this).attr('id', 'checkall');
                 $(this).attr('value', 'Check all');
             }
+        });
+
+        $.fn.dataTable.moment('D/MM/YYYY');
+
+        $('#contract').DataTable({
+            'aaSorting': [0, 'desc'],
+            "columnDefs": [
+                { className: "borderlastcol", "targets": [9] }
+            ],
+            'scrollX': true,
         });
 
         $('#date_picker').datepicker({

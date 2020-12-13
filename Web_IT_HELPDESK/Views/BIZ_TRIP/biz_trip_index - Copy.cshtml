@@ -1,0 +1,237 @@
+﻿@model IEnumerable<Web_IT_HELPDESK.BIZ_TRIP>
+
+@{
+    ViewBag.Title = "biz_trip_index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.refresh').click(function () {
+            location.reload();
+        });
+    });
+</script>
+<!-- Modal -->
+<div id="messageModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông báo!!!</h4>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center">
+                    <p id="msgNotify">This is message.</p>
+                    <p>************** Cám ơn đã sử dụng chương trình **************</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @Html.ActionLink("Close", "Index", "BIZ_TRIP", null, new { @class = "btn btn-default" })
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content-box-large">
+    <h2>biz_trip_index</h2>
+
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+
+    @using (Html.BeginForm("biz_trip_index", "BIZ_TRIP"))
+    {
+        <p>
+            Find (tìm theo tên, mã phòng ban): @Html.TextBox("SearchString", "", new { @class = "text-box single-line", @style = "background-color:#A9BCF5;" })    Tháng năm: @Html.TextBox("_datetime", DateTime.Now.Month.ToString("00") + "/" + DateTime.Now.Year.ToString("0000"), new { @class = "text-box single-line", @MaxLength = "7", @style = "background-color:#A9BCF5;" })
+            <input type="submit" value="Search" />
+        </p>
+    }
+
+    <div class="panel-heading">
+        List
+    </div>
+    <div class="panel-body">
+        <table class="table table-hover nowrap" border="0" id="biztrip" aria-describedby="example_info">
+            <thead>
+                <tr>
+                    <th>
+                        No
+                    </th>
+                    <th>
+                        Empno
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Dept
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Vehicle
+                    </th>
+                    <th>
+                        Contact Co.
+                    </th>
+                    <th>
+                        Contact Person
+                    </th>
+                    <th>
+                        Contact Dept
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        From date
+                    </th>
+                    <th>
+                        To date
+                    </th>
+                    <th>
+                        Equip
+                    </th>
+                    <th>
+                        Dept conf
+                    </th>
+                    <th>
+                        HR conf
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @using (Html.BeginForm("Resend", "BIZ_TRIP", FormMethod.Post))
+                {
+                    int j = 0;
+                    foreach (var item in Model)
+                    {
+                        j = (Int16)j + 1;
+                        bool? department_confirm = item.DEPT_CONFIRM;
+                        bool? hr_confirm = item.HR_CONFIRM;
+                        bool? it_confirm = item.IT_CONFIRM;
+                        <tr style="@(department_confirm == false ? "Background-color:#40FF00" :
+                                 department_confirm == true &&  hr_confirm == false ? "Background-color:#82FA58" :
+                                 hr_confirm == true  &&  it_confirm == false ? "Background-color:#F3F781" :
+                                  it_confirm == true ? "Background-color:#BCF5A9" : "")">
+                            <td>
+                                @j.ToString()
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EMPNO)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NAME)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DEPT)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DESCRIPTION)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.VEHICLE)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CONTACT_COMPANY)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CONTACT_PERSON)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CONTACT_DEPT)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DATE)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FROM_DATE)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TO_DATE)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.REMARK)
+                            </td>
+                            <td>
+                                @Html.CheckBox("DEPT_CONFIRM", item.DEPT_CONFIRM.GetValueOrDefault())
+                            </td>
+                            <td>
+                                @Html.CheckBox("HR_CONFIRM", item.HR_CONFIRM.GetValueOrDefault())
+                            </td>
+                            <td>
+                                @*@if (@item.DEPT_CONFIRM == false && (Convert.ToString(Session["dept_id"]) == "0000" || Convert.ToString(Session["employee_id"]) == "D83003" ||
+                                    Convert.ToString(Session["employee_id"].ToString()) == "MK78072" || Convert.ToString(Session["employee_id"].ToString()) == "H88768" ||
+                                    Convert.ToString(Session["employee_id"].ToString()) == "HN91185" || Convert.ToString(Session["employee_id"].ToString()) == "HN92244"))
+                                               {
+                                                   @Html.ActionLink("Resend", "Resend", new { id = item.ID }, new { @class = "button" })
+                                               }*@
+                                <button class="refresh">
+                                    @Ajax.ActionLink(
+                                                                       "Delete",
+                                                                       "delete_biztrip",
+                                                                       "BIZ_TRIP",
+                                                                       new { v_id = item.ID },
+                                                                       new AjaxOptions
+                                                                            {
+                                                                           UpdateTargetId = "",
+                                                                           InsertionMode = InsertionMode.Replace
+                                                                   },
+                                                                   new { @class = "button" }
+                                                                   )
+                                </button>
+                                <button class="refresh">
+                                    @Ajax.ActionLink(
+                                                                       "Print",
+                                                                       "BizTripPrint",
+                                                                       "BIZ_TRIP",
+                                                                       new { v_id = item.ID },
+                                                                       new AjaxOptions
+                                                                            {
+                                                                           UpdateTargetId = "",
+                                                                           InsertionMode = InsertionMode.Replace
+                                                                   },
+                                                                   new { @class = "button" }
+                                                                   )
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Script {
+    <script type="text/javascript">
+        $.fn.dataTable.moment('DD/MM/YYYY');
+
+        var t = $('#biztrip').DataTable({
+            "columnDefs": [{
+                "searchable": false,
+                "orderable": false,
+                "targets": 0
+            }],
+            "order": [[9, 'desc']],
+            "scrollX": true
+        });
+
+        t.on('order.dt search.dt', function () {
+            t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+
+         $('#messageModal').on('shown.bs.modal', function (e) {
+            var message = '@Html.Raw(ViewBag.Message)';
+            var modal = $(this);
+            var msgPlace = modal.find('.modal-body p#msgNotify');
+            msgPlace.text(message);
+         });
+
+        $('#messageModal').modal('@ViewBag.ModalState');
+    </script>
+}

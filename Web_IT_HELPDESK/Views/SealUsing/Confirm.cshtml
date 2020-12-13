@@ -86,15 +86,15 @@
                 <div class="form-group">
                     <div class="col-md-3">
                         @Html.LabelFor(model => model.Code_number, "Document Code", htmlAttributes: new { @class = "control-label" })
-                        @Html.EditorFor(model => model.Code_number, new { htmlAttributes = new { @class = "form-control material" } })
+                        @Html.EditorFor(model => model.Code_number, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly" } })
                     </div>
                     <div class="col-md-3">
                         @Html.LabelFor(model => model.Type_document, "Document Type", htmlAttributes: new { @class = "control-label" })
-                        @Html.EditorFor(model => model.Type_document, new { htmlAttributes = new { @class = "form-control material" } })
+                        @Html.EditorFor(model => model.Type_document, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly" } })
                     </div>
                     <div class="col-md-3">
                         @Html.LabelFor(model => model.Name_signature, "Signer", htmlAttributes: new { @class = "control-label" })
-                        @Html.EditorFor(model => model.Name_signature, new { htmlAttributes = new { @class = "form-control material" } })
+                        @Html.EditorFor(model => model.Name_signature, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly" } })
                     </div>
                     <div class="col-md-3">
                         @Html.LabelFor(model => model.Date_signature, "Signature Date", htmlAttributes: new { @class = "control-label" })
@@ -105,11 +105,11 @@
                 <div class="form-group">
                     <div class="col-md-8">
                         @Html.LabelFor(model => model.Context, "Content", htmlAttributes: new { @class = "control-label" })
-                        @Html.TextAreaFor(model => model.Context, new { @class = "form-control material", @rows = 1 })
+                        @Html.TextAreaFor(model => model.Context, new { @class = "form-control material", @readonly = "readonly", @rows = 1 })
                     </div>
                     <div class="col-md-4">
                         @Html.LabelFor(model => model.Place_Recipient, "Recipient Place ", htmlAttributes: new { @class = "control-label" })
-                        @Html.EditorFor(model => model.Place_Recipient, new { htmlAttributes = new { @class = "form-control material" } })
+                        @Html.EditorFor(model => model.Place_Recipient, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly" } })
                     </div>
                 </div>
             </div>
@@ -135,7 +135,7 @@
                                     </div>
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.Department_note, "Manager's opinion (option)", htmlAttributes: new { @class = "control-label" })
-                                        @Html.EditorFor(model => model.Department_note, null, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.EditorFor(model => model.Department_note, null, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                         @Html.ValidationMessageFor(model => model.Department_note, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group">
@@ -172,7 +172,7 @@
                                     </div>
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.Department_note, "Manager's opinion (option)", htmlAttributes: new { @class = "control-label" })
-                                        @Html.EditorFor(model => model.Department_note, null, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.EditorFor(model => model.Department_note, null, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                         @Html.ValidationMessageFor(model => model.Department_note, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group">
@@ -261,7 +261,7 @@
                                     </div>
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.Employee_Seal_keep_note, "HR's opinion (option)", htmlAttributes: new { @class = "control-label" })
-                                        @Html.EditorFor(model => model.Employee_Seal_keep_note, null, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.EditorFor(model => model.Employee_Seal_keep_note, null, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                         @Html.ValidationMessageFor(model => model.Employee_Seal_keep_note, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group">

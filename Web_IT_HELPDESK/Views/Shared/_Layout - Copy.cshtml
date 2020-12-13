@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+    @Html.Partial("~/Views/Shared/Dev_JS_CSS.cshtml")
+    @*@Html.Partial("~/Views/Shared/JS_CSS.cshtml")*@
+
+    @RenderSection("Style", required: false)
+
+</head>
+
+<body>
+    <div class="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5">
+                    <!-- Logo -->
+                    <div class="logo">
+                        <h1><a href="~/Home/Index">CJ Vina - Service Desk</a></h1>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="row">
+                        @*<div class="col-lg-12">
+                                    <div class="input-group form">
+                                        <input type="text" class="form-control" placeholder="Search...">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-primary" type="button">Search</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>*@
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="navbar navbar-inverse" role="banner">
+                        <nav class="collapse navbar-collapse bs-navbar-collapse navbar-right" role="navigation">
+                            <!--ul class="nav navbar-nav">
+                              <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <b class="caret"></b></a>
+                                <ul class="dropdown-menu animated fadeInUp">
+                                  <li><a href="profile.html">Profile</a></li>
+                                  <li><a href="login.html">Logout</a></li>
+                                </ul>
+                              </li>
+                            </ul-->
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="sidebar content-box" style="display: block;">
+                    <ul class="nav">
+                        <!-- Main menu -->
+
+                        @Html.ActionLink("Logout", "LogOff", "LogOn")
+                        @Html.ActionLink("Change Pass", "changepasword", "Employee")
+
+                        @if (Convert.ToString(Session["employee_id"]) == "admin")
+                        {
+                            <li><a href="/servicedesk/SealUsing/EmployeeList"><i class="glyphicon glyphicon-calendar"></i> Employee</a></li>
+                            <li><a href="/servicedesk/SealUsing/PortalAdmin"><i class="glyphicon glyphicon-calendar"></i> Portal Ad</a></li>
+                        }
+
+                        <li class="current"><a href="/servicedesk/Home/Index"><i class="glyphicon glyphicon-home"></i> Dashboard</a></li>
+
+                        <li class="submenu">
+                            <a href="#">
+                                <i class="glyphicon glyphicon-list"></i> IT Order Request
+                                <span class="caret pull-right"></span>
+                            </a>
+                            <!-- Sub menu -->
+                            <ul>
+                                <li><a href="/servicedesk/Incident/Index">Request List</a></li>
+                                <li><a href="/servicedesk/Incident/Create">Create new</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="submenu">
+                            <a href="#">
+                                <i class="glyphicon glyphicon-list"></i> IT Devices
+                                <span class="caret pull-right"></span>
+                            </a>
+                            <!-- Sub menu -->
+                            <ul>
+                                <li><a href="/servicedesk/Devices/Index">Device List</a></li>
+                                <li class="subsubmenu">
+                                    <a href="#">
+                                        Create new
+                                        <span class="caret pull-right"></span>
+                                    </a>
+                                    <!-- Sub menu -->
+                                    <ul>
+                                        <li><a href="/servicedesk/Devices/Create">Laptop/Desktop</a></li>
+                                        <li><a href="/servicedesk/Devices/CreateOthers">Others</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="/servicedesk/Allocations/Index">Management</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="submenu">
+                            <a href="#">
+                                <i class="glyphicon glyphicon-sd-video"></i> Seal using
+                                <span class="caret pull-right"></span>
+                            </a>
+                            <!-- Sub menu -->
+                            <ul>
+                                <li><a href="/servicedesk/SealUsing/Index"> Seal Using List</a></li>
+                                <li><a href="/servicedesk/SealUsing/Create">Create new</a></li>
+                            </ul>
+                        </li>
+
+
+                        <!--li><a href="/servicedesk/SealUsing/Index"><i class="glyphicon glyphicon-calendar"></i> Seal using</a></li-->
+                        <li><a href="/servicedesk/DrinkingRequest/Index"><i class="glyphicon glyphicon-tasks"></i> Services </a></li>
+
+
+                        @*<li><a href="/servicedesk/HumanceResource/Index"><i class="glyphicon glyphicon-shopping-cart"></i> Stationery </a></li>*@
+                        <li class="submenu">
+                            <a href="#">
+                                <i class="glyphicon glyphicon-shopping-cart"></i> HR service
+                                <span class="caret pull-right"></span>
+                            </a>
+                            <!-- Sub menu -->
+                            <ul>
+                                <li><a href="/servicedesk/HumanceResource/Index">Stationery</a></li>
+                                <li><a href="/servicedesk/Meal/Index">Meal</a></li>
+                            </ul>
+                        </li>
+
+
+                        <li><a href="/servicedesk/Contacts/Index"><i class="glyphicon glyphicon-list"></i> Contactlist </a></li>
+                        <li class="submenu">
+                            <a href="#">
+                                <i class="glyphicon glyphicon-record"></i> Contract
+                                <span class="caret pull-right"></span>
+                            </a>
+                            <!-- Sub menu -->
+                            <ul>
+                                <li><a href="/servicedesk/CONTRACT/ContractIndex">Contract List</a></li>
+                                <li><a href="/servicedesk/CONTRACT/CreateCONTRACTViewModel2">Create new</a></li>
+                            </ul>
+                        </li>
+                        <li class="submenu">
+                            <a href="#">
+                                <i class="glyphicon glyphicon-tasks"></i> BIZ_TRIP
+                                <span class="caret pull-right"></span>
+                            </a>
+                            <!-- Sub menu -->
+                            <ul>
+                                <li><a href="/servicedesk/BIZ_TRIP/biz_trip_index">BIZ_TRIP List</a></li>
+                                <li><a href="/servicedesk/BIZ_TRIP/Create">Create new</a></li>
+                            </ul>
+                        </li>
+
+                        <!--<li><a href="calendar.html"><i class="glyphicon glyphicon-calendar"></i> Calendar</a></li>
+                        <li><a href="stats.html"><i class="glyphicon glyphicon-stats"></i> Statistics (Charts)</a></li>
+                        <li><a href="tables.html"><i class="glyphicon glyphicon-list"></i> Tables</a></li>
+                        <li><a href="buttons.html"><i class="glyphicon glyphicon-record"></i> Buttons</a></li>
+                        <li><a href="editors.html"><i class="glyphicon glyphicon-pencil"></i> Editors</a></li>
+                        <li><a href="forms.html"><i class="glyphicon glyphicon-tasks"></i> Forms</a></li>
+                        <li class="submenu">
+                             <a href="#">
+                                <i class="glyphicon glyphicon-list"></i> Pages
+                                <span class="caret pull-right"></span>
+                             </a>
+                             <Sub menu >
+                             <ul>
+                                <li><a href="login.html">Login</a></li>
+                                <li><a href="signup.html">Signup</a></li>
+                            </ul>
+                        </li-->
+
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-9">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="container">
+            <div class="copy text-center">
+                Copyright 2018 <a href='#'>Website</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+@RenderSection("Script", required: false)
+
+</html>

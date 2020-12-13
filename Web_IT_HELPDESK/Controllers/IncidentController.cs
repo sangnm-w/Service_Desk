@@ -150,6 +150,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: /Incident/Details
+        [Authorize]
         public ActionResult Details(Guid? inc_id)
         {
             //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.DETAILS, Commons.ModuleConstant.INCIDENT);
@@ -171,6 +172,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         [Authorize]
         // GET: /Incident/Create
+        [Authorize]
         public ActionResult Create()
         {
             Incident inc = new Incident();
@@ -242,6 +244,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: /Incident/Edit
+        [Authorize]
         public ActionResult Edit(Guid? inc_id)
         {
             //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.EDIT, Commons.ModuleConstant.INCIDENT);
@@ -312,6 +315,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: /Incident/Solve
+        [Authorize]
         public ActionResult Solve(Guid? inc_id)
         {
             //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.SOLVE, Commons.ModuleConstant.INCIDENT);
@@ -375,6 +379,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: /Incident/Delete
+        [Authorize]
         public ActionResult Delete(int id)
         {
             //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.DELETE, Commons.ModuleConstant.INCIDENT);

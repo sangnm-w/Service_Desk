@@ -17,7 +17,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
         }
         private Biz_TripHelper() { }
 
-        public bool sendBiz_TripEmail(BIZ_TRIP biztrip, int level_confirm, Employee userRequest, string linkConfirm)
+        public bool sendBiz_TripEmail(BIZ_TRIP biztrip, int level_confirm, Employee userRequest, string linkConfirm = null)
         {
             string subject = "";
             string body = "";
@@ -33,7 +33,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             string departmentName = DepartmentModel.Instance.getDeptName(biztrip.PLANT, biztrip.DEPT);
             if (level == 1) // Level 1: Department Manager
             {
-                subject = "[APPROVE] - Phiếu đăng ký đi công tác: " + biztrip.NAME + " - tạo ngày: " + biztrip.DATE;
+                subject = "[Cần duyệt] - Phiếu đăng ký đi công tác: " + biztrip.NAME + " - tạo ngày: " + biztrip.DATE;
 
                 body = "     Employee Name: " + biztrip.NAME + "\n" +
                    "        Department: " + departmentName + "\n" +
@@ -66,12 +66,12 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                       "    Used equipemnt: " + biztrip.USED_EQUIPMENT.ToString() + "\n" +
                       " Equipemnt remarks: " + biztrip.REMARK.ToString() + "\n" +
                       "-------------------------------------" + "\n" +
-                      "   Follow link to confirm: " + "http://52.213.3.168/servicedesk/biztrip/dept_confirm/" + biztrip.ID + "\n" + "\n" +
+                      "   Follow link to confirm: " + domainName + "/servicedesk/BIZ_TRIP/dept_confirm/" + biztrip.ID + "\n" + "\n" +
                       "Regards!";
             } // TODO: Need Action Method
             else if (level == 3) // Level 3: BOD
             {
-                subject = "[APPROVE] - Phiếu yêu cầu đăng ký đi công tác BIZ TRIP: " + biztrip.NAME + " - ngày: " + biztrip.DATE;
+                subject = "[Cần duyệt] - Phiếu yêu cầu đăng ký đi công tác BIZ TRIP: " + biztrip.NAME + " - ngày: " + biztrip.DATE;
                 body =
                    "     Employee Name: " + biztrip.NAME + "\n" +
                    "        Department: " + departmentName + "\n" +
@@ -85,14 +85,14 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                    "    Used equipemnt: " + biztrip.USED_EQUIPMENT.ToString() + "\n" +
                    " Equipemnt remarks: " + biztrip.REMARK.ToString() + "\n" +
                    "-------------------------------------" + "\n" +
-                   "Confirmed by BOD" + "\n" +
-                   "   Follow to confirm by link: " + "http://52.213.3.168/servicedesk/biztrip/bod_confirm/" + biztrip.ID + "\n" +
+                   "Confirmed by Head of Department" + "\n" +
+                   "   Follow to confirm by link: " + domainName + "/servicedesk/BIZ_TRIP/bod_confirm/" + biztrip.ID + "\n" +
                    "Regards!";
 
             }
             else if (level == 4) // Level 4: HR Manager
             {
-                subject = "[APPROVE] - Phiếu yêu cầu đăng ký đi công tác BIZ TRIP: " + biztrip.NAME + " - ngày: " + biztrip.DATE;
+                subject = "[Cần duyệt] - Phiếu yêu cầu đăng ký đi công tác BIZ TRIP: " + biztrip.NAME + " - ngày: " + biztrip.DATE;
                 body =
                    "     Employee Name: " + biztrip.NAME + "\n" +
                    "        Department: " + departmentName + "\n" +
@@ -106,14 +106,14 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                    "    Used equipemnt: " + biztrip.USED_EQUIPMENT.ToString() + "\n" +
                    " Equipemnt remarks: " + biztrip.REMARK.ToString() + "\n" +
                    "-------------------------------------" + "\n" +
-                   "Confirmed by HR manager" + "\n" +
-                   "   Follow to confirm by link: " + "http://52.213.3.168/servicedesk/biztrip/hr_confirm/" + biztrip.ID + "\n" +
+                   "Confirmed by Head of Department" + "\n" +
+                   "   Follow to confirm by link: " + domainName + "/servicedesk/BIZ_TRIP/hr_confirm/" + biztrip.ID + "\n" +
                    "Regards!";
 
             }// TODO: Need Action Method
             else if (level == 5) // Level 5: HR Admin
             {
-                subject = "[APPROVE] - Phiếu yêu cầu đăng ký đi công tác BIZ TRIP: " + biztrip.NAME + " - ngày: " + biztrip.DATE;
+                subject = "[Cần duyệt] - Phiếu yêu cầu đăng ký đi công tác BIZ TRIP: " + biztrip.NAME + " - ngày: " + biztrip.DATE;
                 body =
                    "     Employee Name: " + biztrip.NAME + "\n" +
                    "        Department: " + departmentName + "\n" +
@@ -127,6 +127,8 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                    "    Used equipemnt: " + biztrip.USED_EQUIPMENT.ToString() + "\n" +
                    " Equipemnt remarks: " + biztrip.REMARK.ToString() + "\n" +
                    "-------------------------------------" + "\n" +
+                   "Confirmed" + "\n" +
+                   "   Follow to add information by link: " + domainName + "/servicedesk/BIZ_TRIP/hr_admin/" + biztrip.ID + "\n" +
                    "Regards!";
 
             }
@@ -146,7 +148,6 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                    "    Used equipemnt: " + biztrip.USED_EQUIPMENT.ToString() + "\n" +
                    " Equipemnt remarks: " + biztrip.REMARK.ToString() + "\n" +
                    "-------------------------------------" + "\n" +
-                   "Confirmed by HR manager" + "\n" +
                    "Regards!";
             }
             else if (level == 7)
@@ -165,8 +166,6 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                    "    Used equipemnt: " + biztrip.USED_EQUIPMENT.ToString() + "\n" +
                    " Equipemnt remarks: " + biztrip.REMARK.ToString() + "\n" +
                    "-------------------------------------" + "\n" +
-                   "Confirmed by HR manager" + "\n" +
-                   "   Follow to confirm by link: " + "http://52.213.3.168/servicedesk/biztrip/hr_reply/" + biztrip.ID + "\n" +
                    "Regards!";
             }
         }

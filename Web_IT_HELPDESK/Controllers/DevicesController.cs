@@ -20,6 +20,7 @@ namespace Web_IT_HELPDESK.Controllers
         private string session_emp = System.Web.HttpContext.Current.User.Identity.Name;
 
         // GET: Devices
+        [Authorize]
         public ActionResult Index()
         {
             string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
@@ -29,6 +30,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: Devices/Details/5
+        [Authorize]
         public ActionResult Details(Guid? id)
         {
             if (id == null)
@@ -45,6 +47,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         #region Create
         // GET: Devices/Create
+        [Authorize]
         public ActionResult Create()
         {
             string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
@@ -110,6 +113,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: Devices/CreateOthers
+        [Authorize]
         public ActionResult CreateOthers()
         {
             string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
@@ -183,6 +187,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         #region Edit
         // GET: Devices/Edit/5
+        [Authorize]
         public ActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -226,6 +231,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: Devices/EditOthers/5
+        [Authorize]
         public ActionResult EditOthers(Guid? id)
         {
             if (id == null)
@@ -270,6 +276,7 @@ namespace Web_IT_HELPDESK.Controllers
         #endregion
 
         // GET: Devices/Delete/5
+        [Authorize]
         public ActionResult Delete(Guid? id)
         {
             if (id == null)
@@ -287,6 +294,7 @@ namespace Web_IT_HELPDESK.Controllers
         // POST: Devices/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult DeleteConfirmed(Guid id)
         {
             Device device = en.Devices.Find(id);
@@ -297,6 +305,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         // Post: Devices/Upload
         [HttpPost, ActionName("Upload")]
+        [Authorize]
         public ActionResult UploadDevices(HttpPostedFileBase FileUpload)
         {
             if (FileUpload != null)
