@@ -48,6 +48,8 @@ namespace Web_IT_HELPDESK.Controllers
             if (session_emp != "")
             {
                 bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == plant_id && d.Department_Id == dept_id && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
+                // TODO: add logic for HRAdmin
+                //bool hrADMIN = en.Departments.FirstOrDefault(d => d.Plant_Id == plant_id && d.Department_Name.Trim().ToUpper().Contains("HR-Admin") && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
                 var bizz = en.BIZ_TRIP.Where(i => i.DEL != true
                                                && i.DEPT == dept_id
                                                && i.DATE >= from_date

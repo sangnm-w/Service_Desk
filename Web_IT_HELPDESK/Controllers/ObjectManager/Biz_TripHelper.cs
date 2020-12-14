@@ -33,7 +33,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             string departmentName = DepartmentModel.Instance.getDeptName(biztrip.PLANT, biztrip.DEPT);
             if (level == 1) // Level 1: Department Manager
             {
-                subject = "[Cần duyệt] - Phiếu đăng ký đi công tác: " + biztrip.NAME + " - tạo ngày: " + biztrip.DATE;
+                subject = "[Need Confirm by Department Manager ] - Phiếu đăng ký đi công tác: " + biztrip.NAME + " - tạo ngày: " + biztrip.DATE;
 
                 body = "     Employee Name: " + biztrip.NAME + "\n" +
                    "        Department: " + departmentName + "\n" +
@@ -53,7 +53,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             }
             else if (level == 2) // Level 2: Resend
             {
-                subject = "<<Gấp>> [Cần duyệt] - Phiếu yêu cầu sử dụng con dấu: " + biztrip.NAME + " - tạo ngày: " + biztrip.DATE;
+                subject = "<<Gấp>> [Need Confirm by Department Manager ] - Phiếu yêu cầu đăng ký đi công tác BIZ TRIP: " + biztrip.NAME + " - tạo ngày: " + biztrip.DATE;
                 body = "     Employee Name: " + biztrip.NAME + "\n" +
                       "        Department: " + departmentName + "\n" +
                       "              Date: " + biztrip.DATE + "\n" +
@@ -71,7 +71,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             } // TODO: Need Action Method
             else if (level == 3) // Level 3: BOD
             {
-                subject = "[Cần duyệt] - Phiếu yêu cầu đăng ký đi công tác BIZ TRIP: " + biztrip.NAME + " - ngày: " + biztrip.DATE;
+                subject = "[Need Confirm by BOD] - Phiếu yêu cầu đăng ký đi công tác BIZ TRIP: " + biztrip.NAME + " - ngày: " + biztrip.DATE;
                 body =
                    "     Employee Name: " + biztrip.NAME + "\n" +
                    "        Department: " + departmentName + "\n" +
@@ -92,7 +92,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             }
             else if (level == 4) // Level 4: HR Manager
             {
-                subject = "[Cần duyệt] - Phiếu yêu cầu đăng ký đi công tác BIZ TRIP: " + biztrip.NAME + " - ngày: " + biztrip.DATE;
+                subject = "[Need Confirm by HR Manager] - Phiếu yêu cầu đăng ký đi công tác BIZ TRIP: " + biztrip.NAME + " - ngày: " + biztrip.DATE;
                 body =
                    "     Employee Name: " + biztrip.NAME + "\n" +
                    "        Department: " + departmentName + "\n" +
@@ -113,7 +113,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             }// TODO: Need Action Method
             else if (level == 5) // Level 5: HR Admin
             {
-                subject = "[Cần duyệt] - Phiếu yêu cầu đăng ký đi công tác BIZ TRIP: " + biztrip.NAME + " - ngày: " + biztrip.DATE;
+                subject = "[Need Confirm by HR Admin] - Phiếu yêu cầu đăng ký đi công tác BIZ TRIP: " + biztrip.NAME + " - ngày: " + biztrip.DATE;
                 body =
                    "     Employee Name: " + biztrip.NAME + "\n" +
                    "        Department: " + departmentName + "\n" +
@@ -134,7 +134,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             }
             else if (level == 6)
             {
-                subject = "[Không được duyệt] - Phiếu yêu cầu đăng ký đi công tác BIZ TRIP: " + biztrip.NAME + " - ngày: " + biztrip.DATE;
+                subject = "[NOT APPROVED] - Phiếu yêu cầu đăng ký đi công tác BIZ TRIP: " + biztrip.NAME + " - ngày: " + biztrip.DATE;
                 body =
                    "     Employee Name: " + biztrip.NAME + "\n" +
                    "        Department: " + departmentName + "\n" +
@@ -152,7 +152,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             }
             else if (level == 7)
             {
-                subject = "[Đã được duyệt] - Phiếu yêu cầu đăng ký đi công tác BIZ TRIP: " + biztrip.NAME + " - ngày: " + biztrip.DATE;
+                subject = "[APPROVED] - Phiếu yêu cầu đăng ký đi công tác BIZ TRIP: " + biztrip.NAME + " - ngày: " + biztrip.DATE;
                 body =
                    "     Employee Name: " + biztrip.NAME + "\n" +
                    "        Department: " + departmentName + "\n" +
