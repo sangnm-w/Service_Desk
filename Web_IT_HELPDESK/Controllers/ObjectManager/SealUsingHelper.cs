@@ -34,7 +34,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             string departmentName = DepartmentModel.Instance.getDeptName(sealUsing.Plant, sealUsing.DepartmentId);
             if (level == 1) // Level 1: Department Manager
             {
-                subject = "[Cần Duyệt] - Phiếu yêu cầu sử dụng con dấu: " + sealUsing.Employee_name + " - tạo ngày: " + sealUsing.Date;
+                subject = "[Cần Duyệt của trưởng phòng] - Phiếu yêu cầu sử dụng con dấu: " + sealUsing.Employee_name + " - tạo ngày: " + sealUsing.Date;
 
                 body = "Tên người yêu cầu: " + sealUsing.Employee_name + "\n" +
                         "          Bộ phận: " + departmentName + "\n" +
@@ -50,7 +50,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             }
             else if (level == 2) // Level 2: Resend
             {
-                subject = "<<Gấp>> [Cần duyệt] - Phiếu yêu cầu sử dụng con dấu: " + sealUsing.Employee_name + " - tạo ngày: " + sealUsing.Date;
+                subject = "<<Gấp>> [Cần Duyệt của trưởng phòng] - Phiếu yêu cầu sử dụng con dấu: " + sealUsing.Employee_name + " - tạo ngày: " + sealUsing.Date;
                 body = "Tên người yêu cầu: " + sealUsing.Employee_name + "\n" +
                         "          Bộ phận: " + departmentName + "\n" +
                         "     Ngày yêu cầu: " + sealUsing.Date + "\n" +
@@ -64,7 +64,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             }
             else if (level == 5) // Level 5: HR Admin
             {
-                subject = "[Cần Duyệt] - Phiếu yêu cầu sử dụng con dấu: " + sealUsing.Employee_name + " - tạo ngày: " + sealUsing.Date;
+                subject = "[Cần Duyệt của HR Admin] - Phiếu yêu cầu sử dụng con dấu: " + sealUsing.Employee_name + " - tạo ngày: " + sealUsing.Date;
                 body = "Tên người yêu cầu: " + sealUsing.Employee_name + "\n" +
                         "          Bộ phận: " + departmentName + "\n" +
                         "     Ngày yêu cầu: " + sealUsing.Date + "\n" +

@@ -32,7 +32,7 @@
                 </div>
                 if (ViewBag.currUserIsManager == true)
                 {
-                    <div class="form-group">
+                    <div class="form-group show">
                         <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Departments :</label>
                         <br />
                         <input type="button" name="deptCheck" id="uncheckall" value="Uncheck all" />
@@ -45,6 +45,23 @@
                             }
                         </div>
                     </div>
+                }
+                else
+                {
+                    <div class="form-group hide">
+                        <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Departments :</label>
+                        <br />
+                        <input type="button" name="deptCheck" id="uncheckall" value="Uncheck all" />
+                        <div class="row">
+                            @foreach (var item in ViewBag.Departments)
+                            {
+                                <div class="col-md-3 col-sm-2">
+                                    <input value="@item.Department_Id" name="v_depts" type="checkbox" checked><label style="margin-left:5px;">@item.Department_Name</label>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
                 }
                 <div class="form-group">
                     <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Filter :</label>
@@ -172,9 +189,9 @@
                                     <br />
                                 }
                             </td>
-                            <td>
-                                @Html.ActionLink("Edit", "EditCONTRACTViewModel", new { id = item.ID }, new { @class = "btn btn-default btn-xs", @role = "button" })
-                            </td>
+                            @*<td>
+                                    @Html.ActionLink("Edit", "EditCONTRACTViewModel", new { id = item.ID }, new { @class = "btn btn-default btn-xs", @role = "button" })
+                                </td>*@
                         </tr>
                     }
                 </tbody>
