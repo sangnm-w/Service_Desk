@@ -367,7 +367,7 @@ namespace Web_IT_HELPDESK.Controllers
             subject = "[Thông báo] - Phòng nhân sự điều chỉnh thông tin yêu cầu";
             result = string.Format("Thông báo! <br /> <br />" +
                                               "Đã gởi email xác nhận!  <br />" +
-                                              "************** Cám ơn đã sử dụng chương trình **************");
+                                              "************** Thank you!!! **************");
             status = "1";
             //}
             body = "Kiểm tra thông tin đã chỉnh sửa ...\n" +
@@ -423,7 +423,7 @@ namespace Web_IT_HELPDESK.Controllers
             subject = "[Thông báo] - Duyệt thông tin yêu cầu";
             result = string.Format("Thông báo! <br /> <br />" +
                                               "Đã gởi email xác nhận!  <br />" +
-                                              "************** Cám ơn đã sử dụng chương trình **************");
+                                              "************** Thank you!!! **************");
 
             status = "1";
             //}
@@ -469,7 +469,7 @@ namespace Web_IT_HELPDESK.Controllers
                     //~~~~~~~~~~~~~~~~~~~~~
                     result = string.Format("Thông báo! <br /> <br />" +
                                                       "Đã gởi email xác nhận!  <br />" +
-                                                      "************** Cám ơn đã sử dụng chương trình **************");
+                                                      "************** Thank you!!! **************");
                 }
 
                 //string v_department_id= en.Employees.Where(i  => i.EmployeeID==order.EmployeeID).SingleOrDefault().ToString();
@@ -483,7 +483,7 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 result = string.Format("Thông báo! <br /> <br />" +
                                                "THÔNG TIN CHƯA ĐƯỢC DUYỆT, HÃY KIỂM TRA LẠI!  <br />" +
-                                               "************** Cám ơn đã sử dụng chương trình **************");
+                                               "************** Thank you!!! **************");
             }
             return result;
         }

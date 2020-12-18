@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity.Validation;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -36,6 +34,7 @@ namespace Web_IT_HELPDESK.Controllers
             //    }
             //}
             bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantID && d.Department_Id == curr_DeptID && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
+            bool currUserIsHRSealUsing = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantID && d.Department_Id == "V20S000003" && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
 
             var suVM = en.Seal_Using
                 .Where(s => s.Del != true
@@ -55,7 +54,7 @@ namespace Web_IT_HELPDESK.Controllers
                       )
                 .ToList();
 
-            if (currUserIsManager == false)
+            if (currUserIsManager == false && currUserIsHRSealUsing == false)
             {
                 suVM = suVM.Where(i => i.SealUsing.Employee_ID == CurrentUser.Instance.User.Emp_CJ).ToList();
             }
@@ -92,6 +91,8 @@ namespace Web_IT_HELPDESK.Controllers
 
             bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantID && d.Department_Id == curr_DeptID && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
 
+            bool currUserIsHRSealUsing = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantID && d.Department_Id == "V20S000003" && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
+
             //+++++++ Repair for Right_Management +++++++
             //if (!Admin)
             //{
@@ -100,7 +101,7 @@ namespace Web_IT_HELPDESK.Controllers
             //        sealusings = sealusings.Where(s => s.DepartmentId == curr_DeptID && s.Plant == curr_PlantID).ToList();
             //    }
             //}
-            if (currUserIsManager == false)
+            if (currUserIsManager == false && currUserIsHRSealUsing == false)
             {
                 suVM = suVM.Where(i => i.SealUsing.Employee_ID == CurrentUser.Instance.User.Emp_CJ).ToList();
             }
@@ -128,7 +129,7 @@ namespace Web_IT_HELPDESK.Controllers
         {
             SealUsingViewModel.CreateSealUsing csuVM = new SealUsingViewModel.CreateSealUsing();
 
-            ViewBag.ModalState = "hide";
+            ViewBag.ModalState = "false";
             ViewBag.Message = "";
             return View(csuVM);
         }
@@ -149,14 +150,14 @@ namespace Web_IT_HELPDESK.Controllers
                     en.Seal_Using.Add(su);
                     en.SaveChanges();
                     Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == su.Employee_ID);
-                    bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(su, 1, userRequest);
+                    bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(su, 1, userRequest); // Level 1: Department Manager 
                     if (resultMailing)
                     {
-                        result = string.Format("Đã gửi email xác nhận đến trưởng phòng để duyệt sử dụng con dấu.");
+                        result = string.Format("Email to confirm The Seal Using Registration has been sent to Department Manager");
                     }
                     else
                     {
-                        result = string.Format("Không gửi được email. Vui lòng kiểm tra lại. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
+                        result = string.Format("Can't send confirm email to Department Manager. Please contact for support: minhsang.it@cjvina.com");
                     }
                 }
                 catch (DbEntityValidationException ex)
@@ -167,17 +168,17 @@ namespace Web_IT_HELPDESK.Controllers
                     var fullErrorMessage = string.Join("; ", errorMessages);
                     var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
 
-                    result = string.Format("Có lỗi khi tạo đăng ký. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
+                    result = string.Format("Can't create your Seal Using Registration. Please contact for support: minhsang.it@cjvina.com");
                 }
             }
             if (!string.IsNullOrEmpty(result))
             {
-                ViewBag.ModalState = "show";
+                ViewBag.ModalState = "true";
                 ViewBag.Message = result;
             }
             else
             {
-                ViewBag.ModalState = "hide";
+                ViewBag.ModalState = "false";
                 ViewBag.Message = "";
             }
             return View(csuVM);
@@ -202,24 +203,24 @@ namespace Web_IT_HELPDESK.Controllers
             string result = "";
 
             Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == seal_Using.Employee_ID);
-            bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(seal_Using, 2, userRequest);
+            bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(seal_Using, 2, userRequest); // Level 2: Resend
             if (resultMailing)
             {
-                result = string.Format("Đã gửi lại email xác nhận đến trưởng phòng để duyệt sử dụng con dấu.");
+                result = string.Format("Email to confirm The Seal Using Registration has been sent to Department Manager");
             }
             else
             {
-                result = string.Format("Không gửi được email. Vui lòng kiểm tra lại. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
+                result = string.Format("Can't send confirm email to Department Manager. Please contact for support: minhsang.it@cjvina.com");
             }
 
             if (!string.IsNullOrEmpty(result))
             {
-                ViewBag.ModalState = "show";
+                ViewBag.ModalState = "true";
                 ViewBag.Message = result;
             }
             else
             {
-                ViewBag.ModalState = "hide";
+                ViewBag.ModalState = "false";
                 ViewBag.Message = "";
             }
             return View("Index", esuVM);
@@ -241,7 +242,7 @@ namespace Web_IT_HELPDESK.Controllers
 
             SealUsingViewModel.EditSealUsing esuVM = new SealUsingViewModel.EditSealUsing(seal_Using);
 
-            ViewBag.ModalState = "hide";
+            ViewBag.ModalState = "false";
             ViewBag.Message = "";
             return View(esuVM);
         }
@@ -276,45 +277,45 @@ namespace Web_IT_HELPDESK.Controllers
                     var fullErrorMessage = string.Join("; ", errorMessages);
                     var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
 
-                    result = string.Format("Có lỗi khi xác nhận đăng ký. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
-                    ViewBag.ModalState = "show";
+                    result = string.Format("An error occurred while confirming registration. Please contact for support: minhsang.it@cjvina.com");
+                    ViewBag.ModalState = "true";
                     ViewBag.Message = result;
                     return View(model);
                 }
 
                 if (sealUsing.Department_confirm == true)
                 {
-                    bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(sealUsing, 5, userRequest);
+                    bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(sealUsing, 6, userRequest); // Level 6: HR Seal Using
                     if (resultMailing)
                     {
-                        result = string.Format("Trạng thái được duyệt đã chọn: Đồng ý xác nhận. Email xác nhận đã được gởi sang bộ phận quản lý con dấu.");
+                        result = string.Format("Approved! Email to confirm The Seal Using Registration has been sent to HR Seal Using Manager.");
                     }
                     else
                     {
-                        result = string.Format("Không gửi được email.Vui lòng kiểm tra lại. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
+                        result = string.Format("Can't send confirm email to HR Seal Using Manager. Please contact for support: minhsang.it@cjvina.com");
                     }
                 }
                 else
                 {
-                    bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(sealUsing, 6, userRequest);
+                    bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(sealUsing, 8, userRequest); // Level 8: Return NOT APPROVED
                     if (resultMailing)
                     {
-                        result = string.Format("Trạng thái được duyệt đã chọn: KHÔNG ĐỒNG Ý XÁC NHẬN. Email xác nhận không được gởi sang bộ phận quản lý con dấu.");
+                        result = string.Format("Not approved! Feedback mail has been sent to employee.");
                     }
                     else
                     {
-                        result = string.Format("Có lỗi khi gửi mail. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
+                        result = string.Format("Can't send feedback email to employee. Please contact for support: minhsang.it@cjvina.com");
                     }
                 }
             }
             if (!string.IsNullOrEmpty(result))
             {
-                ViewBag.ModalState = "show";
+                ViewBag.ModalState = "true";
                 ViewBag.Message = result;
             }
             else
             {
-                ViewBag.ModalState = "hide";
+                ViewBag.ModalState = "false";
                 ViewBag.Message = "";
             }
             return View(model);
@@ -336,7 +337,7 @@ namespace Web_IT_HELPDESK.Controllers
 
             SealUsingViewModel.ConfirmSealUsing esuVM = new SealUsingViewModel.ConfirmSealUsing(seal_Using);
 
-            ViewBag.ModalState = "hide";
+            ViewBag.ModalState = "false";
             ViewBag.Message = "";
             return View(esuVM);
         }
@@ -370,45 +371,45 @@ namespace Web_IT_HELPDESK.Controllers
                     var fullErrorMessage = string.Join("; ", errorMessages);
                     var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
 
-                    result = string.Format("Có lỗi khi xác nhận đăng ký. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
-                    ViewBag.ModalState = "show";
+                    result = string.Format("An error occurred while confirming registration. Please contact for support: minhsang.it@cjvina.com");
+                    ViewBag.ModalState = "true";
                     ViewBag.Message = result;
                     return View(model);
                 }
 
                 if (sealUsing.Employee_Seal_keep_confrim == true)
                 {
-                    bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(sealUsing, 6, userRequest);
+                    bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(sealUsing, 7, userRequest); // Level 7: Return APPROVED
                     if (resultMailing)
                     {
-                        result = string.Format("Trạng thái được duyệt đã chọn: Đồng ý xác nhận.");
+                        result = string.Format("Approved! Feedback mail has been sent to employee.");
                     }
                     else
                     {
-                        result = string.Format("Không gửi được email.Vui lòng kiểm tra lại.Liên hệ hỗ trợ: minhsang.it@cjvina.com");
+                        result = string.Format("Can't send feedback email to employee. Please contact for support: minhsang.it@cjvina.com");
                     }
                 }
                 else
                 {
-                    bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(sealUsing, 7, userRequest);
+                    bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(sealUsing, 8, userRequest); // Level 8: Return NOT APPROVED
                     if (resultMailing)
                     {
-                        result = string.Format("Trạng thái được duyệt đã chọn: KHÔNG ĐỒNG Ý XÁC NHẬN. ");
+                        result = string.Format("Not approved! Feedback mail has been sent to employee.");
                     }
                     else
                     {
-                        result = string.Format("Có lỗi khi gửi mail. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
+                        result = string.Format("Can't send feedback email to employee. Please contact for support: minhsang.it@cjvina.com");
                     }
                 }
             }
             if (!string.IsNullOrEmpty(result))
             {
-                ViewBag.ModalState = "show";
+                ViewBag.ModalState = "true";
                 ViewBag.Message = result;
             }
             else
             {
-                ViewBag.ModalState = "hide";
+                ViewBag.ModalState = "false";
                 ViewBag.Message = "";
             }
             return View(model);

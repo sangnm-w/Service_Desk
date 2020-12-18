@@ -72,7 +72,7 @@ namespace Web_IT_HELPDESK.Controllers
                 subject = "[Duyệt] - Thông tin yêu cầu văn phòng phẩm";
                 result = string.Format("Thông báo! <br /> <br />" +
                                                   "Đã gởi email xác nhận!  <br />" +
-                                                  "************** Cám ơn đã sử dụng chương trình **************");
+                                                  "************** Thank you!!! **************");
                 status = "1";
                 //}
                 body = "Duyệt thông tin yêu cầu \n" +

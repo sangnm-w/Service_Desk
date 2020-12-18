@@ -36,7 +36,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             }
             else if (level_confirm == 3) // Level 3: BOD
             {
-                toMails.Add(en.Departments.FirstOrDefault(d => d.Plant_Id == userRequest.Plant_Id && d.Department_Name.Contains(")BOD")).Manager_Email);
+                toMails.Add(en.Departments.FirstOrDefault(d => d.Plant_Id == userRequest.Plant_Id && d.Department_Id == userRequest.Department_Id).BOD_Email);
                 //ccMails.Add("test01.it@cjvina.com");
                 bccMails.Add("it-servicedesk@cjvina.com");
             }
@@ -53,13 +53,19 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                 //ccMails.Add("test01.it@cjvina.com");
                 bccMails.Add("it-servicedesk@cjvina.com");
             }
-            else if (level_confirm == 6) // Level 6: Return NOT APPROVED
+            else if (level_confirm == 6) // Level 6: HR Seal Using
+            {
+                toMails.Add(en.Departments.FirstOrDefault(d => d.Plant_Id == userRequest.Plant_Id && d.Department_Name.Contains(") HR-Seal Using")).Manager_Email);
+                //ccMails.Add("test01.it@cjvina.com");
+                bccMails.Add("it-servicedesk@cjvina.com");
+            }
+            else if (level_confirm == 7) // Level 7: Return APPROVED
             {
                 toMails.Add(userRequest.Email);
                 ccMails.Add(en.Departments.FirstOrDefault(d => d.Plant_Id == userRequest.Plant_Id && d.Department_Id == userRequest.Department_Id).Manager_Email);
                 bccMails.Add("it-servicedesk@cjvina.com");
             }
-            else if (level_confirm == 7) // Level 7: Return APPROVED
+            else if (level_confirm == 8) // Level 8: Return NOT APPROVED
             {
                 toMails.Add(userRequest.Email);
                 ccMails.Add(en.Departments.FirstOrDefault(d => d.Plant_Id == userRequest.Plant_Id && d.Department_Id == userRequest.Department_Id).Manager_Email);

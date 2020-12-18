@@ -229,7 +229,7 @@ namespace Web_IT_HELPDESK.Controllers
                 subject = "[Duyệt hỗ trợ] - Phiếu yêu cầu sử dụng con dấu: " + seal_using.Employee_name + " - tạo ngày: " + seal_using.Date;
                 result = string.Format("Thông báo! <br /> <br />" +
                                                   "Đã gởi email xác nhận đến trưởng phòng nhân sự để duyệt sử dụng con dấu <br />" +
-                                                  "************** Cám ơn đã sử dụng chương trình **************");
+                                                  "************** Thank you!!! **************");
                 status = "1.1";
             }
             else
@@ -237,7 +237,7 @@ namespace Web_IT_HELPDESK.Controllers
             subject = "[Duyệt] - Phiếu yêu cầu sử dụng: " + drinking_request.Employee_name + " - tạo ngày: " + drinking_request.Date;
             result = string.Format("Thông báo! <br /> <br />" +
                                               "Đã gởi email xác nhận sử dụng đến trưởng phòng bộ phận: " + dept.Single().ToString() + " <br />" +
-                                              "************** Cám ơn đã sử dụng chương trình **************");
+                                              "************** Thank you!!! **************");
             status = "1";
             //}
             body = "Tên người yêu cầu: " + drinking_request.Employee_name + "\n" +

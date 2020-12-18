@@ -31,7 +31,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         public ActionResult biz_trip_index()
         {
-            ViewBag.ModalState = "hide";
+            ViewBag.ModalState = "false";
             ViewBag.Message = "";
             var DepartmentName = from i in en.Departments where i.Deactive != true select i.Department_Name;
             SelectList deptlist = new SelectList(DepartmentName);
@@ -48,14 +48,15 @@ namespace Web_IT_HELPDESK.Controllers
             if (session_emp != "")
             {
                 bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == plant_id && d.Department_Id == dept_id && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
-                // TODO: add logic for HRAdmin
-                //bool hrADMIN = en.Departments.FirstOrDefault(d => d.Plant_Id == plant_id && d.Department_Name.Trim().ToUpper().Contains("HR-Admin") && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
+
+                bool currUserIsHRSealUsing = en.Departments.FirstOrDefault(d => d.Plant_Id == plant_id && d.Department_Id == "V20S000002" && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
+
                 var bizz = en.BIZ_TRIP.Where(i => i.DEL != true
                                                && i.DEPT == dept_id
                                                && i.DATE >= from_date
                                                && i.DATE <= to_date
                                                && i.PLANT == plant_id);
-                if (currUserIsManager == false)
+                if (currUserIsManager == false && currUserIsHRSealUsing == false)
                 {
                     bizz = bizz.Where(i => i.EMPNO == CurrentUser.Instance.User.Emp_CJ);
                 }
@@ -68,7 +69,7 @@ namespace Web_IT_HELPDESK.Controllers
         [HttpPost]
         public ActionResult biz_trip_index(string searchString, string _datetime, int? page)
         {
-            ViewBag.ModalState = "hide";
+            ViewBag.ModalState = "false";
             ViewBag.Message = "";
 
             IFormatProvider culture = new CultureInfo("en-US", true);
@@ -82,12 +83,14 @@ namespace Web_IT_HELPDESK.Controllers
             if (session_emp != "")
             {
                 bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == plant_id && d.Department_Id == dept_id && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
+                bool currUserIsHRSealUsing = en.Departments.FirstOrDefault(d => d.Plant_Id == plant_id && d.Department_Id == "V20S000002" && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
+
                 var bizz = en.BIZ_TRIP.Where(i => i.DEL != true
                                                && i.DEPT == dept_id
                                                && i.DATE >= from_date
                                                && i.DATE <= to_date
                                                && i.PLANT == plant_id);
-                if (currUserIsManager == false)
+                if (currUserIsManager == false && currUserIsHRSealUsing == false)
                 {
                     bizz = bizz.Where(i => i.EMPNO == CurrentUser.Instance.User.Emp_CJ);
                 }
@@ -124,6 +127,9 @@ namespace Web_IT_HELPDESK.Controllers
                 ViewBag.NAME = en.Employees.Where(f => (f.Emp_CJ == session_emp.ToString() && f.Plant_Id == plant_id)).Select(f => f.EmployeeName).SingleOrDefault();
                 ViewBag.Job = en.Employees.Where(f => (f.Emp_CJ == session_emp.ToString() && f.Plant_Id == plant_id)).Select(f => f.Job).SingleOrDefault();
                 /*get employee name*/
+
+                ViewBag.ModalState = "false";
+                ViewBag.Message = "";
                 return View(biz_trip);
             }
         }
@@ -155,28 +161,35 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 en.SaveChanges();
                 string dept_name = DepartmentModel.Instance.getDeptName(biz_trip.PLANT, biz_trip.DEPT);
-                //string deptManagerEmail = DepartmentModel.Instance.getManagerEmail(biz_trip.PLANT, biz_trip.DEPT);
-                //string deptManagerEmail = DepartmentModel.Instance.getManagerEmailbyID(biz_trip.PLANT, biz_trip.DEPT, biz_trip.EMPNO);
                 bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == biz_trip.PLANT && d.Department_Id == biz_trip.DEPT && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
+
+                Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO);
                 string domainName = System.Web.HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
                 if (currUserIsManager)
                 {
                     linkConfirm = domainName + @"/servicedesk/BIZ_TRIP/bod_confirm/";
+                    bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(biz_trip, 3, userRequest, linkConfirm); // Level 3: BOD
+                    if (resultMailing)
+                    {
+                        result = string.Format("Email to confirm the Business Trip Registration has been sent to BOD: " + dept_name);
+                    }
+                    else
+                    {
+                        result = string.Format("Can't send confirm email to BOD. Please contact for support: minhsang.it@cjvina.com");
+                    }
                 }
                 else
                 {
                     linkConfirm = domainName + @"/servicedesk/BIZ_TRIP/dept_confirm/";
-                }
-
-                Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO);
-                bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(biz_trip, 1, userRequest, linkConfirm);
-                if (resultMailing)
-                {
-                    result = string.Format("Đã gởi email phiếu đăng ký đi công tác đến trưởng phòng bộ phận: " + dept_name);
-                }
-                else
-                {
-                    result = string.Format("Không gửi được email. Vui lòng kiểm tra lại. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
+                    bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(biz_trip, 1, userRequest, linkConfirm); // Level 1: Department Manager
+                    if (resultMailing)
+                    {
+                        result = string.Format("Email to confirm the Business Trip Registration has been sent to Department Manager: " + dept_name);
+                    }
+                    else
+                    {
+                        result = string.Format("Can't send confirm email to Department Manager. Please contact for support: minhsang.it@cjvina.com");
+                    }
                 }
             }
             catch (DbEntityValidationException ex)
@@ -186,17 +199,17 @@ namespace Web_IT_HELPDESK.Controllers
                         .Select(x => x.ErrorMessage);
                 var fullErrorMessage = string.Join("; ", errorMessages);
                 var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
-                result = string.Format("Có lỗi khi tạo đăng ký. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
+                result = string.Format("Can't create your Business Trip Registration. Please contact for support: minhsang.it@cjvina.com");
             }
 
             if (!string.IsNullOrEmpty(result))
             {
-                ViewBag.ModalState = "show";
+                ViewBag.ModalState = "true";
                 ViewBag.Message = result;
             }
             else
             {
-                ViewBag.ModalState = "hide";
+                ViewBag.ModalState = "false";
                 ViewBag.Message = "";
             }
             return View(biz_trip);
@@ -216,7 +229,7 @@ namespace Web_IT_HELPDESK.Controllers
             /*get employee name*/
 
 
-            ViewBag.ModalState = "hide";
+            ViewBag.ModalState = "false";
             ViewBag.Message = "";
             return View(biz_trip);
         }
@@ -253,7 +266,7 @@ namespace Web_IT_HELPDESK.Controllers
                 {
                     ModelState.AddModelError("DEPT_CONFIRM_IMAGE", "Please select signature");
                     existingCart.DEPT_CONFIRM_DATE = null;
-                    ViewBag.ModalState = "hide";
+                    ViewBag.ModalState = "false";
                     ViewBag.Message = "";
                     return View(existingCart);
                 }
@@ -265,11 +278,11 @@ namespace Web_IT_HELPDESK.Controllers
                 bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(existingCart, 4, userRequest); // Level 4: HR Manager
                 if (resultMailing)
                 {
-                    result = string.Format("Đã đồng ý. Email xác nhận đã được gửi đến trưởng phòng nhân sự");
+                    result = string.Format("Approved! Email to confirm the Business Trip Registration has been sent to HR Manager");
                 }
                 else
                 {
-                    result = string.Format("Không gửi được email. Vui lòng kiểm tra lại. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
+                    result = string.Format("Can't send confirm email to HR Manager. Please contact for support: minhsang.it@cjvina.com");
                 }
             }
             else
@@ -280,29 +293,128 @@ namespace Web_IT_HELPDESK.Controllers
                 en.SaveChanges();
 
                 Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
-                bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(existingCart, 6, userRequest);
+                bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(existingCart, 8, userRequest); // Level 8: Return NOT APPROVED
                 if (resultMailing)
                 {
-                    result = string.Format("Không đồng ý. Đã gửi email phản hồi đến nhân viên");
+                    result = string.Format("Not approved! Feedback mail has been sent to employee");
                 }
                 else
                 {
-                    result = string.Format("Không gửi được email. Vui lòng kiểm tra lại. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
+                    result = string.Format("Can't send feedback email to employee. Please contact for support: minhsang.it@cjvina.com");
                 }
             }
             if (!string.IsNullOrEmpty(result))
             {
-                ViewBag.ModalState = "show";
+                ViewBag.ModalState = "true";
                 ViewBag.Message = result;
             }
             else
             {
-                ViewBag.ModalState = "hide";
+                ViewBag.ModalState = "false";
                 ViewBag.Message = "";
             }
             return View(existingCart);
         }
+        public ActionResult bod_confirm(Guid? id)
+        {
+            BIZ_TRIP biz_trip = en.BIZ_TRIP.Find(id);
+            //ViewBag.Department_confirm_date = DateTime.Now;
+            ViewBag.EMPNO = session_emp;
+            ViewBag.DEPT = biz_trip.DEPT;
+            ViewBag.PLANT = biz_trip.PLANT;
+            ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == biz_trip.DEPT
+                                                         && o.Plant_Id == biz_trip.PLANT).Select(i => i.Department_Name).SingleOrDefault();
+            /*get employee name*/
+            ViewBag.User_name = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).EmployeeName;
+            /*get employee name*/
 
+
+            ViewBag.ModalState = "false";
+            ViewBag.Message = "";
+            return View(biz_trip);
+        }
+
+        // POST: /BIZ_TRIP/dept_confirm/GUID
+        [HttpPost]
+        public ActionResult bod_confirm(BIZ_TRIP biz_trip, HttpPostedFileBase BODsignatureimage, bool BODapproved)
+        {
+            string result = "";
+            var dept = from i in en.Departments where i.Department_Id == biz_trip.DEPT && i.Plant_Id == biz_trip.PLANT select i.Department_Name;
+            string plantid = userManager.GetUserPlant(session_emp);
+
+            //if (ModelState.IsValid)
+            //{
+            biz_trip.BOD_CONFIRM = BODapproved;
+            var existingCart = en.BIZ_TRIP.Find(biz_trip.ID);
+            if (biz_trip.BOD_CONFIRM == true)
+            {
+                existingCart.BOD_CONFIRM = biz_trip.BOD_CONFIRM;
+                existingCart.BOD_CONFIRM_DATE = biz_trip.BOD_CONFIRM_DATE;
+                existingCart.BOD_CONFIRM_IMAGE = biz_trip.BOD_CONFIRM_IMAGE;
+
+                BODsignatureimage = BODsignatureimage ?? Request.Files["BODsignatureimage"];
+                if (BODsignatureimage != null && BODsignatureimage.ContentLength > 0)
+                {
+                    byte[] fileData = new byte[Request.Files["BODsignatureimage"].InputStream.Length];
+                    Request.Files["BODsignatureimage"].InputStream.Read(fileData, 0, Convert.ToInt32(Request.Files["BODsignatureimage"].InputStream.Length));
+                    System.Data.Linq.Binary binaryFile = new System.Data.Linq.Binary(fileData);
+
+                    existingCart.BOD_CONFIRM_IMAGE_NAME = Request.Files["BODsignatureimage"].FileName;
+                    existingCart.BOD_CONFIRM_IMAGE = binaryFile.ToArray();
+                }
+                else
+                {
+                    ModelState.AddModelError("BOD_CONFIRM_IMAGE", "Please select signature");
+                    existingCart.BOD_CONFIRM_DATE = null;
+                    ViewBag.ModalState = "false";
+                    ViewBag.Message = "";
+                    return View(existingCart);
+                }
+
+                en.Entry(existingCart).State = System.Data.Entity.EntityState.Modified;
+                en.SaveChanges();
+
+                Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
+                bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(existingCart, 4, userRequest); // Level 4: HR Manager
+                if (resultMailing)
+                {
+                    result = string.Format("Approved! Email to confirm the Business Trip Registration has been sent to HR Manager");
+                }
+                else
+                {
+                    result = string.Format("Can't send confirm email to HR Manager. Please contact for support: minhsang.it@cjvina.com");
+                }
+            }
+            else
+            {
+                existingCart.BOD_CONFIRM = biz_trip.BOD_CONFIRM;
+                existingCart.BOD_CONFIRM_DATE = biz_trip.BOD_CONFIRM_DATE;
+                en.Entry(existingCart).State = System.Data.Entity.EntityState.Modified;
+                en.SaveChanges();
+
+                Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
+                bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(existingCart, 8, userRequest); // Level 8: Return NOT APPROVED
+                if (resultMailing)
+                {
+                    result = string.Format("Not approved! Feedback mail has been sent to employee");
+                }
+                else
+                {
+                    result = string.Format("Can't send feedback email to employee. Please contact for support: minhsang.it@cjvina.com");
+                }
+            }
+            if (!string.IsNullOrEmpty(result))
+            {
+                ViewBag.ModalState = "true";
+                ViewBag.Message = result;
+            }
+            else
+            {
+                ViewBag.ModalState = "false";
+                ViewBag.Message = "";
+            }
+            return View(existingCart);
+        }
         public ActionResult hr_confirm(Guid? id)
         {
             BIZ_TRIP biz_trip = en.BIZ_TRIP.Find(id);
@@ -316,7 +428,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.User_name = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).EmployeeName;
             /*get employee name*/
 
-            ViewBag.ModalState = "hide";
+            ViewBag.ModalState = "false";
             ViewBag.Message = "";
             return View(biz_trip);
         }
@@ -353,7 +465,7 @@ namespace Web_IT_HELPDESK.Controllers
                 {
                     ModelState.AddModelError("HR_CONFIRM_IMAGE", "Please select signature");
                     existingCart.HR_CONFIRM_DATE = null;
-                    ViewBag.ModalState = "hide";
+                    ViewBag.ModalState = "false";
                     ViewBag.Message = "";
                     return View(existingCart);
                 }
@@ -362,14 +474,14 @@ namespace Web_IT_HELPDESK.Controllers
                 en.SaveChanges();
 
                 Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
-                bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(existingCart, 5, userRequest); // Level 4: HR Manager
+                bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(existingCart, 5, userRequest); // Level 5: HR Admin
                 if (resultMailing)
                 {
-                    result = string.Format("Đã đồng ý. Email xác nhận đã được gửi đến HR Admin");
+                    result = string.Format("Approved. Email to confirm the business trip registration has been sent to HR Admin");
                 }
                 else
                 {
-                    result = string.Format("Không gửi được email. Vui lòng kiểm tra lại. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
+                    result = string.Format("Can't send confirm email to HR Admin. Please contact for support: minhsang.it@cjvina.com");
                 }
             }
             else
@@ -380,24 +492,24 @@ namespace Web_IT_HELPDESK.Controllers
                 en.SaveChanges();
 
                 Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
-                bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(existingCart, 6, userRequest);
+                bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(existingCart, 8, userRequest); // Level 8: Return NOT APPROVED
                 if (resultMailing)
                 {
-                    result = string.Format("Không đồng ý. Đã gửi email phản hồi đến nhân viên");
+                    result = string.Format("Not approved! Feedback mail has been sent to employee");
                 }
                 else
                 {
-                    result = string.Format("Không gửi được email. Vui lòng kiểm tra lại. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
+                    result = string.Format("Can't send feedback email to employee. Please contact for support: minhsang.it@cjvina.com");
                 }
             }
             if (!string.IsNullOrEmpty(result))
             {
-                ViewBag.ModalState = "show";
+                ViewBag.ModalState = "true";
                 ViewBag.Message = result;
             }
             else
             {
-                ViewBag.ModalState = "hide";
+                ViewBag.ModalState = "false";
                 ViewBag.Message = "";
             }
             return View(existingCart);
@@ -413,7 +525,7 @@ namespace Web_IT_HELPDESK.Controllers
                                                          && o.Plant_Id == biz_trip.PLANT).Select(i => i.Department_Name).SingleOrDefault();
             ViewBag.User_name = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).EmployeeName;
 
-            ViewBag.ModalState = "hide";
+            ViewBag.ModalState = "false";
             ViewBag.Message = "";
             return View(biz_trip);
         }
@@ -430,24 +542,24 @@ namespace Web_IT_HELPDESK.Controllers
             en.SaveChanges();
 
             Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
-            bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(existingCart, 7, userRequest);
+            bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(existingCart, 7, userRequest); // Level 7: Return APPROVED
             if (resultMailing)
             {
-                result = string.Format("Email phản hồi đã được gửi đến nhân viên");
+                result = string.Format("Feedback mail has been sent to employee");
             }
             else
             {
-                result = string.Format("Không gửi được email. Vui lòng kiểm tra lại. Liên hệ hỗ trợ: minhsang.it@cjvina.com");
+                result = string.Format("Can't send feedback email to employee. Please contact for support: minhsang.it@cjvina.com");
             }
 
             if (!string.IsNullOrEmpty(result))
             {
-                ViewBag.ModalState = "show";
+                ViewBag.ModalState = "true";
                 ViewBag.Message = result;
             }
             else
             {
-                ViewBag.ModalState = "hide";
+                ViewBag.ModalState = "false";
                 ViewBag.Message = "";
             }
             return View(biz_trip);

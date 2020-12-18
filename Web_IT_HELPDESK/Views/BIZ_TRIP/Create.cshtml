@@ -14,7 +14,7 @@
             <div class="modal-body">
                 <div style="text-align: center">
                     <p id="msgNotify">This is message.</p>
-                    <p>************** Cám ơn đã sử dụng chương trình **************</p>
+                    <p>************** Thank you!!! **************</p>
                 </div>
             </div>
             <div class="modal-footer">
@@ -350,13 +350,21 @@
     <script type="text/javascript">
         $("#DATE").val(moment($("#DATE_val").val()).format("DD/MM/YYYY HH:mm"));
 
-         $('#messageModal').on('shown.bs.modal', function (e) {
+        //get result message for modal when it show
+        $('#messageModal').on('shown.bs.modal', function (e) {
             var message = '@Html.Raw(ViewBag.Message)';
             var modal = $(this);
             var msgPlace = modal.find('.modal-body p#msgNotify');
             msgPlace.text(message);
         });
 
-        $('#messageModal').modal('@ViewBag.ModalState');
+        //set backdrop and show follow ModalState from controller
+        $('#messageModal').modal({
+            backdrop: 'static',
+            keyboard: false,
+            show: @ViewBag.ModalState,
+        });
+
+
     </script>
 }
