@@ -12,7 +12,7 @@ namespace Web_IT_HELPDESK.Controllers
     {
         //
         // GET: /Home/
-
+        [Authorize]
         public ActionResult Index()
         {
             return View();

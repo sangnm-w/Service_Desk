@@ -7,12 +7,12 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
 {
     public class ExcelHelper
     {
-        public Stream CreateExcelFile<T>(Stream stream, List<T> models)
+        public Stream CreateExcelFile<T>(Stream stream, List<T> models, Dictionary<int, string> modelTitles, List<int> colsDate)
         {
             using (var excelPackage = new ExcelPackage(stream ?? new MemoryStream()))
             {
                 excelPackage.Workbook.Properties.Author = "Nguyen Minh Sang";
-                excelPackage.Workbook.Properties.Title = "IT order request";
+                excelPackage.Workbook.Properties.Title = "IT Service Desk";
                 excelPackage.Workbook.Properties.Comments = "";
                 excelPackage.Workbook.Worksheets.Add("First Sheet");
 
@@ -21,13 +21,16 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                 //workSheet.DefaultColWidth = 10;
                 workSheet.Cells[1, 1].LoadFromCollection(models, true, TableStyles.Medium7);
 
-                // TODO: ~M$ refactor for all Models
-                Dictionary<int, string> incTitle = ExcelTitle.Instance.IncTitles();
-                foreach (int i in incTitle.Keys)
+                foreach (int i in modelTitles.Keys)
                 {
-                    workSheet.Cells[1, i].Value = ExcelTitle.Instance.IncTitles()[i];
+                    workSheet.Cells[1, i].Value = modelTitles[i];
                 }
-                workSheet.Cells[2, 2, models.Count + 1, 2].Style.Numberformat.Format = "mm/dd/yyyy hh:mm:ss AM/PM";
+
+                foreach (int colnum in colsDate)
+                {
+                    workSheet.Cells[2, colnum, models.Count + 1, colnum].Style.Numberformat.Format = "dd/MM/yyyy hh:mm:ss AM/PM";
+                }
+
                 workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns(15, 45);
                 workSheet.Cells.Style.WrapText = true;
                 excelPackage.Save();

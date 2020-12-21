@@ -26,7 +26,7 @@ namespace Web_IT_HELPDESK
         public System.Guid ID { get; set; }
         public string VENDOR { get; set; }
         public string PERIODID { get; set; }
-        public string ADREES { get; set; }
+        public string ADDRESS { get; set; }
         public string PHONE { get; set; }
         public string REPRESENTATION { get; set; }
         public Nullable<System.DateTime> DATE { get; set; }

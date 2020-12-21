@@ -1,125 +1,259 @@
 ﻿@model Web_IT_HELPDESK.BIZ_TRIP
 
 @{
-    ViewBag.Title = "dept_confirm";
+    ViewBag.Title = "Department Manager Confirmation";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@section Style {
+    <!--CustomInputFile -->
+    <link href="~/vendors/CustomInputFile/css/CustomInputFile.css" rel="stylesheet" />
 
-<h2>DEPARTMENT CONFIRMATION</h2>
+    <style>
+        .material {
+            border: none;
+            border-bottom: 1px solid #ccc;
+            box-shadow: none;
+            background: none !important;
+        }
 
-<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+        textarea {
+            resize: vertical;
+            min-height: 34px;
+            max-height: 102px;
+        }
 
-@using (Html.BeginForm("dept_confirm", "BIZ_TRIP", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.ValidationSummary(true)
-    <fieldset>
-        <legend>BIZ_TRIP</legend>
+        .middlebtn {
+            display: flex;
+            margin: auto;
+        }
 
-        @Html.HiddenFor(model => model.NO)
-        @Html.HiddenFor(model => model.ID)
+            .middlebtn > div:last-child {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
 
-         <table style="width:100%">
-        <tr>
-        <th> Employee no - /Mã nhân viên/ </th>
-        <th> @Html.TextBoxFor(model => model.EMPNO, new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()" , @style="background-color:#FFFFFF;"})
-             @Html.ValidationMessageFor(model => model.EMPNO)
-
-        </th> 
-        </tr>
-
-        <tr>
-        <th> Employee name - /Họ tên nhân viên/  </th>
-        <th> <br />
-             @Html.TextBoxFor(model => model.NAME, new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()" , @style="background-color:#FFFFFF;"})
-             @Html.ValidationMessageFor(model => model.NAME)
-        </th> 
-        </tr>
-        <tr>
-        <th> @Html.LabelFor(model => model.DEPT)    -  /Mã phòng ban/ </th>
-        <th> <br />
-             @Html.TextBox("DEPT", (string)ViewBag.DEPT,new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()", @style="background-color:#FFFFFF;" })
-             @Html.ValidationMessageFor(model => model.DEPT) </th> 
-        </tr>
-         <tr>
-        <th> DepartmentName    -  /Tên phòng ban/ </th>
-        <th> <br />
-             @Html.TextBox("DepartmentName", (string)ViewBag.DepartmentName,new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()", @style="background-color:#FFFFFF;" }) </th> 
-        </tr>
-        <tr>
-        <th> Description -  /Nội dung công tác/  </th>
-        <th> <br />
-             @Html.TextBox("DESCRIPTION", null, new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()", @style="width:300px", cols="50" }) </th> 
-        </tr>
-        <tr>
-        <th> Vehicle - /Phương tiện công tác/ </th>
-        <th> <br />
-             @Html.TextBoxFor(model => model.VEHICLE, new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()" , @style="background-color:#FFFFFF;"})
-             @Html.ValidationMessageFor(model => model.VEHICLE)
-        </tr>
-         <tr>
-        <th> Contact company - /Công ty liên hệ/ </th>
-        <th> <br />
-             @Html.TextBox("CONTACT_COMPANY", null, new {@class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()", @style="width:300px"  }) </th> 
-        </tr>
-        <tr>
-        <th> Contact person - /Người liên hệ/ </th>
-        <th> <br />
-             @Html.TextBox("CONTACT_PERSON", null, new {@class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()", @style="width:300px"  }) </th> 
-        </tr>
-        <tr>
-        <th> Contact Dept - /Phòng ban liên hệ/  </th>
-        <th> <br /> 
-             @Html.TextBox("CONTACT_DEPT", null, new {@class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()", @style="width:300px"  }) </th> 
-        </tr>
-        <tr>
-        <th> @Html.LabelFor(model => model.DATE)  -  /Ngày tạo/ </th>
-        <th><br /> 
-             @Html.TextBoxFor(model => model.DATE, new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()" , @style="background-color:#FFFFFF;"})
-             @Html.ValidationMessageFor(model => model.DATE) </th> 
-        </tr>
-        <tr>
-        <th> @Html.LabelFor(model => model.FROM_DATE) </th>
-        <th> <br />
-             @Html.TextBoxFor(model => model.FROM_DATE, new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()" , @style="background-color:#FFFFFF;"})
-             @Html.ValidationMessageFor(model => model.FROM_DATE)
-        </th> 
-
-        </tr>
-        <tr>
-        <th> @Html.LabelFor(model => model.TO_DATE) </th>
-        <th> <br />
-             @Html.TextBoxFor(model => model.TO_DATE, new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()" , @style="background-color:#FFFFFF;"})
-             @Html.ValidationMessageFor(model => model.TO_DATE)
-        </th> 
-        </tr>
-        <tr>
-        <th> @Html.LabelFor(model => model.USED_EQUIPMENT) </th>
-        <th> <br />
-             @Html.EditorFor(model => model.USED_EQUIPMENT, new { @readonly = "readonly", onfocus = "this.blur()" , @style="background-color:#FFFFFF;"})
-             @Html.ValidationMessageFor(model => model.USED_EQUIPMENT) </th> 
-        </tr>
-        <tr>
-        <th> Bring Equipment - Mang thiết bị  </th>
-        <th> <br /> 
-              @Html.TextBoxFor(model => model.REMARK, new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()" , @style="background-color:#FFFFFF;"})
-              @Html.ValidationMessageFor(model => model.REMARK)  </th> 
-        </tr>
-        <tr>
-        <th>  Department Confirmantion   -  /Duyệt của trưởng phòng/ </th>
-        <th>  <br />
-             @Html.EditorFor(model => model.DEPT_CONFIRM)
-              @Html.ValidationMessageFor(model => model.DEPT_CONFIRM) </th> 
-        </tr>
-         <tr>
-        <th>  <input type="file" id="image" name="image"/></th>
-        <th>  <br /><input type="submit" value="  Save  "/>  </th> 
-        </tr>
-        </table>
-
-    </fieldset>
+            .middlebtn input.btn {
+                height: 70px;
+                min-width: 100px;
+            }
+    </style>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
+<!-- Modal -->
+<div id="messageModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông báo!!!</h4>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center">
+                    <p id="msgNotify">This is message.</p>
+                    <p>************** Thank you!!! **************</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @Html.ActionLink("Close", "biz_trip_index", "BIZ_TRIP", null, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    </div>
 </div>
+
+<div class="col-md-12 panel-info">
+    <div class="content-box-header panel-heading">
+        <div class="panel-title ">Biz_Trip Confirm</div>
+
+        @*<div class="panel-options">
+                <a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
+                <a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
+            </div>*@
+    </div>
+    <div class="content-box-large box-with-header">
+        <fieldset disabled">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.DATE, "Registration date", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.DATE, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", id = "RegDate" } })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.DEPT, "Department", htmlAttributes: new { @class = "control-label" })
+                        @Html.Editor("Department", new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", @Value = ViewBag.DepartmentName } })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.EMPNO, "Employee Name", htmlAttributes: new { @class = "control-label" })
+                        @Html.Editor("Employee Name", new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", @Value = ViewBag.User_name } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @Html.LabelFor(model => model.DESCRIPTION, "Description", htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.DESCRIPTION, new { @class = "form-control material", @readonly = "readonly", @rows = 2 })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.CONTACT_COMPANY, "CONTACT COMPANY", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.CONTACT_COMPANY, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly" } })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.CONTACT_DEPT, "CONTACT DEPT", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.CONTACT_DEPT, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly" } })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.CONTACT_PERSON, "CONTACT PERSON", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.CONTACT_PERSON, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly" } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.FROM_DATE, "From date", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.FROM_DATE, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", id = "fromdate" } })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.TO_DATE, "To date", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.TO_DATE, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", id = "todate" } })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.VEHICLE, "Vehicle", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.VEHICLE, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly" } })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.REMARK, "Equipment", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.REMARK, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly" } })
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <hr />
+        <div class="panel panel-default">
+            <div class="panel-heading"><h5><b>Department manager confirm</b></h5></div>
+            <div class="panel-body">
+                @if (Model.DEPT_CONFIRM_DATE == null)
+                {
+                    using (Html.BeginForm("dept_confirm", "BIZ_TRIP", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.ID)
+                            @Html.HiddenFor(model => model.NO)
+                            <div class="row middlebtn">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.DEPT_CONFIRM_DATE, "Confirmation Date", htmlAttributes: new { @class = "control-label" })
+                                        @Html.Editor("Confirmation Date", new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", id = "ConfDate" } })
+                                        @Html.HiddenFor(model => model.DEPT_CONFIRM_DATE, new { id = "ConfDate_val" })
+
+                                        @Html.Label("Signature File", htmlAttributes: new { @class = "control-label" })
+                                        <div class="box-inputfile-left">
+                                            @Html.TextBox("signatureimage", null, new { @class = "inputfile inputfile-1", id = "signatureimage", type = "file", data_multiple_caption = "{count} files selected" })
+                                            <label for="signatureimage"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z" /></svg> <span>Choose a file&hellip;</span></label>
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.DEPT_CONFIRM_IMAGE, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-12 col-md-6">
+                                            @Html.RadioButton("approved", true, true, new { id = "approved1" })
+                                            @Html.Label("APPROVE", htmlAttributes: new { @style = "vertical-align: middle; margin-left: 7px;" })
+                                        </div>
+                                        <div class="col-sm-12 col-md-6">
+                                            @Html.RadioButton("approved", false, false, new { id = "approved2" })
+                                            @Html.Label("NOT APPROVE", htmlAttributes: new { @style = "vertical-align: middle; margin-left: 7px;" })
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.DEPT_CONFIRM)
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="submit" value="Submit" class="btn btn-primary" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <fieldset disabled>
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.ID)
+                            @Html.HiddenFor(model => model.NO)
+                            <div class="row middlebtn">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.DEPT_CONFIRM_DATE, "Confirmation Date", htmlAttributes: new { @class = "control-label" })
+                                        @Html.Editor("Confirmation Date", new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", id = "ConfDate" } })
+                                        @Html.HiddenFor(model => model.DEPT_CONFIRM_DATE, new { id = "ConfDate_val" })
+                                        @if (Model.DEPT_CONFIRM == true)
+                                        {
+                                            @Html.Label("Signature File", htmlAttributes: new { @class = "control-label" })
+                                            @Html.EditorFor(model => model.DEPT_CONFIRM_IMAGE_NAME, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly" } })
+                                        }
+                                        else
+                                        {
+                                            @Html.Label("Signature File", htmlAttributes: new { @class = "control-label" })
+                                            <div class="box-inputfile-left">
+                                                @Html.TextBox("SignatureImage", null, new { @class = "inputfile inputfile-1", id = "file-1", type = "file", data_multiple_caption = "{count} files selected" })
+                                                <label for="file-1"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z" /></svg> <span>Choose a file&hellip;</span></label>
+                                            </div>
+                                            @Html.ValidationMessageFor(model => model.DEPT_CONFIRM_IMAGE, "", new { @class = "text-danger" })
+                                        }
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-12 col-md-6">
+                                            @Html.RadioButton("approved", true, Model.DEPT_CONFIRM == true ? true : false, new { id = "approved1" })
+                                            @Html.Label("APPROVE", htmlAttributes: new { @style = "vertical-align: middle; margin-left: 7px;" })
+                                        </div>
+                                        <div class="col-sm-12 col-md-6">
+                                            @Html.RadioButton("approved", false, Model.DEPT_CONFIRM != true ? true : false, new { id = "approved2" })
+                                            @Html.Label("NOT APPROVE", htmlAttributes: new { @style = "vertical-align: middle; margin-left: 7px;" })
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.DEPT_CONFIRM)
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    @if (Model.DEPT_CONFIRM == true)
+                                    {
+                                        <input type="submit" value="APPROVED" class="btn btn-primary" />
+                                    }
+                                    else
+                                    {
+                                        <input type="submit" value="NOT APPROVED" class="btn btn-primary" />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Script {
+    <script src="~/vendors/CustomInputFile/js/jquery.custom-file-input.js"></script>
+    <script type="text/javascript">
+        //get result message for modal when it show
+        $('#messageModal').on('shown.bs.modal', function (e) {
+            var message = '@Html.Raw(ViewBag.Message)';
+            var modal = $(this);
+            var msgPlace = modal.find('.modal-body p#msgNotify');
+            msgPlace.text(message);
+        });
+
+        //set backdrop and show follow ModalState from controller
+        $('#messageModal').modal({
+            backdrop: 'static',
+            keyboard: false,
+            show: @ViewBag.ModalState,
+        });
+
+        $("#RegDate").val(moment($("#RegDate").val()).format("DD/MM/YYYY HH:mm"));
+        $("#fromdate").val(moment($("#fromdate").val()).format("DD/MM/YYYY HH:mm"));
+        $("#todate").val(moment($("#todate").val()).format("DD/MM/YYYY HH:mm"));
+
+        var ConfDate_val = $("#ConfDate_val").val(moment(Date.now()).format());
+        $("#ConfDate").val(moment(ConfDate_val).format("DD/MM/YYYY"));
+    </script>
+}

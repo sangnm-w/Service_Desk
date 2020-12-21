@@ -36,11 +36,14 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                         if (ccMails.Contains(m))
                             ccMails.Remove(m);
 
+                
                 if (bccMails != null)
                 {
+                    // Check duplicate between toMails and bccMails
                     foreach (string m in toMails)
                         if (bccMails.Contains(m))
                             bccMails.Remove(m);
+                    // Check duplicate between ccMails and bccMails
                     foreach (string m in ccMails)
                         if (bccMails.Contains(m))
                             bccMails.Remove(m);

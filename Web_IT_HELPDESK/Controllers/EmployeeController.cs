@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Web_IT_HELPDESK.Models;
+using Web_IT_HELPDESK.ViewModels;
 
 namespace Web_IT_HELPDESK.Controllers
 {
@@ -53,25 +55,35 @@ namespace Web_IT_HELPDESK.Controllers
             return View("EmployeeList", en.Employees.Where(i => i.Deactive != true && i.Emp_CJ != "admin"));
         }
 
-
-        public ActionResult changepasword(string employeeid)
+        [Authorize]
+        public ActionResult ChangePasword(string employeeid)
         {
             //Employee employee = en.Employees.Find(session_emp);
             ViewBag.Emp_CJ = session_emp;
             return View();
         }
 
-         [HttpPost]
-        public ActionResult changepasword(string employeeid, string v_newpass)
+        [HttpPost]
+        public ActionResult ChangePasword(ChangePasswordViewModel cpVM)
         {
-            Employee employee = en.Employees.Find(session_emp);
-            try
+            if (!string.Equals(cpVM.NewPsw, cpVM.NewPsw_Confirm))
             {
-                employee.Password = v_newpass;
-                en.SaveChanges();
+                ModelState.AddModelError("", "New Password and Confirm New Password does not match.");
+                return View(cpVM);
             }
-            catch { };
-            return View();
+            if (ModelState.IsValid)
+            {
+                string curr_Psw = CurrentUser.Instance.User.Password;
+                if (cpVM.OldPsw == curr_Psw)
+                {
+                    string curr_EmpID = CurrentUser.Instance.User.Emp_CJ;
+                    Employee emp = en.Employees.FirstOrDefault(e => e.Emp_CJ == curr_EmpID && e.Password == cpVM.OldPsw);
+                    emp.Password = cpVM.NewPsw_Confirm;
+                    en.Entry(emp).State = System.Data.Entity.EntityState.Modified;
+                    en.SaveChanges();
+                }
+            }
+            return View(cpVM);
         }
 
     }

@@ -16,7 +16,6 @@ namespace Web_IT_HELPDESK.Controllers
         private ServiceDeskEntities db = new ServiceDeskEntities();
 
         // GET: Survey/SecuritySurvey
-        [Authorize]
         public ActionResult SecuritySurvey()
         {
             return View();

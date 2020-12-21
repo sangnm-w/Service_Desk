@@ -16,6 +16,7 @@ namespace Web_IT_HELPDESK.Controllers
         private string session_emp = System.Web.HttpContext.Current.User.Identity.Name;
 
         // GET: Allocations
+        [Authorize]
         public ActionResult Index()
         {
             string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
@@ -24,6 +25,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: Allocations/Details/5
+        [Authorize]
         public ActionResult Details(Guid? id)
         {
             if (id == null)
@@ -39,6 +41,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: Allocations/Create
+        [Authorize]
         public ActionResult Create(Guid? id)
         {
             if (id == null)
@@ -126,6 +129,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: Allocations/Edit/5
+        [Authorize]
         public ActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -207,6 +211,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: Allocations/Revoke/5
+        [Authorize]
         public ActionResult Revoke(Guid? id)
         {
             if (id == null)
@@ -307,6 +312,7 @@ namespace Web_IT_HELPDESK.Controllers
         #endregion
 
         // GET: Allocations/ReAllocation
+        [Authorize]
         public ActionResult ReAllocation(Guid? id)
         {
             if (id == null)

@@ -1,135 +1,156 @@
-﻿@model Web_IT_HELPDESK.Seal_Using
+﻿@model Web_IT_HELPDESK.ViewModels.SealUsingViewModel.CreateSealUsing
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Seal Using Registration";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
- <div class="page-content">
-<div class="row">
-		  
-	<div class="col-md-10">
-	<div class="content-box-large">
-<div class="panel-heading">
-   <div class="panel-body">
-
-<h2>Create</h2>
-
-<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
-
-@using (Html.BeginForm("Create", "SealUsing", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    <fieldset>
-        <legend>Seal_Using</legend>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Plant)    -  /Plant/
-        </div>
-        <div class="editor-field">
-            @Html.TextBox("Plant", (string)ViewBag.Plant,new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()", @style="background-color:#DEDEDE;" })
-            @Html.ValidationMessageFor(model => model.Plant)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Date)  -  /Ngày tạo/
-        </div>
-        <div class="editor-field">
-            @Html.TextBoxFor(model => model.Date, new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()" , @style="background-color:#DEDEDE;"})
-            @Html.ValidationMessageFor(model => model.Date)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Employee_name)  -  /Tên người đăng ký/
-        </div>
-        <div class="editor-field">
-            @Html.TextBox("Employee_name", (string)ViewBag.User_name)
-            @Html.ValidationMessageFor(model => model.Employee_name)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.DepartmentId)    -  /Mã phòng ban/
-        </div>
-        <div class="editor-field">
-            @Html.TextBox("DepartmentId", (string)ViewBag.DepartmentId,new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()", @style="background-color:#DEDEDE;" })
-            @Html.ValidationMessageFor(model => model.DepartmentId)
-        </div>
-
-         <div class="editor-label">
-            DepartmentName    -  /Tên phòng ban/
-        </div>
-        <div class="editor-field">
-            @Html.TextBox("DepartmentName", (string)ViewBag.DepartmentName,new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()", @style="background-color:#DEDEDE;" })
-        </div>
-
-         <div class="editor-label">
-            @Html.LabelFor(model => model.Type_document)  -  /Loại văn bản/
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Type_document)
-            @Html.ValidationMessageFor(model => model.Type_document)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Code_number)  -  /Số hiệu văn bản/
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Code_number)
-            @Html.ValidationMessageFor(model => model.Code_number)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Context)  -  /Nội dung văn bản/
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Context)
-            @Html.ValidationMessageFor(model => model.Context)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Place_Recipient)  -  /Nơi nhận/
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Place_Recipient)
-            @Html.ValidationMessageFor(model => model.Place_Recipient)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Period_date)  -  /Ngày hiệu lực/
-        </div>
-        <div class="editor-field">
-            @Html.TextBox("Period_date", null, new { id = "add confirm", type = "datetime", required = "required" })
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Date_signature)  -  /Ngày ký văn bản/
-        </div>
-        <div class="editor-field">
-           @Html.TextBox("Date_signature", null, new { id = "add confirm", type = "datetime", required = "required" })
-        </div>
-
-          <div class="editor-label">
-            @Html.LabelFor(model => model.Name_signature)  -  /Người ký văn bản/
-        </div>
-        <div class="editor-field">
-           @Html.TextBox("Name_signature", null, new { id = "add confirm", type = "string", required = "required" })
-        </div>
-
-        <p>
-            <input type="submit" value="Submit" />
-        </p>
-        
-    </fieldset>
-}
-
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-       </div>
-    </div>
+<!-- Modal -->
+<div id="messageModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông báo!!!</h4>
             </div>
-    </div>
+            <div class="modal-body">
+                <div style="text-align: center">
+                    <p id="msgNotify">This is message.</p>
+                    <p>************** Thank you!!! **************</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @Html.ActionLink("Close", "Index", "SealUsing", null, new { @class = "btn btn-default" })
+                @Html.ActionLink("Create new", "Create", "SealUsing", null, new { @class = "btn btn-primary" })
+            </div>
         </div>
     </div>
+</div>
+
+<div class="col-md-12 panel-info">
+    <div class="content-box-header panel-heading">
+        <div class="panel-title ">New Seal Using Request</div>
+
+        @*<div class="panel-options">
+                <a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
+                <a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
+            </div>*@
+    </div>
+    <div class="content-box-large box-with-header">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Plant)
+                <div class="form-group">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Date, "Registration Date", htmlAttributes: new { @class = "control-label" })
+                        @Html.Editor("Registration Date", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", id = "RegDate" } })
+                        @Html.HiddenFor(model => model.Date, new { id = "RegDate_val" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.DeptName, "Department", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.DeptName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.HiddenFor(model => model.DepartmentId)
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Employee_name, "Employee Name", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Employee_name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.HiddenFor(model => model.Employee_ID)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Code_number, "Document Code", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Code_number, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Code_number, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Type_document, "Document Type", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Type_document, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Type_document, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Name_signature, "Signer", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Name_signature, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Name_signature, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Date_signature, "Signature Date", htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group date" id="signdateDP">
+                            @Html.Editor("Signature Date", new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                        @Html.HiddenFor(model => model.Date_signature, new { @id = "signdateDP_val" })
+                        @Html.ValidationMessageFor(model => model.Date_signature, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-8">
+                        @Html.LabelFor(model => model.Context, "Content", htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.Context, new { @class = "form-control", @rows = 1 })
+                        @Html.ValidationMessageFor(model => model.Context, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Place_Recipient, "Recipient Place ", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Place_Recipient, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Place_Recipient, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-10">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                    <div class="col-sm-2">
+                        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default", @style = "float: right" })
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@section Script {
+    <script type="text/javascript">
+        //get result message for modal when it show
+        $('#messageModal').on('shown.bs.modal', function (e) {
+            var message = '@Html.Raw(ViewBag.Message)';
+            var modal = $(this);
+            var msgPlace = modal.find('.modal-body p#msgNotify');
+            msgPlace.text(message);
+        });
+
+        //set backdrop and show follow ModalState from controller
+        $('#messageModal').modal({
+            backdrop: 'static',
+            keyboard: false,
+            show: @ViewBag.ModalState,
+        });
+
+        $('select').selectpicker({
+            search: false,
+            container: 'body'
+        });
+
+        $("#RegDate").val(moment($("#RegDate_val").val()).format("DD/MM/YYYY"));
+        console.log("reg");
+        $("#signdateDP").datepicker({
+            format: 'dd/mm/yyyy',
+            autoclose: true,
+            todayHighlight: true
+        });
+
+        $('#signdateDP').on('changeDate', function () {
+            var d = new Date($('#signdateDP').datepicker('getDate'));
+            if (d.getFullYear() > 2000) {
+                $('#signdateDP_val').val(
+                    moment(d).format()
+                );
+            }
+        });
+
+        $("#signdateDP").datepicker("setDate", 'today');
+    </script>
+}

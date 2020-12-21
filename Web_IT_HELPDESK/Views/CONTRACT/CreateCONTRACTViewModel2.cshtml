@@ -1,261 +1,363 @@
-﻿@model Web_IT_HELPDESK.Models.ContractViewModel
+﻿@model Web_IT_HELPDESK.ViewModels.ContractViewModel
 
 @{
     ViewBag.Title = "CreateCONTRACTViewModel2";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create CONTRACT Model</h2>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
 
-<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 
-<script>
-    $(document).ready(function () {
-        $("#tab_logic").find('input').click(function () {
-            var t = $(this);
-            console.log(t);
+<!--CustomInputFile -->
+<link href="~/vendors/CustomInputFile/css/CustomInputFile.css" rel="stylesheet" />
+
+
+<!-- CSS for ICON Input File -->
+@section Style {
+    <style>
+        .upload-wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .upload-wrapper .file-upload {
+                height: 40px;
+                width: 40px;
+                border-radius: 50%;
+                position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border: 4px solid #ffffff;
+                overflow: hidden;
+                background-image: linear-gradient(to bottom, #2590eb 50%, #ffffff 50%);
+                background-size: 100% 200%;
+                transition: all 1s;
+                color: #ffffff;
+                font-size: 20px;
+                cursor: pointer;
+            }
+
+                .upload-wrapper .file-upload input[type="file"] {
+                    height: 40px;
+                    width: 40px;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    opacity: 0;
+                    cursor: pointer;
+                }
+
+                .upload-wrapper .file-upload i {
+                    position: initial;
+                }
+
+                .upload-wrapper .file-upload:hover {
+                    background-position: 0 -100%;
+                    color: #2590eb;
+                }
+
+        ::-webkit-file-upload-button {
+            cursor: pointer;
+        }
+    </style>
+}
+
+<div class="col-md-12 panel-info">
+    <div class="content-box-header panel-heading">
+        <div class="panel-title ">Add New Contract</div>
+
+        <div class="panel-options">
+            <a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
+            <a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
+        </div>
+    </div>
+    <div class="content-box-large box-with-header">
+        @using (Html.BeginForm("CreateCONTRACTViewModel2", "CONTRACT", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="row">
+                    <div class="col-md-8">
+                        @Html.LabelFor(model => model.CONTRACT.VENDOR, "Vendor", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.CONTRACT.VENDOR, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CONTRACT.VENDOR, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.CONTRACT.PHONE, "Phone", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.CONTRACT.PHONE, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CONTRACT.PHONE, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        @Html.LabelFor(model => model.CONTRACT.ADDRESS, "Address", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.CONTRACT.ADDRESS, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CONTRACT.ADDRESS, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-md-8">
+                        @Html.LabelFor(model => model.CONTRACT.CONTRACTNAME, "Contract Name", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.CONTRACT.CONTRACTNAME, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CONTRACT.CONTRACTNAME, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.CONTRACT.REPRESENTATION, "Representation", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.CONTRACT.REPRESENTATION, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CONTRACT.REPRESENTATION, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.CONTRACT.CONTRACT_TYPE_ID, "Contract Type", htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownListFor(model => model.CONTRACT.CONTRACT_TYPE_ID, new SelectList(Model.Contract_Types, "CONTRACT_TYPE_ID", "CONTRACT_TYPE_NAME"), new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.CONTRACT.CONTRACT_TYPE_ID, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.CONTRACT.PERIODID, "Period", htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownListFor(model => model.CONTRACT.PERIODID, new SelectList(Model.Periods, "PERIOD_ID", "PERIOD_NAME"), new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.CONTRACT.PERIODID, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.CONTRACT.DATE, "Date", htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group date" id="contractDate">
+                            @Html.Editor("Date", new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                        @Html.HiddenFor(model => model.CONTRACT.DATE, new { @id = "contractDate_val" })
+                        @Html.ValidationMessageFor(model => model.CONTRACT.DATE, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.CONTRACT.MONTHS, "Months", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.CONTRACT.MONTHS, new { htmlAttributes = new { @class = "form-control", min = 0, max = 70 } })
+                        @Html.ValidationMessageFor(model => model.CONTRACT.MONTHS, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.ContractFile, "Contract File", htmlAttributes: new { @class = "control-label" }) :
+                        <div class="box-inputfile-left">
+                            @Html.TextBoxFor(model => model.ContractFile, new { @class = "inputfile inputfile-1", id = "file-1", type = "file", data_multiple_caption = "{count} files selected", multiple = "multiple" })
+                            <label for="file-1"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z" /></svg> <span>Choose a file&hellip;</span></label>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.ContractFile, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-sm-6"></div>
+                </div>
+            </div>
+            <hr />
+            <div style="text-align:right">
+                <input type="button" id="add_row" class="btn btn-info" value="Add Sub-Contract">
+                <input type="button" id="remove_row" class="btn btn-danger" value="Remove Sub-Contract">
+            </div>
+            <div class="row clearfix">
+                <div class="col-md-12">
+                    @Html.HiddenFor(model => model.countContractSubModel, new { id = "countContractSub" })
+                    <table class="display nowrap" id="tab_logic" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    #
+                                </th>
+                                <th class="text-center">
+                                    DATE
+                                </th>
+                                <th class="text-center">
+                                    SUB NAME
+                                </th>
+                                <th class="text-center">
+                                    CONTENT
+                                </th>
+                                <th class="text-center">
+                                    PERIOD
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < 10; i++)
+                            {
+                                string idrow = "addr" + i;
+                                <tr id="@idrow" class="hidden">
+                                    <td>
+                                        @(i + 1)
+                                    </td>
+                                    <td>
+                                        <div class="input-group date subdate">
+                                            @Html.Editor("SubDate", new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
+                                        @Html.HiddenFor(model => model.ContractSubViewModels[i].ContractSub.DATE)
+                                        @Html.ValidationMessageFor(model => model.ContractSubViewModels[i].ContractSub.DATE, "", new { @class = "text-danger" })
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(model => model.ContractSubViewModels[i].ContractSub.SUBNAME, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.ContractSubViewModels[i].ContractSub.SUBNAME, "", new { @class = "text-danger" })
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <div class="upload-wrapper">
+                                            <div class="file-upload">
+                                                @Html.TextBoxFor(model => model.ContractSubViewModels[i].ContentSubFile, "", new { type = "file" })<i class="glyphicon glyphicon-circle-arrow-up"></i>
+                                            </div>
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.ContractSubViewModels[i].ContentSubFile, "", new { @class = "text-danger" })
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.ContractSubViewModels[i].ContractSub.PERIODID, new SelectList(Model.Periods, "PERIOD_ID", "PERIOD_NAME"), new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.ContractSubViewModels[i].ContractSub.PERIODID, "", new { @class = "text-danger" })
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <hr />
+            <div class="row">
+                <div class="col-sm-10">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+                <div class="col-sm-2">
+                    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default", @style = "float: right" })
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+@section Script {
+    <script src="~/vendors/CustomInputFile/js/jquery.custom-file-input.js"></script>
+    <script type="text/javascript">
+        $('select').selectpicker({
+            search: false,
+            container: 'body'
         });
 
-        var i = 0;
-        $("#add_row").click(function () {
-            $('#addr' + i).html("<td>" + (i + 1) + "</td>"//<td><input id='date" + i + "'  name='date" + i + "' type='date' placeholder='Datum' class='form-control input-md'  /> </td><td><input id='privatKM" + i + "' name='privatKM" + i + "' type='number' placeholder='Private KM'  class='form-control input-md'></td><td><input id='beruflichKM" + i + "' name='beruflichKM" + i + "' type='number' placeholder='Beruflich KM'  class='form-control input-md'></td><td><input id='reisekosten" + i + "' name='reisekosten" + i + "' type='number' placeholder='Erstattete Reisekosten' class='form-control input-md'  /> </td>");
-                 + "<td><input id='CONTRACT_SUB_" + i + "_DATE' name='CONTRACT_SUB[" + i + "].DATE' type='date'></td>"
-                  + "<td><input  id='CONTRACT_SUB_" + i + "_SUBNAME' name='CONTRACT_SUB[" + i + "].SUBNAME' type='text' placeholder='SUBNAME'  class='form-control'></td>"
-                        //+ "<td><input     id='CONTRACT_SUB_" + i + "_CONTENT' name='CONTRACT_SUB[" + i + "].CONTENT'  type='text' placeholder='LOADFILE'  class='form-control'></td>"
-                        + "<td><input type='file' name='subcontent' class='form-control'/></td>"
-                    + "<td>" +
-                        "<select id='PERIOD_ID' name='PERIOD_ID'>" +
-                        "<option selected='selected' value='000001'>Hợp đồng một năm</option>" +
-                        "<option value='000002'>Hợp đồng sáu tháng</option>" +
-                        "<option value='000003'>Hợp đồng</option>" +
-                        "</select>"
-                       + "</td>"
-                     + "<td><input     id='CONTRACT_SUB_" + i + "_Note' name='CONTRACT_SUB[" + i + "].Note'  type='text' placeholder='NOTE'  class='form-control' readonly='readonl'y></td>"
-                      );
-
-            $('#tab_logic').append('<tr id="addr' + (i + 1) + '"></tr>');
-            i++;
+        $("#contractDate").datepicker({
+            format: 'dd/mm/yyyy',
+            autoclose: true,
+            todayHighlight: true
         });
-        $("#delete_row").click(function () {
-            if (i > 1) {
-                $("#addr" + (i - 1)).html('');
-                i--;
+
+        $('#contractDate').on('changeDate', function () {
+            var d = new Date($('#contractDate').datepicker('getDate'));
+            if (d.getFullYear() > 2000) {
+                $('#contractDate_val').val(
+                    moment(d).format()
+                );
             }
         });
 
-    });
-</script>
+        $('.subdate').datepicker({
+            format: 'dd/mm/yyyy',
+            autoclose: true,
+            todayHighlight: true,
+        });
 
-@using (Html.BeginForm("CreateCONTRACTViewModel2", "CONTRACT", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.ValidationSummary(true)
-    <fieldset>
-          <legend>CONTRACT</legend>
+        $('.subdate').on('changeDate', function () {
+            var d = new Date($(this).datepicker('getDate'));
+            if (d.getFullYear() > 2000) {
+                var dtval = $(this).siblings("input[type='hidden']");
+                dtval.val(
+                    moment(d).format()
+                );
+            }
+        });
 
-        <table style="width:100%">
-          <tr>
-            <td>
-            @Html.LabelFor(model => model.CONTRACT.VENDOR)
-            </td>
-            <td>
-            @Html.EditorFor(model => model.CONTRACT.VENDOR)
-            @Html.ValidationMessageFor(model => model.CONTRACT.VENDOR)
-            </td>
-          </tr>
-            <tr>
-            <td>
-            @Html.LabelFor(model => model.CONTRACT.CONTRACT_TYPE_ID,"CONTRACT_TYPE")
-            </td>
-            <td>
-            @Html.DropDownList("CONTRACT_TYPE_ID")
-            @Html.ValidationMessageFor(model => model.CONTRACT.CONTRACT_TYPE_ID)
-            </td>
-            </tr>
-            <tr>
-            <td>
-            @Html.LabelFor(model => model.CONTRACT.PERIODID,"PERIODs")
-            </td>
-            <td>
-            @Html.DropDownList("PERIODID")
-            @Html.ValidationMessageFor(model => model.CONTRACT.PERIODID)
-            </td>
-            </tr>
-            <tr>
-            <td>
-            @Html.LabelFor(model => model.CONTRACT.MONTHS)
-            </td>
-            <td>
-            @Html.EditorFor(model => model.CONTRACT.MONTHS)
-            @Html.ValidationMessageFor(model => model.CONTRACT.MONTHS)
-            </td>
-            </tr>
-            <tr>
-            <td>
-            @Html.LabelFor(model => model.CONTRACT.ADREES)           
-            </td>
-            <td>
-            @Html.EditorFor(model => model.CONTRACT.ADREES)
-            @Html.ValidationMessageFor(model => model.CONTRACT.ADREES)
-            </td>
-            </tr>
-            <tr>
-            <td>
-             @Html.LabelFor(model => model.CONTRACT.PHONE)
-            </td>
-            <td>
-             @Html.EditorFor(model => model.CONTRACT.PHONE)
-             @Html.ValidationMessageFor(model => model.CONTRACT.PHONE)
-            </td>
-            </tr>
-             <tr>
-            <td>
-            @Html.LabelFor(model => model.CONTRACT.REPRESENTATION)             
-            </td>
-            <td>
-            @Html.EditorFor(model => model.CONTRACT.REPRESENTATION)
-            @Html.ValidationMessageFor(model => model.CONTRACT.REPRESENTATION)
-            </td>
-            </tr>
-             <tr>
-            <td>
-             @Html.LabelFor(model => model.CONTRACT.DATE)
-            </td>
-            <td>
-             @Html.TextBoxFor(model => model.CONTRACT.DATE, new { @class = "date",@type="date"})
-             @Html.ValidationMessageFor(model => model.CONTRACT.DATE)
-            </td>
-            </tr>
-             <tr>
-            <td>
-            @Html.LabelFor(model => model.CONTRACT.DATE_CREATE)             
-            </td>
-            <td>
-             @Html.TextBoxFor(model => model.CONTRACT.DATE_CREATE, new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()", @style="background-color:#DEDEDE;" })
-             @Html.ValidationMessageFor(model => model.CONTRACT.DATE_CREATE)
-            </td>
-            </tr>
-             <tr>
-            <td>
-            @Html.LabelFor(model => model.CONTRACT.CONTRACTNAME)
-            </td>
-            <td>
-            @Html.EditorFor(model => model.CONTRACT.CONTRACTNAME)
-            @Html.ValidationMessageFor(model => model.CONTRACT.CONTRACTNAME)
-            </td>
-            </tr>
-             <tr>
-            <td>
-            @Html.LabelFor(model => model.CONTRACT.DEPARMENTID)           
-            </td>
-            <td>
-            @Html.TextBox("DEPARMENTID", (string)ViewBag.DEPT_ID,new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()", @style="background-color:#DEDEDE;" })
-            @Html.ValidationMessageFor(model => model.CONTRACT.DEPARMENTID)
-            </td>
-            </tr>
-             <tr>
-            <td>
-            @Html.LabelFor(model => model.CONTRACT.USER_CREATE)
-            </td>
-            <td>
-            @Html.TextBox("USER_CREATE", (string)ViewBag.User_create,new { @class = "text-box single-line", @readonly = "readonly", onfocus = "this.blur()", @style="background-color:#DEDEDE;" })
-            @Html.ValidationMessageFor(model => model.CONTRACT.USER_CREATE)
-            </td>
-            </tr>
-            <tr>
-            <td>
-            @Html.LabelFor(model => model.CONTRACT.NOTE)             
-            </td>
-            <td>
-            @Html.EditorFor(model => model.CONTRACT.NOTE)
-            @Html.ValidationMessageFor(model => model.CONTRACT.NOTE)
-            </td>
-            </tr><tr>
-            <td>
-            </td>
-            <td>
-            </td>
-            </tr>
-          </table>
-         <input type="file" id="image" name="image"/>
-    </fieldset>
-        
-<div class="container">
-    <div class="row clearfix">
-		<div class="col-md-12 column">
-			<table class="table table-bordered table-hover" id="tab_logic">
-				<thead>
-					<tr>
-						<th class="text-center">
-							#
-						</th>
-						<th class="text-center">
-							DATE
-						</th>
-						<th class="text-center">
-							SUB NAME
-						</th>
-						<th class="text-center">
-							CONTENT
-						</th>
-						<th class="text-center">
-							PERIOD
-						</th>
-                        <th class="text-center">
-							FILE NAME
-						</th>
-                        <th></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr id="addr0">
-						<td>
-						1
-						</td>
-						<td>
-						<input id="CONTRACT_SUB_0_DATE" type="date" name="CONTRACT_SUB[0].DATE" placeholder="Datum" class="form-control">
-						</td>
-						<td>
-						<input id="CONTRACT_SUB_0_SUBNAME" type="text" name="CONTRACT_SUB[0].SUBNAME" placeholder="SUBNAME" class="form-control">
-						</td>
-						<td>
-						<!--input id="CONTRACT_SUB_0_CONTENT" type="text" name="CONTRACT_SUB[0].CONTENT" placeholder="LOADFILE" class="form-control"-->
-                        <input type="file" name="subcontent"/>
-						</td>
-                      	<td>
-                              @Html.DropDownList("PERIOD_ID")
-                              @Html.ValidationMessageFor(model => model.CONTRACT_SUB.PERIODID)
-						</td>
-                        <td>
-						<input id="CONTRACT_SUB_0_NOTE" type="text" name="CONTRACT_SUB[0].NOTE" placeholder="NOTE" class="form-control" readonly="readonly">
-						</td>
-                        <td>
-                         <button class="toggle3">
-                          @Ajax.ActionLink(
-                                                "Delete", 
-                                                "Delete_contractSUB", 
-                                                "CONTRACT",
-                                                new { v_id = Model.CONTRACT_SUB.ID, v_contract_id = Model.CONTRACT_SUB.CONTRACTID},
-                                                new AjaxOptions {  
-                                                    UpdateTargetId = "" ,
-                                                    InsertionMode = InsertionMode.Replace,
-                                            },
-                                            new { @class = "button" }
-                                            )
-                               </button>
-                        </td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
-    <!--a id='delete_row' class="pull-right btn btn-default">Delete Row</a-->
-</div>
-<div style="text-align:left">
-        <input type="button" class="button" value="Cancel" onclick="location.href='@Url.Action("ContractIndex", "CONTRACT")'" />
+        $('#contractDate').datepicker().on('show', function () {
+            if (contractDateVal.length == 0) {
+                $('#contractDate').datepicker('setDate', 'today');
+            } else {
+                $('#contractDate').datepicker('setDate', new Date(contractDateVal));
+            }
+        });
 
-	<input type="button" id="add_row" class="button"/ value="Add">
-    
-   <input type="submit" value="Save" />
-    </div>
+        $(function () {
+            var contractDateVal = $('#contractDate_val').val();
+            if (contractDateVal.length == 0) {
+                $('#contractDate').datepicker('setDate', 'today');
+            } else {
+                $('#contractDate').datepicker('setDate', new Date(contractDateVal));
+            }
+            var subDates = $('.subdate');
+            subDates.each(function (e) {
+                var subDateVal = $(this).siblings("input[type='hidden']").val();
+                if (subDateVal.length == 0) {
+                    $(this).datepicker('setDate', 'today');
+                } else {
+                    $(this).datepicker('setDate', new Date(subDateVal));
+                }
+            });
+        });
+
+        $('#tab_logic').DataTable({
+            'paging': false,
+            'searching': false,
+            'sorting': false,
+            'info': false,
+            'scrollX': true,
+            'columnDefs': [
+                { "width": "5%", "targets": 0 },
+                { "width": "25%", "targets": 1 },
+                { "width": "35%", "targets": 2 },
+                { "width": "10%", "targets": 3 },
+                { "width": "25%", "targets": 4 },
+            ],
+        });
+
+        $('#tab_logic').parents('div.dataTables_wrapper').first().hide();
+
+        $("#add_row").click(function () {
+            var rows = $('#tab_logic tbody').find('tr.hidden');
+            rows.first().removeClass('hidden');
+            var existRow = $('#tab_logic tbody').find('tr').not('.hidden');
+            if (existRow.first().length != 0) {
+                $('#tab_logic').parents('div.dataTables_wrapper').first().show();
+            }
+            var countCS = parseInt($("#countContractSub").val());
+            if (countCS <= 10) {
+                countCS = countCS + 1;
+                $('#countContractSub').val(countCS);
+            }
+        });
+
+        $("#remove_row").click(function () {
+            var rows = $('#tab_logic tbody').find('tr').not('.hidden');
+            rows.last().addClass('hidden');
+            var existRow = $('#tab_logic tbody').find('tr').not('.hidden');
+            if (existRow.length == 0) {
+                $('#tab_logic').parents('div.dataTables_wrapper').first().hide();
+            }
+            var countCS = parseInt($("#countContractSub").val());
+            if (countCS > 0) {
+                countCS = countCS - 1;
+                $('#countContractSub').val(countCS);
+            }
+        });
+
+        $(function () {
+            var countContractSub = $('#countContractSub').val();
+            for (var i = 0; i < countContractSub; i++) {
+                var rows = $('#tab_logic tbody').find('tr.hidden');
+                rows.first().removeClass('hidden');
+                var existRow = $('#tab_logic tbody').find('tr').not('.hidden');
+                if (existRow.first().length != 0) {
+                    $('#tab_logic').parents('div.dataTables_wrapper').first().show();
+                }
+            }
+        });
+    </script>
 }

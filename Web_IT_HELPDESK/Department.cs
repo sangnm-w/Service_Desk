@@ -29,6 +29,8 @@ namespace Web_IT_HELPDESK
         public string Plant_Name { get; set; }
         public Nullable<bool> Deactive { get; set; }
         public string Manager_Email { get; set; }
+        public string Manager_Id { get; set; }
+        public string BOD_Email { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Allocation> Allocations { get; set; }
