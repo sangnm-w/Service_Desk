@@ -5,6 +5,26 @@
     ViewBag.Title = "Seal Using";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<!-- Modal -->
+<div id="messageModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông báo!!!</h4>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center">
+                    <p id="msgNotify">This is message.</p>
+                    <p>************** Thank you!!! **************</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @Html.ActionLink("Close", "Index", "SealUsing", null, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="content-box-large">
     <h4>Seal Using Page</h4>
     <div class="panel panel-default">
@@ -46,6 +66,8 @@
                 </div>*@
         </div>
         <div class="panel-body">
+            @*@using (Html.BeginForm("Resend", "SealUsing", FormMethod.Post))
+                {*@
             <table class="table table-bordered table-striped nowrap" id="sealusing" width="100%">
                 <thead>
                     <tr>
@@ -73,62 +95,72 @@
                         <th>
                             Receiving place
                         </th>
-                        <th>
-                            Effective Date
-                        </th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @using (Html.BeginForm("Resend", "SealUsing", FormMethod.Post))
+                    @foreach (var item in Model)
                     {
-                        foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.SealUsing.Date)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.DeptName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.SealUsing.Employee_name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.SealUsing.Code_number)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.SealUsing.Type_document)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.SealUsing.Context)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.SealUsing.Place_Recipient)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.SealUsing.Period_date)
-                                </td>
-                                <td>
-                                    @*@Html.ActionLink("Details", "Details", new { id = item.SealUsing.Id }, new { @class = "btn btn-primary btn-xs", @role = "button" })*@
-                                    @*@Html.ActionLink("Edit", "Edit", new { id=item.SealUsing.Id }) |
-                                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })|
-                                        @Html.ActionLink("Confirm", "Confirm", new { id=item.SealUsing.Id }) |
-                                         @Html.ActionLink("Resend", "Resend", new { id = item.Id }, new { @class = "btn btn-primary btn-xs", @role = "button" })*@
-                                </td>
-                            </tr>
-                        }
+                        <tr>
+                            <td>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SealUsing.Date)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DeptName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SealUsing.Employee_name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SealUsing.Code_number)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SealUsing.Type_document)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SealUsing.Context)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SealUsing.Place_Recipient)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Details", "Details", new { id = item.SealUsing.Id }, new { @class = "btn btn-primary btn-xs", @role = "button" })
+                                @if ((bool)ViewBag.IsResend)
+                                {
+                                    @Html.ActionLink("Resend", "Resend", new { id = item.SealUsing.Id }, new { @class = "btn btn-primary btn-xs", @role = "button" })
+                                }
+                                @*@Html.ActionLink("Edit", "Edit", new { id=item.SealUsing.Id }) |
+                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })|
+                                    @Html.ActionLink("Confirm", "Confirm", new { id=item.SealUsing.Id }) |*@
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
+            @*  }*@
         </div>
     </div>
 </div>
 
 @section Script {
     <script type="text/javascript">
+          //get result message for modal when it show
+        $('#messageModal').on('shown.bs.modal', function (e) {
+            var message = '@Html.Raw(ViewBag.Message)';
+            var modal = $(this);
+            var msgPlace = modal.find('.modal-body p#msgNotify');
+            msgPlace.text(message);
+        });
+
+        //set backdrop and show follow ModalState from controller
+        $('#messageModal').modal({
+            backdrop: 'static',
+            keyboard: false,
+            show: @ViewBag.ModalState,
+        });
+
         var t = $('#sealusing').DataTable({
             "columnDefs": [{
                 "searchable": false,

@@ -1714,6 +1714,8 @@
     <Content Include="Views\CONTRACT\CreateCONTRACTViewModel2 - Copy.cshtml" />
     <Content Include="Views\CONTRACT\EditCONTRACTViewModel - Copy.cshtml" />
     <Content Include="Views\BIZ_TRIP\bod_confirm.cshtml" />
+    <Content Include="Views\SealUsing\Details.cshtml" />
+    <Content Include="Views\BIZ_TRIP\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

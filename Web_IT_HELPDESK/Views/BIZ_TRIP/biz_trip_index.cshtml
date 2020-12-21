@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                @Html.ActionLink("Close", "Index", "BIZ_TRIP", null, new { @class = "btn btn-default" })
+                @Html.ActionLink("Close", "biz_trip_index", "BIZ_TRIP", null, new { @class = "btn btn-default" })
 
             </div>
         </div>
@@ -176,39 +176,24 @@
                                     @Html.CheckBox("HR_CONFIRM", item.HR_CONFIRM.GetValueOrDefault())
                                 </td>
                                 <td>
-                                    @*@if (@item.DEPT_CONFIRM == false && (Convert.ToString(Session["dept_id"]) == "0000" || Convert.ToString(Session["employee_id"]) == "D83003" ||
-                                        Convert.ToString(Session["employee_id"].ToString()) == "MK78072" || Convert.ToString(Session["employee_id"].ToString()) == "H88768" ||
-                                        Convert.ToString(Session["employee_id"].ToString()) == "HN91185" || Convert.ToString(Session["employee_id"].ToString()) == "HN92244"))
-                                                   {
-                                                       @Html.ActionLink("Resend", "Resend", new { id = item.ID }, new { @class = "button" })
-                                                   }*@
-                                    @*<button class="refresh">
-                                            @Ajax.ActionLink(
-                                                                               "Delete",
-                                                                               "delete_biztrip",
-                                                                               "BIZ_TRIP",
-                                                                               new { v_id = item.ID },
-                                                                               new AjaxOptions
-                                                                                    {
-                                                                                   UpdateTargetId = "",
-                                                                                   InsertionMode = InsertionMode.Replace
-                                                                           },
-                                                                           new { @class = "button" }
-                                                                           )
-                                        </button>*@
+                                    @if ((bool)ViewBag.IsResend)
+                                    {
+                                        @Html.ActionLink("Resend", "Resend", new { id = item.ID }, new { @class = "btn btn-primary btn-xs", @role = "button" })
+                                    }
+                                    @Html.ActionLink("Details", "Details", new { id = item.ID }, new { @class = "btn btn-primary btn-xs", @role = "button" })
                                     <button class="refresh">
                                         @Ajax.ActionLink(
-                                                                           "Print",
-                                                                           "BizTripPrint",
-                                                                           "BIZ_TRIP",
-                                                                           new { v_id = item.ID },
-                                                                           new AjaxOptions
-                                                                                {
-                                                                               UpdateTargetId = "",
-                                                                               InsertionMode = InsertionMode.Replace
-                                                                       },
-                                                                       new { @class = "button" }
-                                                                       )
+                                                            "Print",
+                                                            "BizTripPrint",
+                                                            "BIZ_TRIP",
+                                                            new { v_id = item.ID },
+                                                            new AjaxOptions
+                                                                {
+                                                                UpdateTargetId = "",
+                                                                InsertionMode = InsertionMode.Replace
+                                                                },
+                                                            new { @class = "button" }
+                                                        )
                                     </button>
                                 </td>
                             </tr>

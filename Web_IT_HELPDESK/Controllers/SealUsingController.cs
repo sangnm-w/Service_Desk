@@ -22,7 +22,8 @@ namespace Web_IT_HELPDESK.Controllers
             string curr_PlantID = CurrentUser.Instance.User.Plant_Id;
             string curr_DeptID = CurrentUser.Instance.User.Department_Id;
 
-            DateTime from_date = DateTime.ParseExact("01/" + DateTime.Now.ToString("MM/yyyy"), "dd/MM/yyyy", null);
+            DateTime now = DateTime.Now;
+            DateTime from_date = new DateTime(now.Year, now.Month, 1);
             DateTime to_date = from_date.AddMonths(1).AddSeconds(-1);
 
             //+++++++ Repair for Right_Management +++++++
@@ -33,6 +34,8 @@ namespace Web_IT_HELPDESK.Controllers
             //        sealusings = sealusings.Where(s => s.DepartmentId == curr_DeptID && s.Plant == curr_PlantID).ToList();
             //    }
             //}
+
+
             bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantID && d.Department_Id == curr_DeptID && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
             bool currUserIsHRSealUsing = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantID && d.Department_Id == "V20S000003" && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
 
@@ -57,7 +60,14 @@ namespace Web_IT_HELPDESK.Controllers
             if (currUserIsManager == false && currUserIsHRSealUsing == false)
             {
                 suVM = suVM.Where(i => i.SealUsing.Employee_ID == CurrentUser.Instance.User.Emp_CJ).ToList();
+                ViewBag.IsResend = false;
             }
+            else
+            {
+                ViewBag.IsResend = true;
+            }
+            ViewBag.ModalState = "false";
+            ViewBag.Message = "";
             return View(suVM);
         }
 
@@ -111,15 +121,31 @@ namespace Web_IT_HELPDESK.Controllers
                 suVM = suVM.Where(s => (s.DeptName.Trim().ToUpper().Contains(searchString.Trim().ToUpper())
                                          || s.SealUsing.Employee_name.Trim().ToUpper().Contains(searchString.Trim().ToUpper()))).ToList();
             }
+            ViewBag.ModalState = "false";
+            ViewBag.Message = "";
             return View(suVM);
         }
 
         //
         // GET: /SealUsing/Details/5
         [Authorize]
-        public ActionResult Details(int id)
+        public ActionResult Details(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var seal_Using = en.Seal_Using.FirstOrDefault(s => s.Id == id);
+
+            if (seal_Using == null)
+            {
+                return HttpNotFound();
+            }
+
+            SealUsingViewModel.DetailsSealUsing dsuVM = new SealUsingViewModel.DetailsSealUsing(seal_Using);
+
+            return View(dsuVM);
         }
 
         // GET: /SealUsing/Create
@@ -183,6 +209,7 @@ namespace Web_IT_HELPDESK.Controllers
             }
             return View(csuVM);
         }
+
         [Authorize]
         public ActionResult Resend(int? id)
         {
@@ -213,6 +240,42 @@ namespace Web_IT_HELPDESK.Controllers
                 result = string.Format("Can't send confirm email to Department Manager. Please contact for support: minhsang.it@cjvina.com");
             }
 
+            string curr_PlantID = CurrentUser.Instance.User.Plant_Id;
+            string curr_DeptID = CurrentUser.Instance.User.Department_Id;
+
+            DateTime now = DateTime.Now;
+            DateTime from_date = new DateTime(now.Year, now.Month, 1);
+            DateTime to_date = from_date.AddMonths(1).AddSeconds(-1);
+
+            //+++++++ Repair for Right_Management +++++++
+            //if (!Admin)
+            //{
+            //    if (!hasPermission)
+            //    {
+            //        sealusings = sealusings.Where(s => s.DepartmentId == curr_DeptID && s.Plant == curr_PlantID).ToList();
+            //    }
+            //}
+
+            ViewBag.IsResend = true;
+
+            var suVM = en.Seal_Using
+                .Where(s => s.Del != true
+                        && s.Plant == curr_PlantID
+                        && s.DepartmentId == curr_DeptID
+                        && s.Date >= from_date
+                        && s.Date <= to_date
+                      )
+                .Join(en.Departments,
+                      s => new { deptID = s.DepartmentId, plantID = s.Plant },
+                      d => new { deptID = d.Department_Id, plantID = d.Plant_Id },
+                      (s, d) => new SealUsingViewModel.IndexSealUsing()
+                      {
+                          SealUsing = s,
+                          DeptName = d.Department_Name
+                      }
+                      )
+                .ToList();
+
             if (!string.IsNullOrEmpty(result))
             {
                 ViewBag.ModalState = "true";
@@ -223,7 +286,8 @@ namespace Web_IT_HELPDESK.Controllers
                 ViewBag.ModalState = "false";
                 ViewBag.Message = "";
             }
-            return View("Index", esuVM);
+
+            return View("Index", suVM);
         }
 
         public ActionResult Edit(int? id)

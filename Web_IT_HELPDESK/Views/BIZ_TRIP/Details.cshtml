@@ -1,0 +1,292 @@
+﻿@model Web_IT_HELPDESK.BIZ_TRIP
+
+@{
+    ViewBag.Title = "Business Trip Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Style {
+    <!--CustomInputFile -->
+    <link href="~/vendors/CustomInputFile/css/CustomInputFile.css" rel="stylesheet" />
+
+    <style>
+        .material {
+            border: none;
+            border-bottom: 1px solid #ccc;
+            box-shadow: none;
+            background: none !important;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 34px;
+            max-height: 102px;
+        }
+
+        .middlebtn {
+            display: flex;
+            margin: auto;
+        }
+
+            .middlebtn > div:last-child {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .middlebtn input.btn {
+                height: 70px;
+                min-width: 100px;
+            }
+    </style>
+}
+<div class="col-md-12 panel-info">
+    <div class="content-box-header panel-heading">
+        <div class="panel-title ">Biz-Trip Details</div>
+
+        @*<div class="panel-options">
+                <a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
+                <a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
+            </div>*@
+    </div>
+    <div class="content-box-large box-with-header">
+        <fieldset disabled">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.DATE, "Registration date", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.DATE, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", id = "RegDate" } })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.DEPT, "Department", htmlAttributes: new { @class = "control-label" })
+                        @Html.Editor("Department", new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", @Value = ViewBag.DepartmentName } })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.EMPNO, "Employee Name", htmlAttributes: new { @class = "control-label" })
+                        @Html.Editor("Employee Name", new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", @Value = ViewBag.User_name } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @Html.LabelFor(model => model.DESCRIPTION, "Description", htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.DESCRIPTION, new { @class = "form-control material", @readonly = "readonly", @rows = 2 })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.CONTACT_COMPANY, "CONTACT COMPANY", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.CONTACT_COMPANY, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly" } })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.CONTACT_DEPT, "CONTACT DEPT", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.CONTACT_DEPT, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly" } })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.CONTACT_PERSON, "CONTACT PERSON", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.CONTACT_PERSON, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly" } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.FROM_DATE, "From date", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.FROM_DATE, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", id = "fromdate" } })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.TO_DATE, "To date", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.TO_DATE, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", id = "todate" } })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.VEHICLE, "Vehicle", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.VEHICLE, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly" } })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.REMARK, "Equipment", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.REMARK, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly" } })
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <hr />
+        @if (!(bool)ViewBag.IsManager)
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading"><h5><b>Department manager confirm</b></h5></div>
+                <div class="panel-body">
+                    <fieldset disabled>
+                        <div class="form-horizontal">
+                            <div class="row middlebtn">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.DEPT_CONFIRM_DATE, "Confirmation Date", htmlAttributes: new { @class = "control-label" })
+                                        @Html.Editor("Confirmation Date", new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", id = "ConfDate" } })
+                                        @Html.HiddenFor(model => model.DEPT_CONFIRM_DATE, new { id = "ConfDate_val" })
+
+                                        @Html.Label("Signature File", htmlAttributes: new { @class = "control-label" })
+                                        @Html.EditorFor(model => model.DEPT_CONFIRM_IMAGE_NAME, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly" } })
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-12 col-md-6">
+                                            @Html.RadioButton("approved", true, Model.DEPT_CONFIRM == true ? true : false, new { id = "approved1" })
+                                            @Html.Label("APPROVE", htmlAttributes: new { @style = "vertical-align: middle; margin-left: 7px;" })
+                                        </div>
+                                        <div class="col-sm-12 col-md-6">
+                                            @Html.RadioButton("approved", false, Model.DEPT_CONFIRM != true ? true : false, new { id = "approved2" })
+                                            @Html.Label("NOT APPROVE", htmlAttributes: new { @style = "vertical-align: middle; margin-left: 7px;" })
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.DEPT_CONFIRM)
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    @if (Model.DEPT_CONFIRM == true)
+                                    {
+                                        <input type="submit" value="APPROVED" class="btn btn-primary" />
+                                    }
+                                    else
+                                    {
+                                        <input type="submit" value="NOT APPROVED" class="btn btn-primary" />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading"><h5><b>BOD confirm</b></h5></div>
+                <div class="panel-body">
+                    <fieldset disabled>
+                        <div class="form-horizontal">
+                            <div class="row middlebtn">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.BOD_CONFIRM_DATE, "Confirmation Date", htmlAttributes: new { @class = "control-label" })
+                                        @Html.Editor("Confirmation Date", new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", id = "BODConfDate" } })
+                                        @Html.HiddenFor(model => model.BOD_CONFIRM_DATE, new { id = "BODConfDate_val" })
+
+                                        @Html.Label("Signature File", htmlAttributes: new { @class = "control-label" })
+                                        @Html.EditorFor(model => model.BOD_CONFIRM_IMAGE_NAME, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly" } })
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-12 col-md-6">
+                                            @Html.RadioButton("approved", true, Model.BOD_CONFIRM == true ? true : false, new { id = "approved1" })
+                                            @Html.Label("APPROVE", htmlAttributes: new { @style = "vertical-align: middle; margin-left: 7px;" })
+                                        </div>
+                                        <div class="col-sm-12 col-md-6">
+                                            @Html.RadioButton("approved", false, Model.BOD_CONFIRM != true ? true : false, new { id = "approved2" })
+                                            @Html.Label("NOT APPROVE", htmlAttributes: new { @style = "vertical-align: middle; margin-left: 7px;" })
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.BOD_CONFIRM)
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    @if (Model.BOD_CONFIRM == true)
+                                    {
+                                        <input type="submit" value="APPROVED" class="btn btn-primary" />
+                                    }
+                                    else
+                                    {
+                                        <input type="submit" value="NOT APPROVED" class="btn btn-primary" />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        }
+        @if (Model.HR_CONFIRM_DATE != null)
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading"><h5><b>HR manager confirm</b></h5></div>
+                <div class="panel-body">
+                    <fieldset disabled>
+                        <div class="form-horizontal">
+                            <div class="row middlebtn">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.HR_CONFIRM_DATE, "Confirmation Date", htmlAttributes: new { @class = "control-label" })
+                                        @Html.Editor("Confirmation Date", new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", id = "HRConfDate" } })
+                                        @Html.HiddenFor(model => model.HR_CONFIRM_DATE, new { id = "HRConfDate_val" })
+
+                                        @Html.Label("Signature File", htmlAttributes: new { @class = "control-label" })
+                                        @Html.EditorFor(model => model.HR_CONFIRM_IMAGE_NAME, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly" } })
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-12 col-md-6">
+                                            @Html.RadioButton("HRapproved", true, Model.HR_CONFIRM == true ? true : false, new { id = "approved1" })
+                                            @Html.Label("APPROVE", htmlAttributes: new { @style = "vertical-align: middle; margin-left: 7px;" })
+                                        </div>
+                                        <div class="col-sm-12 col-md-6">
+                                            @Html.RadioButton("HRapproved", false, Model.HR_CONFIRM != true ? true : false, new { id = "approved2" })
+                                            @Html.Label("NOT APPROVE", htmlAttributes: new { @style = "vertical-align: middle; margin-left: 7px;" })
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.HR_CONFIRM)
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    @if (Model.HR_CONFIRM == true)
+                                    {
+                                        <input type="submit" value="APPROVED" class="btn btn-primary" />
+                                    }
+                                    else
+                                    {
+                                        <input type="submit" value="NOT APPROVED" class="btn btn-primary" />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.Vehicle_Infor))
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading"><h5><b>HR Admin</b></h5></div>
+                <div class="panel-body">
+                    <div class="form-horizontal">
+                        <fieldset disabled>
+                            <div class="row middlebtn">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Vehicle_Infor, "Vehicle Information", htmlAttributes: new { @class = "control-label" })
+                                        @Html.TextAreaFor(model => model.Vehicle_Infor, new { @class = "form-control material", @rows = 2, @required = "required" })
+                                        @Html.ValidationMessageFor(model => model.Vehicle_Infor, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="submit" value="Submit" class="btn btn-primary" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Script {
+    <script src="~/vendors/CustomInputFile/js/jquery.custom-file-input.js"></script>
+    <script type="text/javascript">
+        $("#RegDate").val(moment($("#RegDate").val()).format("DD/MM/YYYY HH:mm"));
+        $("#fromdate").val(moment($("#fromdate").val()).format("DD/MM/YYYY HH:mm"));
+        $("#todate").val(moment($("#todate").val()).format("DD/MM/YYYY HH:mm"));
+
+        $("#SignDate").val(moment($("#SignDate_val").val()).format("DD/MM/YYYY"));
+
+        var ConfDate_val = $("#ConfDate_val").val(moment(Date.now()).format());
+        $("#ConfDate").val(moment(ConfDate_val).format("DD/MM/YYYY"));
+
+        var BODConfDate_val = $("#BODConfDate_val").val(moment(Date.now()).format());
+        $("#BODConfDate").val(moment(BODConfDate_val).format("DD/MM/YYYY"));
+
+        var HRConfDate_val = $("#HRConfDate_val").val(moment(Date.now()).format());
+        $("#HRConfDate").val(moment(ConfDate_val).format("DD/MM/YYYY"));
+    </script>
+}
