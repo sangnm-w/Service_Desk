@@ -49,7 +49,7 @@
             <div class="modal-body">
                 <div style="text-align: center">
                     <p id="msgNotify">This is message.</p>
-                    <p>************** Cám ơn đã sử dụng chương trình **************</p>
+                    <p>************** Thank you!!! **************</p>
                 </div>
             </div>
             <div class="modal-footer">
@@ -81,8 +81,8 @@
                         @Html.Editor("Department", new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", @Value = ViewBag.DepartmentName } })
                     </div>
                     <div class="col-md-4">
-                        @Html.LabelFor(model => model.EMPNO, "Register", htmlAttributes: new { @class = "control-label" })
-                        @Html.Editor("Register", new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", @Value = ViewBag.User_name } })
+                        @Html.LabelFor(model => model.EMPNO, "Employee Name", htmlAttributes: new { @class = "control-label" })
+                        @Html.Editor("Employee Name", new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", @Value = ViewBag.User_name } })
                     </div>
                 </div>
                 <div class="form-group">
@@ -347,7 +347,7 @@
                         <div class="row middlebtn">
                             <div class="col-md-8">
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.Vehicle_Infor, "Vehicel Information", htmlAttributes: new { @class = "control-label" })
+                                    @Html.LabelFor(model => model.Vehicle_Infor, "Vehicle Information", htmlAttributes: new { @class = "control-label" })
                                     @Html.TextAreaFor(model => model.Vehicle_Infor, new { @class = "form-control material", @rows = 2, @required = "required" })
                                     @Html.ValidationMessageFor(model => model.Vehicle_Infor, "", new { @class = "text-danger" })
                                 </div>
@@ -366,6 +366,7 @@
 @section Script {
     <script src="~/vendors/CustomInputFile/js/jquery.custom-file-input.js"></script>
     <script type="text/javascript">
+        //get result message for modal when it show
         $('#messageModal').on('shown.bs.modal', function (e) {
             var message = '@Html.Raw(ViewBag.Message)';
             var modal = $(this);
@@ -373,7 +374,12 @@
             msgPlace.text(message);
         });
 
-        $('#messageModal').modal('@ViewBag.ModalState');
+        //set backdrop and show follow ModalState from controller
+        $('#messageModal').modal({
+            backdrop: 'static',
+            keyboard: false,
+            show: @ViewBag.ModalState,
+        });
 
         $("#RegDate").val(moment($("#RegDate").val()).format("DD/MM/YYYY HH:mm"));
         $("#fromdate").val(moment($("#fromdate").val()).format("DD/MM/YYYY HH:mm"));

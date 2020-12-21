@@ -298,6 +298,7 @@
     <Compile Include="Models\AutoCompleteModel.cs" />
     <Compile Include="Models\Biz_TripViewModel.cs" />
     <Compile Include="ViewModels\ChangePasswordViewModel.cs" />
+    <Compile Include="ViewModels\ContactsViewModel.cs" />
     <Compile Include="ViewModels\ContractViewModel.cs" />
     <Compile Include="Models\DepartmentModel.cs" />
     <Compile Include="Models\DeviceModel.cs" />
@@ -753,10 +754,7 @@
     <Content Include="vendors\BootstrapDatepicker\bootstrap-datepicker.min.js" />
     <Content Include="vendors\CustomInputFile\css\component.css" />
     <Content Include="vendors\CustomInputFile\css\CustomInputFile.css" />
-    <Content Include="vendors\CustomInputFile\css\demo.css" />
-    <Content Include="vendors\CustomInputFile\css\normalize.css" />
     <Content Include="vendors\CustomInputFile\js\custom-file-input.js" />
-    <Content Include="vendors\CustomInputFile\js\jquery-v1.min.js" />
     <Content Include="vendors\CustomInputFile\js\jquery.custom-file-input.js" />
     <Content Include="vendors\datatables\css\demo_page.css" />
     <Content Include="vendors\datatables\css\demo_table.css" />
@@ -1567,7 +1565,6 @@
     <Content Include="Scripts\modernizr-1.7.min.js.map">
       <DependentUpon>modernizr-1.7.js</DependentUpon>
     </Content>
-    <Content Include="Views\SealUsing\Delete.cshtml" />
     <Content Include="Views\Order_\Edit.cshtml" />
     <Content Include="Views\DrinkingRequest\Index.cshtml" />
     <Content Include="Views\DrinkingRequest\Create.cshtml" />
@@ -1576,14 +1573,6 @@
     <Content Include="Views\DrinkingRequest\Delete.cshtml" />
     <Content Include="Views\Order_\Confirm.cshtml" />
     <Content Include="Views\Order_\Delete.cshtml" />
-    <Content Include="Views\Document\PortalIndex.cshtml" />
-    <Content Include="Views\Document\PortalAdmin.cshtml" />
-    <Content Include="Views\Document\Create.cshtml" />
-    <Content Include="Views\ContactEmployee\Index.cshtml" />
-    <Content Include="Views\Document\Contactlist.cshtml" />
-    <Content Include="Views\Document\ContactList2.cshtml" />
-    <Content Include="Views\Document\partial0000001.cshtml" />
-    <Content Include="Views\SealUsing\Resend.cshtml" />
     <Content Include="Views\Employee\EmployeeList.cshtml" />
     <Content Include="Views\Employee\EditRoleViewModel.cshtml" />
     <Content Include="Views\CONTRACT\ContractIndex.cshtml" />
@@ -1667,7 +1656,6 @@
     </Content>
     <Content Include="Views\Survey\SecuritySurvey.cshtml" />
     <Content Include="Views\Survey\CanteenSurvey.cshtml" />
-    <Content Include="Views\SealUsing\Index - Copy.cshtml" />
     <Content Include="Views\Rules\Create.cshtml" />
     <Content Include="Views\Rules\Delete.cshtml" />
     <Content Include="Views\Rules\Details.cshtml" />
@@ -1723,6 +1711,11 @@
     <Content Include="Views\BIZ_TRIP\hr_admin.cshtml" />
     <Content Include="Views\BIZ_TRIP\biz_trip_index - Copy.cshtml" />
     <Content Include="Views\Shared\_Layout - Copy.cshtml" />
+    <Content Include="Views\CONTRACT\CreateCONTRACTViewModel2 - Copy.cshtml" />
+    <Content Include="Views\CONTRACT\EditCONTRACTViewModel - Copy.cshtml" />
+    <Content Include="Views\BIZ_TRIP\bod_confirm.cshtml" />
+    <Content Include="Views\SealUsing\Details.cshtml" />
+    <Content Include="Views\BIZ_TRIP\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

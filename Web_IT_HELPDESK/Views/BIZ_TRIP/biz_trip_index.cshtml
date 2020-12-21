@@ -22,11 +22,11 @@
             <div class="modal-body">
                 <div style="text-align: center">
                     <p id="msgNotify">This is message.</p>
-                    <p>************** Cám ơn đã sử dụng chương trình **************</p>
+                    <p>************** Thank you!!! **************</p>
                 </div>
             </div>
             <div class="modal-footer">
-                @Html.ActionLink("Close", "Index", "BIZ_TRIP", null, new { @class = "btn btn-default" })
+                @Html.ActionLink("Close", "biz_trip_index", "BIZ_TRIP", null, new { @class = "btn btn-default" })
 
             </div>
         </div>
@@ -176,39 +176,24 @@
                                     @Html.CheckBox("HR_CONFIRM", item.HR_CONFIRM.GetValueOrDefault())
                                 </td>
                                 <td>
-                                    @*@if (@item.DEPT_CONFIRM == false && (Convert.ToString(Session["dept_id"]) == "0000" || Convert.ToString(Session["employee_id"]) == "D83003" ||
-                                        Convert.ToString(Session["employee_id"].ToString()) == "MK78072" || Convert.ToString(Session["employee_id"].ToString()) == "H88768" ||
-                                        Convert.ToString(Session["employee_id"].ToString()) == "HN91185" || Convert.ToString(Session["employee_id"].ToString()) == "HN92244"))
-                                                   {
-                                                       @Html.ActionLink("Resend", "Resend", new { id = item.ID }, new { @class = "button" })
-                                                   }*@
-                                    @*<button class="refresh">
-                                        @Ajax.ActionLink(
-                                                                           "Delete",
-                                                                           "delete_biztrip",
-                                                                           "BIZ_TRIP",
-                                                                           new { v_id = item.ID },
-                                                                           new AjaxOptions
-                                                                                {
-                                                                               UpdateTargetId = "",
-                                                                               InsertionMode = InsertionMode.Replace
-                                                                       },
-                                                                       new { @class = "button" }
-                                                                       )
-                                    </button>*@
+                                    @if ((bool)ViewBag.IsResend)
+                                    {
+                                        @Html.ActionLink("Resend", "Resend", new { id = item.ID }, new { @class = "btn btn-primary btn-xs", @role = "button" })
+                                    }
+                                    @Html.ActionLink("Details", "Details", new { id = item.ID }, new { @class = "btn btn-primary btn-xs", @role = "button" })
                                     <button class="refresh">
                                         @Ajax.ActionLink(
-                                                                           "Print",
-                                                                           "BizTripPrint",
-                                                                           "BIZ_TRIP",
-                                                                           new { v_id = item.ID },
-                                                                           new AjaxOptions
-                                                                                {
-                                                                               UpdateTargetId = "",
-                                                                               InsertionMode = InsertionMode.Replace
-                                                                       },
-                                                                       new { @class = "button" }
-                                                                       )
+                                                            "Print",
+                                                            "BizTripPrint",
+                                                            "BIZ_TRIP",
+                                                            new { v_id = item.ID },
+                                                            new AjaxOptions
+                                                                {
+                                                                UpdateTargetId = "",
+                                                                InsertionMode = InsertionMode.Replace
+                                                                },
+                                                            new { @class = "button" }
+                                                        )
                                     </button>
                                 </td>
                             </tr>
@@ -221,7 +206,22 @@
 </div>
 @section Script {
     <script type="text/javascript">
-         var t = $('#biztrip').DataTable({
+        //get result message for modal when it show
+        $('#messageModal').on('shown.bs.modal', function (e) {
+            var message = '@Html.Raw(ViewBag.Message)';
+            var modal = $(this);
+            var msgPlace = modal.find('.modal-body p#msgNotify');
+            msgPlace.text(message);
+        });
+
+        //set backdrop and show follow ModalState from controller
+        $('#messageModal').modal({
+            backdrop: 'static',
+            keyboard: false,
+            show: @ViewBag.ModalState,
+        });
+
+        var t = $('#biztrip').DataTable({
             "columnDefs": [{
                 "searchable": false,
                 "orderable": false,
@@ -245,14 +245,5 @@
         });
 
         $('#_datetime').datepicker('setDate', 'today');
-
-        $('#messageModal').on('shown.bs.modal', function (e) {
-        var message = '@Html.Raw(ViewBag.Message)';
-        var modal = $(this);
-        var msgPlace = modal.find('.modal-body p#msgNotify');
-        msgPlace.text(message);
-        });
-
-        $('#messageModal').modal('@ViewBag.ModalState');
     </script>
 }

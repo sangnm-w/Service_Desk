@@ -67,6 +67,10 @@ body {
     background-color: #2c3742;
 }
 
+    .header .container {
+        width: 90%;
+    }
+
     .header .logo h1 {
         font-size: 30px;
         margin: 0px;
@@ -657,10 +661,6 @@ textarea {
 
 /* Tablets */
 @media (max-width: 767px) {
-    .container {
-        width: 100%;
-    }
-
     .header {
         height: auto;
         padding: 15px 0px;

@@ -17,7 +17,7 @@
                     <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Month :</label>
                     @Html.TextBox("_datetime", DateTime.Now.ToString("yyyy-MM"), new { @type = "month", @class = "form-control", @style = "width: auto; display: inline-block" })
                 </div>
-                if (((List<PlantViewModel>)ViewBag.Plants).Count > 1)
+                if (((List<PlantViewModel>)ViewBag.Plants).Count > 0)
                 {
                     /*Only admin have this group*/
                     <div class="form-group">
@@ -31,11 +31,14 @@
                                     </label>
                                 </div>
                             }
-                            <div class="col-sm-3">
-                                <label class="radio-inline">
-                                    @Html.RadioButton("plants", "all", true)<label>All</label>
-                                </label>
-                            </div>
+                            @if (((List<PlantViewModel>)ViewBag.Plants).Count != 1)
+                            {
+                                <div class="col-sm-3">
+                                    <label class="radio-inline">
+                                        @Html.RadioButton("plants", "all", true)<label>All</label>
+                                    </label>
+                                </div>
+                            }
                         </div>
                     </div>
                 }

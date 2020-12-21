@@ -46,7 +46,7 @@
             <div class="modal-body">
                 <div style="text-align: center">
                     <p id="msgNotify">This is message.</p>
-                    <p>************** Cám ơn đã sử dụng chương trình **************</p>
+                    <p>************** Thank you!!! **************</p>
                 </div>
             </div>
             <div class="modal-footer">
@@ -79,7 +79,7 @@
                         @Html.EditorFor(model => model.DeptName, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly" } })
                     </div>
                     <div class="col-md-4">
-                        @Html.LabelFor(model => model.Employee_name, "Register", htmlAttributes: new { @class = "control-label" })
+                        @Html.LabelFor(model => model.Employee_name, "Employee Name", htmlAttributes: new { @class = "control-label" })
                         @Html.EditorFor(model => model.Employee_name, new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly" } })
                     </div>
                 </div>
@@ -116,7 +116,7 @@
         </fieldset>
         <hr />
         <div class="panel panel-default">
-            <div class="panel-heading">Department manager confirm</div>
+            <div class="panel-heading">Department Manager Confirm</div>
             <div class="panel-body">
                 @if (Model.Department_confirm_date == null)
                 {
@@ -205,7 +205,7 @@
         </div>
         <hr />
         <div class="panel panel-default">
-            <div class="panel-heading">HR Admin confirm</div>
+            <div class="panel-heading">HR Seal Using Confirm</div>
             <div class="panel-body">
                 @if (Model.Employee_Seal_keep == null)
                 {
@@ -297,6 +297,7 @@
 
 @section Script {
     <script type="text/javascript">
+        //get result message for modal when it show
         $('#messageModal').on('shown.bs.modal', function (e) {
             var message = '@Html.Raw(ViewBag.Message)';
             var modal = $(this);
@@ -304,7 +305,12 @@
             msgPlace.text(message);
         });
 
-        $('#messageModal').modal('@ViewBag.ModalState');
+        //set backdrop and show follow ModalState from controller
+        $('#messageModal').modal({
+            backdrop: 'static',
+            keyboard: false,
+            show: @ViewBag.ModalState,
+        });
 
         $("#RegDate").val(moment($("#RegDate_val").val()).format("DD/MM/YYYY"));
         $("#SignDate").val(moment($("#SignDate_val").val()).format("DD/MM/YYYY"));

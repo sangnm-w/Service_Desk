@@ -1,7 +1,7 @@
-﻿@model Web_IT_HELPDESK.ViewModels.SealUsingViewModel.EditSealUsing
+﻿@model Web_IT_HELPDESK.ViewModels.SealUsingViewModel.DetailsSealUsing
 
 @{
-    ViewBag.Title = "Manager Confirmation";
+    ViewBag.Title = "Seal Using Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section Style {
@@ -58,7 +58,7 @@
 
 <div class="col-md-12 panel-info">
     <div class="content-box-header panel-heading">
-        <div class="panel-title ">Seal Using Confirm</div>
+        <div class="panel-title ">Seal Using Details</div>
 
         @*<div class="panel-options">
                 <a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
@@ -116,79 +116,83 @@
         </fieldset>
         <hr />
         <div class="panel panel-default">
-            <div class="panel-heading">Department manager confirm</div>
+            <div class="panel-heading">Department Manager Confirm</div>
             <div class="panel-body">
-                @if (Model.Department_confirm_date == null)
-                {
-                    using (Html.BeginForm())
-                    {
-                        @Html.AntiForgeryToken()
-                        <div class="form-horizontal">
-                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                            @Html.HiddenFor(model => model.Id)
-                            <div class="row middlebtn">
-                                <div class="col-md-8">
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.Department_confirm_date, "Confirmation Date", htmlAttributes: new { @class = "control-label" })
-                                        @Html.Editor("Confirmation Date", new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", id = "ConfDate" } })
-                                        @Html.HiddenFor(model => model.Department_confirm_date, new { id = "ConfDate_val" })
-                                    </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.Department_note, "Manager's opinion (option)", htmlAttributes: new { @class = "control-label" })
-                                        @Html.EditorFor(model => model.Department_note, null, new { htmlAttributes = new { @class = "form-control" } })
-                                        @Html.ValidationMessageFor(model => model.Department_note, "", new { @class = "text-danger" })
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-sm-12 col-md-6">
-                                            @Html.RadioButton("approved", true, true, new { id = "approved1" })
-                                            @Html.Label("APPROVE", htmlAttributes: new { @style = "vertical-align: middle; margin-left: 7px;" })
-                                        </div>
-                                        <div class="col-sm-12 col-md-6">
-                                            @Html.RadioButton("approved", false, false, new { id = "approved2" })
-                                            @Html.Label("NOT APPROVE", htmlAttributes: new { @style = "vertical-align: middle; margin-left: 7px;" })
-                                        </div>
-                                        @Html.ValidationMessageFor(model => model.Department_confirm)
-                                    </div>
+                <fieldset disabled>
+                    <div class="form-horizontal">
+                        <div class="row middlebtn">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Department_confirm_date, "Confirmation Date", htmlAttributes: new { @class = "control-label" })
+                                    @Html.Editor("Confirmation Date", new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", id = "ConfDate" } })
+                                    @Html.HiddenFor(model => model.Department_confirm_date, new { id = "ConfDate_val" })
                                 </div>
-                                <div class="col-md-4">
-                                    <input type="submit" value="Submit" class="btn btn-primary" />
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Department_note, "Manager's opinion (option)", htmlAttributes: new { @class = "control-label" })
+                                    @Html.EditorFor(model => model.Department_note, null, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    @Html.ValidationMessageFor(model => model.Department_note, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-12 col-md-6">
+                                        @Html.RadioButton("approved", true, Model.Department_confirm == true ? true : false, new { id = "approved1" })
+                                        @Html.Label("APPROVE", htmlAttributes: new { @style = "vertical-align: middle; margin-left: 7px;" })
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        @Html.RadioButton("approved", false, Model.Department_confirm != true ? true : false, new { id = "approved2" })
+                                        @Html.Label("NOT APPROVE", htmlAttributes: new { @style = "vertical-align: middle; margin-left: 7px;" })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.Department_confirm)
                                 </div>
                             </div>
+                            <div class="col-md-4">
+                                @if (Model.Department_confirm == true)
+                                {
+                                    <input type="submit" value="APPROVED" class="btn btn-primary" />
+                                }
+                                else
+                                {
+                                    <input type="submit" value="NOT APPROVED" class="btn btn-primary" />
+                                }
+                            </div>
                         </div>
-                    }
-                }
-                else
-                {
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        @if (Model.Employee_Seal_keep != null)
+        {
+            <hr />
+            <div class="panel panel-default">
+                <div class="panel-heading">HR Seal Using Confirm</div>
+                <div class="panel-body">
                     <fieldset disabled>
                         <div class="form-horizontal">
-                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                            @Html.HiddenFor(model => model.Id)
                             <div class="row middlebtn">
                                 <div class="col-md-8">
                                     <div class="form-group">
-                                        @Html.LabelFor(model => model.Department_confirm_date, "Confirmation Date", htmlAttributes: new { @class = "control-label" })
-                                        @Html.Editor("Confirmation Date", new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", id = "ConfDate" } })
-                                        @Html.HiddenFor(model => model.Department_confirm_date, new { id = "ConfDate_val" })
+                                        @Html.LabelFor(model => model.Employee_Seal_keep, "Confirmation Date", htmlAttributes: new { @class = "control-label" })
+                                        @Html.Editor("Confirmation Date", new { htmlAttributes = new { @class = "form-control material", @readonly = "readonly", id = "HRConfDate" } })
+                                        @Html.HiddenFor(model => model.Employee_Seal_keep, new { id = "HRConfDate_val" })
                                     </div>
                                     <div class="form-group">
-                                        @Html.LabelFor(model => model.Department_note, "Manager's opinion (option)", htmlAttributes: new { @class = "control-label" })
-                                        @Html.EditorFor(model => model.Department_note, null, new { htmlAttributes = new { @class = "form-control" } })
-                                        @Html.ValidationMessageFor(model => model.Department_note, "", new { @class = "text-danger" })
+                                        @Html.LabelFor(model => model.Employee_Seal_keep_note, "HR's opinion (option)", htmlAttributes: new { @class = "control-label" })
+                                        @Html.EditorFor(model => model.Employee_Seal_keep_note, null, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                        @Html.ValidationMessageFor(model => model.Employee_Seal_keep_note, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group">
                                         <div class="col-sm-12 col-md-6">
-                                            @Html.RadioButton("approved", true, Model.Department_confirm == true ? true : false, new { id = "approved1" })
+                                            @Html.RadioButton("HRapproved", true, Model.Employee_Seal_keep_confrim == true ? true : false, new { id = "HRapproved1" })
                                             @Html.Label("APPROVE", htmlAttributes: new { @style = "vertical-align: middle; margin-left: 7px;" })
                                         </div>
                                         <div class="col-sm-12 col-md-6">
-                                            @Html.RadioButton("approved", false, Model.Department_confirm != true ? true : false, new { id = "approved2" })
+                                            @Html.RadioButton("HRapproved", false, Model.Employee_Seal_keep_confrim != true ? true : false, new { id = "HRapproved2" })
                                             @Html.Label("NOT APPROVE", htmlAttributes: new { @style = "vertical-align: middle; margin-left: 7px;" })
                                         </div>
-                                        @Html.ValidationMessageFor(model => model.Department_confirm)
+                                        @Html.ValidationMessageFor(model => model.Employee_Seal_keep_confrim)
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    @if (Model.Department_confirm == true)
+                                    @if (Model.Employee_Seal_keep_confrim == true)
                                     {
                                         <input type="submit" value="APPROVED" class="btn btn-primary" />
                                     }
@@ -200,32 +204,21 @@
                             </div>
                         </div>
                     </fieldset>
-                }
+                </div>
             </div>
-        </div>
+        }
     </div>
 </div>
 
 @section Script {
     <script type="text/javascript">
-        //get result message for modal when it show
-        $('#messageModal').on('shown.bs.modal', function (e) {
-            var message = '@Html.Raw(ViewBag.Message)';
-            var modal = $(this);
-            var msgPlace = modal.find('.modal-body p#msgNotify');
-            msgPlace.text(message);
-        });
-
-        //set backdrop and show follow ModalState from controller
-        $('#messageModal').modal({
-            backdrop: 'static',
-            keyboard: false,
-            show: @ViewBag.ModalState,
-        });
-
         $("#RegDate").val(moment($("#RegDate_val").val()).format("DD/MM/YYYY"));
         $("#SignDate").val(moment($("#SignDate_val").val()).format("DD/MM/YYYY"));
+
         var ConfDate_val = $("#ConfDate_val").val(moment(Date.now()).format());
         $("#ConfDate").val(moment(ConfDate_val).format("DD/MM/YYYY"));
+
+        var HRConfDate_val = $("#HRConfDate_val").val(moment(Date.now()).format());
+        $("#HRConfDate").val(moment(ConfDate_val).format("DD/MM/YYYY"));
     </script>
 }

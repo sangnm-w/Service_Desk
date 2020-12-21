@@ -33,7 +33,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             string departmentName = DepartmentModel.Instance.getDeptName(biztrip.PLANT, biztrip.DEPT);
             if (level == 1) // Level 1: Department Manager
             {
-                subject = "[Cần duyệt] - Phiếu đăng ký đi công tác: " + biztrip.NAME + " - tạo ngày: " + biztrip.DATE;
+                subject = "[Need Confirm by Department Manager ] - Business Trip Registration: " + biztrip.NAME + " - Date: " + biztrip.DATE;
 
                 body = "     Employee Name: " + biztrip.NAME + "\n" +
                    "        Department: " + departmentName + "\n" +
@@ -47,13 +47,13 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                    "    Used equipemnt: " + biztrip.USED_EQUIPMENT.ToString() + "\n" +
                    " Equipemnt remarks: " + biztrip.REMARK.ToString() + "\n" +
                    "-------------------------------------" + "\n" +
-                   "   Follow link to confirm: " + linkConfirm + biztrip.ID + "\n" + "\n" +
+                   "   Follow the link to confirm: " + linkConfirm + biztrip.ID + "\n" + "\n" +
                    "Regards!";
 
             }
             else if (level == 2) // Level 2: Resend
             {
-                subject = "<<Gấp>> [Cần duyệt] - Phiếu yêu cầu sử dụng con dấu: " + biztrip.NAME + " - tạo ngày: " + biztrip.DATE;
+                subject = "<<Gấp>> [Need Confirm by Department Manager ] - Business Trip Registration: " + biztrip.NAME + " - Date: " + biztrip.DATE;
                 body = "     Employee Name: " + biztrip.NAME + "\n" +
                       "        Department: " + departmentName + "\n" +
                       "              Date: " + biztrip.DATE + "\n" +
@@ -66,12 +66,12 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                       "    Used equipemnt: " + biztrip.USED_EQUIPMENT.ToString() + "\n" +
                       " Equipemnt remarks: " + biztrip.REMARK.ToString() + "\n" +
                       "-------------------------------------" + "\n" +
-                      "   Follow link to confirm: " + domainName + "/servicedesk/BIZ_TRIP/dept_confirm/" + biztrip.ID + "\n" + "\n" +
+                      "   Follow the link to confirm: " + domainName + "/servicedesk/BIZ_TRIP/dept_confirm/" + biztrip.ID + "\n" + "\n" +
                       "Regards!";
             } // TODO: Need Action Method
             else if (level == 3) // Level 3: BOD
             {
-                subject = "[Cần duyệt] - Phiếu yêu cầu đăng ký đi công tác BIZ TRIP: " + biztrip.NAME + " - ngày: " + biztrip.DATE;
+                subject = "[Need Confirm by BOD] - Business Trip Registration: " + biztrip.NAME + " - Date: " + biztrip.DATE;
                 body =
                    "     Employee Name: " + biztrip.NAME + "\n" +
                    "        Department: " + departmentName + "\n" +
@@ -86,13 +86,14 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                    " Equipemnt remarks: " + biztrip.REMARK.ToString() + "\n" +
                    "-------------------------------------" + "\n" +
                    "Confirmed by Head of Department" + "\n" +
-                   "   Follow to confirm by link: " + domainName + "/servicedesk/BIZ_TRIP/bod_confirm/" + biztrip.ID + "\n" +
+                   "-------------------------------------" + "\n" +
+                   "   Follow the link to confirm: " + domainName + "/servicedesk/BIZ_TRIP/bod_confirm/" + biztrip.ID + "\n" +
                    "Regards!";
 
             }
             else if (level == 4) // Level 4: HR Manager
             {
-                subject = "[Cần duyệt] - Phiếu yêu cầu đăng ký đi công tác BIZ TRIP: " + biztrip.NAME + " - ngày: " + biztrip.DATE;
+                subject = "[Need Confirm by HR Manager] - Business Trip Registration: " + biztrip.NAME + " - Date: " + biztrip.DATE;
                 body =
                    "     Employee Name: " + biztrip.NAME + "\n" +
                    "        Department: " + departmentName + "\n" +
@@ -107,13 +108,14 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                    " Equipemnt remarks: " + biztrip.REMARK.ToString() + "\n" +
                    "-------------------------------------" + "\n" +
                    "Confirmed by Head of Department" + "\n" +
-                   "   Follow to confirm by link: " + domainName + "/servicedesk/BIZ_TRIP/hr_confirm/" + biztrip.ID + "\n" +
+                   "-------------------------------------" + "\n" +
+                   "   Follow the link to confirm: " + domainName + "/servicedesk/BIZ_TRIP/hr_confirm/" + biztrip.ID + "\n" +
                    "Regards!";
 
-            }// TODO: Need Action Method
+            }
             else if (level == 5) // Level 5: HR Admin
             {
-                subject = "[Cần duyệt] - Phiếu yêu cầu đăng ký đi công tác BIZ TRIP: " + biztrip.NAME + " - ngày: " + biztrip.DATE;
+                subject = "[Need Confirm by HR Admin] - Business Trip Registration: " + biztrip.NAME + " - Date: " + biztrip.DATE;
                 body =
                    "     Employee Name: " + biztrip.NAME + "\n" +
                    "        Department: " + departmentName + "\n" +
@@ -127,14 +129,15 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                    "    Used equipemnt: " + biztrip.USED_EQUIPMENT.ToString() + "\n" +
                    " Equipemnt remarks: " + biztrip.REMARK.ToString() + "\n" +
                    "-------------------------------------" + "\n" +
-                   "Confirmed" + "\n" +
+                   "Confirmed by HR Manager" + "\n" +
+                   "-------------------------------------" + "\n" +
                    "   Follow to add information by link: " + domainName + "/servicedesk/BIZ_TRIP/hr_admin/" + biztrip.ID + "\n" +
                    "Regards!";
 
             }
-            else if (level == 6)
+            else if (level == 7) // Level 7: Return APPROVED
             {
-                subject = "[Không được duyệt] - Phiếu yêu cầu đăng ký đi công tác BIZ TRIP: " + biztrip.NAME + " - ngày: " + biztrip.DATE;
+                subject = "[APPROVED] - Business Trip Registration: " + biztrip.NAME + " - Date: " + biztrip.DATE;
                 body =
                    "     Employee Name: " + biztrip.NAME + "\n" +
                    "        Department: " + departmentName + "\n" +
@@ -150,9 +153,9 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                    "-------------------------------------" + "\n" +
                    "Regards!";
             }
-            else if (level == 7)
+            else if (level == 8) // Level 8: Return NOT APPROVED
             {
-                subject = "[Đã được duyệt] - Phiếu yêu cầu đăng ký đi công tác BIZ TRIP: " + biztrip.NAME + " - ngày: " + biztrip.DATE;
+                subject = "[NOT APPROVED] - Business Trip Registration: " + biztrip.NAME + " - Date: " + biztrip.DATE;
                 body =
                    "     Employee Name: " + biztrip.NAME + "\n" +
                    "        Department: " + departmentName + "\n" +
