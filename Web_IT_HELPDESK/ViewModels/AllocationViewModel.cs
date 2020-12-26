@@ -12,5 +12,12 @@ namespace Web_IT_HELPDESK.ViewModels
 
         public string Deliver_Name { get; set; }
         public string Receiver_Name { get; set; }
+        public string Department_Name { get; set; }
+
+        public AllocationViewModel()
+        {
+            Allocation = new Allocation();
+            Device = new Device();
+        }
     }
 }

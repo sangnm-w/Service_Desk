@@ -189,9 +189,9 @@
                                     <br />
                                 }
                             </td>
-                            @*<td>
+                            <td>
                                     @Html.ActionLink("Edit", "EditCONTRACTViewModel", new { id = item.ID }, new { @class = "btn btn-default btn-xs", @role = "button" })
-                                </td>*@
+                                </td>
                         </tr>
                     }
                 </tbody>
@@ -215,13 +215,11 @@
             }
         });
 
-        $.fn.dataTable.moment('D/MM/YYYY');
-
         $('#contract').DataTable({
             'aaSorting': [0, 'desc'],
-            "columnDefs": [
-                { className: "borderlastcol", "targets": [9] }
-            ],
+            //"columnDefs": [
+            //    { className: "borderlastcol", "targets": [9] }
+            //],
             'scrollX': true,
         });
 

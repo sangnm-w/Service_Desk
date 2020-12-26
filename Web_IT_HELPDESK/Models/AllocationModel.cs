@@ -66,7 +66,7 @@ namespace Web_IT_HELPDESK.Models
 
             return avm.ToList();
         }
-        public List<AllocationViewModel> GetLastAllocationOfDeviceByPlantId(string plantId)
+        public IEnumerable<AllocationViewModel> GetLastAllocationOfDeviceByPlantId(string plantId)
         {
             ServiceDeskEntities en = new ServiceDeskEntities();
 
@@ -87,6 +87,16 @@ namespace Web_IT_HELPDESK.Models
                     allocation = grp.allocation,
                     DeliverName = grp.DeliverName,
                     ReceiverName = e.EmployeeName
+                })
+                .Join(en.Departments,
+                a => (new { Plant_Id = a.allocation.Plant_Id, Department_Id = a.allocation.Department_Id }),
+                d => (new { Plant_Id = d.Plant_Id, Department_Id = d.Department_Id }),
+                (a, d) => new
+                {
+                    allocation = a.allocation,
+                    DeliverName = a.DeliverName,
+                    ReceiverName = a.ReceiverName,
+                    DepartmentName = d.Department_Name
                 });
 
             var devices = en.Devices.Where(d => d.Plant_Id == plantId);
@@ -108,16 +118,18 @@ namespace Web_IT_HELPDESK.Models
                                 (
                                     temp0 => temp0.joined.DefaultIfEmpty(),
                                     (temp0, j) =>
-                                        new AllocationViewModel
+                                        new AllocationViewModel()
                                         {
                                             Device = temp0.d,
                                             Allocation = j.allocation,
                                             Deliver_Name = j.DeliverName,
-                                            Receiver_Name = j.ReceiverName
+                                            Receiver_Name = j.ReceiverName,
+                                            Department_Name = j.DepartmentName
                                         }
                                 );
 
-            return avm.ToList();
+            List<AllocationViewModel> allList = avm.ToList();
+            return avm.AsEnumerable();
         }
 
         public List<AllocationViewModel> get_AllocationsByDeviceId(Guid? deviceId)

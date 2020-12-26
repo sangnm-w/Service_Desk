@@ -61,6 +61,24 @@ namespace Web_IT_HELPDESK.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ~\Library\Picture\Allocation\.
+        /// </summary>
+        internal static string AllocationQRCodePath {
+            get {
+                return ResourceManager.GetString("AllocationQRCodePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ~\Library\Picture\Device\.
+        /// </summary>
+        internal static string DeviceQRCodePath {
+            get {
+                return ResourceManager.GetString("DeviceQRCodePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to it-servicedesk@cjvina.com.
         /// </summary>
         internal static string SenderID {

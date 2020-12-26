@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Web_IT_HELPDESK.Controllers.ObjectManager;
 using Web_IT_HELPDESK.Models;
 using Web_IT_HELPDESK.ViewModels;
 using EntityState = System.Data.Entity.EntityState;
@@ -42,6 +43,11 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 return HttpNotFound();
             }
+
+            List<AllocationViewModel> allocations = AllocationModel.Instance.get_AllocationsByDeviceId(device.Device_Id);
+            ViewBag.Allocations = allocations;
+
+            ViewBag.Domain = System.Web.HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
             return View(device);
         }
 
@@ -76,12 +82,6 @@ namespace Web_IT_HELPDESK.Controllers
         {
             string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
 
-            //if (device.Contract_Id == null)
-            //    ModelState.AddModelError("Contract_Id", "Please select one contract!");
-
-            //if (device.Device_Type_Id == null)
-            //    ModelState.AddModelError("Device_Type_Id", "Please select one type!");
-            //
             DateTime purchaseD = device.Purchase_Date.GetValueOrDefault();
             DateTime depreciationD = device.Depreciation.GetValueOrDefault();
             if (purchaseD >= depreciationD)
@@ -96,6 +96,9 @@ namespace Web_IT_HELPDESK.Controllers
                 device.Create_Date = DateTime.Now;
 
                 device.Plant_Id = empPlantID;
+
+                string deviceQRPath = DeviceHelper.Instance.CreateQRCode(device);
+                device.QRCodeFile = deviceQRPath;
 
                 en.Devices.Add(device);
                 en.SaveChanges();
@@ -160,8 +163,10 @@ namespace Web_IT_HELPDESK.Controllers
                 device.Device_Id = Guid.NewGuid();
                 device.Device_Code = DeviceModel.Instance.Generate_DeviceCode(empPlantID, device.Device_Type_Id);
                 device.Create_Date = DateTime.Now;
-
                 device.Plant_Id = empPlantID;
+
+                string deviceQRPath = DeviceHelper.Instance.CreateQRCode(device);
+                device.QRCodeFile = deviceQRPath;
 
                 en.Devices.Add(device);
                 en.SaveChanges();
@@ -220,6 +225,9 @@ namespace Web_IT_HELPDESK.Controllers
             }
             if (ModelState.IsValid)
             {
+                string deviceQRPath = DeviceHelper.Instance.CreateQRCode(device);
+                device.QRCodeFile = deviceQRPath;
+
                 en.Entry(device).State = EntityState.Modified;
                 en.SaveChanges();
                 return RedirectToAction("Index");
@@ -264,6 +272,9 @@ namespace Web_IT_HELPDESK.Controllers
             }
             if (ModelState.IsValid)
             {
+                string deviceQRPath = DeviceHelper.Instance.CreateQRCode(device);
+                device.QRCodeFile = deviceQRPath;
+
                 en.Entry(device).State = EntityState.Modified;
                 en.SaveChanges();
                 return RedirectToAction("Index");

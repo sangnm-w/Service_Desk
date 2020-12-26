@@ -29,6 +29,7 @@ namespace Web_IT_HELPDESK
         public Nullable<System.DateTime> Create_Date { get; set; }
         public Nullable<System.DateTime> Delete_Date { get; set; }
         public Nullable<bool> Flag_ReAllocation { get; set; }
+        public string QRCodeFile { get; set; }
     
         public virtual Department Department { get; set; }
         public virtual Device Device { get; set; }

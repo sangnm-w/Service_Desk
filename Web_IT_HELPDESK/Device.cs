@@ -43,6 +43,7 @@ namespace Web_IT_HELPDESK
         public string Addition_Information { get; set; }
         public string Plant_Id { get; set; }
         public Nullable<System.DateTime> Create_Date { get; set; }
+        public string QRCodeFile { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Allocation> Allocations { get; set; }
