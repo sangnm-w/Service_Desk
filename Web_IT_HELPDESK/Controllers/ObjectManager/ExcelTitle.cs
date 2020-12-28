@@ -33,7 +33,31 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             res.Add(5, "Birthday");
             return res;
         }
-            private ExcelTitle() { }
+
+        public Dictionary<int, string> DevicesTitles()
+        {
+            Dictionary<int, string> res = new Dictionary<int, string>();
+            res.Add(1, "Device_Type_ID");
+            res.Add(2, "Device_Name");
+            res.Add(3, "Serial_No");
+            res.Add(4, "Purchase_Date");
+            res.Add(5, "Computer_Name");
+            res.Add(6, "CPU");
+            res.Add(7, "RAM");
+            res.Add(8, "DISK");
+            res.Add(9, "Operation_System");
+            res.Add(10, "OS_License");
+            res.Add(11, "Office");
+            res.Add(12, "Office_License");
+            res.Add(13, "Note");
+            res.Add(14, "Depreciate");
+            res.Add(15, "Device_Status");
+            res.Add(16, "Addition_Information");
+            res.Add(17, "Plant_ID");
+            res.Add(18, "Create_Date");
+            return res;
+        }
+        private ExcelTitle() { }
 
         private static ExcelTitle _instance;
 

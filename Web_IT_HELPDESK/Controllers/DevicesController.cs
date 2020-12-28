@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.SqlTypes;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -319,107 +320,68 @@ namespace Web_IT_HELPDESK.Controllers
         [Authorize]
         public ActionResult UploadDevices(HttpPostedFileBase FileUpload)
         {
+            string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
             if (FileUpload != null)
             {
                 if (FileUpload.ContentType == "application/vnd.ms-excel" || FileUpload.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                 {
-                    try
+                    List<Device> deviceList = new List<Device>();
+                    List<DeviceViewModel.ErrDeviceExcel> errDeviceList = new List<DeviceViewModel.ErrDeviceExcel>();
+
+                    deviceList = DeviceHelper.Instance.GetDevicesFromExcel(FileUpload.InputStream);
+
+                    foreach (Device item in deviceList)
                     {
-                        List<Device> deviceList = new List<Device>();
-                        using (ExcelPackage package = new ExcelPackage(FileUpload.InputStream))
-                        {
-                            ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
-                            int startRow = worksheet.Dimension.Start.Row;
-                            int endRow = worksheet.Dimension.End.Row;
-
-
-                            for (int rowNo = startRow + 1; rowNo < endRow; rowNo++)
-                            {
-                                string plantid = worksheet.Cells[rowNo, 17].Value?.ToString();
-
-                                Guid Device_Id = Guid.NewGuid();
-                                Guid? Contract_Id = null;
-                                bool DeviceType = int.TryParse(worksheet.Cells[rowNo, 1].Value?.ToString(), out int DeviceTypeExcel);
-                                int? Device_Type_Id = DeviceType ? (int?)DeviceTypeExcel : null;
-                                string Device_Code = DeviceModel.Instance.Generate_DeviceCode_Upload(plantid, Device_Type_Id, deviceList);
-                                string Device_Name = worksheet.Cells[rowNo, 2].Value?.ToString();
-                                string Serial_No = worksheet.Cells[rowNo, 3].Value?.ToString();
-                                DateTime? Purchase_Date = worksheet.Cells[rowNo, 4].Value is null ? (DateTime?)null : Convert.ToDateTime(worksheet.Cells[rowNo, 4].Value);
-                                string computer_name = worksheet.Cells[rowNo, 5].Value?.ToString();
-                                string CPU = worksheet.Cells[rowNo, 6].Value?.ToString();
-                                string RAM = worksheet.Cells[rowNo, 7].Value?.ToString();
-                                string DISK = worksheet.Cells[rowNo, 8].Value?.ToString();
-                                string Operation_System = worksheet.Cells[rowNo, 9].Value?.ToString();
-                                string OS_License = worksheet.Cells[rowNo, 10].Value?.ToString();
-                                string Office = worksheet.Cells[rowNo, 11].Value?.ToString();
-                                string Office_License = worksheet.Cells[rowNo, 12].Value?.ToString();
-                                string Note = worksheet.Cells[rowNo, 13].Value?.ToString();
-                                DateTime? Depreciation = worksheet.Cells[rowNo, 14].Value is null ? (DateTime?)null : Convert.ToDateTime(worksheet.Cells[rowNo, 14].Value);
-                                string Device_Status = worksheet.Cells[rowNo, 15].Value?.ToString();
-                                string Addition_Information = worksheet.Cells[rowNo, 16].Value?.ToString();
-                                string Plant_Id = plantid;
-                                DateTime? Create_Date = worksheet.Cells[rowNo, 18].Value is null ? (DateTime?)null : Convert.ToDateTime(worksheet.Cells[rowNo, 18].Value);
-
-                                deviceList.Add(new Device
-                                {
-                                    Device_Id = Device_Id,
-                                    Contract_Id = Contract_Id,
-                                    Device_Type_Id = Device_Type_Id,
-                                    Device_Code = Device_Code,
-                                    Device_Name = Device_Name,
-                                    Serial_No = Serial_No,
-                                    Purchase_Date = Purchase_Date,
-                                    CPU = CPU,
-                                    RAM = RAM,
-                                    DISK = DISK,
-                                    Operation_System = Operation_System,
-                                    OS_License = OS_License,
-                                    Office = Office,
-                                    Office_License = Office_License,
-                                    Note = Note,
-                                    Depreciation = Depreciation,
-                                    Device_Status = Device_Status,
-                                    Addition_Information = Addition_Information,
-                                    Plant_Id = Plant_Id,
-                                    Create_Date = null
-                                });
-                            }
-                        }
                         try
                         {
-                            en.Devices.AddRange(deviceList);
+                            item.Device_Code = DeviceModel.Instance.Generate_DeviceCode_Upload_OnebyOne(item.Plant_Id, item.Device_Type_Id);
+                            string devicePath = DeviceHelper.Instance.CreateQRCode(item);
+                            item.QRCodeFile = devicePath;
+
+                            en.Devices.Add(item);
                             en.SaveChanges();
                         }
                         catch (Exception ex)
                         {
-                            string error = "Saving devices have been failed!!!";
-                            ex.Data.Add("Error", error);
-                            throw ex;
+                            DeviceViewModel.ErrDeviceExcel errDevice = new DeviceViewModel.ErrDeviceExcel(item);
+                            errDevice.errMsg = ex.ToString();
+                            errDeviceList.Add(errDevice);
                         }
                     }
-                    catch (Exception ex)
+
+                    //Column need format date
+                    List<int> colsDate = new List<int>() { 4, 18 };
+
+                    if (errDeviceList.Count > 0)
                     {
-                        ViewBag.Error = "Read file is error: " + ex.Message;
+                        Dictionary<int, string> errDeviceTitles = ExcelTitle.Instance.DevicesTitles();
+                        errDeviceTitles.Add(19, "Error Message");
+
+                        var stream = ExcelHelper.Instance.CreateExcelFile(null, errDeviceList, errDeviceTitles, colsDate);
+                        var buffer = stream as MemoryStream;
+                        Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                        Response.AddHeader("Content-Disposition", "attachment; filename=Error Devices List.xlsx");
+                        Response.BinaryWrite(buffer.ToArray());
+                        Response.Flush();
                     }
 
-                    var devices = en.Devices.Include(d => d.CONTRACT).Include(d => d.Device_Type);
-                    return RedirectToAction("Index");
+                    IEnumerable<DeviceViewModel> devices = DeviceModel.Instance.GetDevicesByPlantId(curr_plantId);
+                    return View("Index", devices.ToList());
                 }
                 else
                 {
                     ViewBag.Error = "Only Excel file format is allowed";
-                    var devices = en.Devices.Include(d => d.CONTRACT).Include(d => d.Device_Type);
-                    return RedirectToAction("Index");
+                    IEnumerable<DeviceViewModel> devices = DeviceModel.Instance.GetDevicesByPlantId(curr_plantId);
+                    return View("Index", devices.ToList());
                 }
             }
             else
             {
-                ViewBag.Error = "Please choose Excel file";
-                var devices = en.Devices.Include(d => d.CONTRACT).Include(d => d.Device_Type);
-                return RedirectToAction("Index");
+                ViewBag.Error = "Please choose Devices Excel file";
+                IEnumerable<DeviceViewModel> devices = DeviceModel.Instance.GetDevicesByPlantId(curr_plantId);
+                return View("Index", devices.ToList());
             }
         }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)

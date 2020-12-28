@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Reflection;
 using Web_IT_HELPDESK.ViewModels;
 
 namespace Web_IT_HELPDESK.Models
@@ -40,7 +41,7 @@ namespace Web_IT_HELPDESK.Models
             return plantId + "-" + deviceType.Device_Type_Name + strDeviceCode;
         }
 
-        public string Generate_DeviceCode_Upload(string plantId, int? deviceTypeId, List<Device> deviceList)
+        public string Generate_DeviceCode_Upload_ByList(string plantId, int? deviceTypeId, List<Device> deviceList)
         {
             ServiceDeskEntities en = new ServiceDeskEntities();
 
@@ -76,7 +77,34 @@ namespace Web_IT_HELPDESK.Models
 
             return plantId + "-" + deviceType.Device_Type_Name + strDeviceCode;
         }
+        public string Generate_DeviceCode_Upload_OnebyOne(string plantId, int? deviceTypeId)
+        {
+            string maxDeviceCodeInDB = null;
+            Device_Type deviceType = null;
+            try
+            {
+                ServiceDeskEntities en = new ServiceDeskEntities();
 
+                deviceType = en.Device_Type.FirstOrDefault(d => d.Device_Type_Id == deviceTypeId);
+                maxDeviceCodeInDB = en.Devices.Where(d => d.Device_Type_Id == deviceType.Device_Type_Id && d.Plant_Id == plantId).Max(d => d.Device_Code);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            if (string.IsNullOrWhiteSpace(maxDeviceCodeInDB))
+            {
+                return plantId + "-" + deviceType.Device_Type_Name + "0001";
+            }
+
+            int lenDeviceCodeInDB = maxDeviceCodeInDB.Length;
+            int numDeviceCodeInDB = Convert.ToInt32(maxDeviceCodeInDB.Substring(lenDeviceCodeInDB - 4, 4));
+            int intDeviceCode = numDeviceCodeInDB + 1;
+            string strDeviceCode = intDeviceCode.ToString("D4");
+
+            return plantId + "-" + deviceType.Device_Type_Name + strDeviceCode;
+        }
         public IEnumerable<DeviceViewModel> GetDevices()
         {
             ServiceDeskEntities en = new ServiceDeskEntities();
