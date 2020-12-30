@@ -179,10 +179,6 @@ namespace Web_IT_HELPDESK.Controllers
             }
             else return RedirectToAction("LogOn", "LogOn");
         }
-
-
-
-
         private string GetDept_id(string v_plant_id)
         {
             string dept_id = en.Employees.Where(f => (f.Emp_CJ == session_emp && f.Plant_Id == v_plant_id)).Select(f => f.Department_Id).SingleOrDefault();

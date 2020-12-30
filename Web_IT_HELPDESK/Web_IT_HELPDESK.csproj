@@ -1579,8 +1579,9 @@
     <Content Include="Views\Device_Type\Details.cshtml" />
     <Content Include="Views\Device_Type\Edit.cshtml" />
     <Content Include="Views\Device_Type\Index.cshtml" />
-    <Content Include="Views\CONTRACT\CreateCONTRACTViewModel2 - Copy.cshtml" />
+    <Content Include="Views\CONTRACT\CreateCONTRACTViewModel3.cshtml" />
     <Content Include="Views\CONTRACT\EditCONTRACTViewModel - Copy.cshtml" />
+    <Content Include="Views\CONTRACT\EditCONTRACTViewModel2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

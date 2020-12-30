@@ -1,4 +1,4 @@
-﻿@model Web_IT_HELPDESK.Models.ContractViewModel
+﻿@model Web_IT_HELPDESK.ViewModels.ContractViewModel
 
 @{
     ViewBag.Title = "CreateCONTRACTViewModel2";
@@ -78,7 +78,7 @@
         </div>
     </div>
     <div class="content-box-large box-with-header">
-        @using (Html.BeginForm("CreateCONTRACTViewModel2", "CONTRACT", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        @using (Html.BeginForm("CreateCONTRACTViewModel3", "CONTRACT", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
             <div class="form-horizontal">
@@ -97,9 +97,9 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        @Html.LabelFor(model => model.CONTRACT.ADREES, "Address", htmlAttributes: new { @class = "control-label" })
-                        @Html.EditorFor(model => model.CONTRACT.ADREES, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.CONTRACT.ADREES, "", new { @class = "text-danger" })
+                        @Html.LabelFor(model => model.CONTRACT.ADDRESS, "Address", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.CONTRACT.ADDRESS, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CONTRACT.ADDRESS, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <hr />
@@ -266,12 +266,12 @@
             var existEmptyRow = $('#tab_logic tbody').find('td.dataTables_empty');
             if (existEmptyRow.length == 1) {
                 $('#tab_logic').parents('div.dataTables_wrapper').first().show();
-                drawnewrow();
-                drawnewrow();
+                DrawNewRow();
+                DrawNewRow();
                 t.row(1).remove().draw();
             }
             else {
-                drawnewrow();
+                DrawNewRow();
             }
         });
 
@@ -281,35 +281,10 @@
                 .remove()
                 .draw();
 
-            var allTr = $('#tab_logic').find('tr');
-            allTr.each(function (index) {
-                if (index > 0) {
-                    var arrayNo = index - 1;
-                    //change for tr
-                    $(this).attr('id', 'addr' + arrayNo);
-
-                    //change for td
-                    var allTd = $(this).find('td');
-                    //td0
-                    $(allTd[0]).text(index);
-                    //td1
-                    var inputofTd1 = $(allTd[1]).find('input');
-                    inputofTd1.attr('id', 'CONTRACT_SUB_' + arrayNo + '_DATE');
-                    inputofTd1.attr('name', 'CONTRACT_SUB[' + arrayNo + '].DATE');
-                    //td2
-                    var inputofTd2 = $(allTd[2]).find('input');
-                    inputofTd2.attr('id', 'CONTRACT_SUB_' + arrayNo + '_SUBNAME');
-                    inputofTd2.attr('name', 'CONTRACT_SUB[' + arrayNo + '].SUBNAME');
-                }
-            });
-
-            var existEmptyRow = $('#tab_logic tbody').find('td.dataTables_empty');
-            if (existEmptyRow.length == 1) {
-                $('#tab_logic').parents('div.dataTables_wrapper').first().hide();
-            }
+            RemoveRow();
         });
 
-        function drawnewrow() {
+        function DrawNewRow() {
             //check row "No data" of datatables and remove it
             var existEmptyRow = $('#tab_logic tbody').find('td.dataTables_empty');
             if (existEmptyRow.length == 1) {
@@ -322,36 +297,6 @@
             //Random ID for datetimepicker
             var ID = '_' + Date.now().toString(36) + Math.random().toString(36).substr(2);
 
-            ////Mod new row
-            //var First = rowcount + 1;
-            //var Second = ""
-            //    + "<div class='input-group date' id='dtpicker" + ID + "'>"
-            //    + "<input class='form-control' autocomplete='off'>"
-            //    + "<span class='input-group-addon'>"
-            //    + "<span class='glyphicon glyphicon-calendar'></span>"
-            //    + "</span>"
-            //    + "</div>"
-            //    + "<input id='CONTRACT_SUB_" + rowcount + "_DATE' name='CONTRACT_SUB[" + rowcount + "].DATE' type='hidden' value=''>";
-
-            //var Third = "<input id='CONTRACT_SUB_" + rowcount + "_SUBNAME' name='CONTRACT_SUB[" + rowcount + "].SUBNAME' type='text' placeholder='SUBNAME' class='form-control'>";
-            ////var Fourth = "<input type='file' name='subcontent' class='form-control'/>";
-            //var Fourth = ""
-            //    + "<div class='upload-wrapper'>"
-            //    + "<div class='file-upload'>"
-            //    + "<input type='file' />"
-            //    + "<i class='glyphicon glyphicon-circle-arrow-up'></i>"
-            //    + "</div>"
-            //    + "</div>";
-
-            //var Fifth = ""
-            //    + "<select id='PERIOD" + ID + "' name='PERIOD_ID'>"
-            //    + "<option selected='selected' value='000001'>Hợp đồng một năm</option>"
-            //    + "<option value='000002'>Hợp đồng sáu tháng</option>"
-            //    + "<option value='000003'>Hợp đồng</option>"
-            //    + "</select>";
-            //var Sixth = "<input type='button' id='remove_row' class='btn btn-danger btn-xs' value='Remove'>";
-
-            //Mod new row
             var First = rowcount + 1;
             var Second = ''
                 + '<div class="input-group date" id="dtpicker' + ID + '">'
@@ -429,6 +374,35 @@
             $(selectX).selectpicker({
                 container: 'body'
             });
+        }
+
+        function RemoveRow() {
+            var allTr = $('#tab_logic').find('tr');
+            allTr.each(function (index) {
+                if (index > 0) {
+                    var arrayNo = index - 1;
+                    //change for tr
+                    $(this).attr('id', 'addr' + arrayNo);
+
+                    //change for td
+                    var allTd = $(this).find('td');
+                    //td0
+                    $(allTd[0]).text(index);
+                    //td1
+                    var inputofTd1 = $(allTd[1]).find('input');
+                    inputofTd1.attr('id', 'CONTRACT_SUB_' + arrayNo + '_DATE');
+                    inputofTd1.attr('name', 'CONTRACT_SUB[' + arrayNo + '].DATE');
+                    //td2
+                    var inputofTd2 = $(allTd[2]).find('input');
+                    inputofTd2.attr('id', 'CONTRACT_SUB_' + arrayNo + '_SUBNAME');
+                    inputofTd2.attr('name', 'CONTRACT_SUB[' + arrayNo + '].SUBNAME');
+                }
+            });
+
+            var existEmptyRow = $('#tab_logic tbody').find('td.dataTables_empty');
+            if (existEmptyRow.length == 1) {
+                $('#tab_logic').parents('div.dataTables_wrapper').first().hide();
+            }
         }
     </script>
 }
