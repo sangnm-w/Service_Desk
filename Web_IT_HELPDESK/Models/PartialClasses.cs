@@ -45,7 +45,13 @@ namespace Web_IT_HELPDESK
     public partial class CONTRACT { }
 
     [MetadataType(typeof(Contract_SubMetadata))]
-    public partial class CONTRACT_SUB { }
+    public partial class CONTRACT_SUB : IEquatable<CONTRACT_SUB>
+    {
+        public bool Equals(CONTRACT_SUB other)
+        {
+            return this.ID == other.ID;
+        }
+    }
 
     public partial class Document
     {

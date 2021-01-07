@@ -178,15 +178,22 @@
                             <td>
                                 @if (item.CONTENT != null)
                                 {
-                                    @Html.ActionLink("Getfile", "Get_file", new { con_id = item.ID }, new { @class = "button" })
+                                    @Html.ActionLink("Contract File", "Get_file", new { con_id = item.ID }, new { @class = "button" })
                                 }
-                                @foreach (var sub in new Web_IT_HELPDESK.ServiceDeskEntities().CONTRACT_SUB.Where(o => o.CONTRACTID == item.ID))
+                                <br />
+                                @if (item.CONTRACT_SUB.Any())
                                 {
-                                    if (sub.CONTENT != null)
+                                    //foreach (var sub in new Web_IT_HELPDESK.ServiceDeskEntities().CONTRACT_SUB.Where(o => o.CONTRACTID == item.ID))
+                                    int subCount = 0;
+                                    foreach (var sub in item.CONTRACT_SUB.Where(s => s.CONTRACTID == item.ID && s.DEL != true).Select(s => new { s.ID, s.NOTE }))
                                     {
-                                        @Html.ActionLink(@sub.SUBNAME.ToString(), "Get_sub", new { sub_id = sub.ID })
+                                        if (!string.IsNullOrWhiteSpace(sub.NOTE))
+                                        {
+                                            @Html.ActionLink("Sub File " + subCount, "Get_sub", new { sub_id = sub.ID })
+                                            subCount++;
+                                        }
+                                        <br />
                                     }
-                                    <br />
                                 }
                             </td>
                             @*<td>

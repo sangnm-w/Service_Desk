@@ -1,4 +1,4 @@
-﻿@model Web_IT_HELPDESK.ViewModels.ContractViewModel
+﻿@model Web_IT_HELPDESK.ViewModels.ContractViewModel.EditContractViewModel
 
 @{
     ViewBag.Title = "EditCONTRACTViewModel";
@@ -8,8 +8,7 @@
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
 
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
 
 <!--CustomInputFile -->
 <link href="~/vendors/CustomInputFile/css/CustomInputFile.css" rel="stylesheet" />
@@ -65,6 +64,10 @@
 
         ::-webkit-file-upload-button {
             cursor: pointer;
+        }
+
+        div.inputFlex {
+            display: flex;
         }
     </style>
 }
@@ -164,7 +167,6 @@
             <hr />
             <div style="text-align:right">
                 <input type="button" id="add_row" class="btn btn-info" value="Add Sub-Contract">
-                <input type="button" id="remove_row" class="btn btn-danger" value="Remove Sub-Contract">
             </div>
             <div class="row clearfix">
                 <div class="col-md-12">
@@ -188,53 +190,64 @@
                                 <th class="text-center">
                                     PERIOD
                                 </th>
+                                <th class="text-center">
+                                    ACTION
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
-                            @for (int i = 0; i < 10; i++)
+                            @if (Model.ContractSubViewModels.Any())
                             {
-                                string idrow = "addr" + i;
-                                string idsubFile = "ContractSubViewModels[" + i + "].ContentSubFile";
-                                <tr id="@idrow" class="hidden">
-                                    <td>
-                                        @(i + 1)
-                                        @Html.HiddenFor(model => model.ContractSubViewModels[i].ContractSub.ID)
-                                    </td>
-                                    <td>
-                                        <div class="input-group date subdate">
-                                            @Html.Editor("Date", new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
-                                            <span class="input-group-addon">
-                                                <span class="glyphicon glyphicon-calendar"></span>
-                                            </span>
-                                        </div>
-                                        @Html.HiddenFor(model => model.ContractSubViewModels[i].ContractSub.DATE)
-                                        @Html.ValidationMessageFor(model => model.ContractSubViewModels[i].ContractSub.DATE, "", new { @class = "text-danger" })
-                                    </td>
-                                    <td>
-                                        @Html.EditorFor(model => model.ContractSubViewModels[i].ContractSub.SUBNAME, new { htmlAttributes = new { @class = "form-control" } })
-                                        @Html.ValidationMessageFor(model => model.ContractSubViewModels[i].ContractSub.SUBNAME, "", new { @class = "text-danger" })
-                                    </td>
-                                    <td style="display: flex">
-                                        <div style="display: inline-flex; align-items: center">
-                                            @Html.EditorFor(model => model.ContractSubViewModels[i].ContractSub.NOTE, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-                                            @Html.ValidationMessageFor(model => model.ContractSubViewModels[i].ContractSub.NOTE, "", new { @class = "text-danger" })
-                                        </div>
-                                        <div class="upload-wrapper" style="display: inline-flex; align-items: center">
-                                            <div class="file-upload">
-                                                @Html.TextBoxFor(model => model.ContractSubViewModels[i].ContentSubFile, "", new { type = "file" })<i class="glyphicon glyphicon-circle-arrow-up"></i>
+                                for (int i = 0; i < Model.ContractSubViewModels.Count; i++)
+                                {
+                                    string idrow = "addr" + i;
+                                    string idsubFile = "ContractSubViewModels[" + i + "].ContentSubFile";
+                                    <tr id="@idrow">
+                                        <td>
+                                            <p>@(i + 1)</p>
+                                            @Html.HiddenFor(model => model.ContractSubViewModels[i].ContractSub.ID)
+                                        </td>
+                                        <td>
+                                            <div class="input-group date subdate">
+                                                @Html.Editor("Date", new { htmlAttributes = new { @class = "form-control", autocomplete = "off", style = "width: 100px" } })
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
                                             </div>
-                                        </div>
-                                        @Html.ValidationMessageFor(model => model.ContractSubViewModels[i].ContentSubFile, "", new { @class = "text-danger" })
-                                    </td>
-                                    <td>
-                                        @Html.DropDownListFor(model => model.ContractSubViewModels[i].ContractSub.PERIODID, new SelectList(Model.Periods, "PERIOD_ID", "PERIOD_NAME"), new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(model => model.ContractSubViewModels[i].ContractSub.PERIODID, "", new { @class = "text-danger" })
-                                    </td>
-                                </tr>
+                                            @Html.HiddenFor(model => model.ContractSubViewModels[i].ContractSub.DATE)
+                                            @Html.ValidationMessageFor(model => model.ContractSubViewModels[i].ContractSub.DATE, "", new { @class = "text-danger" })
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(model => model.ContractSubViewModels[i].ContractSub.SUBNAME, new { htmlAttributes = new { @class = "form-control", style = "width: 300px" } })
+                                            @Html.ValidationMessageFor(model => model.ContractSubViewModels[i].ContractSub.SUBNAME, "", new { @class = "text-danger" })
+                                        </td>
+                                        <td>
+                                            <div class="inputFlex">
+                                                <div style="display: inline-flex; align-items: center">
+                                                    @Html.EditorFor(model => model.ContractSubViewModels[i].ContractSub.NOTE, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "width: 300px", placeholder = "File name" } })
+                                                </div>
+                                                <div class="upload-wrapper" style="display: inline-flex; align-items: center">
+                                                    <div class="file-upload">
+                                                        @Html.TextBoxFor(model => model.ContractSubViewModels[i].ContentSubFile, "", new { type = "file" })<i class="glyphicon glyphicon-circle-arrow-up"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @Html.ValidationMessageFor(model => model.ContractSubViewModels[i].ContentSubFile, "", new { @class = "text-danger" })
+                                        </td>
+                                        <td>
+                                            @Html.DropDownListFor(model => model.ContractSubViewModels[i].ContractSub.PERIODID, new SelectList(Model.Periods, "PERIOD_ID", "PERIOD_NAME", Model.ContractSubViewModels[i].ContractSub.PERIODID), new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.ContractSubViewModels[i].ContractSub.PERIODID, "", new { @class = "text-danger" })
+                                        </td>
+                                        <td>
+                                            <input type="button" id="remove_row" class="btn btn-danger btn-xs" value="Remove" />
+                                        </td>
+                                    </tr>
+                                }
                             }
                         </tbody>
                     </table>
                 </div>
+
             </div>
 
             <hr />
@@ -251,6 +264,8 @@
     </div>
 </div>
 @section Script {
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
     <script src="~/vendors/CustomInputFile/js/jquery.custom-file-input.js"></script>
     <script type="text/javascript">
         $('select').selectpicker({
@@ -305,6 +320,17 @@
                     $(this).datepicker('setDate', new Date(subDateVal));
                 }
             });
+
+            setColorSubFile();
+        });
+
+        //set color when change Input file of Contract File
+        $('.box-inputfile-left').children('input[type="file"]').bind("change", function () {
+            if ($(this).val() != "") {
+                $(this).siblings('label').css({ "background-color": "green" });
+            } else {
+                $(this).siblings('label').css({ "background-color": "#C2B9B0" });
+            }
         });
 
         $('#tab_logic').DataTable({
@@ -313,57 +339,331 @@
             'sorting': false,
             'info': false,
             'scrollX': true,
-            'columnDefs': [
-                { "width": "5%", "targets": 0 },
-                { "width": "20%", "targets": 1 },
-                { "width": "35%", "targets": 2 },
-                { "width": "20%", "targets": 3 },
-                { "width": "20%", "targets": 4 },
-            ],
+            //'columnDefs': [
+            //    { className: 'inputFlex', 'targets': [3] }
+            //]
         });
 
-        $('#tab_logic').parents('div.dataTables_wrapper').first().hide();
+        //$('#tab_logic').parents('div.dataTables_wrapper').first().hide();
 
-        $("#add_row").click(function () {
-            var rows = $('#tab_logic tbody').find('tr.hidden');
-            rows.first().removeClass('hidden');
-            var existRow = $('#tab_logic tbody').find('tr').not('.hidden');
-            if (existRow.first().length != 0) {
-                $('#tab_logic').parents('div.dataTables_wrapper').first().show();
-            }
-            var countCS = parseInt($("#countContractSub").val());
-            if (countCS <= 10) {
-                countCS = countCS + 1;
-                $('#countContractSub').val(countCS);
-            }
-        });
+        //$("#add_row").click(function () {
+        //    var rows = $('#tab_logic tbody').find('tr.hidden');
+        //    rows.first().removeClass('hidden');
+        //    var existRow = $('#tab_logic tbody').find('tr').not('.hidden');
+        //    if (existRow.first().length != 0) {
+        //        $('#tab_logic').parents('div.dataTables_wrapper').first().show();
+        //    }
+        //    var countCS = parseInt($("#countContractSub").val());
+        //    if (countCS <= 10) {
+        //        countCS = countCS + 1;
+        //        $('#countContractSub').val(countCS);
+        //    }
+        //});
 
-        $("#remove_row").click(function () {
-            var rows = $('#tab_logic tbody').find('tr').not('.hidden');
-            rows.last().addClass('hidden');
-            var existRow = $('#tab_logic tbody').find('tr').not('.hidden');
-            if (existRow.length == 0) {
-                $('#tab_logic').parents('div.dataTables_wrapper').first().hide();
-            }
-            var countCS = parseInt($("#countContractSub").val());
-            if (countCS > 0) {
-                countCS = countCS - 1;
-                $('#countContractSub').val(countCS);
-            }
+        //$("#remove_row").click(function () {
+        //    var rows = $('#tab_logic tbody').find('tr').not('.hidden');
+        //    rows.last().addClass('hidden');
+        //    var existRow = $('#tab_logic tbody').find('tr').not('.hidden');
+        //    if (existRow.length == 0) {
+        //        $('#tab_logic').parents('div.dataTables_wrapper').first().hide();
+        //    }
+        //    var countCS = parseInt($("#countContractSub").val());
+        //    if (countCS > 0) {
+        //        countCS = countCS - 1;
+        //        $('#countContractSub').val(countCS);
+        //    }
+        //});
 
-            var
-        });
+        //$(".removeBtn").click(function () {
+        //    var currRow = $(this).parents("tr");
+        //    var contractSubID = currRow.find('td#contractSubID');
+        //    if (contractSubID.val() != null) {
+        //        console.log("Ajax call action DeleteContractSub");
+        //    } else {
+        //        RemoveSub();
+        //    }
+        //    console.log(currRow.attr("id"));
+        //});
+
+        //function RemoveSub() {
+        //    var rows = $('#tab_logic tbody').find('tr').not('.hidden');
+        //    rows.last().addClass('hidden');
+        //    var existRow = $('#tab_logic tbody').find('tr').not('.hidden');
+        //    if (existRow.length == 0) {
+        //        $('#tab_logic').parents('div.dataTables_wrapper').first().hide();
+        //    }
+        //    var countCS = parseInt($("#countContractSub").val());
+        //    if (countCS > 0) {
+        //        countCS = countCS - 1;
+        //        $('#countContractSub').val(countCS);
+        //    }
+        //};
+
+        //$(function () {
+        //    var countContractSub = $('#countContractSub').val();
+        //    for (var i = 0; i < countContractSub; i++) {
+        //        var rows = $('#tab_logic tbody').find('tr.hidden');
+        //        rows.first().removeClass('hidden');
+        //        var existRow = $('#tab_logic tbody').find('tr').not('.hidden');
+        //        if (existRow.first().length != 0) {
+        //            $('#tab_logic').parents('div.dataTables_wrapper').first().show();
+        //        }
+        //    }
+        //});
+
+        //mix part
 
         $(function () {
-            var countContractSub = $('#countContractSub').val();
-            for (var i = 0; i < countContractSub; i++) {
-                var rows = $('#tab_logic tbody').find('tr.hidden');
-                rows.first().removeClass('hidden');
-                var existRow = $('#tab_logic tbody').find('tr').not('.hidden');
-                if (existRow.first().length != 0) {
-                    $('#tab_logic').parents('div.dataTables_wrapper').first().show();
-                }
+            var hasContractSub = @(Model.ContractSubViewModels.Any().ToString().ToLower());
+            if (!hasContractSub) {
+                $('#tab_logic').parents('div.dataTables_wrapper').first().hide();
             }
         });
+
+        var t = $('#tab_logic').DataTable();
+
+        $("#add_row").click(function () {
+            //if is first row
+            var existEmptyRow = $('#tab_logic tbody').find('td.dataTables_empty');
+            if (existEmptyRow.length == 1) {
+                $('#tab_logic').parents('div.dataTables_wrapper').first().show();
+                fnDrawNewRow();
+                fnDrawNewRow();
+                t.row(1).remove().draw();
+            }
+            else {
+                fnDrawNewRow();
+            }
+
+            //set Bootstrap SelectPicker for all select of table tbody
+            var selects = $('#tab_logic tbody').find('select');
+            selects.each(function () {
+                $(this).selectpicker('destroy');
+                $(this).selectpicker({
+                    search: false,
+                    container: 'body'
+                });
+            });
+
+            //set color when file change for all Input SubContractFile
+            var subFiles = $('#tab_logic tbody').find('input[type="file"]');
+            subFiles.each(function () {
+                $(this).unbind("change");
+                $(this).bind("change", function () {
+                    if ($(this).val() != "") {
+                        $(this).parent('.file-upload').css({ "background-image": "linear-gradient(to bottom, green 50%, #ffffff 50%)" });
+                    } else {
+                        $(this).parent('.file-upload').css({ "background-image": "linear-gradient(to bottom, #2590eb 50%, #ffffff 50%)" });
+                    }
+                });
+            });
+        });
+
+        $('#tab_logic tbody').on('click', 'input#remove_row', function () {
+            var contractSubID = $(this).parent('td').siblings(":first").children("input[type='hidden']").val();
+
+            if (contractSubID != '00000000-0000-0000-0000-000000000000') {
+                if (confirm("Do you want to delete?")) {
+                    t
+                        .row($(this).parents('tr'))
+                        .remove()
+                        .draw();
+                    fnRemoveRow();
+                }
+            }
+            else {
+                t
+                    .row($(this).parents('tr'))
+                    .remove()
+                    .draw();
+                fnRemoveRow();
+            }
+        });
+
+        function fnDrawNewRow() {
+            //check row "No data" of datatables and remove it
+            var existEmptyRow = $('#tab_logic tbody').find('td.dataTables_empty');
+            if (existEmptyRow.length == 1) {
+                existEmptyRow.parents('tbody').empty();
+            }
+
+            //rowcount is array Index for new row
+            var rowcount = $('#tab_logic tbody tr').length;
+
+            //Random ID for datetimepicker
+            var ID = '_' + Date.now().toString(36) + Math.random().toString(36).substr(2);
+
+            var stt = rowcount + 1;
+            var First = '<p>' + stt + '</p>'
+                + '<input type="hidden" value="00000000-0000-0000-0000-000000000000" id="ContractSubViewModels_' + rowcount + '__ContractSub_ID" name="ContractSubViewModels[' + rowcount + '].ContractSub.ID" >';
+            var Second = ''
+                + '<div class="input-group date" id="dtpicker' + ID + '">'
+                + '<input class="form-control" autocomplete="off" style="width: 100px">'
+                + '<span class="input-group-addon">'
+                + '<span class="glyphicon glyphicon-calendar"></span>'
+                + '</span>'
+                + '</div>'
+                + '<input id="ContractSubViewModels_' + rowcount + '__ContractSub_DATE" name="ContractSubViewModels[' + rowcount + '].ContractSub.DATE" type="hidden" value="">'
+                + '<span class="field-validation-valid text-danger" data-valmsg-for="ContractSubViewModels[' + rowcount + '].ContractSub.DATE" data-valmsg-replace="true"></span>';
+
+            var Third = '<input id="ContractSubViewModels_' + rowcount + '__ContractSub_SUBNAME" name="ContractSubViewModels[' + rowcount + '].ContractSub.SUBNAME" type="text" placeholder="SUBNAME" class="form-control" style="width: 300px">'
+                + '<span class="field-validation-valid text-danger" data-valmsg-for="ContractSubViewModels[' + rowcount + '].ContractSub.SUBNAME" data-valmsg-replace="true"></span>';
+
+            var Fourth = '<div class="inputFlex">'
+                + '<div style="display: inline-flex; align-items: center">'
+                + '<input id="ContractSubViewModels_' + rowcount + '__ContractSub_NOTE" name="ContractSubViewModels[' + rowcount + '].ContractSub.NOTE" type="text" placeholder="File Name" readonly="readonly" class="form-control" style="width: 300px">'
+                + '</div>'
+                + '<div class="upload-wrapper">'
+                + '<div class="file-upload">'
+                + '<input type="file" id="ContractSubViewModels_' + rowcount + '__ContentSubFile" name="ContractSubViewModels[' + rowcount + '].ContentSubFile"/>'
+                + '<i class="glyphicon glyphicon-circle-arrow-up"></i>'
+                + '</div>'
+                + '</div>'
+                + '<span class="field-validation-valid text-danger" data-valmsg-for="ContractSubViewModels[' + rowcount + '].ContentSubFile" data-valmsg-replace="true"></span>'
+                + '</div>';
+
+            var Periods = @Html.Raw(Json.Encode(Model.Periods.Select(p => new { p.PERIOD_ID, p.PERIOD_NAME }).ToList()));
+            var options = "";
+            for (var i = 0; i < Periods.length; i++) {
+                options = options + "<option value=" + Periods[i].PERIOD_ID + ">" + Periods[i].PERIOD_NAME + "</option>";
+            }
+            var Fifth = ""
+                + '<select id="ContractSubViewModels_' + rowcount + '__ContractSub_PERIODID" name="ContractSubViewModels[' + rowcount + '].ContractSub.PERIODID">'
+                + options
+                + '</select>'
+                + '<span class="field-validation-valid text-danger" data-valmsg-for="ContractSubViewModels[' + rowcount + '].ContractSub.PERIODID" data-valmsg-replace="true"></span>';
+
+            var Sixth = '<input type="button" id="remove_row" class="btn btn-danger btn-xs" value="Remove">';
+
+            t.row.add([
+                First,
+                Second,
+                Third,
+                Fourth,
+                Fifth,
+                Sixth
+            ]).node().id = 'addr' + rowcount;
+            t.draw(true);
+
+            //Date of subcontract
+            var dtpickerX = "#dtpicker" + ID;
+
+            $(dtpickerX).datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                todayHighlight: true
+            });
+
+            $(dtpickerX).on('changeDate', function () {
+                var d = new Date($(this).datepicker('getDate'));
+                if (d.getFullYear() > 2000) {
+                    var dtval = $(this).siblings("input[type='hidden']");
+                    dtval.val(
+                        moment(d).format()
+                    );
+                }
+            });
+
+            $(dtpickerX).datepicker('setDate', 'today');
+        }
+
+        function fnRemoveRow() {
+            var allTr = $('#tab_logic').find('tr');
+            allTr.each(function (index) {
+                if (index > 0) {
+                    var arrayNo = index - 1;
+                    //change for tr
+                    $(this).attr('id', 'addr' + arrayNo);
+
+                    //change for td
+                    var allTd = $(this).find('td');
+                    //td0
+                    $(allTd[0]).find("p").text(index);
+                    var inputofTd0 = $(allTd[0]).find('input[type="hidden"]');
+                    inputofTd0.attr('id', 'ContractSubViewModels_' + arrayNo + '__ContractSub_ID');
+                    inputofTd0.attr('name', 'ContractSubViewModels[' + arrayNo + '].ContractSub.ID');
+                    //td1
+                    var inputofTd1 = $(allTd[1]).find('input[type="hidden"]');
+                    inputofTd1.attr('id', 'ContractSubViewModels_' + arrayNo + '__ContractSub_DATE');
+                    inputofTd1.attr('name', 'ContractSubViewModels[' + arrayNo + '].ContractSub.DATE');
+                    var inputofTd1_span = $(allTd[1]).find('span.field-validation-valid');
+                    inputofTd1_span.attr('data-valmsg-for', 'ContractSubViewModels[' + arrayNo + '].ContractSub.DATE');
+                    //td2
+                    var inputofTd2 = $(allTd[2]).find('input[type="text"]');
+                    inputofTd2.attr('id', 'ContractSubViewModels_' + arrayNo + '__ContractSub_SUBNAME');
+                    inputofTd2.attr('name', 'ContractSubViewModels[' + arrayNo + '].ContractSub.SUBNAME');
+                    var inputofTd2_span = $(allTd[2]).find('span.field-validation-valid');
+                    inputofTd2_span.attr('data-valmsg-for', 'ContractSubViewModels[' + arrayNo + '].ContractSub.SUBNAME');
+                    //td3
+                    var inputofTd3_Note = $(allTd[3]).find('input[type="text"]');
+                    inputofTd3_Note.attr('id', 'ContractSubViewModels_' + arrayNo + '__ContentSub_NOTE');
+                    inputofTd3_Note.attr('name', 'ContractSubViewModels[' + arrayNo + '].ContentSub.NOTE');
+                    var inputofTd3_File = $(allTd[3]).find('input[type="file"]');
+                    inputofTd3_File.attr('id', 'ContractSubViewModels_' + arrayNo + '__ContentSubFile');
+                    inputofTd3_File.attr('name', 'ContractSubViewModels[' + arrayNo + '].ContentSubFile');
+                    var inputofTd3_span = $(allTd[3]).find('span.field-validation-valid');
+                    inputofTd3_span.attr('data-valmsg-for', 'ContractSubViewModels[' + arrayNo + '].ContractSub.ContentSubFile');
+                    //td4
+                    var inputofTd4 = $(allTd[4]).find('select');
+                    inputofTd4.attr('id', 'ContractSubViewModels_' + arrayNo + '__ContractSub_PERIODID');
+                    inputofTd4.attr('name', 'ContractSubViewModels[' + arrayNo + '].ContractSub.PERIODID');
+                    var inputofTd4_span = $(allTd[4]).find('span.field-validation-valid');
+                    inputofTd4_span.attr('data-valmsg-for', 'ContractSubViewModels[' + arrayNo + '].ContractSub.PERIODID');
+                }
+            });
+
+            var existEmptyRow = $('#tab_logic tbody').find('td.dataTables_empty');
+            if (existEmptyRow.length == 1) {
+                $('#tab_logic').parents('div.dataTables_wrapper').first().hide();
+            }
+        }
+
+        function fnshowRow() {
+            var allTr = $("#tab_logic tbody").find("tr");
+            allTr.each(function (i) {
+                console.log("TR: " + i);
+                var allTd = $(this).find("td");
+
+                //td0
+                console.log($(allTd[0]).find("input[type='hidden']").attr("id"));
+                console.log($(allTd[0]).find("input[type='hidden']").attr("name"));
+                console.log($(allTd[0]).find("input[type='hidden']").attr("value"));
+                //td1
+                console.log($(allTd[1]).find("input[type='hidden']").attr("id"));
+                console.log($(allTd[1]).find("input[type='hidden']").attr("name"));
+                console.log($(allTd[1]).find("span.field-validation-valid").attr("data-valmsg-for"));
+                //td2
+                console.log($(allTd[2]).find("input[type='text']").attr("id"));
+                console.log($(allTd[2]).find("input[type='text']").attr("name"));
+                console.log($(allTd[2]).find("span.field-validation-valid").attr("data-valmsg-for"));
+                //td3
+                console.log($(allTd[3]).find("input[type='text']").attr("id"));
+                console.log($(allTd[3]).find("input[type='text']").attr("name"));
+                console.log($(allTd[3]).find("input[type='file']").attr("id"));
+                console.log($(allTd[3]).find("input[type='file']").attr("name"));
+                console.log($(allTd[3]).find("span.field-validation-valid").attr("data-valmsg-for"));
+                //td4
+                console.log($(allTd[4]).find("select").attr("id"));
+                console.log($(allTd[4]).find("select").attr("name"));
+                console.log($(allTd[4]).find("span.field-validation-valid").attr("data-valmsg-for"));
+                //td5
+                console.log($(allTd[5]).find("input").attr("name"));
+            })
+        }
+
+        //set color when file change for all Input SubContractFile
+        function setColorSubFile() {
+            var subFiles = $('#tab_logic tbody').find('input[type="file"]');
+            subFiles.each(function () {
+                $(this).unbind("change");
+                $(this).bind("change", function () {
+                    if ($(this).val() != "") {
+                        $(this).parent('.file-upload').css({ "background-image": "linear-gradient(to bottom, green 50%, #ffffff 50%)" });
+                    } else {
+                        $(this).parent('.file-upload').css({ "background-image": "linear-gradient(to bottom, #2590eb 50%, #ffffff 50%)" });
+                    }
+                });
+            });
+        }
     </script>
 }

@@ -297,6 +297,7 @@
     <Compile Include="Models\AllocationModel.cs" />
     <Compile Include="Models\AutoCompleteModel.cs" />
     <Compile Include="Models\Biz_TripViewModel.cs" />
+    <Compile Include="ViewModels\ContractTypeViewModel.cs" />
     <Compile Include="ViewModels\ChangePasswordViewModel.cs" />
     <Compile Include="ViewModels\ContactsViewModel.cs" />
     <Compile Include="ViewModels\ContractViewModel.cs" />
@@ -1579,7 +1580,6 @@
     <Content Include="Views\CONTRACT\CreateCONTRACTViewModel.cshtml" />
     <Content Include="Views\CONTRACT\CreateCONTRACTViewModel2.cshtml" />
     <Content Include="Views\CONTRACT\CreateContract.cshtml" />
-    <Content Include="Views\CONTRACT\EditCONTRACTViewModel.cshtml" />
     <Content Include="Views\LaborContract\LaborContractIndex.cshtml" />
     <Content Include="Views\LaborContract\Approve.cshtml" />
     <Content Include="Views\LaborContract\hr_approve.cshtml" />
@@ -1713,6 +1713,8 @@
     <Content Include="Views\Shared\_Layout - Copy.cshtml" />
     <Content Include="Views\CONTRACT\CreateCONTRACTViewModel2 - Copy.cshtml" />
     <Content Include="Views\CONTRACT\EditCONTRACTViewModel - Copy.cshtml" />
+    <Content Include="Views\CONTRACT\EditCONTRACTViewModel.cshtml" />
+    <Content Include="Views\CONTRACT\SubContractPartialView.cshtml" />
     <Content Include="Views\BIZ_TRIP\bod_confirm.cshtml" />
     <Content Include="Views\SealUsing\Details.cshtml" />
     <Content Include="Views\BIZ_TRIP\Details.cshtml" />

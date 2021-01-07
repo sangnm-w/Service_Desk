@@ -6,6 +6,7 @@ using System.Data.Entity.Validation;
 using System.Data.Linq;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Web_IT_HELPDESK.Controllers.ObjectManager;
@@ -34,29 +35,19 @@ namespace Web_IT_HELPDESK.Controllers
             ////int pageNumber = (page ?? 1);
             #endregion
 
-            string curr_PlantId = CurrentUser.Instance.User.Plant_Id;
-            string curr_DeptId = CurrentUser.Instance.User.Department_Id;
-            bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantId && d.Department_Id == curr_DeptId && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
-            ViewBag.currUserIsManager = currUserIsManager;
-
-            var depts = en.Departments.Where(d => d.Plant_Id == curr_PlantId && d.Deactive == false).Select(d => new DepartmentViewModel
+            string curr_plantId = CurrentUser.Instance.User.Plant_Id;
+           
+            var depts = en.Departments.Where(d => d.Plant_Id == curr_plantId && d.Deactive != true).Select(d => new DepartmentViewModel
             {
                 Department_Id = d.Department_Id,
                 Department_Name = d.Department_Name
             }).OrderByDescending(d => d.Department_Name).ToList();
-
             ViewBag.Departments = depts;
 
             var contract_types = en.CONTRACT_TYPE;
             ViewBag.Contract_Types = contract_types;
 
-            var contracts = en.CONTRACTs.Where(c => c.DEL != true && c.PLANT == curr_PlantId && c.DEPARTMENTID == curr_DeptId);
-
-            if (currUserIsManager == false)
-            {
-                contracts = contracts.Where(c => c.USER_CREATE == CurrentUser.Instance.User.Emp_CJ);
-            }
-
+            var contracts = en.CONTRACTs.Where(c => c.DEL != true && DateTime.Now <= DbFunctions.AddDays(c.DATE, 30));
             return View(contracts);
         }
 
@@ -209,13 +200,20 @@ namespace Web_IT_HELPDESK.Controllers
             //} 
             #endregion
 
+            var depts = en.Departments.Where(d => d.Plant_Id == curr_plantId && d.Deactive != true)
+                .Select(d => new DepartmentViewModel
+                {
+                    Department_Id = d.Department_Id,
+                    Department_Name = d.Department_Name
+                }
+                ).OrderByDescending(d => d.Department_Name).ToList();
+            ViewBag.Departments = depts;
+
+            var contract_types = en.CONTRACT_TYPE;
+            ViewBag.Contract_Types = contract_types;
+
             return View(contract_list);
         }
-
-        //public ActionResult ContractCreate()
-        //{
-        //    return View();
-        //}
 
         public PartialViewResult ContractCreate()
         {
@@ -255,15 +253,77 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: CONTRACT/Create
-        public ActionResult CreateCONTRACTViewModel2()
+        public ActionResult CreateCONTRACTViewModel()
         {
-            ContractViewModel _contractviewModel = new ContractViewModel();
+            ContractViewModel.CreateContractViewModel _contractviewModel = new ContractViewModel.CreateContractViewModel();
             _contractviewModel.Contract_Types = en.CONTRACT_TYPE;
             _contractviewModel.Periods = en.PERIODs.ToList();
-            List<ContractSubViewModel> cslist = new List<ContractSubViewModel>();
+
+            return View(_contractviewModel);
+        }
+
+        // POST: CONTRACT/Create
+        [HttpPost]
+        public ActionResult CreateCONTRACTViewModel(ContractViewModel.CreateContractViewModel _contractviewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                HttpPostedFileBase contractFile = _contractviewModel.ContractFile;
+
+                byte[] contentData = new byte[contractFile.InputStream.Length];
+                contractFile.InputStream.Read(contentData, 0, Convert.ToInt32(contractFile.InputStream.Length));
+                Binary contentBinary = new Binary(contentData);
+
+                //var fileName = Path.GetFileName(_contractviewModel.ContractFile.FileName);
+                //var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);
+                //_contractviewModel.ContractFile.SaveAs(path);
+
+                CONTRACT contract = _contractviewModel.CONTRACT;
+                contract.ID = Guid.NewGuid();
+                contract.CONTENT = contentBinary.ToArray();
+                contract.NOTE = System.IO.Path.GetFileName(contractFile.FileName);
+                contract.DEPARTMENTID = CurrentUser.Instance.User.Department_Id;
+                contract.USER_CREATE = CurrentUser.Instance.User.Emp_CJ;
+                contract.PLANT = CurrentUser.Instance.User.Plant_Id;
+                contract.DATE_CREATE = DateTime.Now;
+                en.CONTRACTs.Add(contract);
+
+                Guid contract_id = contract.ID;
+
+                foreach (var item in _contractviewModel.ContractSubViewModels)
+                {
+                    byte[] subcontentData = new byte[item.ContentSubFile.InputStream.Length];
+                    item.ContentSubFile.InputStream.Read(subcontentData, 0, Convert.ToInt32(item.ContentSubFile.InputStream.Length));
+                    Binary subcontentBinary = new Binary(subcontentData);
+
+                    item.ContractSub.ID = Guid.NewGuid();
+                    item.ContractSub.CONTRACTID = contract_id;
+                    item.ContractSub.CONTENT = subcontentBinary.ToArray();
+                    item.ContractSub.NOTE = Path.GetFileName(item.ContentSubFile.FileName);
+                    item.ContractSub.USER_CREATE = CurrentUser.Instance.User.Emp_CJ;
+                    item.ContractSub.PLANT = CurrentUser.Instance.User.Plant_Id;
+
+                    en.CONTRACT_SUB.Add(item.ContractSub);
+                }
+                en.SaveChanges();
+                return RedirectToAction("ContractIndex");
+            }
+
+            _contractviewModel.Contract_Types = en.CONTRACT_TYPE;
+            _contractviewModel.Periods = en.PERIODs;
+            return View(_contractviewModel);
+        }
+
+        // GET: CONTRACT/Create
+        public ActionResult CreateCONTRACTViewModel2()
+        {
+            ContractViewModel.CreateContractViewModel _contractviewModel = new ContractViewModel.CreateContractViewModel();
+            _contractviewModel.Contract_Types = en.CONTRACT_TYPE;
+            _contractviewModel.Periods = en.PERIODs.ToList();
+            List<ContractSubViewModel.Create> cslist = new List<ContractSubViewModel.Create>();
             for (int i = 0; i < 10; i++)
             {
-                cslist.Add(new ContractSubViewModel());
+                cslist.Add(new ContractSubViewModel.Create());
             }
             _contractviewModel.ContractSubViewModels = cslist;
             return View("CreateCONTRACTViewModel2", _contractviewModel);
@@ -271,7 +331,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         // POST: CONTRACT/Create
         [HttpPost]
-        public ActionResult CreateCONTRACTViewModel2(ContractViewModel _contractviewModel)
+        public ActionResult CreateCONTRACTViewModel2(ContractViewModel.CreateContractViewModel _contractviewModel)
         {
             List<string> modelStateKeys = ModelState.Select(m => m.Key).ToList();
             int countContractSub = _contractviewModel.countContractSubModel;
@@ -312,7 +372,7 @@ namespace Web_IT_HELPDESK.Controllers
                 Guid contract_id = contract.ID;
                 for (int i = 0; i < countContractSub; i++)
                 {
-                    ContractSubViewModel sub = _contractviewModel.ContractSubViewModels[i];
+                    ContractSubViewModel.Create sub = _contractviewModel.ContractSubViewModels[i];
                     byte[] subcontentData = new byte[sub.ContentSubFile.InputStream.Length];
                     sub.ContentSubFile.InputStream.Read(subcontentData, 0, Convert.ToInt32(sub.ContentSubFile.InputStream.Length));
                     Binary subcontentBinary = new Binary(subcontentData);
@@ -347,57 +407,46 @@ namespace Web_IT_HELPDESK.Controllers
         // GET: CONTRACT/Edit
         public ActionResult EditCONTRACTViewModel(Guid id)
         {
-            ContractViewModel _contractviewmodel = new ContractViewModel();
+            ContractViewModel.EditContractViewModel _contractviewmodel = new ContractViewModel.EditContractViewModel();
             _contractviewmodel.Contract_Types = en.CONTRACT_TYPE;
-            _contractviewmodel.Periods = en.PERIODs.ToList();
+            _contractviewmodel.Periods = en.PERIODs;
 
-            var c = en.CONTRACTs.FirstOrDefault(i => i.DEL != true && i.ID == id);
+            var c = en.CONTRACTs.FirstOrDefault(i => i.ID == id && i.DEL != true);
             _contractviewmodel.CONTRACT = c;
 
-            var ct = en.CONTRACT_SUB.Where(o => o.CONTRACTID == id).ToList();
-            _contractviewmodel.countContractSubModel = ct.Count;
+            var cs = en.CONTRACT_SUB.Where(o => o.CONTRACTID == id && o.DEL != true).OrderByDescending(o => o.DATE).ToList();
+            _contractviewmodel.countContractSubModel = cs.Count;
 
-            for (int i = 0; i < ct.Count; i++)
+            foreach (CONTRACT_SUB contractSub in cs)
             {
-                _contractviewmodel.ContractSubViewModels[i].ContractSub = ct[i];
+                _contractviewmodel.ContractSubViewModels.Add(new ContractSubViewModel.Edit() { ContractSub = contractSub });
             }
-            return View("EditCONTRACTViewModel", _contractviewmodel);
+            return View(_contractviewmodel);
         }
 
         // POST: CONTRACT/Edit
         [HttpPost]
-        public ActionResult EditCONTRACTViewModel(ContractViewModel _contractviewModel)
+        public ActionResult EditCONTRACTViewModel(ContractViewModel.EditContractViewModel _contractviewModel)
         {
-            //Clear error of Contract File
-            ModelState["ContractFile"].Errors.Clear();
-
-            //Clear error of contractSubs
-            List<string> modelStateKeys = ModelState.Select(m => m.Key).ToList();
-            int countContractSub = _contractviewModel.countContractSubModel;
-            //Clear error of contractSubs file
-            for (int i = 0; i < countContractSub; i++)
+            //check subfile of new contractsub
+            int subCount = 0;
+            foreach (var item in _contractviewModel.ContractSubViewModels)
             {
-                string subFileKey = "ContractSubViewModel[" + i + "].ContentSubFile";
-                ModelState[subFileKey].Errors.Clear();
-            }
-            if (countContractSub != 10)
-            {
-                for (int i = 9; i >= countContractSub; i--)
+                if (item.ContractSub.ID == Guid.Empty && item.ContentSubFile == null)
                 {
-                    List<string> keynames = modelStateKeys.Where(m => m.Contains(i.ToString())).ToList();
-                    foreach (string key in keynames)
-                    {
-                        ModelState[key].Errors.Clear();
-                    }
+                    ModelState.AddModelError("ContractSubViewModels[" + subCount + "].ContentSubFile", "File not found!");
                 }
+                subCount++;
             }
 
             if (ModelState.IsValid)
             {
+                // Contract Part
                 CONTRACT contract = _contractviewModel.CONTRACT;
                 HttpPostedFileBase contractFile = _contractviewModel.ContractFile;
 
-                if (contractFile.ContentLength > 0)
+                CONTRACT modifyContract = en.CONTRACTs.FirstOrDefault(c => c.ID == contract.ID);
+                if (contractFile != null)
                 {
                     byte[] contentData = new byte[contractFile.InputStream.Length];
                     contractFile.InputStream.Read(contentData, 0, Convert.ToInt32(contractFile.InputStream.Length));
@@ -407,75 +456,102 @@ namespace Web_IT_HELPDESK.Controllers
                     //var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);
                     //_contractviewModel.ContractFile.SaveAs(path);
 
-                    contract.CONTENT = contentBinary.ToArray();
+                    modifyContract.CONTENT = contentBinary.ToArray();
+                    modifyContract.NOTE = System.IO.Path.GetFileName(contractFile.FileName);
                 }
 
-                contract.ID = Guid.NewGuid();
-                contract.NOTE = System.IO.Path.GetFileName(contractFile.FileName);
-                contract.DEPARTMENTID = CurrentUser.Instance.User.Department_Id;
-                contract.USER_CREATE = CurrentUser.Instance.User.Emp_CJ;
-                contract.PLANT = CurrentUser.Instance.User.Plant_Id;
-                contract.DATE_CREATE = DateTime.Now;
+                modifyContract.VENDOR = contract.VENDOR;
+                modifyContract.PHONE = contract.PHONE;
+                modifyContract.ADDRESS = contract.ADDRESS;
+                modifyContract.CONTRACTNAME = contract.CONTRACTNAME;
+                modifyContract.REPRESENTATION = contract.REPRESENTATION;
+                modifyContract.CONTRACT_TYPE_ID = contract.CONTRACT_TYPE_ID;
+                modifyContract.PERIODID = contract.PERIODID;
+                modifyContract.DATE = contract.DATE;
+                modifyContract.MONTHS = contract.MONTHS;
 
-                en.Entry(contract).State = EntityState.Modified;
+                en.Entry(modifyContract).State = EntityState.Modified;
+                en.SaveChanges();
 
-                Guid contract_id = contract.ID;
-                List<CONTRACT_SUB> subOfContract = en.CONTRACT_SUB.Where(s => s.CONTRACTID == contract_id).ToList();
-                for (int i = 0; i < countContractSub; i++)
+                // Contract Sub Part
+                List<ContractSubViewModel.Edit> csVMs = _contractviewModel.ContractSubViewModels;
+                List<CONTRACT_SUB> oldSubs = en.CONTRACT_SUB.Where(s => s.CONTRACTID == contract.ID && s.DEL != true).ToList();
+                List<CONTRACT_SUB> newSubs = csVMs.Select(csVM => csVM.ContractSub).ToList();
+
+                // Delete oldSubs have removed in View
+                foreach (CONTRACT_SUB oldSub in oldSubs)
                 {
-                    ContractSubViewModel sub = _contractviewModel.ContractSubViewModels[i];
-
-                    if (subOfContract.Contains(sub.ContractSub))
+                    if (!newSubs.Contains(oldSub))
                     {
-                        if (sub.ContentSubFile.ContentLength > 0)
+                        oldSub.DEL = true;
+                        en.Entry(oldSub).State = EntityState.Modified;
+                        en.SaveChanges();
+                    }
+                }
+
+                // Insert or modified sub in newSubs
+                oldSubs = en.CONTRACT_SUB.Where(s => s.CONTRACTID == contract.ID && s.DEL != true).ToList();
+                int i = 0;
+                foreach (ContractSubViewModel.Edit csVM in csVMs)
+                {
+                    CONTRACT_SUB sub = csVM.ContractSub;
+                    HttpPostedFileBase subFile = csVM.ContentSubFile;
+                    if (oldSubs.Contains(sub)) // newSub existed in database => modify
+                    {
+                        CONTRACT_SUB modifySub = en.CONTRACT_SUB.FirstOrDefault(c => c.ID == sub.ID);
+                        if (subFile != null)
                         {
-                            byte[] subcontentData = new byte[sub.ContentSubFile.InputStream.Length];
-                            sub.ContentSubFile.InputStream.Read(subcontentData, 0, Convert.ToInt32(sub.ContentSubFile.InputStream.Length));
+                            byte[] subcontentData = new byte[subFile.InputStream.Length];
+                            subFile.InputStream.Read(subcontentData, 0, Convert.ToInt32(subFile.InputStream.Length));
                             Binary subcontentBinary = new Binary(subcontentData);
-                            sub.ContractSub.CONTENT = subcontentBinary.ToArray();
+
+                            modifySub.CONTENT = subcontentBinary.ToArray();
+                            modifySub.NOTE = Path.GetFileName(subFile.FileName);
+                        }
+                        modifySub.DATE = sub.DATE;
+                        modifySub.SUBNAME = sub.SUBNAME;
+                        modifySub.PERIODID = sub.PERIODID;
+                        en.Entry(modifySub).State = EntityState.Modified;
+                    }
+                    else // newSub not existed in database => insert
+                    {
+                        if (subFile != null)
+                        {
+                            byte[] subcontentData = new byte[subFile.InputStream.Length];
+                            subFile.InputStream.Read(subcontentData, 0, Convert.ToInt32(subFile.InputStream.Length));
+                            Binary subcontentBinary = new Binary(subcontentData);
+
+                            sub.CONTENT = subcontentBinary.ToArray();
+                            sub.NOTE = Path.GetFileName(subFile.FileName);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("ContractSubViewModels[" + i + "].ContentSubFile", "File not found!");
+
+                            _contractviewModel.Contract_Types = en.CONTRACT_TYPE;
+                            _contractviewModel.Periods = en.PERIODs.ToList();
+
+                            return View(_contractviewModel);
                         }
 
-                        sub.ContractSub.ID = Guid.NewGuid();
-                        sub.ContractSub.CONTRACTID = contract_id;
-                        sub.ContractSub.NOTE = Path.GetFileName(sub.ContentSubFile.FileName);
-                        sub.ContractSub.USER_CREATE = CurrentUser.Instance.User.Emp_CJ;
-                        sub.ContractSub.PLANT = CurrentUser.Instance.User.Plant_Id;
+                        sub.ID = Guid.NewGuid();
+                        sub.CONTRACTID = contract.ID;
+                        sub.USER_CREATE = CurrentUser.Instance.User.Emp_CJ;
+                        sub.PLANT = CurrentUser.Instance.User.Plant_Id;
 
-                        en.Entry(sub.ContractSub).State = EntityState.Modified;
+                        en.CONTRACT_SUB.Add(sub);
                     }
-                    else
-                    {
-
-                    }
-                }
-
-                try
-                {
                     en.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
+                    i++;
                 }
 
                 return RedirectToAction("ContractIndex");
             }
 
-            //ContractViewModel _contractviewmodel = new ContractViewModel();
-            //_contractviewmodel.Contract_Types = en.CONTRACT_TYPE;
-            //_contractviewmodel.Periods = en.PERIODs.ToList();
+            _contractviewModel.Contract_Types = en.CONTRACT_TYPE;
+            _contractviewModel.Periods = en.PERIODs.ToList();
 
-            //var c = en.CONTRACTs.FirstOrDefault(i => i.DEL != true && i.ID == id);
-            //_contractviewmodel.CONTRACT = c;
-
-            //var ct = en.CONTRACT_SUB.Where(o => o.CONTRACTID == id).ToList();
-            //_contractviewmodel.countContractSubModel = ct.Count;
-
-            //for (int i = 0; i < ct.Count; i++)
-            //{
-            //    _contractviewmodel.ContractSubViewModels[i].ContractSub = ct[i];
-            //}
-            return View("EditCONTRACTViewModel", _contractviewModel);
+            return View(_contractviewModel);
         }
 
         [HttpGet]
@@ -522,36 +598,41 @@ namespace Web_IT_HELPDESK.Controllers
             return File(fileData, "text", fileName);
         }
 
-        public ActionResult Delete_contractSUB(Guid v_id, Guid v_contract_id)
+        [HttpPost]
+        public ActionResult Delete_contractSUB(Guid contractID, Guid contractsubID)
         {
-            //Guid id = new Guid(v_id);
-            CONTRACT_SUB _contract_sub_del = en.CONTRACT_SUB.Where(i => i.ID == v_id && i.CONTRACTID == v_contract_id).FirstOrDefault();
+            if (contractID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            CONTRACT_SUB _contract_sub_del = en.CONTRACT_SUB.Where(i => i.ID == contractsubID && i.CONTRACTID == contractID).FirstOrDefault();
             if (_contract_sub_del == null)
             {
                 return HttpNotFound();
             }
-            else
-            {
-                en.CONTRACT_SUB.Remove(_contract_sub_del);
-                en.SaveChanges();
-            }
-            // call edit view again 
-            ContractViewModel _contractviewmodel = new ContractViewModel();
-            var c = en.CONTRACTs.Where(i => i.DEL != true && i.ID == v_contract_id).FirstOrDefault();
-            {
-                _contractviewmodel.CONTRACT = c;
-            }
-            var ct = en.CONTRACT_SUB.Where(o => o.CONTRACTID == c.ID).ToList();
 
-            foreach (var i in ct)
-            {
-                //_contractviewmodel.ContractSubViewModel.ContractSub = i;
-            }
-            ViewBag.User_create = c.USER_CREATE;
-            ViewBag.DEPT_ID = GetDept_id(c.USER_CREATE);
-            ViewBag.PERIODID = new SelectList(en.PERIODs, "PERIOD_ID", "PERIOD_NAME", c.PERIODID);
-            ViewBag.CONTRACT_TYPE_ID = new SelectList(en.CONTRACT_TYPE, "CONTRACT_TYPE_ID", "CONTRACT_TYPE_NAME", c.CONTRACT_TYPE_ID);
-            return PartialView("EditCONTRACTViewModel", _contractviewmodel);
+            _contract_sub_del.DEL = true;
+
+            en.Entry(_contract_sub_del).State = EntityState.Modified;
+            en.SaveChanges();
+
+            //// call edit view again 
+            ContractViewModel _contractviewmodel = new ContractViewModel();
+            //_contractviewmodel.Contract_Types = en.CONTRACT_TYPE;
+            //_contractviewmodel.Periods = en.PERIODs.ToList();
+
+            //var c = en.CONTRACTs.FirstOrDefault(i => i.ID == contractID && i.DEL != true);
+            //_contractviewmodel.CONTRACT = c;
+
+            //var ct = en.CONTRACT_SUB.Where(o => o.CONTRACTID == contractID && o.DEL != true).ToList();
+            //_contractviewmodel.countContractSubModel = ct.Count;
+
+            //for (int i = 0; i < ct.Count; i++)
+            //{
+            //    _contractviewmodel.ContractSubViewModels[i].ContractSub = ct[i];
+            //}
+            return View("EditCONTRACTViewModel", _contractviewmodel);
         }
 
         public ActionResult Delete_contract(Guid v_id)
@@ -587,8 +668,6 @@ namespace Web_IT_HELPDESK.Controllers
             var contract_list = en.CONTRACTs.Where(o => o.DEL != true && today <= DbFunctions.AddDays(o.DATE, 45) && o.DEPARTMENTID == dept).OrderBy(i => i.DATE);
             return View("ContractIndex", contract_list);
         }
-
-
     }
 }
 
