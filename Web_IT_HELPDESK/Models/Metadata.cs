@@ -80,20 +80,17 @@ namespace Web_IT_HELPDESK
     public class ContractMetadata
     {
         [Required(ErrorMessage = "This field can not be empty.")]
+        public string CONTRACTNAME { get; set; }
+        [Required(ErrorMessage = "This field can not be empty.")]
         public string VENDOR { get; set; }
-
         [Required(ErrorMessage = "This field can not be empty.")]
         public string PERIODID { get; set; }
-
         [Required(ErrorMessage = "This field can not be empty.")]
         public string ADDRESS { get; set; }
-
         [Required(ErrorMessage = "This field can not be empty.")]
         public string PHONE { get; set; }
-
         [Required(ErrorMessage = "This field can not be empty.")]
         public string REPRESENTATION { get; set; }
-
         [Required(ErrorMessage = "This field can not be empty.")]
         public Nullable<int> MONTHS { get; set; }
     }
@@ -104,7 +101,7 @@ namespace Web_IT_HELPDESK
         public string SUBNAME { get; set; }
         [Required(ErrorMessage = "This field can not be empty.")]
         public DateTime DATE { get; set; }
-        
+
     }
 
     public class EmployeeMetadata

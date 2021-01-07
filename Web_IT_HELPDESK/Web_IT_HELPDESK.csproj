@@ -292,6 +292,7 @@
     <Compile Include="Models\AllocationModel.cs" />
     <Compile Include="Models\AutoCompleteModel.cs" />
     <Compile Include="Models\Biz_TripViewModel.cs" />
+    <Compile Include="ViewModels\ContractTypeViewModel.cs" />
     <Compile Include="ViewModels\ContractViewModel.cs" />
     <Compile Include="Models\DepartmentModel.cs" />
     <Compile Include="Models\DeviceModel.cs" />
@@ -1498,7 +1499,6 @@
     <Content Include="Views\CONTRACT\CreateCONTRACTViewModel.cshtml" />
     <Content Include="Views\CONTRACT\CreateCONTRACTViewModel2.cshtml" />
     <Content Include="Views\CONTRACT\CreateContract.cshtml" />
-    <Content Include="Views\CONTRACT\EditCONTRACTViewModel.cshtml" />
     <Content Include="Views\LaborContract\LaborContractIndex.cshtml" />
     <Content Include="Views\LaborContract\Approve.cshtml" />
     <Content Include="Views\LaborContract\hr_approve.cshtml" />
@@ -1579,9 +1579,9 @@
     <Content Include="Views\Device_Type\Details.cshtml" />
     <Content Include="Views\Device_Type\Edit.cshtml" />
     <Content Include="Views\Device_Type\Index.cshtml" />
-    <Content Include="Views\CONTRACT\CreateCONTRACTViewModel3.cshtml" />
     <Content Include="Views\CONTRACT\EditCONTRACTViewModel - Copy.cshtml" />
-    <Content Include="Views\CONTRACT\EditCONTRACTViewModel2.cshtml" />
+    <Content Include="Views\CONTRACT\EditCONTRACTViewModel.cshtml" />
+    <Content Include="Views\CONTRACT\SubContractPartialView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

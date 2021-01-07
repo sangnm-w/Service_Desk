@@ -11,7 +11,7 @@ namespace Web_IT_HELPDESK.ViewModels
         public class Create
         {
             public CONTRACT_SUB ContractSub { get; set; }
-            [Required(ErrorMessage = "Á à!")]
+            [Required(ErrorMessage = "File not found!")]
             public HttpPostedFileBase ContentSubFile { get; set; }
         }
         public class Edit
