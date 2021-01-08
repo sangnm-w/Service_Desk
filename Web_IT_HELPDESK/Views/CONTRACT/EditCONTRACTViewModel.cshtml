@@ -69,6 +69,9 @@
         div.inputFlex {
             display: flex;
         }
+        .subdate {
+            width: 150px;
+        }
     </style>
 }
 
@@ -209,7 +212,7 @@
                                         </td>
                                         <td>
                                             <div class="input-group date subdate">
-                                                @Html.Editor("Date", new { htmlAttributes = new { @class = "form-control", autocomplete = "off", style = "width: 100px" } })
+                                                @Html.Editor("Date", new { htmlAttributes = new { @class = "form-control", autocomplete = "off"} })
                                                 <span class="input-group-addon">
                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                 </span>
@@ -497,8 +500,8 @@
             var First = '<p>' + stt + '</p>'
                 + '<input type="hidden" value="00000000-0000-0000-0000-000000000000" id="ContractSubViewModels_' + rowcount + '__ContractSub_ID" name="ContractSubViewModels[' + rowcount + '].ContractSub.ID" >';
             var Second = ''
-                + '<div class="input-group date" id="dtpicker' + ID + '">'
-                + '<input class="form-control" autocomplete="off" style="width: 100px">'
+                + '<div class="input-group date subdate" id="dtpicker' + ID + '">'
+                + '<input class="form-control" autocomplete="off">'
                 + '<span class="input-group-addon">'
                 + '<span class="glyphicon glyphicon-calendar"></span>'
                 + '</span>'

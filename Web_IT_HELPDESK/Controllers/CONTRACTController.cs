@@ -200,18 +200,6 @@ namespace Web_IT_HELPDESK.Controllers
             //} 
             #endregion
 
-            var depts = en.Departments.Where(d => d.Plant_Id == curr_plantId && d.Deactive != true)
-                .Select(d => new DepartmentViewModel
-                {
-                    Department_Id = d.Department_Id,
-                    Department_Name = d.Department_Name
-                }
-                ).OrderByDescending(d => d.Department_Name).ToList();
-            ViewBag.Departments = depts;
-
-            var contract_types = en.CONTRACT_TYPE;
-            ViewBag.Contract_Types = contract_types;
-
             return View(contract_list);
         }
 
