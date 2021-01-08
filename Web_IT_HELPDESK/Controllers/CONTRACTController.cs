@@ -35,9 +35,12 @@ namespace Web_IT_HELPDESK.Controllers
             ////int pageNumber = (page ?? 1);
             #endregion
 
-            string curr_plantId = CurrentUser.Instance.User.Plant_Id;
-           
-            var depts = en.Departments.Where(d => d.Plant_Id == curr_plantId && d.Deactive != true).Select(d => new DepartmentViewModel
+            string curr_PlantId = CurrentUser.Instance.User.Plant_Id;
+            string curr_DeptId = CurrentUser.Instance.User.Department_Id;
+            bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantId && d.Department_Id == curr_DeptId && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
+            ViewBag.currUserIsManager = currUserIsManager;
+
+            var depts = en.Departments.Where(d => d.Plant_Id == curr_PlantId && d.Deactive != true).Select(d => new DepartmentViewModel
             {
                 Department_Id = d.Department_Id,
                 Department_Name = d.Department_Name
@@ -47,8 +50,14 @@ namespace Web_IT_HELPDESK.Controllers
             var contract_types = en.CONTRACT_TYPE;
             ViewBag.Contract_Types = contract_types;
 
-            var contracts = en.CONTRACTs.Where(c => c.DEL != true && DateTime.Now <= DbFunctions.AddDays(c.DATE, 30));
-            return View(contracts);
+            var contract_list = en.CONTRACTs.Where(c => c.DEL != true
+                                                 && c.PLANT == curr_PlantId
+                                                 && DateTime.Now <= DbFunctions.AddDays(c.DATE, 30));
+            if (currUserIsManager != true)
+            {
+                contract_list = contract_list.Where(c => c.USER_CREATE == CurrentUser.Instance.User.Emp_CJ);
+            }
+            return View(contract_list);
         }
 
         // POST: Index
@@ -73,13 +82,9 @@ namespace Web_IT_HELPDESK.Controllers
             var contract_types = en.CONTRACT_TYPE;
             ViewBag.Contract_Types = contract_types;
 
-            IEnumerable<CONTRACT> contract_list;
-
-            contract_list = en.CONTRACTs.Where(c => c.DEL != true
+            var contract_list = en.CONTRACTs.Where(c => c.DEL != true
                                                  && c.PLANT == curr_PlantId
                                                  && date_ <= DbFunctions.AddDays(c.DATE, daynum_));
-
-
 
             if (currUserIsManager == true)
             {
