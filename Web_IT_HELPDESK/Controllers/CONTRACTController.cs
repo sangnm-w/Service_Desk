@@ -18,9 +18,9 @@ namespace Web_IT_HELPDESK.Controllers
     public class CONTRACTController : Controller
     {
         ServiceDeskEntities en = new ServiceDeskEntities();
-        // GET: ContractIndex
+        // GET: Index
         [Authorize]
-        public ActionResult ContractIndex()//int? page)
+        public ActionResult Index()
         {
             #region closed - M$ 20201103
             //DateTime today = DateTime.Today;
@@ -35,9 +35,12 @@ namespace Web_IT_HELPDESK.Controllers
             ////int pageNumber = (page ?? 1);
             #endregion
 
-            string curr_plantId = CurrentUser.Instance.User.Plant_Id;
-           
-            var depts = en.Departments.Where(d => d.Plant_Id == curr_plantId && d.Deactive != true).Select(d => new DepartmentViewModel
+            string curr_PlantId = CurrentUser.Instance.User.Plant_Id;
+            string curr_DeptId = CurrentUser.Instance.User.Department_Id;
+            bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantId && d.Department_Id == curr_DeptId && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
+            ViewBag.currUserIsManager = currUserIsManager;
+
+            var depts = en.Departments.Where(d => d.Plant_Id == curr_PlantId && d.Deactive != true).Select(d => new DepartmentViewModel
             {
                 Department_Id = d.Department_Id,
                 Department_Name = d.Department_Name
@@ -47,13 +50,20 @@ namespace Web_IT_HELPDESK.Controllers
             var contract_types = en.CONTRACT_TYPE;
             ViewBag.Contract_Types = contract_types;
 
-            var contracts = en.CONTRACTs.Where(c => c.DEL != true && DateTime.Now <= DbFunctions.AddDays(c.DATE, 30));
-            return View(contracts);
+            var contract_list = en.CONTRACTs.Where(c => c.DEL != true
+                                                 && c.PLANT == curr_PlantId
+                                                 && DateTime.Now <= DbFunctions.AddDays(c.DATE, 30));
+            if (currUserIsManager != true)
+            {
+                contract_list = contract_list.Where(c => c.USER_CREATE == CurrentUser.Instance.User.Emp_CJ);
+            }
+            return View(contract_list);
         }
 
+        // POST: Index
         [Authorize]
         [HttpPost]
-        public ActionResult ContractIndex(string search_, DateTime? date_, ICollection<string> v_depts, string v_contract_type, int daynum_)//, DateTime fromdate_, DateTime todate_)
+        public ActionResult Index(string search_, DateTime? date_, ICollection<string> v_depts, string v_contract_type, int daynum_)
         {
             string curr_PlantId = CurrentUser.Instance.User.Plant_Id;
             string curr_DeptId = CurrentUser.Instance.User.Department_Id;
@@ -72,13 +82,9 @@ namespace Web_IT_HELPDESK.Controllers
             var contract_types = en.CONTRACT_TYPE;
             ViewBag.Contract_Types = contract_types;
 
-            IEnumerable<CONTRACT> contract_list;
-
-            contract_list = en.CONTRACTs.Where(c => c.DEL != true
+            var contract_list = en.CONTRACTs.Where(c => c.DEL != true
                                                  && c.PLANT == curr_PlantId
                                                  && date_ <= DbFunctions.AddDays(c.DATE, daynum_));
-
-
 
             if (currUserIsManager == true)
             {
@@ -203,45 +209,8 @@ namespace Web_IT_HELPDESK.Controllers
             return View(contract_list);
         }
 
-        public PartialViewResult ContractCreate()
-        {
-            CONTRACT _contract = new CONTRACT();
-            ViewBag.User_create = System.Web.HttpContext.Current.User.Identity.Name;
-            ViewBag.PERIOD_ID = new SelectList(en.PERIODs, "PERIOD_ID", "PERIOD_NAME", en.PERIODs.First().PERIOD_ID);
-            ViewBag.CONTRACT_TYPE_ID = new SelectList(en.CONTRACT_TYPE, "CONTRACT_TYPE_ID", "CONTRACT_TYPE_NAME", en.CONTRACT_TYPE.First().CONTRACT_TYPE_ID);
-            var dept = from i in en.Employees where i.Emp_CJ == System.Web.HttpContext.Current.User.Identity.Name select i.Department_Id;
-            ViewBag.DEPT_ID = dept.ToString();
-            return PartialView("partial_create_new_asset", _contract);
-        }
-
-        [HttpPost]
-        public ActionResult ContractCreate(CONTRACT _contract, HttpPostedFileBase image)
-        {
-            ViewBag.PERIODID = new SelectList(en.PERIODs, "PERIOD_ID", "PERIOD_NAME", _contract.PERIODID);
-            if (ModelState.IsValid)
-            {
-                if (image != null && image.ContentLength > 0)
-                {
-                }
-                try
-                {
-                    en.CONTRACTs.Add(_contract);
-                    en.SaveChanges();
-                }
-                catch { }
-            }
-            var view = en.CONTRACTs.Where(i => i.DEL != true);
-            return View("Asset_Import_List", view);
-        }
-
-        private string GetDept_id(string v_emp)
-        {
-            string dept_id = en.Employees.Where(f => (f.Emp_CJ == v_emp)).Select(f => f.Department_Id).SingleOrDefault();
-            return dept_id;
-        }
-
         // GET: CONTRACT/Create
-        public ActionResult CreateCONTRACTViewModel()
+        public ActionResult Create()
         {
             ContractViewModel.CreateContractViewModel _contractviewModel = new ContractViewModel.CreateContractViewModel();
             _contractviewModel.Contract_Types = en.CONTRACT_TYPE;
@@ -252,7 +221,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         // POST: CONTRACT/Create
         [HttpPost]
-        public ActionResult CreateCONTRACTViewModel(ContractViewModel.CreateContractViewModel _contractviewModel)
+        public ActionResult Create(ContractViewModel.CreateContractViewModel _contractviewModel)
         {
             if (ModelState.IsValid)
             {
@@ -294,106 +263,16 @@ namespace Web_IT_HELPDESK.Controllers
                     en.CONTRACT_SUB.Add(item.ContractSub);
                 }
                 en.SaveChanges();
-                return RedirectToAction("ContractIndex");
+                return RedirectToAction("Index");
             }
 
             _contractviewModel.Contract_Types = en.CONTRACT_TYPE;
             _contractviewModel.Periods = en.PERIODs;
             return View(_contractviewModel);
         }
-
-        // GET: CONTRACT/Create
-        public ActionResult CreateCONTRACTViewModel2()
-        {
-            ContractViewModel.CreateContractViewModel _contractviewModel = new ContractViewModel.CreateContractViewModel();
-            _contractviewModel.Contract_Types = en.CONTRACT_TYPE;
-            _contractviewModel.Periods = en.PERIODs.ToList();
-            List<ContractSubViewModel.Create> cslist = new List<ContractSubViewModel.Create>();
-            for (int i = 0; i < 10; i++)
-            {
-                cslist.Add(new ContractSubViewModel.Create());
-            }
-            _contractviewModel.ContractSubViewModels = cslist;
-            return View("CreateCONTRACTViewModel2", _contractviewModel);
-        }
-
-        // POST: CONTRACT/Create
-        [HttpPost]
-        public ActionResult CreateCONTRACTViewModel2(ContractViewModel.CreateContractViewModel _contractviewModel)
-        {
-            List<string> modelStateKeys = ModelState.Select(m => m.Key).ToList();
-            int countContractSub = _contractviewModel.countContractSubModel;
-            if (countContractSub != 10)
-            {
-                for (int i = 9; i >= countContractSub; i--)
-                {
-                    List<string> keynames = modelStateKeys.Where(m => m.Contains(i.ToString())).ToList();
-                    foreach (string key in keynames)
-                    {
-                        ModelState[key].Errors.Clear();
-                    }
-                }
-            }
-
-            if (ModelState.IsValid)
-            {
-                HttpPostedFileBase contractFile = _contractviewModel.ContractFile;
-
-                byte[] contentData = new byte[contractFile.InputStream.Length];
-                contractFile.InputStream.Read(contentData, 0, Convert.ToInt32(contractFile.InputStream.Length));
-                Binary contentBinary = new Binary(contentData);
-
-                //var fileName = Path.GetFileName(_contractviewModel.ContractFile.FileName);
-                //var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);
-                //_contractviewModel.ContractFile.SaveAs(path);
-
-                CONTRACT contract = _contractviewModel.CONTRACT;
-                contract.ID = Guid.NewGuid();
-                contract.CONTENT = contentBinary.ToArray();
-                contract.NOTE = System.IO.Path.GetFileName(contractFile.FileName);
-                contract.DEPARTMENTID = CurrentUser.Instance.User.Department_Id;
-                contract.USER_CREATE = CurrentUser.Instance.User.Emp_CJ;
-                contract.PLANT = CurrentUser.Instance.User.Plant_Id;
-                contract.DATE_CREATE = DateTime.Now;
-                en.CONTRACTs.Add(contract);
-
-                Guid contract_id = contract.ID;
-                for (int i = 0; i < countContractSub; i++)
-                {
-                    ContractSubViewModel.Create sub = _contractviewModel.ContractSubViewModels[i];
-                    byte[] subcontentData = new byte[sub.ContentSubFile.InputStream.Length];
-                    sub.ContentSubFile.InputStream.Read(subcontentData, 0, Convert.ToInt32(sub.ContentSubFile.InputStream.Length));
-                    Binary subcontentBinary = new Binary(subcontentData);
-
-                    sub.ContractSub.ID = Guid.NewGuid();
-                    sub.ContractSub.CONTRACTID = contract_id;
-                    sub.ContractSub.CONTENT = subcontentBinary.ToArray();
-                    sub.ContractSub.NOTE = Path.GetFileName(sub.ContentSubFile.FileName);
-                    sub.ContractSub.USER_CREATE = CurrentUser.Instance.User.Emp_CJ;
-                    sub.ContractSub.PLANT = CurrentUser.Instance.User.Plant_Id;
-
-                    en.CONTRACT_SUB.Add(sub.ContractSub);
-                }
-
-                try
-                {
-                    en.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-
-                return RedirectToAction("ContractIndex");
-            }
-
-            _contractviewModel.Contract_Types = en.CONTRACT_TYPE;
-            _contractviewModel.Periods = en.PERIODs;
-            return View("CreateCONTRACTViewModel2", _contractviewModel);
-        }
-
+               
         // GET: CONTRACT/Edit
-        public ActionResult EditCONTRACTViewModel(Guid id)
+        public ActionResult Edit(Guid id)
         {
             ContractViewModel.EditContractViewModel _contractviewmodel = new ContractViewModel.EditContractViewModel();
             _contractviewmodel.Contract_Types = en.CONTRACT_TYPE;
@@ -414,7 +293,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         // POST: CONTRACT/Edit
         [HttpPost]
-        public ActionResult EditCONTRACTViewModel(ContractViewModel.EditContractViewModel _contractviewModel)
+        public ActionResult Edit(ContractViewModel.EditContractViewModel _contractviewModel)
         {
             //check subfile of new contractsub
             int subCount = 0;
@@ -533,7 +412,7 @@ namespace Web_IT_HELPDESK.Controllers
                     i++;
                 }
 
-                return RedirectToAction("ContractIndex");
+                return RedirectToAction("Index");
             }
 
             _contractviewModel.Contract_Types = en.CONTRACT_TYPE;
@@ -584,77 +463,6 @@ namespace Web_IT_HELPDESK.Controllers
             fileName = record.First().NOTE;
             //return file and provide byte file content and file name
             return File(fileData, "text", fileName);
-        }
-
-        [HttpPost]
-        public ActionResult Delete_contractSUB(Guid contractID, Guid contractsubID)
-        {
-            if (contractID == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            CONTRACT_SUB _contract_sub_del = en.CONTRACT_SUB.Where(i => i.ID == contractsubID && i.CONTRACTID == contractID).FirstOrDefault();
-            if (_contract_sub_del == null)
-            {
-                return HttpNotFound();
-            }
-
-            _contract_sub_del.DEL = true;
-
-            en.Entry(_contract_sub_del).State = EntityState.Modified;
-            en.SaveChanges();
-
-            //// call edit view again 
-            ContractViewModel _contractviewmodel = new ContractViewModel();
-            //_contractviewmodel.Contract_Types = en.CONTRACT_TYPE;
-            //_contractviewmodel.Periods = en.PERIODs.ToList();
-
-            //var c = en.CONTRACTs.FirstOrDefault(i => i.ID == contractID && i.DEL != true);
-            //_contractviewmodel.CONTRACT = c;
-
-            //var ct = en.CONTRACT_SUB.Where(o => o.CONTRACTID == contractID && o.DEL != true).ToList();
-            //_contractviewmodel.countContractSubModel = ct.Count;
-
-            //for (int i = 0; i < ct.Count; i++)
-            //{
-            //    _contractviewmodel.ContractSubViewModels[i].ContractSub = ct[i];
-            //}
-            return View("EditCONTRACTViewModel", _contractviewmodel);
-        }
-
-        public ActionResult Delete_contract(Guid v_id)
-        {
-            //Guid id = new Guid(v_id);
-            //CONTRACT _contract_del = en.CONTRACTs.Where(i => i.ID == v_id).FirstOrDefault();
-            CONTRACT _contract_del = en.CONTRACTs.Find(v_id);
-            if (_contract_del == null)
-            {
-                return HttpNotFound();
-            }
-            else
-            {
-                try
-                {
-                    //en.CONTRACT_SUB.Remove(_contract_sub_del);
-                    _contract_del.DEL = true;
-                    en.SaveChanges();
-                }
-                catch (DbEntityValidationException ex)
-                {
-                    string errorMessages = string.Join("; ", ex.EntityValidationErrors.SelectMany(x => x.ValidationErrors).Select(x => x.ErrorMessage));
-                    throw new DbEntityValidationException(errorMessages);
-                }
-            }
-
-
-            DateTime today = DateTime.Today;
-
-            int v_year = today.Year;
-            int v_month = today.Month;
-            string dept = GetDept_id(System.Web.HttpContext.Current.User.Identity.Name);
-            var contract_list = en.CONTRACTs.Where(o => o.DEL != true && today <= DbFunctions.AddDays(o.DATE, 45) && o.DEPARTMENTID == dept).OrderBy(i => i.DATE);
-            return View("ContractIndex", contract_list);
         }
     }
 }
