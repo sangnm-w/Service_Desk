@@ -1711,7 +1711,6 @@
     <Content Include="Views\BIZ_TRIP\hr_admin.cshtml" />
     <Content Include="Views\BIZ_TRIP\biz_trip_index - Copy.cshtml" />
     <Content Include="Views\Shared\_Layout - Copy.cshtml" />
-    <Content Include="Views\CONTRACT\CreateCONTRACTViewModel2 - Copy.cshtml" />
     <Content Include="Views\CONTRACT\EditCONTRACTViewModel - Copy.cshtml" />
     <Content Include="Views\CONTRACT\EditCONTRACTViewModel.cshtml" />
     <Content Include="Views\CONTRACT\SubContractPartialView.cshtml" />
@@ -1721,6 +1720,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Library\Document\" />
+    <Folder Include="Library\Picture\Device\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
