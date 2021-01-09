@@ -117,5 +117,10 @@ namespace Web_IT_HELPDESK.Models
             return dvm;
         }
 
+        public enum DeviceStatus
+        {
+            In_Stock,
+            Using
+        }
     }
 }
