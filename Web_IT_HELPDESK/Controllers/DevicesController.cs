@@ -25,7 +25,6 @@ namespace Web_IT_HELPDESK.Controllers
         {
             string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
             IEnumerable<DeviceViewModel> devices = DeviceModel.Instance.GetDevicesByPlantId(curr_plantId);
-
             return View(devices.ToList());
         }
 
@@ -344,7 +343,7 @@ namespace Web_IT_HELPDESK.Controllers
                                 string Office_License = worksheet.Cells[rowNo, 12].Value?.ToString();
                                 string Note = worksheet.Cells[rowNo, 13].Value?.ToString();
                                 DateTime? Depreciation = worksheet.Cells[rowNo, 14].Value is null ? (DateTime?)null : Convert.ToDateTime(worksheet.Cells[rowNo, 14].Value);
-                                string Device_Status = worksheet.Cells[rowNo, 15].Value?.ToString();
+                                string Device_Status = DeviceModel.DeviceStatus.In_Stock.ToString();
                                 string Addition_Information = worksheet.Cells[rowNo, 16].Value?.ToString();
                                 string Plant_Id = plantid;
                                 DateTime? Create_Date = worksheet.Cells[rowNo, 18].Value is null ? (DateTime?)null : Convert.ToDateTime(worksheet.Cells[rowNo, 18].Value);
