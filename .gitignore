@@ -351,4 +351,8 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+<<<<<<< HEAD
 Web_IT_HELPDESK/Library/Picture/Device/
+=======
+/Web_IT_HELPDESK/Library/Picture/Device/V2090
+>>>>>>> 4ca7ae2234fe912769fa52c2dba65b67f2dd84d7
