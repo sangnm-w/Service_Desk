@@ -173,9 +173,7 @@
                     {
                         <tr>
                             <td>
-                                <a href="@Url.Action("Details","Allocations",new { id = item.Allocation.Allocation_Id })">
-                                    @Html.DisplayFor(modelItem => item.Allocation.Allocation_Code)
-                                </a>
+                                <a href="@Url.Action("Details","Allocations",new { id = item.Allocation.Allocation_Id })">@Html.DisplayFor(modelItem => item.Allocation.Allocation_Code)</a>
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Deliver_Name)

@@ -48,7 +48,6 @@ namespace Web_IT_HELPDESK.Controllers
             List<AllocationViewModel> allocations = AllocationModel.Instance.get_AllocationsByDeviceId(device.Device_Id);
             ViewBag.Allocations = allocations;
 
-            ViewBag.Domain = System.Web.HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
             return View(device);
         }
 
@@ -328,7 +327,8 @@ namespace Web_IT_HELPDESK.Controllers
                     List<Device> deviceList = new List<Device>();
                     List<DeviceViewModel.ErrDeviceExcel> errDeviceList = new List<DeviceViewModel.ErrDeviceExcel>();
 
-                    deviceList = DeviceHelper.Instance.GetDevicesFromExcel(FileUpload.InputStream);
+
+                    deviceList = DeviceHelper.Instance.GetDevicesFromExcel(FileUpload.InputStream, out errDeviceList);
 
                     foreach (Device item in deviceList)
                     {
@@ -354,7 +354,7 @@ namespace Web_IT_HELPDESK.Controllers
 
                     if (errDeviceList.Count > 0)
                     {
-                        Dictionary<int, string> errDeviceTitles = ExcelTitle.Instance.DevicesTitles();
+                        Dictionary<int, string> errDeviceTitles = ExcelTitle.Instance.Devices();
                         errDeviceTitles.Add(19, "Error Message");
 
                         var stream = ExcelHelper.Instance.CreateExcelFile(null, errDeviceList, errDeviceTitles, colsDate);
@@ -362,7 +362,12 @@ namespace Web_IT_HELPDESK.Controllers
                         Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                         Response.AddHeader("Content-Disposition", "attachment; filename=Error Devices List.xlsx");
                         Response.BinaryWrite(buffer.ToArray());
-                        Response.Flush();
+                        //Response.Flush();
+                        ViewBag.Error = "An error has occurred while uploading. Please check Error_Devices_List file!";
+                    }
+                    else
+                    {
+                        ViewBag.Error = "Upload success!";
                     }
 
                     IEnumerable<DeviceViewModel> devices = DeviceModel.Instance.GetDevicesByPlantId(curr_plantId);
@@ -382,6 +387,28 @@ namespace Web_IT_HELPDESK.Controllers
                 return View("Index", devices.ToList());
             }
         }
+
+        public FileContentResult Download()
+        {
+            //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.DOWNLOAD, Commons.ModuleConstant.INCIDENT);
+            //if (hasPermission.Value == false)
+            //    return RedirectToAction("Index", "Home");
+
+            string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            var devices = DeviceModel.Instance.GetQRDevicesByPlantID(curr_plantId);
+
+            var stream = ExcelHelper.Instance.CreateQRExcel(null, devices.ToList(), ExcelTitle.Instance.QRDevices(), null);
+            var buffer = stream as MemoryStream;
+            //Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            //Response.AddHeader("Content-Disposition", "attachment; filename=IT Order Request.xlsx");
+            //Response.BinaryWrite(buffer.ToArray());
+            //Response.Flush();
+            //Response.End();
+            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            string fileName = "QR Code Devices.xlsx";
+            return File(buffer.ToArray(), contentType, fileName);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

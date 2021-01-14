@@ -67,13 +67,14 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             string savePath = Path.Combine(serverPath, fileName);
             try
             {
-                using (var oldImage = QRCodeUtility.Instance.GetBitmapQRCode(QRText))
+                using (var orginalImage = QRCodeUtility.Instance.GetBitmapQRCode(QRText))
                 {
-                    var format = oldImage.RawFormat;
-                    using (var newImage = QRCodeUtility.Instance.ResizeImage(oldImage, 200, 200))
-                    {
-                        newImage.Save(savePath, format);
-                    }
+                    //var format = orginalImage.RawFormat;
+                    //using (var newImage = QRCodeUtility.Instance.ResizeImage(orginalImage, 200, 200))
+                    //{
+                    //    newImage.Save(savePath, format);
+                    //}
+                    orginalImage.Save(savePath);
                 }
                 deviceQRPath = Path.Combine(filePath, fileName);
             }

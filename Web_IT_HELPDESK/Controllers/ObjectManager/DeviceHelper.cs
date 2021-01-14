@@ -52,13 +52,14 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             string savePath = Path.Combine(serverPath, fileName);
             try
             {
-                using (var oldImage = QRCodeUtility.Instance.GetBitmapQRCode(QRText))
+                using (var orginalImage = QRCodeUtility.Instance.GetBitmapQRCode(QRText))
                 {
-                    var format = oldImage.RawFormat;
-                    using (var newImage = QRCodeUtility.Instance.ResizeImage(oldImage, 200, 200))
-                    {
-                        newImage.Save(savePath, format);
-                    }
+                    //var format = orginalImage.RawFormat;
+                    //using (var newImage = QRCodeUtility.Instance.ResizeImage(orginalImage, 200, 200))
+                    //{
+                    //    newImage.Save(savePath, format);
+                    //}
+                    orginalImage.Save(savePath);
                 }
                 deviceQRPath = Path.Combine(filePath, fileName);
             }
@@ -69,39 +70,49 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
 
             return deviceQRPath;
         }
-        public List<Device> GetDevicesFromExcel(Stream fileStream)
+        public List<Device> GetDevicesFromExcel(Stream fileStream, out List<DeviceViewModel.ErrDeviceExcel> errDeviceExcels)
         {
             List<Device> devices = new List<Device>();
             List<DeviceViewModel.DeviceExcelTemplate> deviceTemplates = new List<DeviceViewModel.DeviceExcelTemplate>();
+            errDeviceExcels = new List<DeviceViewModel.ErrDeviceExcel>();
 
             deviceTemplates = readDeviceExcelTemplate(fileStream);
+
             foreach (var item in deviceTemplates)
             {
                 Device device = new Device();
+                try
+                {
+                    device.Device_Id = Guid.NewGuid();
+                    device.Contract_Id = null;
+                    device.Device_Type_Id = Convert.ToInt32(item.Device_Type_Id);
+                    device.Device_Code = null;
+                    device.Device_Name = item.Device_Name;
+                    device.Serial_No = item.Serial_No;
+                    device.Purchase_Date = string.IsNullOrWhiteSpace(item.Purchase_Date) ? null : (DateTime?)Convert.ToDateTime(item.Purchase_Date);
+                    device.Computer_Name = item.Computer_Name;
+                    device.CPU = item.CPU;
+                    device.RAM = item.RAM;
+                    device.DISK = item.DISK;
+                    device.Operation_System = item.Operation_System;
+                    device.OS_License = item.OS_License;
+                    device.Office = item.Office;
+                    device.Office_License = item.Office_License;
+                    device.Note = item.Note;
+                    device.Depreciation = string.IsNullOrWhiteSpace(item.Depreciation) ? null : (DateTime?)Convert.ToDateTime(item.Depreciation);
+                    device.Device_Status = item.Device_Status;
+                    device.Addition_Information = item.Addition_Information;
+                    device.Plant_Id = item.Plant_Id;
+                    device.Create_Date = string.IsNullOrWhiteSpace(item.Create_Date) ? null : (DateTime?)Convert.ToDateTime(item.Create_Date);
 
-                device.Device_Id = Guid.NewGuid();
-                device.Contract_Id = null;
-                device.Device_Type_Id = Convert.ToInt32(item.Device_Type_Id);
-                device.Device_Code = null;
-                device.Device_Name = item.Device_Name;
-                device.Serial_No = item.Serial_No;
-                device.Purchase_Date = string.IsNullOrWhiteSpace(item.Purchase_Date) ? null : (DateTime?)Convert.ToDateTime(item.Purchase_Date);
-                device.Computer_Name = item.Computer_Name;
-                device.CPU = item.CPU;
-                device.RAM = item.RAM;
-                device.DISK = item.DISK;
-                device.Operation_System = item.Operation_System;
-                device.OS_License = item.OS_License;
-                device.Office = item.Office;
-                device.Office_License = item.Office_License;
-                device.Note = item.Note;
-                device.Depreciation = string.IsNullOrWhiteSpace(item.Depreciation) ? null : (DateTime?)Convert.ToDateTime(item.Depreciation);
-                device.Device_Status = item.Device_Status;
-                device.Addition_Information = item.Addition_Information;
-                device.Plant_Id = item.Plant_Id;
-                device.Create_Date = string.IsNullOrWhiteSpace(item.Create_Date) ? null : (DateTime?)Convert.ToDateTime(item.Create_Date);
-
-                devices.Add(device);
+                    devices.Add(device);
+                }
+                catch (Exception ex)
+                {
+                    DeviceViewModel.ErrDeviceExcel errDevice = new DeviceViewModel.ErrDeviceExcel(device);
+                    errDevice.errMsg = ex.ToString();
+                    errDeviceExcels.Add(errDevice);
+                }
             }
 
             return devices;
@@ -116,7 +127,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                 int startRow = worksheet.Dimension.Start.Row;
                 int endRow = worksheet.Dimension.End.Row;
 
-                for (int rowNo = startRow + 1; rowNo < endRow; rowNo++)
+                for (int rowNo = startRow + 1; rowNo <= endRow; rowNo++)
                 {
                     DeviceViewModel.DeviceExcelTemplate deviceTemplate = new DeviceViewModel.DeviceExcelTemplate();
                     deviceTemplate.Device_Type_Id = worksheet.Cells[rowNo, 1].Value?.ToString();

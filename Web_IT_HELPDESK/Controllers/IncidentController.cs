@@ -550,7 +550,7 @@ namespace Web_IT_HELPDESK.Controllers
 
                 if (lstInc.Count > 0)
                 {
-                    var stream = ExcelHelper.Instance.CreateExcelFile(null, lstInc, ExcelTitle.Instance.IncTitles(), colsDate);
+                    var stream = ExcelHelper.Instance.CreateExcelFile(null, lstInc, ExcelTitle.Instance.Incidents(), colsDate);
                     var buffer = stream as MemoryStream;
                     Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                     Response.AddHeader("Content-Disposition", "attachment; filename=IT Order Request.xlsx");

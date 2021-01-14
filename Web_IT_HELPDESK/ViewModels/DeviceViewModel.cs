@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Web;
 
@@ -80,6 +81,12 @@ namespace Web_IT_HELPDESK.ViewModels
             public DateTime? Create_Date { get; set; }
             public string errMsg { get; set; } 
             #endregion
+        }
+
+        public class QRDevices
+        {
+            public string Content { get; set; }
+            public string QRCode { get; set; }
         }
     }
 }

@@ -18,9 +18,9 @@ namespace Web_IT_HELPDESK.Commons
         {
             string logoPath = HttpContext.Current.Server.MapPath(@"~/Library/Picture/Logo.jpg");
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(QRText, QRCodeGenerator.ECCLevel.Q);
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(QRText, QRCodeGenerator.ECCLevel.Q, forceUtf8: true);
             QRCode qrCode = new QRCode(qrCodeData);
-            Bitmap qrCodeImage = qrCode.GetGraphic(20, Color.Black, Color.White, (Bitmap)Bitmap.FromFile(logoPath));
+            Bitmap qrCodeImage = qrCode.GetGraphic(2, Color.Black, Color.White, (Bitmap)Bitmap.FromFile(logoPath));
             return qrCodeImage;
         }
 

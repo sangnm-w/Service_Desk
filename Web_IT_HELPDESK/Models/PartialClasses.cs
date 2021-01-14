@@ -13,10 +13,6 @@ namespace Web_IT_HELPDESK
     [MetadataType(typeof(AllocationMetadata))]
     public partial class Allocation
     {
-        public Allocation()
-        {
-
-        }
     }
 
     [MetadataType(typeof(IncidentMetadata))]

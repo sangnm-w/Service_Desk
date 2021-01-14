@@ -1721,11 +1721,8 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Library\Document\" />
-<<<<<<< HEAD
     <Folder Include="Library\Picture\Allocation\PlantID\DeptID\" />
-=======
     <Folder Include="Library\Picture\Device\" />
->>>>>>> 4ca7ae2234fe912769fa52c2dba65b67f2dd84d7
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

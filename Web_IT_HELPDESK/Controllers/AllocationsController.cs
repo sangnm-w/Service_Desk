@@ -309,34 +309,6 @@ namespace Web_IT_HELPDESK.Controllers
             return View(allocation);
         }
 
-        #region ActionResult Delete
-        //// GET: Allocations/Delete/5
-        //public ActionResult Delete(Guid? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Allocation allocation = en.Allocations.Find(id);
-        //    if (allocation == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(allocation);
-        //}
-
-        //// POST: Allocations/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(Guid id)
-        //{
-        //    Allocation allocation = en.Allocations.Find(id);
-        //    en.Allocations.Remove(allocation);
-        //    en.SaveChanges();
-        //    return RedirectToAction("Index");
-        //} 
-        #endregion
-
         // GET: Allocations/ReAllocation
         [Authorize]
         public ActionResult ReAllocation(Guid? id)
@@ -379,7 +351,6 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // POST: Allocations/ReAllocation
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ReAllocation(Allocation allocation)
@@ -442,6 +413,39 @@ namespace Web_IT_HELPDESK.Controllers
             string deptId = null;
             deptId = en.Employees.FirstOrDefault(e => e.Emp_CJ == receiverId).Department_Id;
             return Json(deptId, JsonRequestBehavior.AllowGet);
+        }
+
+        public FileContentResult Download()
+        {
+            //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.DOWNLOAD, Commons.ModuleConstant.INCIDENT);
+            //if (hasPermission.Value == false)
+            //    return RedirectToAction("Index", "Home");
+
+            string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            var devices = AllocationModel.Instance.GetLastAllocationOfDeviceByPlantId(curr_plantId);
+
+            // Sort by Code
+            devices = devices.OrderBy(model => model.Device.Device_Code);
+
+            List<AllocationViewModel.ExcelReport> devices_ExcelReport = new List<AllocationViewModel.ExcelReport>();
+            foreach (var item in devices)
+            {
+                AllocationViewModel.ExcelReport entry = new AllocationViewModel.ExcelReport(item.Device, item.Allocation, item.Device?.Device_Type?.Device_Type_Name, item.Deliver_Name, item.Receiver_Name, item.Deliver_Name, item.Allocation?.Department?.Plant_Name);
+                devices_ExcelReport.Add(entry);
+            }
+
+            //Col need format date
+            List<int> colsDate = new List<int>()
+                {
+                    5 , 15 ,18 ,22 ,23
+                };
+
+            var stream = ExcelHelper.Instance.CreateExcelFile(null, devices_ExcelReport, ExcelTitle.Instance.DevicesExcelReport(), colsDate);
+            var buffer = stream as MemoryStream;
+
+            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            string fileName = "IT Devices.xlsx";
+            return File(buffer.ToArray(), contentType, fileName);
         }
 
         protected override void Dispose(bool disposing)
