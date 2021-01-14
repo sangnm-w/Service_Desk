@@ -1721,7 +1721,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Library\Document\" />
-    <Folder Include="Library\Picture\Allocation\PlantID\DeptID\" />
     <Folder Include="Library\Picture\Device\" />
   </ItemGroup>
   <ItemGroup>

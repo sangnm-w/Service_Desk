@@ -100,10 +100,15 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                     device.Office_License = item.Office_License;
                     device.Note = item.Note;
                     device.Depreciation = string.IsNullOrWhiteSpace(item.Depreciation) ? null : (DateTime?)Convert.ToDateTime(item.Depreciation);
-                    device.Device_Status = item.Device_Status;
+                    device.Device_Status = item.Device_Status.Trim();
                     device.Addition_Information = item.Addition_Information;
                     device.Plant_Id = item.Plant_Id;
                     device.Create_Date = string.IsNullOrWhiteSpace(item.Create_Date) ? null : (DateTime?)Convert.ToDateTime(item.Create_Date);
+
+                    if (!Enum.IsDefined(typeof(DeviceModel.DeviceStatus), item.Device_Status.Trim()))
+                    {
+                        throw new Exception("Wrong Device Status!");
+                    }
 
                     devices.Add(device);
                 }
