@@ -91,7 +91,7 @@ namespace Web_IT_HELPDESK.Controllers
                     5
                 };
 
-            var stream = ExcelHelper.Instance.CreateExcelFile(null, contactlist, ExcelTitle.Instance.ContactsTitles(), colsDate);
+            var stream = ExcelHelper.Instance.CreateExcelFile(null, contactlist, ExcelTitle.Instance.Contacts(), colsDate);
             var buffer = stream as MemoryStream;
             Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             Response.AddHeader("Content-Disposition", "attachment; filename=Contacts_" + plantName + ".xlsx");

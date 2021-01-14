@@ -11,7 +11,9 @@ namespace Web_IT_HELPDESK
     public partial class Device { }
 
     [MetadataType(typeof(AllocationMetadata))]
-    public partial class Allocation { }
+    public partial class Allocation
+    {
+    }
 
     [MetadataType(typeof(IncidentMetadata))]
     public partial class Incident
