@@ -7,24 +7,24 @@ namespace Web_IT_HELPDESK
 {
     public class DeviceMetadata
     {
-        //[Required]
+        [Required]
         [DisplayName("Device Type")]
         public Nullable<int> Device_Type_Id { get; set; }
 
-        //[Required]
+        [Required]
         [DisplayName("Device Name")]
         public string Device_Name { get; set; }
 
-        //[Required]
+        [Required]
         [DisplayName("Serial")]
         public string Serial_No { get; set; }
 
-        //[Required]
+        [Required]
         [DisplayName("Purchased Date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public Nullable<DateTime> Purchase_Date { get; set; }
 
-        //[Required]
+        [Required]
         [DisplayName("Depreciation")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public Nullable<DateTime> Depreciation { get; set; }
