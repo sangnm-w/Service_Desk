@@ -328,7 +328,6 @@ namespace Web_IT_HELPDESK.Controllers
                     List<Device> deviceList = new List<Device>();
                     List<DeviceViewModel.ErrDeviceExcel> errDeviceList = new List<DeviceViewModel.ErrDeviceExcel>();
 
-
                     deviceList = DeviceHelper.Instance.GetDevicesFromExcel(FileUpload.InputStream, out errDeviceList);
 
                     foreach (Device item in deviceList)
@@ -339,6 +338,7 @@ namespace Web_IT_HELPDESK.Controllers
                             string devicePath = DeviceHelper.Instance.CreateQRCode(item);
                             item.QRCodeFile = devicePath;
 
+                            en.Configuration.ValidateOnSaveEnabled = false;
                             en.Devices.Add(item);
                             en.SaveChanges();
                         }

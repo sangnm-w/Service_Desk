@@ -502,7 +502,6 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Model_labor_contract.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Library\Picture\Logo.jpg" />
     <Content Include="Model_labor_contract.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model_labor_contract.edmx</DependentUpon>
@@ -1720,8 +1719,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Library\Document\" />
-    <Folder Include="Library\Picture\Device\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
