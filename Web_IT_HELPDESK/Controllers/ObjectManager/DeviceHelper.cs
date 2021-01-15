@@ -129,8 +129,9 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             using (ExcelPackage package = new ExcelPackage(fileStream))
             {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
-                int startRow = worksheet.Dimension.Start.Row;
-                int endRow = worksheet.Dimension.End.Row;
+                var table = worksheet.Tables.First();
+                int startRow = table.Address.Start.Row;
+                int endRow = table.Address.End.Row;
 
                 for (int rowNo = startRow + 1; rowNo <= endRow; rowNo++)
                 {
