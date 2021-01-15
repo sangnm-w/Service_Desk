@@ -42,6 +42,7 @@
           <Property Name="Create_Date" Type="datetime" />
           <Property Name="Delete_Date" Type="datetime" />
           <Property Name="Flag_ReAllocation" Type="bit" />
+          <Property Name="QRCodeFile" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="BIZ_TRIP">
           <Key>
@@ -182,6 +183,7 @@
           <Property Name="Addition_Information" Type="nvarchar(max)" />
           <Property Name="Plant_Id" Type="nvarchar" MaxLength="50" />
           <Property Name="Create_Date" Type="datetime" />
+          <Property Name="QRCodeFile" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Device_Type">
           <Key>
@@ -866,12 +868,13 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
                 <Property Name="Delivery_Date" Type="datetime" />
                 <Property Name="Return_Date" Type="datetime" />
                 <Property Name="Department_Id" Type="nvarchar" MaxLength="50" />
-                <Property Name="Plant_Id" Type="nvarchar" MaxLength="4" />
+                <Property Name="Plant_Id" Type="nvarchar" MaxLength="50" />
                 <Property Name="Note" Type="nvarchar(max)" />
                 <Property Name="IP" Type="nvarchar" MaxLength="50" />
                 <Property Name="Create_Date" Type="datetime" />
                 <Property Name="Delete_Date" Type="datetime" />
                 <Property Name="Flag_ReAllocation" Type="bit" />
+                <Property Name="QRCodeFile" Type="nvarchar(max)" />
               </RowType>
             </CollectionType>
           </ReturnType>
@@ -1056,23 +1059,6 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="R_D" Type="Int32" />
           <Property Name="SALES_SUPPORT" Type="Int32" />
         </ComplexType>
-        <ComplexType Name="GetLastAllocationOfDevice_Result">
-          <Property Name="Allocation_Id" Type="Guid" Nullable="false" />
-          <Property Name="Device_Id" Type="Guid" />
-          <Property Name="Memo_Id" Type="Guid" />
-          <Property Name="Allocation_Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Deliver" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Receiver" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Delivery_Date" Type="DateTime" />
-          <Property Name="Return_Date" Type="DateTime" />
-          <Property Name="Department_Id" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Plant_Id" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
-          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="IP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Create_Date" Type="DateTime" />
-          <Property Name="Delete_Date" Type="DateTime" />
-          <Property Name="Flag_ReAllocation" Type="Boolean" />
-        </ComplexType>
         <EntityType Name="Album">
           <Key>
             <PropertyRef Name="AlbumId" />
@@ -1116,6 +1102,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="Flag_ReAllocation" Type="Boolean" />
           <NavigationProperty Name="Department" Relationship="Self.FK_Allocation_Department1" FromRole="Allocation" ToRole="Department" />
           <NavigationProperty Name="Device" Relationship="Self.FK_Allocation_Device" FromRole="Allocation" ToRole="Device" />
+          <Property Name="QRCodeFile" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="BIZ_TRIP">
           <Key>
@@ -1273,6 +1260,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <NavigationProperty Name="Allocations" Relationship="Self.FK_Allocation_Device" FromRole="Device" ToRole="Allocation" />
           <NavigationProperty Name="CONTRACT" Relationship="Self.FK_Device_CONTRACT" FromRole="Device" ToRole="CONTRACT" />
           <NavigationProperty Name="Device_Type" Relationship="Self.FK_Device_Device_Type" FromRole="Device" ToRole="Device_Type" />
+          <Property Name="QRCodeFile" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Device_Type">
           <Key>
@@ -2052,7 +2040,6 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             <Parameter Name="v_todate" Mode="In" Type="DateTime" />
             <Parameter Name="v_plant" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="GetLastAllocationOfDevice" IsComposable="true" EntitySet="Allocations" ReturnType="Collection(ServiceDeskModel.Allocation)" />
           <EntitySet Name="Employee_Screen" EntityType="ServiceDeskModel.Employee_Screen" />
           <AssociationSet Name="FK_Employee_Screen_Employee" Association="ServiceDeskModel.FK_Employee_Screen_Employee">
             <End Role="Employee" EntitySet="Employees" />
@@ -2062,6 +2049,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             <End Role="Screen" EntitySet="Screens" />
             <End Role="Employee_Screen" EntitySet="Employee_Screen" />
           </AssociationSet>
+          <FunctionImport Name="GetLastAllocationOfDevice" IsComposable="true" EntitySet="Allocations" ReturnType="Collection(ServiceDeskModel.Allocation)" />
         </EntityContainer>
         <EntityType Name="Employee_Screen">
           <Key>
@@ -2128,6 +2116,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <EntitySetMapping Name="Allocations">
             <EntityTypeMapping TypeName="ServiceDeskModel.Allocation">
               <MappingFragment StoreEntitySet="Allocation">
+                <ScalarProperty Name="QRCodeFile" ColumnName="QRCodeFile" />
                 <ScalarProperty Name="Allocation_Id" ColumnName="Allocation_Id" />
                 <ScalarProperty Name="Device_Id" ColumnName="Device_Id" />
                 <ScalarProperty Name="Memo_Id" ColumnName="Memo_Id" />
@@ -2269,6 +2258,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <EntitySetMapping Name="Devices">
             <EntityTypeMapping TypeName="ServiceDeskModel.Device">
               <MappingFragment StoreEntitySet="Device">
+                <ScalarProperty Name="QRCodeFile" ColumnName="QRCodeFile" />
                 <ScalarProperty Name="Device_Id" ColumnName="Device_Id" />
                 <ScalarProperty Name="Contract_Id" ColumnName="Contract_Id" />
                 <ScalarProperty Name="Device_Type_Id" ColumnName="Device_Type_Id" />
@@ -2642,8 +2632,6 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionName="ServiceDeskModel.Store.GetLastAllocationOfDevice" FunctionImportName="GetLastAllocationOfDevice">
-          </FunctionImportMapping>
           <EntitySetMapping Name="Employee_Screen">
             <EntityTypeMapping TypeName="ServiceDeskModel.Employee_Screen">
               <MappingFragment StoreEntitySet="Employee_Screen">
@@ -2655,6 +2643,8 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetLastAllocationOfDevice" FunctionName="ServiceDeskModel.Store.GetLastAllocationOfDevice">
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

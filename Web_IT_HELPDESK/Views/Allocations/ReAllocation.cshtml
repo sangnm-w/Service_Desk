@@ -367,8 +367,7 @@
                     cache: false,
                     success: function (result) {
                         if (result != null && result != '') {
-                            $('.departmentDDL select').val(result).trigger
-                                ('selectron.change');
+                            $('.departmentDDL select').val(result).trigger('selectron.change');
                             $('input[type=hidden]#Department_Id').val(result);
                         } else {
                             $('.departmentDDL select').val(null).trigger('selectron.change');
@@ -376,15 +375,13 @@
                         }
                     },
                     error: function (result) {
-                        $('.departmentDDL select').val(null).trigger
-                            ('selectron.change');
+                        $('.departmentDDL select').val(null).trigger('selectron.change');
                         $('input[type=hidden]#Department_Id').val(null);
                     }
                 });
             }
             else {
-                $('.departmentDDL select').val(null).trigger
-                    ('selectron.change');
+                $('.departmentDDL select').val(null).trigger('selectron.change');
                 $('input[type=hidden]#Department_Id').val(null);
             }
         };

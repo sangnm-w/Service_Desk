@@ -1,131 +1,220 @@
 ﻿@model Web_IT_HELPDESK.Device
+@using Web_IT_HELPDESK.ViewModels
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Device Management - Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@section Style {
+    <style>
+        .material {
+            border: none;
+            border-bottom: 1px solid #ccc;
+            box-shadow: none;
+            background: none !important;
+        }
 
-<h2>Details</h2>
+        textarea {
+            resize: vertical;
+            min-height: 34px;
+            max-height: 102px;
+        }
+    </style>
+}
 
-<div>
-    <h4>Device</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Device_Name)
-        </dt>
+<!--Region Device Information-->
+<div class="col-md-12 panel-info">
+    <div class="content-box-header panel-heading">
+        <div class="panel-title ">Device Info</div>
+    </div>
+    <div class="content-box-large box-with-header">
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <fieldset disabled style="background-color:none;">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Device_Type.Device_Type_Name, "Device Type", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Device_Type.Device_Type_Name, "Device_Type_Id", new { htmlAttributes = new { @class = "form-control material", } })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Device_Name, "Device Name", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Device_Name, "Device_Name", new { htmlAttributes = new { @class = "form-control material" } })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Serial_No, "Serial Number", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Serial_No, "Serial Number", new { htmlAttributes = new { @class = "form-control material" } })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.CONTRACT.CONTRACTNAME, "Contract", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.CONTRACT.CONTRACTNAME, "Contract_Id", null, new { htmlAttributes = new { @class = "form-control material" } })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Purchase_Date, "Purchase Date", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Purchase_Date, "Purchase_Date", new { htmlAttributes = new { @class = "form-control material" } })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Depreciation, "Depreciation", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Depreciation, "Depreciation", new { htmlAttributes = new { @class = "form-control material" } })
+                    </div>
+                </div>
+                @if (new List<int> { 3, 6 }.Contains((int)Model.Device_Type_Id))
+                {
 
-        <dd>
-            @Html.DisplayFor(model => model.Device_Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Serial_No)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Serial_No)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Purchase_Date)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Purchase_Date)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CPU)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CPU)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.RAM)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.RAM)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.DISK)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.DISK)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Operation_System)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Operation_System)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Note)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Note)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Depreciation)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Depreciation)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Device_Status)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Device_Status)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Plant_Id)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Plant_Id)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Addition_Information)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Addition_Information)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CONTRACT.VENDOR)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CONTRACT.VENDOR)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Device_Type.Device_Type_Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Device_Type.Device_Type_Name)
-        </dd>
-
-    </dl>
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.CPU, "CPU", htmlAttributes: new { @class = "control-label" })
+                            @Html.EditorFor(model => model.CPU, "CPU", new { htmlAttributes = new { @class = "form-control material" } })
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.RAM, "RAM", htmlAttributes: new { @class = "control-label" })
+                            @Html.EditorFor(model => model.RAM, "RAM", new { htmlAttributes = new { @class = "form-control material" } })
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.DISK, "DISK", htmlAttributes: new { @class = "control-label" })
+                            @Html.EditorFor(model => model.DISK, "DISK", new { htmlAttributes = new { @class = "form-control material" } })
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.Device_Status, "Device Status", htmlAttributes: new { @class = "control-label" })
+                            @Html.EditorFor(model => model.Device_Status, "Device_Status", new { htmlAttributes = new { @class = "form-control material" } })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            @Html.LabelFor(model => model.Operation_System, "Operation System", htmlAttributes: new { @class = "control-label" })
+                            @Html.EditorFor(model => model.Operation_System, "Operation_System", new { htmlAttributes = new { @class = "form-control material" } })
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(model => model.Office, "Microsoft Office", htmlAttributes: new { @class = "control-label" })
+                            @Html.EditorFor(model => model.Office, "Office", new { htmlAttributes = new { @class = "form-control material" } })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            @Html.LabelFor(model => model.OS_License, "OS License", htmlAttributes: new { @class = "control-label" })
+                            @Html.EditorFor(model => model.OS_License, "OS_License", new { htmlAttributes = new { @class = "form-control material" } })
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(model => model.Office_License, "Office License", htmlAttributes: new { @class = "control-label" })
+                            @Html.EditorFor(model => model.Office_License, "Office_License", new { htmlAttributes = new { @class = "form-control material" } })
+                        </div>
+                    </div>
+                }
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Note, "Note", htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.Note, htmlAttributes: new { @class = "form-control material", @rows = 2 })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Addition_Information, "Addition Information", htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.Addition_Information, htmlAttributes: new { @class = "form-control material", @rows = 2 })
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-md-12" style="text-align:center">
+                        @if (Model.QRCodeFile != null)
+                        {
+                            <img src="@Url.Content(Model.QRCodeFile)" alt="@Model.QRCodeFile.Substring(Model.QRCodeFile.LastIndexOf(@"\") + 1)" width="200" height="200" />
+                        }
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Device_Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<!--End Region Device Information-->
+<!--Region Table Allocations-->
+<div class="col-md-12 panel-info">
+    <div class="content-box-header panel-heading">
+        <div class="panel-title ">History Provides</div>
+    </div>
+    <div class="content-box-large box-with-header">
+        <table class="display nowrap" id="allocation" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayName("Provding Code")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Provider")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Receiver")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Provided Date")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Revoked Date")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Note")
+                    </th>
+                    <th>
+                        @Html.DisplayName("IP")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Created Date")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Department")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Plant")
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (((List<AllocationViewModel>)ViewBag.Allocations).Count > 0)
+                {
+                    foreach (var item in (List<AllocationViewModel>)ViewBag.Allocations)
+                    {
+                        <tr>
+                            <td>
+                                <a href="@Url.Action("Details","Allocations",new { id = item.Allocation.Allocation_Id })">@Html.DisplayFor(modelItem => item.Allocation.Allocation_Code)</a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Deliver_Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Receiver_Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Allocation.Delivery_Date)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Allocation.Return_Date)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Allocation.Note)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Allocation.IP)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Allocation.Create_Date)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Allocation.Department.Department_Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Allocation.Department.Plant_Name)
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Script {
+    <script type="text/javascript">
+        $('#allocation').DataTable({
+            aaSorting: [[7, 'desc']],
+            "scrollX": true
+        });
+    </script>
+}

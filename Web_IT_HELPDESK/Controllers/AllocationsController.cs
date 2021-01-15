@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using Web_IT_HELPDESK.Commons;
+using Web_IT_HELPDESK.Controllers.ObjectManager;
 using Web_IT_HELPDESK.Models;
+using Web_IT_HELPDESK.Properties;
 using Web_IT_HELPDESK.ViewModels;
 using static Web_IT_HELPDESK.Models.AutoCompleteModel;
 using EntityState = System.Data.Entity.EntityState;
@@ -20,12 +25,11 @@ namespace Web_IT_HELPDESK.Controllers
         public ActionResult Index()
         {
             string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
-            List<AllocationViewModel> avm = AllocationModel.Instance.GetLastAllocationOfDeviceByPlantId(curr_plantId);
+            IEnumerable<AllocationViewModel> avm = AllocationModel.Instance.GetLastAllocationOfDeviceByPlantId(curr_plantId);
             return View(avm);
         }
 
         // GET: Allocations/Details/5
-        [Authorize]
         public ActionResult Details(Guid? id)
         {
             if (id == null)
@@ -37,6 +41,15 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 return HttpNotFound();
             }
+            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+
+            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).EmployeeName;
+            ViewBag.ReceiverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).EmployeeName;
+            ViewBag.DeviceTypeId = en.Devices.FirstOrDefault(d => d.Device_Id == allocation.Device_Id).Device_Type_Id;
+
+            List<AllocationViewModel> allocations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
+            ViewBag.Allocations = allocations;
+
             return View(allocation);
         }
 
@@ -83,7 +96,7 @@ namespace Web_IT_HELPDESK.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Allocation allocation)
         {
-            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            string empPlantID = CurrentUser.Instance.User.Plant_Id;
 
             if (allocation.Return_Date != null)
             {
@@ -100,9 +113,14 @@ namespace Web_IT_HELPDESK.Controllers
                 allocation.Allocation_Id = Guid.NewGuid();
                 allocation.Create_Date = DateTime.Now;
                 allocation.Flag_ReAllocation = true;
-                allocation.Plant_Id = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).Plant_Id;
+                allocation.Plant_Id = empPlantID;
+
+                string filePath = AllocationHelper.Instance.CreateQRCode(allocation);
+                allocation.QRCodeFile = filePath;
+
                 en.Allocations.Add(allocation);
                 en.SaveChanges();
+
                 return RedirectToAction("Index");
             }
 
@@ -182,6 +200,10 @@ namespace Web_IT_HELPDESK.Controllers
             if (ModelState.IsValid)
             {
                 allocation.Plant_Id = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).Plant_Id;
+
+                string filePath = AllocationHelper.Instance.CreateQRCode(allocation);
+                allocation.QRCodeFile = filePath;
+
                 en.Entry(allocation).State = EntityState.Modified;
                 en.SaveChanges();
                 return RedirectToAction("Index");
@@ -231,7 +253,7 @@ namespace Web_IT_HELPDESK.Controllers
 
             ViewBag.DeviceTypeId = en.Devices.FirstOrDefault(d => d.Device_Id == allocation.Device_Id).Device_Type_Id;
 
-            ViewBag.DepartmentName = en.Departments.FirstOrDefault(d => d.Department_Id == allocation.Department_Id).Department_Name;
+            ViewBag.DepartmentName = DepartmentModel.Instance.getDeptName(allocation.Plant_Id, allocation.Department_Id);
 
             List<AllocationViewModel> allocations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
             ViewBag.Allocations = allocations;
@@ -261,6 +283,10 @@ namespace Web_IT_HELPDESK.Controllers
             if (ModelState.IsValid)
             {
                 allocation.Plant_Id = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).Plant_Id;
+
+                string filePath = AllocationHelper.Instance.CreateQRCode(allocation);
+                allocation.QRCodeFile = filePath;
+
                 en.Entry(allocation).State = EntityState.Modified;
                 en.SaveChanges();
                 return RedirectToAction("Index");
@@ -275,41 +301,13 @@ namespace Web_IT_HELPDESK.Controllers
 
             ViewBag.DeviceTypeId = en.Devices.FirstOrDefault(d => d.Device_Id == allocation.Device_Id).Device_Type_Id;
 
-            ViewBag.DepartmentName = en.Departments.FirstOrDefault(d => d.Department_Id == allocation.Department_Id).Department_Name;
+            ViewBag.DepartmentName = DepartmentModel.Instance.getDeptName(allocation.Plant_Id, allocation.Department_Id);
 
             List<AllocationViewModel> allocations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
             ViewBag.Allocations = allocations;
 
             return View(allocation);
         }
-
-        #region ActionResult Delete
-        //// GET: Allocations/Delete/5
-        //public ActionResult Delete(Guid? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Allocation allocation = en.Allocations.Find(id);
-        //    if (allocation == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(allocation);
-        //}
-
-        //// POST: Allocations/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(Guid id)
-        //{
-        //    Allocation allocation = en.Allocations.Find(id);
-        //    en.Allocations.Remove(allocation);
-        //    en.SaveChanges();
-        //    return RedirectToAction("Index");
-        //} 
-        #endregion
 
         // GET: Allocations/ReAllocation
         [Authorize]
@@ -353,7 +351,6 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // POST: Allocations/ReAllocation
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ReAllocation(Allocation allocation)
@@ -375,6 +372,10 @@ namespace Web_IT_HELPDESK.Controllers
                 allocation.Create_Date = DateTime.Now;
                 allocation.Flag_ReAllocation = true;
                 allocation.Plant_Id = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).Plant_Id;
+
+                string filePath = AllocationHelper.Instance.CreateQRCode(allocation);
+                allocation.QRCodeFile = filePath;
+
                 en.Allocations.Add(allocation);
                 en.SaveChanges();
                 return RedirectToAction("Index");
@@ -412,6 +413,39 @@ namespace Web_IT_HELPDESK.Controllers
             string deptId = null;
             deptId = en.Employees.FirstOrDefault(e => e.Emp_CJ == receiverId).Department_Id;
             return Json(deptId, JsonRequestBehavior.AllowGet);
+        }
+
+        public FileContentResult Download()
+        {
+            //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.DOWNLOAD, Commons.ModuleConstant.INCIDENT);
+            //if (hasPermission.Value == false)
+            //    return RedirectToAction("Index", "Home");
+
+            string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            var devices = AllocationModel.Instance.GetLastAllocationOfDeviceByPlantId(curr_plantId);
+
+            // Sort by Code
+            devices = devices.OrderBy(model => model.Device.Device_Code);
+
+            List<AllocationViewModel.ExcelReport> devices_ExcelReport = new List<AllocationViewModel.ExcelReport>();
+            foreach (var item in devices)
+            {
+                AllocationViewModel.ExcelReport entry = new AllocationViewModel.ExcelReport(item.Device, item.Allocation, item.Device?.Device_Type?.Device_Type_Name, item.Deliver_Name, item.Receiver_Name, item.Deliver_Name, item.Allocation?.Department?.Plant_Name);
+                devices_ExcelReport.Add(entry);
+            }
+
+            //Col need format date
+            List<int> colsDate = new List<int>()
+                {
+                    5 , 15 ,18 ,22 ,23
+                };
+
+            var stream = ExcelHelper.Instance.CreateExcelFile(null, devices_ExcelReport, ExcelTitle.Instance.DevicesExcelReport(), colsDate);
+            var buffer = stream as MemoryStream;
+
+            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            string fileName = "IT Devices.xlsx";
+            return File(buffer.ToArray(), contentType, fileName);
         }
 
         protected override void Dispose(bool disposing)

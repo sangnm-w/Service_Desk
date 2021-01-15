@@ -105,6 +105,10 @@
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="QRCoder, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\QRCoder.1.4.1\lib\net40\QRCoder.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -160,6 +164,7 @@
     <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Album.cs">
@@ -190,6 +195,7 @@
       <DependentUpon>Model_labor_contract.tt</DependentUpon>
     </Compile>
     <Compile Include="Commons\Constant.cs" />
+    <Compile Include="Commons\QRCodeUtility.cs" />
     <Compile Include="CONTRACT.cs">
       <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
@@ -210,8 +216,9 @@
     <Compile Include="Controllers\CONTRACTController.cs" />
     <Compile Include="Controllers\DevicesController.cs" />
     <Compile Include="Controllers\Device_TypeController.cs" />
-    <Compile Include="Controllers\ObjectManager\BizTripHelper.cs" />
+    <Compile Include="Controllers\ObjectManager\AllocationHelper.cs" />
     <Compile Include="Controllers\ObjectManager\Biz_TripHelper.cs" />
+    <Compile Include="Controllers\ObjectManager\DeviceHelper.cs" />
     <Compile Include="Controllers\ObjectManager\ExcelTitle.cs" />
     <Compile Include="Controllers\DrinkingRequestController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
@@ -273,9 +280,6 @@
       <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="func_report_detail_Result.cs">
-      <DependentUpon>ServicesDesk.tt</DependentUpon>
-    </Compile>
-    <Compile Include="GetLastAllocationOfDevice_Result.cs">
       <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
@@ -1628,7 +1632,6 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Allocations\Create.cshtml" />
     <Content Include="Views\Allocations\Delete.cshtml" />
-    <Content Include="Views\Allocations\Details.cshtml" />
     <Content Include="Views\Allocations\Edit.cshtml" />
     <Content Include="Views\Allocations\Index.cshtml" />
     <Content Include="Views\Allocations\ReAllocation.cshtml" />
@@ -1712,11 +1715,10 @@
     <Content Include="Views\BIZ_TRIP\bod_confirm.cshtml" />
     <Content Include="Views\SealUsing\Details.cshtml" />
     <Content Include="Views\BIZ_TRIP\Details.cshtml" />
+    <Content Include="Views\Allocations\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Library\Document\" />
-    <Folder Include="Library\Picture\Device\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

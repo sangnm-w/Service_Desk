@@ -222,13 +222,11 @@
             }
         });
 
-        $.fn.dataTable.moment('D/MM/YYYY');
-
         $('#contract').DataTable({
             'aaSorting': [0, 'desc'],
-            "columnDefs": [
-                { className: "borderlastcol", "targets": [9] }
-            ],
+            //"columnDefs": [
+            //    { className: "borderlastcol", "targets": [9] }
+            //],
             'scrollX': true,
         });
 
