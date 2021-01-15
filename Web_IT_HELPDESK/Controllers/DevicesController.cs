@@ -93,6 +93,7 @@ namespace Web_IT_HELPDESK.Controllers
                 device.Device_Id = Guid.NewGuid();
                 device.Device_Code = DeviceModel.Instance.Generate_DeviceCode(empPlantID, device.Device_Type_Id);
                 device.Create_Date = DateTime.Now;
+                device.Device_Status = DeviceModel.DeviceStatus.In_Stock.ToString();
 
                 device.Plant_Id = empPlantID;
 
@@ -162,6 +163,7 @@ namespace Web_IT_HELPDESK.Controllers
                 device.Device_Id = Guid.NewGuid();
                 device.Device_Code = DeviceModel.Instance.Generate_DeviceCode(empPlantID, device.Device_Type_Id);
                 device.Create_Date = DateTime.Now;
+                device.Device_Status = DeviceModel.DeviceStatus.In_Stock.ToString();
                 device.Plant_Id = empPlantID;
 
                 string deviceQRPath = DeviceHelper.Instance.CreateQRCode(device);
@@ -326,7 +328,6 @@ namespace Web_IT_HELPDESK.Controllers
                     List<Device> deviceList = new List<Device>();
                     List<DeviceViewModel.ErrDeviceExcel> errDeviceList = new List<DeviceViewModel.ErrDeviceExcel>();
 
-
                     deviceList = DeviceHelper.Instance.GetDevicesFromExcel(FileUpload.InputStream, out errDeviceList);
 
                     foreach (Device item in deviceList)
@@ -337,6 +338,7 @@ namespace Web_IT_HELPDESK.Controllers
                             string devicePath = DeviceHelper.Instance.CreateQRCode(item);
                             item.QRCodeFile = devicePath;
 
+                            en.Configuration.ValidateOnSaveEnabled = false;
                             en.Devices.Add(item);
                             en.SaveChanges();
                         }
@@ -349,7 +351,7 @@ namespace Web_IT_HELPDESK.Controllers
                     }
 
                     //Column need format date
-                    List<int> colsDate = new List<int>() { 4, 18 };
+                    List<int> colsDate = new List<int>() { 4, 14, 18 };
 
                     if (errDeviceList.Count > 0)
                     {
@@ -361,7 +363,6 @@ namespace Web_IT_HELPDESK.Controllers
                         Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                         Response.AddHeader("Content-Disposition", "attachment; filename=Error Devices List.xlsx");
                         Response.BinaryWrite(buffer.ToArray());
-                        //Response.Flush();
                         ViewBag.Error = "An error has occurred while uploading. Please check Error_Devices_List file!";
                     }
                     else
