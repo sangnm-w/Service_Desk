@@ -8,10 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SomeThing", "SomeThing", "{58DC11CF-5610-4031-BB7F-629122D04B90}"
 	ProjectSection(SolutionItems) = preProject
 		GitMind.txt = GitMind.txt
-		Import normal.cs = Import normal.cs
-		Import with EPPlus mvcCore.cs = Import with EPPlus mvcCore.cs
 		Task.txt = Task.txt
-		TextFile1.txt = TextFile1.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D83FAC08-B8D9-4B62-B05B-AF7927206C66}"
