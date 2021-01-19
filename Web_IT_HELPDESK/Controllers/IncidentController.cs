@@ -263,12 +263,22 @@ namespace Web_IT_HELPDESK.Controllers
                 /*1========== Sending Mail ==========================================================================================*/
                 IncidentViewModel incEx = IncidentModel.Instance.get_Incident(incident.Id);
 
-                List<string> toMails = en.Employees.Where(e => e.Plant_Id == curr_PlantID && e.Department_Id == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
+                List<string> toMails = new List<string>();
+
+                if (curr_PlantID == "V2010")
+                {
+                    toMails = en.Employees.Where(e => e.Plant_Id == "V2090" && e.Department_Id == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
+                }
+                else
+                {
+                    toMails = en.Employees.Where(e => e.Plant_Id == curr_PlantID && e.Department_Id == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
+                }
+
                 List<string> ccMails = new List<string>();
                 string managerMail = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantID && d.Department_Id == curr_DeptID).Manager_Email;
                 if (managerMail != null)
                     ccMails.Add(managerMail);
-                if (curr_PlantID != "V2090")
+                if (curr_PlantID != "V2090" && curr_PlantID != "V2010")
                     ccMails.Add("itgroup@cjvina.com");
 
                 bool resultSend = IncidentHelper.Instance.Send_IncidentEmail(incEx, "CREATE", toMails, ccMails);
@@ -338,9 +348,19 @@ namespace Web_IT_HELPDESK.Controllers
 
                 /*1========== Sending Mail ==========================================================================================*/
                 IncidentViewModel incEx = IncidentModel.Instance.get_Incident(inc.Id);
-                List<string> toMails = en.Employees.Where(e => e.Plant_Id == curr_PlantID && e.Department_Id == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
+                List<string> toMails = new List<string>();
+
+                if (curr_PlantID == "V2010")
+                {
+                    toMails = en.Employees.Where(e => e.Plant_Id == "V2090" && e.Department_Id == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
+                }
+                else
+                {
+                    toMails = en.Employees.Where(e => e.Plant_Id == curr_PlantID && e.Department_Id == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
+                }
+
                 List<string> ccMails = new List<string>();
-                if (curr_PlantID != "V2090")
+                if (curr_PlantID != "V2090" && curr_PlantID != "V2010")
                     ccMails.Add("itgroup@cjvina.com");
                 bool resultSend = IncidentHelper.Instance.Send_IncidentEmail(incEx, "EDIT", toMails, ccMails);
                 /*1==================================================================================================================*/
@@ -398,11 +418,22 @@ namespace Web_IT_HELPDESK.Controllers
                 /*1========== Sending Mail ==========================================================================================*/
                 IncidentViewModel incEx = IncidentModel.Instance.get_Incident(inc.Id);
                 List<string> toMails = new List<string>() { en.Employees.FirstOrDefault(e => e.Emp_CJ == inc.User_create).Email };
-                List<string> ccMails = en.Employees.Where(e => e.Plant_Id == curr_PlantID && e.Department_Id == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
-                string managerMail = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantID && d.Department_Id == curr_DeptID).Manager_Email;
+
+                List<string> ccMails = new List<string>();
+
+                if (curr_PlantID == "V2010")
+                {
+                    ccMails = en.Employees.Where(e => e.Plant_Id == "V2090" && e.Department_Id == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
+                }
+                else
+                {
+                    ccMails = en.Employees.Where(e => e.Plant_Id == curr_PlantID && e.Department_Id == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
+                }
+
+                string managerMail = en.Departments.FirstOrDefault(d => d.Plant_Id == inc.Plant && d.Department_Id == inc.DepartmentId).Manager_Email;
                 if (managerMail != null && !ccMails.Contains(managerMail))
                     ccMails.Add(managerMail);
-                if (curr_PlantID != "V2090")
+                if (curr_PlantID != "V2090" && curr_PlantID != "V2010")
                     ccMails.Add("itgroup@cjvina.com");
 
                 bool resultSend = IncidentHelper.Instance.Send_IncidentEmail(incEx, "SOLVE", toMails, ccMails);
