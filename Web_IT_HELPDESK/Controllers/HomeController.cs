@@ -139,13 +139,15 @@ namespace Web_IT_HELPDESK.Controllers
 
         private string GetDept_id()
         {
-            string dept_id = en.Employees.Where(f => (f.Emp_CJ == session_emp)).Select(f => f.Department_Id).SingleOrDefault();
+            //string dept_id = en.Employees.Where(f => (f.Emp_CJ == session_emp)).Select(f => f.Department_Id).SingleOrDefault();
+            string dept_id = en.Employee_New.Where(f => (f.Emp_CJ == session_emp)).Select(f => f.Department_ID).SingleOrDefault();
             return dept_id;
         }
 
         private string GetPlant_id()
         {
-            string plant_id = en.Employees.Where(f => (f.Emp_CJ == session_emp)).Select(f => f.Plant_Id).SingleOrDefault();
+            //string plant_id = en.Employees.Where(f => (f.Emp_CJ == session_emp)).Select(f => f.Plant_Id).SingleOrDefault();
+            string plant_id = en.Employee_New.Where(f => (f.Emp_CJ == session_emp)).Select(f => f.Plant_ID).SingleOrDefault();
             return plant_id;
         }
 

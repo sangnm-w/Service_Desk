@@ -63,6 +63,7 @@ namespace Web_IT_HELPDESK
         public virtual DbSet<UserLogon> UserLogons { get; set; }
         public virtual DbSet<ORDER_TYPE_VIEW> ORDER_TYPE_VIEW { get; set; }
         public virtual DbSet<Employee_Screen> Employee_Screen { get; set; }
+        public virtual DbSet<Employee_New> Employee_New { get; set; }
     
         [DbFunction("ServiceDeskEntities", "func_report_detail")]
         public virtual IQueryable<func_report_detail_Result> func_report_detail(Nullable<System.DateTime> v_fromdate, Nullable<System.DateTime> v_todate, string v_plant)

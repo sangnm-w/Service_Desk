@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Web_IT_HELPDESK.Employee>
+﻿@model IEnumerable<Web_IT_HELPDESK.Employee_New>
 
 @{
     ViewBag.Title = "Contacts";
@@ -42,7 +42,7 @@
     <div id="accordion">
         @foreach (var item_department in ViewBag.departments)
         {
-            int countEmpByDept = Model.Where(e => e.Department_Id == item_department.Department_Id).Count();
+            int countEmpByDept = Model.Where(e => e.Department_ID == item_department.Department_Id).Count();
             if (countEmpByDept > 0)
             {
                 <h3>@item_department.Department_Name</h3>
@@ -69,20 +69,23 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in Model.Where(i => i.Deactive != true && i.Department_Id == item_department.Department_Id).Distinct())
+                                @foreach (var item in Model.Where(i => i.Deactive != true && i.Department_ID == item_department.Department_Id).Distinct())
                                 {
                                     <tr>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Emp_CJ)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.EmployeeName)
+                                            @Html.DisplayFor(modelItem => item.Employee_Name)
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Email)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.Phone)
+                                            @if (!string.IsNullOrWhiteSpace(item.Email) && !item.Email.Contains("@cj.net"))
+                                            {
+                                                @Html.DisplayFor(modelItem => item.Phone)
+                                            }
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Birthday)

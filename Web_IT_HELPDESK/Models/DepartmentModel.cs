@@ -38,7 +38,8 @@ namespace Web_IT_HELPDESK.Models
         {
             ServiceDeskEntities en = new ServiceDeskEntities();
 
-            return en.Departments.Join(en.Employees, (d) => d.Manager_Id, (e) => e.Emp_CJ, (d, e) => new { e.Emp_CJ, e.Email, d.Plant_Id, d.Department_Id }).FirstOrDefault(d => d.Plant_Id == plantId && d.Department_Id == deptId && d.Emp_CJ == empId).Email;
+            return en.Departments.Join(en.Employee_New, (d) => d.Manager_Id, (e) => e.Emp_CJ, (d, e) => new { e.Emp_CJ, e.Email, d.Plant_Id, d.Department_Id }).FirstOrDefault(d => d.Plant_Id == plantId && d.Department_Id == deptId && d.Emp_CJ == empId).Email;
+            //return en.Departments.Join(en.Employees, (d) => d.Manager_Id, (e) => e.Emp_CJ, (d, e) => new { e.Emp_CJ, e.Email, d.Plant_Id, d.Department_Id }).FirstOrDefault(d => d.Plant_Id == plantId && d.Department_Id == deptId && d.Emp_CJ == empId).Email;
         }
     }
 }

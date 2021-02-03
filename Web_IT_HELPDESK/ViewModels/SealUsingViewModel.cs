@@ -26,9 +26,9 @@ namespace Web_IT_HELPDESK.ViewModels
                 Del = false;
 
                 Employee_ID = CurrentUser.Instance.User.Emp_CJ;
-                Employee_name = CurrentUser.Instance.User.EmployeeName;
-                Plant = CurrentUser.Instance.User.Plant_Id;
-                DepartmentId = CurrentUser.Instance.User.Department_Id;
+                Employee_name = CurrentUser.Instance.User.Employee_Name;
+                Plant = CurrentUser.Instance.User.Plant_ID;
+                DepartmentId = CurrentUser.Instance.User.Department_ID;
                 DeptName = DepartmentModel.Instance.getDeptName(Plant, DepartmentId);
             }
 

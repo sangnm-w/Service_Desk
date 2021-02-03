@@ -215,7 +215,6 @@
     <Compile Include="Controllers\ContactsController.cs" />
     <Compile Include="Controllers\CONTRACTController.cs" />
     <Compile Include="Controllers\DevicesController.cs" />
-    <Compile Include="Controllers\Device_TypeController.cs" />
     <Compile Include="Controllers\ObjectManager\AllocationHelper.cs" />
     <Compile Include="Controllers\ObjectManager\Biz_TripHelper.cs" />
     <Compile Include="Controllers\ObjectManager\DeviceHelper.cs" />
@@ -268,6 +267,9 @@
       <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="EmployeeInfo.cs">
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Employee_New.cs">
       <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="Employee_Screen.cs">
