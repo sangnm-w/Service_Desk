@@ -341,11 +341,11 @@ namespace Web_IT_HELPDESK.Controllers
                         //add file input stream into byte array
                         Request.Files[upload].InputStream.Read(fileData, 0, Convert.ToInt32(Request.Files[upload].InputStream.Length));
                         //create system.data.linq object using byte array
-                        System.Data.Linq.Binary binaryFile = new System.Data.Linq.Binary(fileData);
+                        Binary binaryFile = new Binary(fileData);
                         //initialise object of FileDump LINQ to sql class passing values to be inserted
 
                         inc.FileAttched = binaryFile.ToArray();
-                        inc.FileName = System.IO.Path.GetFileName(Request.Files[upload].FileName);
+                        inc.FileName = Path.GetFileName(Request.Files[upload].FileName);
                     }
                 }
 
