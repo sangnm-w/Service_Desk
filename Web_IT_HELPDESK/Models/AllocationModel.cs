@@ -22,22 +22,24 @@ namespace Web_IT_HELPDESK.Models
             List<AllocationViewModel> res = new List<AllocationViewModel>();
 
             var allocations = en.Allocations
-               .Join(en.Employees,
+               //.Join(en.Employees,
+               .Join(en.Employee_New,
                a => a.Deliver,
                e => e.Emp_CJ,
                (a, e) => new
                {
                    allocation = a,
-                   DeliverName = e.EmployeeName
+                   DeliverName = e.Employee_Name
                })
-               .Join(en.Employees,
+               //.Join(en.Employees,
+               .Join(en.Employee_New,
                grp => grp.allocation.Receiver,
                e => e.Emp_CJ,
                (grp, e) => new
                {
                    allocation = grp.allocation,
                    DeliverName = grp.DeliverName,
-                   ReceiverName = e.EmployeeName
+                   ReceiverName = e.Employee_Name
                });
 
             var allocationdevices = en.Devices
@@ -74,22 +76,24 @@ namespace Web_IT_HELPDESK.Models
             ServiceDeskEntities en = new ServiceDeskEntities();
 
             var allocations = en.GetLastAllocationOfDevice()
-                .Join(en.Employees,
+                //.Join(en.Employees,
+                .Join(en.Employee_New,
                 a => a.Deliver,
                 e => e.Emp_CJ,
                 (a, e) => new
                 {
                     allocation = a,
-                    DeliverName = e.EmployeeName
+                    DeliverName = e.Employee_Name
                 })
-                .Join(en.Employees,
+                //.Join(en.Employees,
+                .Join(en.Employee_New,
                 grp => grp.allocation.Receiver,
                 e => e.Emp_CJ,
                 (grp, e) => new
                 {
                     allocation = grp.allocation,
                     DeliverName = grp.DeliverName,
-                    ReceiverName = e.EmployeeName
+                    ReceiverName = e.Employee_Name
                 })
                 .Join(en.Departments,
                 a => (new { Plant_Id = a.allocation.Plant_Id, Department_Id = a.allocation.Department_Id }),
@@ -139,22 +143,24 @@ namespace Web_IT_HELPDESK.Models
             ServiceDeskEntities en = new ServiceDeskEntities();
 
             var allocations = en.GetLastAllocationOfDevice()
-                .Join(en.Employees,
+                //.Join(en.Employees,
+                .Join(en.Employee_New,
                 a => a.Deliver,
                 e => e.Emp_CJ,
                 (a, e) => new
                 {
                     allocation = a,
-                    DeliverName = e.EmployeeName
+                    DeliverName = e.Employee_Name
                 })
-                .Join(en.Employees,
+                //.Join(en.Employees,
+                .Join(en.Employee_New,
                 grp => grp.allocation.Receiver,
                 e => e.Emp_CJ,
                 (grp, e) => new
                 {
                     allocation = grp.allocation,
                     DeliverName = grp.DeliverName,
-                    ReceiverName = e.EmployeeName
+                    ReceiverName = e.Employee_Name
                 });
 
             var avm = en.Devices
@@ -191,22 +197,24 @@ namespace Web_IT_HELPDESK.Models
             ServiceDeskEntities en = new ServiceDeskEntities();
 
             var allocations = en.GetLastAllocationOfDevice()
-                .Join(en.Employees,
+                //.Join(en.Employees,
+                .Join(en.Employee_New,
                 a => a.Deliver,
                 e => e.Emp_CJ,
                 (a, e) => new
                 {
                     allocation = a,
-                    DeliverName = e.EmployeeName
+                    DeliverName = e.Employee_Name
                 })
-                .Join(en.Employees,
+                .Join(en.Employee_New,
+                //.Join(en.Employees,
                 grp => grp.allocation.Receiver,
                 e => e.Emp_CJ,
                 (grp, e) => new
                 {
                     allocation = grp.allocation,
                     DeliverName = grp.DeliverName,
-                    ReceiverName = e.EmployeeName
+                    ReceiverName = e.Employee_Name
                 })
                 .Join(en.Departments,
                 a => (new { Plant_Id = a.allocation.Plant_Id, Department_Id = a.allocation.Department_Id }),
@@ -255,22 +263,24 @@ namespace Web_IT_HELPDESK.Models
         {
             ServiceDeskEntities en = new ServiceDeskEntities();
             var allocations = en.Allocations
-                .Join(en.Employees,
+                //.Join(en.Employees,
+                .Join(en.Employee_New,
                 a => a.Deliver,
                 e => e.Emp_CJ,
                 (a, e) => new
                 {
                     Allocation = a,
-                    Deliver_Name = e.EmployeeName
+                    Deliver_Name = e.Employee_Name
                 })
-                .Join(en.Employees,
+                //.Join(en.Employees,
+                .Join(en.Employee_New,
                 j1 => j1.Allocation.Receiver,
                 e => e.Emp_CJ,
                 (j1, e) => new AllocationViewModel
                 {
                     Allocation = j1.Allocation,
                     Deliver_Name = j1.Deliver_Name,
-                    Receiver_Name = e.EmployeeName
+                    Receiver_Name = e.Employee_Name
                 })
                 .Where(avm => avm.Allocation.Device_Id == deviceId);
 

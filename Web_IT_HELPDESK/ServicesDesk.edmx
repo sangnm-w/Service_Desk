@@ -264,6 +264,29 @@
           <Property Name="Password" Type="nvarchar" MaxLength="50" />
           <Property Name="Administrator" Type="bit" />
         </EntityType>
+        <EntityType Name="Employee_New">
+          <Key>
+            <PropertyRef Name="Emp_CJ" />
+          </Key>
+          <Property Name="Emp_CJ" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Emp_ID" Type="nvarchar" MaxLength="50" />
+          <Property Name="Emp_ID_Old" Type="nvarchar" MaxLength="50" />
+          <Property Name="Employee_Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Employee_Name_NoSign" Type="nvarchar" MaxLength="50" />
+          <Property Name="ID_Number" Type="nvarchar" MaxLength="50" />
+          <Property Name="Birthday" Type="datetime" />
+          <Property Name="Marital_Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="Position" Type="nvarchar" MaxLength="50" />
+          <Property Name="Job" Type="nvarchar" MaxLength="50" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="Hire_Date" Type="datetime" />
+          <Property Name="Termination_Date" Type="datetime" />
+          <Property Name="Department_ID" Type="nvarchar" MaxLength="20" />
+          <Property Name="Plant_ID" Type="nvarchar" MaxLength="20" />
+          <Property Name="Deactive" Type="bit" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="Employee_Screen">
           <Key>
             <PropertyRef Name="Id" />
@@ -551,6 +574,18 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_BIZ_TRIP_Employee_New">
+          <End Role="Employee_New" Type="Self.Employee_New" Multiplicity="0..1" />
+          <End Role="BIZ_TRIP" Type="Self.BIZ_TRIP" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee_New">
+              <PropertyRef Name="Emp_CJ" />
+            </Principal>
+            <Dependent Role="BIZ_TRIP">
+              <PropertyRef Name="EMPNO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Cart_Album">
           <End Role="Album" Type="Self.Album" Multiplicity="0..1" />
           <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
@@ -592,6 +627,18 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <End Role="CONTRACT" Type="Self.CONTRACT" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
+              <PropertyRef Name="Emp_CJ" />
+            </Principal>
+            <Dependent Role="CONTRACT">
+              <PropertyRef Name="USER_CREATE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CONTRACT_Employee_New">
+          <End Role="Employee_New" Type="Self.Employee_New" Multiplicity="0..1" />
+          <End Role="CONTRACT" Type="Self.CONTRACT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee_New">
               <PropertyRef Name="Emp_CJ" />
             </Principal>
             <Dependent Role="CONTRACT">
@@ -683,11 +730,35 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Document_Employee_New">
+          <End Role="Employee_New" Type="Self.Employee_New" Multiplicity="0..1" />
+          <End Role="Document" Type="Self.Document" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee_New">
+              <PropertyRef Name="Emp_CJ" />
+            </Principal>
+            <Dependent Role="Document">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_EMP_ANSWER_Employee">
           <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
           <End Role="EMP_ANSWER" Type="Self.EMP_ANSWER" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
+              <PropertyRef Name="Emp_CJ" />
+            </Principal>
+            <Dependent Role="EMP_ANSWER">
+              <PropertyRef Name="EMPLOYEEID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EMP_ANSWER_Employee_New">
+          <End Role="Employee_New" Type="Self.Employee_New" Multiplicity="0..1" />
+          <End Role="EMP_ANSWER" Type="Self.EMP_ANSWER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee_New">
               <PropertyRef Name="Emp_CJ" />
             </Principal>
             <Dependent Role="EMP_ANSWER">
@@ -719,6 +790,18 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Employee_Screen_Employee_New">
+          <End Role="Employee_New" Type="Self.Employee_New" Multiplicity="0..1" />
+          <End Role="Employee_Screen" Type="Self.Employee_Screen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee_New">
+              <PropertyRef Name="Emp_CJ" />
+            </Principal>
+            <Dependent Role="Employee_Screen">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Employee_Screen_Screen">
           <End Role="Screen" Type="Self.Screen" Multiplicity="0..1" />
           <End Role="Employee_Screen" Type="Self.Employee_Screen" Multiplicity="*" />
@@ -736,6 +819,18 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <End Role="Order_" Type="Self.Order_" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
+              <PropertyRef Name="Emp_CJ" />
+            </Principal>
+            <Dependent Role="Order_">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order__Employee_New">
+          <End Role="Employee_New" Type="Self.Employee_New" Multiplicity="0..1" />
+          <End Role="Order_" Type="Self.Order_" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee_New">
               <PropertyRef Name="Emp_CJ" />
             </Principal>
             <Dependent Role="Order_">
@@ -793,6 +888,18 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Rights_Management_Employee_New">
+          <End Role="Employee_New" Type="Self.Employee_New" Multiplicity="0..1" />
+          <End Role="Rights_Management" Type="Self.Rights_Management" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee_New">
+              <PropertyRef Name="Emp_CJ" />
+            </Principal>
+            <Dependent Role="Rights_Management">
+              <PropertyRef Name="Employee_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Rights_Management_Role">
           <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
           <End Role="Rights_Management" Type="Self.Rights_Management" Multiplicity="*" />
@@ -822,6 +929,18 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <End Role="UserLogon" Type="Self.UserLogon" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
+              <PropertyRef Name="Emp_CJ" />
+            </Principal>
+            <Dependent Role="UserLogon">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserLogon_Employee_New">
+          <End Role="Employee_New" Type="Self.Employee_New" Multiplicity="0..1" />
+          <End Role="UserLogon" Type="Self.UserLogon" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee_New">
               <PropertyRef Name="Emp_CJ" />
             </Principal>
             <Dependent Role="UserLogon">
@@ -897,6 +1016,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <EntitySet Name="Drinking_Request" EntityType="Self.Drinking_Request" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EMP_ANSWER" EntityType="Self.EMP_ANSWER" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee_New" EntityType="Self.Employee_New" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employee_Screen" EntityType="Self.Employee_Screen" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeInfo" EntityType="Self.EmployeeInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Event" EntityType="Self.Event" Schema="dbo" store:Type="Tables" />
@@ -945,6 +1065,10 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             <End Role="Employee" EntitySet="Employee" />
             <End Role="BIZ_TRIP" EntitySet="BIZ_TRIP" />
           </AssociationSet>
+          <AssociationSet Name="FK_BIZ_TRIP_Employee_New" Association="Self.FK_BIZ_TRIP_Employee_New">
+            <End Role="Employee_New" EntitySet="Employee_New" />
+            <End Role="BIZ_TRIP" EntitySet="BIZ_TRIP" />
+          </AssociationSet>
           <AssociationSet Name="FK_Cart_Album" Association="Self.FK_Cart_Album">
             <End Role="Album" EntitySet="Album" />
             <End Role="Cart" EntitySet="Cart" />
@@ -959,6 +1083,10 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           </AssociationSet>
           <AssociationSet Name="FK_CONTRACT_Employee" Association="Self.FK_CONTRACT_Employee">
             <End Role="Employee" EntitySet="Employee" />
+            <End Role="CONTRACT" EntitySet="CONTRACT" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CONTRACT_Employee_New" Association="Self.FK_CONTRACT_Employee_New">
+            <End Role="Employee_New" EntitySet="Employee_New" />
             <End Role="CONTRACT" EntitySet="CONTRACT" />
           </AssociationSet>
           <AssociationSet Name="FK_CONTRACT_PERIOD" Association="Self.FK_CONTRACT_PERIOD">
@@ -989,8 +1117,16 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             <End Role="Employee" EntitySet="Employee" />
             <End Role="Document" EntitySet="Document" />
           </AssociationSet>
+          <AssociationSet Name="FK_Document_Employee_New" Association="Self.FK_Document_Employee_New">
+            <End Role="Employee_New" EntitySet="Employee_New" />
+            <End Role="Document" EntitySet="Document" />
+          </AssociationSet>
           <AssociationSet Name="FK_EMP_ANSWER_Employee" Association="Self.FK_EMP_ANSWER_Employee">
             <End Role="Employee" EntitySet="Employee" />
+            <End Role="EMP_ANSWER" EntitySet="EMP_ANSWER" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EMP_ANSWER_Employee_New" Association="Self.FK_EMP_ANSWER_Employee_New">
+            <End Role="Employee_New" EntitySet="Employee_New" />
             <End Role="EMP_ANSWER" EntitySet="EMP_ANSWER" />
           </AssociationSet>
           <AssociationSet Name="FK_EMP_ANSWER_QUESTION" Association="Self.FK_EMP_ANSWER_QUESTION">
@@ -1001,12 +1137,20 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             <End Role="Employee" EntitySet="Employee" />
             <End Role="Employee_Screen" EntitySet="Employee_Screen" />
           </AssociationSet>
+          <AssociationSet Name="FK_Employee_Screen_Employee_New" Association="Self.FK_Employee_Screen_Employee_New">
+            <End Role="Employee_New" EntitySet="Employee_New" />
+            <End Role="Employee_Screen" EntitySet="Employee_Screen" />
+          </AssociationSet>
           <AssociationSet Name="FK_Employee_Screen_Screen" Association="Self.FK_Employee_Screen_Screen">
             <End Role="Screen" EntitySet="Screen" />
             <End Role="Employee_Screen" EntitySet="Employee_Screen" />
           </AssociationSet>
           <AssociationSet Name="FK_Order__Employee" Association="Self.FK_Order__Employee">
             <End Role="Employee" EntitySet="Employee" />
+            <End Role="Order_" EntitySet="Order_" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order__Employee_New" Association="Self.FK_Order__Employee_New">
+            <End Role="Employee_New" EntitySet="Employee_New" />
             <End Role="Order_" EntitySet="Order_" />
           </AssociationSet>
           <AssociationSet Name="FK_OrderDetail_Album" Association="Self.FK_OrderDetail_Album">
@@ -1025,6 +1169,10 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             <End Role="Employee" EntitySet="Employee" />
             <End Role="Rights_Management" EntitySet="Rights_Management" />
           </AssociationSet>
+          <AssociationSet Name="FK_Rights_Management_Employee_New" Association="Self.FK_Rights_Management_Employee_New">
+            <End Role="Employee_New" EntitySet="Employee_New" />
+            <End Role="Rights_Management" EntitySet="Rights_Management" />
+          </AssociationSet>
           <AssociationSet Name="FK_Rights_Management_Role" Association="Self.FK_Rights_Management_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="Rights_Management" EntitySet="Rights_Management" />
@@ -1035,6 +1183,10 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           </AssociationSet>
           <AssociationSet Name="FK_UserLogon_Employee" Association="Self.FK_UserLogon_Employee">
             <End Role="Employee" EntitySet="Employee" />
+            <End Role="UserLogon" EntitySet="UserLogon" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserLogon_Employee_New" Association="Self.FK_UserLogon_Employee_New">
+            <End Role="Employee_New" EntitySet="Employee_New" />
             <End Role="UserLogon" EntitySet="UserLogon" />
           </AssociationSet>
         </EntityContainer>
@@ -1140,6 +1292,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="BOD_CONFIRM_IMAGE_NAME" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="BOD_CONFIRM_IMAGE" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="BOD_CONFIRM_DATE" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Employee_New" Relationship="ServiceDeskModel.FK_BIZ_TRIP_Employee_New" FromRole="BIZ_TRIP" ToRole="Employee_New" />
         </EntityType>
         <EntityType Name="Cart">
           <Key>
@@ -1182,6 +1335,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <NavigationProperty Name="PERIOD" Relationship="Self.FK_CONTRACT_PERIOD" FromRole="CONTRACT" ToRole="PERIOD" />
           <NavigationProperty Name="CONTRACT_SUB" Relationship="Self.FK_CONTRACT_SUB_CONTRACT" FromRole="CONTRACT" ToRole="CONTRACT_SUB" />
           <NavigationProperty Name="Devices" Relationship="Self.FK_Device_CONTRACT" FromRole="CONTRACT" ToRole="Device" />
+          <NavigationProperty Name="Employee_New" Relationship="ServiceDeskModel.FK_CONTRACT_Employee_New" FromRole="CONTRACT" ToRole="Employee_New" />
         </EntityType>
         <EntityType Name="CONTRACT_SUB">
           <Key>
@@ -1284,6 +1438,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="Del" Type="Boolean" />
           <NavigationProperty Name="DocumentType" Relationship="Self.FK_Document_DocumentType" FromRole="Document" ToRole="DocumentType" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_Document_Employee" FromRole="Document" ToRole="Employee" />
+          <NavigationProperty Name="Employee_New" Relationship="ServiceDeskModel.FK_Document_Employee_New" FromRole="Document" ToRole="Employee_New" />
         </EntityType>
         <EntityType Name="DocumentType">
           <Key>
@@ -1324,6 +1479,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="NOTE" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_EMP_ANSWER_Employee" FromRole="EMP_ANSWER" ToRole="Employee" />
           <NavigationProperty Name="QUESTION" Relationship="Self.FK_EMP_ANSWER_QUESTION" FromRole="EMP_ANSWER" ToRole="QUESTION" />
+          <NavigationProperty Name="Employee_New" Relationship="ServiceDeskModel.FK_EMP_ANSWER_Employee_New" FromRole="EMP_ANSWER" ToRole="Employee_New" />
         </EntityType>
         <EntityType Name="Employee">
           <Key>
@@ -1454,6 +1610,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="Plant" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_Order__Employee" FromRole="Order_" ToRole="Employee" />
           <NavigationProperty Name="OrderDetails" Relationship="Self.FK_OrderDetail_Order_" FromRole="Order_" ToRole="OrderDetail" />
+          <NavigationProperty Name="Employee_New" Relationship="ServiceDeskModel.FK_Order__Employee_New" FromRole="Order_" ToRole="Employee_New" />
         </EntityType>
         <EntityType Name="OrderDetail">
           <Key>
@@ -1505,6 +1662,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <NavigationProperty Name="Employee" Relationship="Self.FK_Rights_Management_Employee" FromRole="Rights_Management" ToRole="Employee" />
           <NavigationProperty Name="Role" Relationship="Self.FK_Rights_Management_Role" FromRole="Rights_Management" ToRole="Role" />
           <NavigationProperty Name="Rule" Relationship="Self.FK_Rights_Management_Rule" FromRole="Rights_Management" ToRole="Rule" />
+          <NavigationProperty Name="Employee_New" Relationship="ServiceDeskModel.FK_Rights_Management_Employee_New" FromRole="Rights_Management" ToRole="Employee_New" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -1579,6 +1737,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="DepartmentId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Del" Type="Boolean" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_UserLogon_Employee" FromRole="UserLogon" ToRole="Employee" />
+          <NavigationProperty Name="Employee_New" Relationship="ServiceDeskModel.FK_UserLogon_Employee_New" FromRole="UserLogon" ToRole="Employee_New" />
         </EntityType>
         <EntityType Name="ORDER_TYPE_VIEW">
           <Key>
@@ -2050,6 +2209,39 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             <End Role="Employee_Screen" EntitySet="Employee_Screen" />
           </AssociationSet>
           <FunctionImport Name="GetLastAllocationOfDevice" IsComposable="true" EntitySet="Allocations" ReturnType="Collection(ServiceDeskModel.Allocation)" />
+          <EntitySet Name="Employee_New" EntityType="ServiceDeskModel.Employee_New" />
+          <AssociationSet Name="FK_BIZ_TRIP_Employee_New" Association="ServiceDeskModel.FK_BIZ_TRIP_Employee_New">
+            <End Role="Employee_New" EntitySet="Employee_New" />
+            <End Role="BIZ_TRIP" EntitySet="BIZ_TRIP" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CONTRACT_Employee_New" Association="ServiceDeskModel.FK_CONTRACT_Employee_New">
+            <End Role="Employee_New" EntitySet="Employee_New" />
+            <End Role="CONTRACT" EntitySet="CONTRACTs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Document_Employee_New" Association="ServiceDeskModel.FK_Document_Employee_New">
+            <End Role="Employee_New" EntitySet="Employee_New" />
+            <End Role="Document" EntitySet="Documents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EMP_ANSWER_Employee_New" Association="ServiceDeskModel.FK_EMP_ANSWER_Employee_New">
+            <End Role="Employee_New" EntitySet="Employee_New" />
+            <End Role="EMP_ANSWER" EntitySet="EMP_ANSWER" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_Screen_Employee_New" Association="ServiceDeskModel.FK_Employee_Screen_Employee_New">
+            <End Role="Employee_New" EntitySet="Employee_New" />
+            <End Role="Employee_Screen" EntitySet="Employee_Screen" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order__Employee_New" Association="ServiceDeskModel.FK_Order__Employee_New">
+            <End Role="Employee_New" EntitySet="Employee_New" />
+            <End Role="Order_" EntitySet="Order_" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rights_Management_Employee_New" Association="ServiceDeskModel.FK_Rights_Management_Employee_New">
+            <End Role="Employee_New" EntitySet="Employee_New" />
+            <End Role="Rights_Management" EntitySet="Rights_Management" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserLogon_Employee_New" Association="ServiceDeskModel.FK_UserLogon_Employee_New">
+            <End Role="Employee_New" EntitySet="Employee_New" />
+            <End Role="UserLogon" EntitySet="UserLogons" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Employee_Screen">
           <Key>
@@ -2062,6 +2254,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="Read" Type="Boolean" />
           <NavigationProperty Name="Employee" Relationship="ServiceDeskModel.FK_Employee_Screen_Employee" FromRole="Employee_Screen" ToRole="Employee" />
           <NavigationProperty Name="Screen" Relationship="ServiceDeskModel.FK_Employee_Screen_Screen" FromRole="Employee_Screen" ToRole="Screen" />
+          <NavigationProperty Name="Employee_New" Relationship="ServiceDeskModel.FK_Employee_Screen_Employee_New" FromRole="Employee_Screen" ToRole="Employee_New" />
         </EntityType>
         <Association Name="FK_Employee_Screen_Employee">
           <End Type="ServiceDeskModel.Employee" Role="Employee" Multiplicity="0..1" />
@@ -2084,6 +2277,133 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </Principal>
             <Dependent Role="Employee_Screen">
               <PropertyRef Name="ScreenId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Employee_New">
+          <Key>
+            <PropertyRef Name="Emp_CJ" />
+          </Key>
+          <Property Name="Emp_CJ" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Emp_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Emp_ID_Old" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Employee_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Employee_Name_NoSign" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ID_Number" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Birthday" Type="DateTime" Precision="3" />
+          <Property Name="Marital_Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Position" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Job" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Hire_Date" Type="DateTime" Precision="3" />
+          <Property Name="Termination_Date" Type="DateTime" Precision="3" />
+          <Property Name="Department_ID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Plant_ID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Deactive" Type="Boolean" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="BIZ_TRIP" Relationship="ServiceDeskModel.FK_BIZ_TRIP_Employee_New" FromRole="Employee_New" ToRole="BIZ_TRIP" />
+          <NavigationProperty Name="CONTRACTs" Relationship="ServiceDeskModel.FK_CONTRACT_Employee_New" FromRole="Employee_New" ToRole="CONTRACT" />
+          <NavigationProperty Name="Documents" Relationship="ServiceDeskModel.FK_Document_Employee_New" FromRole="Employee_New" ToRole="Document" />
+          <NavigationProperty Name="EMP_ANSWER" Relationship="ServiceDeskModel.FK_EMP_ANSWER_Employee_New" FromRole="Employee_New" ToRole="EMP_ANSWER" />
+          <NavigationProperty Name="Employee_Screen" Relationship="ServiceDeskModel.FK_Employee_Screen_Employee_New" FromRole="Employee_New" ToRole="Employee_Screen" />
+          <NavigationProperty Name="Order_" Relationship="ServiceDeskModel.FK_Order__Employee_New" FromRole="Employee_New" ToRole="Order_" />
+          <NavigationProperty Name="Rights_Management" Relationship="ServiceDeskModel.FK_Rights_Management_Employee_New" FromRole="Employee_New" ToRole="Rights_Management" />
+          <NavigationProperty Name="UserLogons" Relationship="ServiceDeskModel.FK_UserLogon_Employee_New" FromRole="Employee_New" ToRole="UserLogon" />
+        </EntityType>
+        <Association Name="FK_BIZ_TRIP_Employee_New">
+          <End Type="ServiceDeskModel.Employee_New" Role="Employee_New" Multiplicity="0..1" />
+          <End Type="ServiceDeskModel.BIZ_TRIP" Role="BIZ_TRIP" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee_New">
+              <PropertyRef Name="Emp_CJ" />
+            </Principal>
+            <Dependent Role="BIZ_TRIP">
+              <PropertyRef Name="EMPNO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CONTRACT_Employee_New">
+          <End Type="ServiceDeskModel.Employee_New" Role="Employee_New" Multiplicity="0..1" />
+          <End Type="ServiceDeskModel.CONTRACT" Role="CONTRACT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee_New">
+              <PropertyRef Name="Emp_CJ" />
+            </Principal>
+            <Dependent Role="CONTRACT">
+              <PropertyRef Name="USER_CREATE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Document_Employee_New">
+          <End Type="ServiceDeskModel.Employee_New" Role="Employee_New" Multiplicity="0..1" />
+          <End Type="ServiceDeskModel.Document" Role="Document" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee_New">
+              <PropertyRef Name="Emp_CJ" />
+            </Principal>
+            <Dependent Role="Document">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EMP_ANSWER_Employee_New">
+          <End Type="ServiceDeskModel.Employee_New" Role="Employee_New" Multiplicity="0..1" />
+          <End Type="ServiceDeskModel.EMP_ANSWER" Role="EMP_ANSWER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee_New">
+              <PropertyRef Name="Emp_CJ" />
+            </Principal>
+            <Dependent Role="EMP_ANSWER">
+              <PropertyRef Name="EMPLOYEEID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employee_Screen_Employee_New">
+          <End Type="ServiceDeskModel.Employee_New" Role="Employee_New" Multiplicity="0..1" />
+          <End Type="ServiceDeskModel.Employee_Screen" Role="Employee_Screen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee_New">
+              <PropertyRef Name="Emp_CJ" />
+            </Principal>
+            <Dependent Role="Employee_Screen">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order__Employee_New">
+          <End Type="ServiceDeskModel.Employee_New" Role="Employee_New" Multiplicity="0..1" />
+          <End Type="ServiceDeskModel.Order_" Role="Order_" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee_New">
+              <PropertyRef Name="Emp_CJ" />
+            </Principal>
+            <Dependent Role="Order_">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rights_Management_Employee_New">
+          <End Type="ServiceDeskModel.Employee_New" Role="Employee_New" Multiplicity="0..1" />
+          <End Type="ServiceDeskModel.Rights_Management" Role="Rights_Management" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee_New">
+              <PropertyRef Name="Emp_CJ" />
+            </Principal>
+            <Dependent Role="Rights_Management">
+              <PropertyRef Name="Employee_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserLogon_Employee_New">
+          <End Type="ServiceDeskModel.Employee_New" Role="Employee_New" Multiplicity="0..1" />
+          <End Type="ServiceDeskModel.UserLogon" Role="UserLogon" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee_New">
+              <PropertyRef Name="Emp_CJ" />
+            </Principal>
+            <Dependent Role="UserLogon">
+              <PropertyRef Name="EmployeeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2645,6 +2965,30 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GetLastAllocationOfDevice" FunctionName="ServiceDeskModel.Store.GetLastAllocationOfDevice">
           </FunctionImportMapping>
+          <EntitySetMapping Name="Employee_New">
+            <EntityTypeMapping TypeName="ServiceDeskModel.Employee_New">
+              <MappingFragment StoreEntitySet="Employee_New">
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Deactive" ColumnName="Deactive" />
+                <ScalarProperty Name="Plant_ID" ColumnName="Plant_ID" />
+                <ScalarProperty Name="Department_ID" ColumnName="Department_ID" />
+                <ScalarProperty Name="Termination_Date" ColumnName="Termination_Date" />
+                <ScalarProperty Name="Hire_Date" ColumnName="Hire_Date" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Job" ColumnName="Job" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="Marital_Status" ColumnName="Marital_Status" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="ID_Number" ColumnName="ID_Number" />
+                <ScalarProperty Name="Employee_Name_NoSign" ColumnName="Employee_Name_NoSign" />
+                <ScalarProperty Name="Employee_Name" ColumnName="Employee_Name" />
+                <ScalarProperty Name="Emp_ID_Old" ColumnName="Emp_ID_Old" />
+                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
+                <ScalarProperty Name="Emp_CJ" ColumnName="Emp_CJ" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

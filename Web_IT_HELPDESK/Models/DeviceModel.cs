@@ -174,7 +174,8 @@ namespace Web_IT_HELPDESK.Models
                 }
                 else
                 {
-                    string allocationEmpName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).EmployeeName;
+                    //string allocationEmpName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).EmployeeName;
+                    string allocationEmpName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).Employee_Name;
                     string allocationDeptName = DepartmentModel.Instance.getDeptName(allocation.Plant_Id, allocation.Department_Id);
                     string allocationDeliveryDate = allocation.Delivery_Date?.ToString("dd/MM/yyyy");
                     QRText = QRText

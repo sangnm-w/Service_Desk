@@ -27,19 +27,22 @@ namespace Web_IT_HELPDESK.Controllers
         //  Get_department_Id
         private string GetEmp_name()
         {
-            string emp_name = storeDB.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.EmployeeName).SingleOrDefault();
+            string emp_name = storeDB.Employee_New.Where(f => (f.Emp_CJ == session_emp)).Select(f => f.Employee_Name).SingleOrDefault();
+            //string emp_name = storeDB.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.EmployeeName).SingleOrDefault();
             return emp_name;
         }
         //  Get_department_Id
         private string GetDept_id()
         {
-            string dept_id = storeDB.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.Department_Id).SingleOrDefault();
+            string dept_id = storeDB.Employee_New.Where(f => (f.Emp_CJ == session_emp)).Select(f => f.Department_ID).SingleOrDefault();
+            //string dept_id = storeDB.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.Department_Id).SingleOrDefault();
             return dept_id;
         }
         //GetPlant_id
         private string GetPlant_id()
         {
-            string plant_id = storeDB.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.Plant_Id).SingleOrDefault();
+            string plant_id = storeDB.Employee_New.Where(f => (f.Emp_CJ == session_emp)).Select(f => f.Plant_ID).SingleOrDefault();
+            //string plant_id = storeDB.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.Plant_Id).SingleOrDefault();
             return plant_id;
         }
 

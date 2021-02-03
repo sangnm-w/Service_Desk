@@ -23,7 +23,8 @@ namespace Web_IT_HELPDESK.Controllers
 
         private string GetDept_id(string v_plant_id)
         {
-            string dept_id = en.Employees.Where(f => (f.Emp_CJ == session_emp && f.Plant_Id == v_plant_id)).Select(f => f.Department_Id).SingleOrDefault();
+            string dept_id = en.Employee_New.Where(f => (f.Emp_CJ == session_emp && f.Plant_ID == v_plant_id)).Select(f => f.Department_ID).SingleOrDefault();
+            //string dept_id = en.Employees.Where(f => (f.Emp_CJ == session_emp && f.Plant_Id == v_plant_id)).Select(f => f.Department_Id).SingleOrDefault();
             return dept_id;
         }
 
@@ -131,8 +132,10 @@ namespace Web_IT_HELPDESK.Controllers
                 /*get employee name*/
                 ViewBag.EMPNO = session_emp;
                 ViewBag.PLANT = plant_id;
-                ViewBag.NAME = en.Employees.Where(f => (f.Emp_CJ == session_emp.ToString() && f.Plant_Id == plant_id)).Select(f => f.EmployeeName).SingleOrDefault();
-                ViewBag.Job = en.Employees.Where(f => (f.Emp_CJ == session_emp.ToString() && f.Plant_Id == plant_id)).Select(f => f.Job).SingleOrDefault();
+                ViewBag.NAME = en.Employee_New.Where(f => (f.Emp_CJ == session_emp.ToString() && f.Plant_ID == plant_id)).Select(f => f.Employee_Name).SingleOrDefault();
+                ViewBag.Position = en.Employee_New.Where(f => (f.Emp_CJ == session_emp.ToString() && f.Plant_ID == plant_id)).Select(f => f.Position).SingleOrDefault();
+                //ViewBag.NAME = en.Employees.Where(f => (f.Emp_CJ == session_emp.ToString() && f.Plant_Id == plant_id)).Select(f => f.EmployeeName).SingleOrDefault();
+                //ViewBag.Job = en.Employees.Where(f => (f.Emp_CJ == session_emp.ToString() && f.Plant_Id == plant_id)).Select(f => f.Job).SingleOrDefault();
                 /*get employee name*/
 
                 ViewBag.ModalState = "false";
@@ -145,8 +148,8 @@ namespace Web_IT_HELPDESK.Controllers
         {
             string result;
             string linkConfirm = "";
-            string curr_PlantID = CurrentUser.Instance.User.Plant_Id;
-            string curr_DeptID = CurrentUser.Instance.User.Department_Id;
+            string curr_PlantID = CurrentUser.Instance.User.Plant_ID;
+            string curr_DeptID = CurrentUser.Instance.User.Department_ID;
 
             string fromdate = biz_trip.FROM_DATE.Value.ToString("dd/MM/yyyy") + " " + p_hour_f + ":" + p_minute_f + ":00,531";
             DateTime v_fromdate = DateTime.ParseExact(fromdate, "dd/MM/yyyy HH:mm:ss,fff",
@@ -169,7 +172,8 @@ namespace Web_IT_HELPDESK.Controllers
                 string dept_name = DepartmentModel.Instance.getDeptName(biz_trip.PLANT, biz_trip.DEPT);
                 bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == biz_trip.PLANT && d.Department_Id == biz_trip.DEPT && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
 
-                Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO);
+                //Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO);
+                Employee_New userRequest = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO);
                 string domainName = System.Web.HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
                 if (currUserIsManager)
                 {
@@ -228,7 +232,8 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.PLANT = biz_trip.PLANT;
             ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == biz_trip.DEPT
                                                          && o.Plant_Id == biz_trip.PLANT).Select(i => i.Department_Name).SingleOrDefault();
-            ViewBag.User_name = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).EmployeeName;
+            ViewBag.User_name = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).Employee_Name;
+            //ViewBag.User_name = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).EmployeeName;
 
             bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == biz_trip.PLANT && d.Department_Id == biz_trip.DEPT && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
 
@@ -248,7 +253,8 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == biz_trip.DEPT
                                                          && o.Plant_Id == biz_trip.PLANT).Select(i => i.Department_Name).SingleOrDefault();
             /*get employee name*/
-            ViewBag.User_name = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).EmployeeName;
+            ViewBag.User_name = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).Employee_Name;
+            //ViewBag.User_name = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).EmployeeName;
             /*get employee name*/
 
 
@@ -295,7 +301,8 @@ namespace Web_IT_HELPDESK.Controllers
                 en.Entry(existingCart).State = System.Data.Entity.EntityState.Modified;
                 en.SaveChanges();
 
-                Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
+                //Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
+                Employee_New userRequest = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
                 bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(existingCart, 4, userRequest); // Level 4: HR Manager
                 if (resultMailing)
                 {
@@ -313,7 +320,8 @@ namespace Web_IT_HELPDESK.Controllers
                 en.Entry(existingCart).State = System.Data.Entity.EntityState.Modified;
                 en.SaveChanges();
 
-                Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
+                Employee_New userRequest = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
+                //Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
                 bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(existingCart, 8, userRequest); // Level 8: Return NOT APPROVED
                 if (resultMailing)
                 {
@@ -346,7 +354,8 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == biz_trip.DEPT
                                                          && o.Plant_Id == biz_trip.PLANT).Select(i => i.Department_Name).SingleOrDefault();
             /*get employee name*/
-            ViewBag.User_name = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).EmployeeName;
+            //ViewBag.User_name = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).EmployeeName;
+            ViewBag.User_name = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).Employee_Name;
             /*get employee name*/
 
 
@@ -393,7 +402,8 @@ namespace Web_IT_HELPDESK.Controllers
                 en.Entry(existingCart).State = System.Data.Entity.EntityState.Modified;
                 en.SaveChanges();
 
-                Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
+                Employee_New userRequest = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
+                //Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
                 bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(existingCart, 4, userRequest); // Level 4: HR Manager
                 if (resultMailing)
                 {
@@ -411,7 +421,8 @@ namespace Web_IT_HELPDESK.Controllers
                 en.Entry(existingCart).State = System.Data.Entity.EntityState.Modified;
                 en.SaveChanges();
 
-                Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
+                Employee_New userRequest = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
+                //Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
                 bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(existingCart, 8, userRequest); // Level 8: Return NOT APPROVED
                 if (resultMailing)
                 {
@@ -444,7 +455,8 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == biz_trip.DEPT
                                                          && o.Plant_Id == biz_trip.PLANT).Select(i => i.Department_Name).SingleOrDefault();
             /*get employee name*/
-            ViewBag.User_name = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).EmployeeName;
+            ViewBag.User_name = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).Employee_Name;
+            //ViewBag.User_name = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).EmployeeName;
             /*get employee name*/
 
             ViewBag.ModalState = "false";
@@ -490,7 +502,8 @@ namespace Web_IT_HELPDESK.Controllers
                 en.Entry(existingCart).State = System.Data.Entity.EntityState.Modified;
                 en.SaveChanges();
 
-                Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
+                Employee_New userRequest = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
+                //Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
                 bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(existingCart, 5, userRequest); // Level 5: HR Admin
                 if (resultMailing)
                 {
@@ -508,7 +521,8 @@ namespace Web_IT_HELPDESK.Controllers
                 en.Entry(existingCart).State = System.Data.Entity.EntityState.Modified;
                 en.SaveChanges();
 
-                Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
+                Employee_New userRequest = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
+                //Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
                 bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(existingCart, 8, userRequest); // Level 8: Return NOT APPROVED
                 if (resultMailing)
                 {
@@ -539,7 +553,8 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.PLANT = biz_trip.PLANT;
             ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == biz_trip.DEPT
                                                          && o.Plant_Id == biz_trip.PLANT).Select(i => i.Department_Name).SingleOrDefault();
-            ViewBag.User_name = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).EmployeeName;
+            ViewBag.User_name = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).Employee_Name;
+            //ViewBag.User_name = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).EmployeeName;
 
             ViewBag.ModalState = "false";
             ViewBag.Message = "";
@@ -556,7 +571,8 @@ namespace Web_IT_HELPDESK.Controllers
             en.Entry(existingCart).State = System.Data.Entity.EntityState.Modified;
             en.SaveChanges();
 
-            Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
+            Employee_New userRequest = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
+            //Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == existingCart.EMPNO);
             bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(existingCart, 7, userRequest); // Level 7: Return APPROVED
             if (resultMailing)
             {
@@ -680,7 +696,8 @@ namespace Web_IT_HELPDESK.Controllers
             string dept_name = DepartmentModel.Instance.getDeptName(biz_trip.PLANT, biz_trip.DEPT);
             bool IsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == biz_trip.PLANT && d.Department_Id == biz_trip.DEPT && d.Manager_Id == biz_trip.EMPNO) != null ? true : false;
 
-            Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO);
+            //Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO);
+            Employee_New userRequest = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO);
             string domainName = System.Web.HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
             if (IsManager)
             {
@@ -724,8 +741,8 @@ namespace Web_IT_HELPDESK.Controllers
             from_date = new DateTime(now.Year, now.Month, 1);
             to_date = from_date.AddMonths(1).AddSeconds(-1);
 
-            string curr_PlantId = CurrentUser.Instance.User.Plant_Id;
-            string curr_DeptId = CurrentUser.Instance.User.Department_Id;
+            string curr_PlantId = CurrentUser.Instance.User.Plant_ID;
+            string curr_DeptId = CurrentUser.Instance.User.Department_ID;
 
             var bizz = en.BIZ_TRIP.Where(i => i.DEL != true
                                            && i.DEPT == curr_DeptId

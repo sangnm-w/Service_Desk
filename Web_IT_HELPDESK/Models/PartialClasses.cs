@@ -77,7 +77,6 @@ namespace Web_IT_HELPDESK
             }
             catch
             {
-                //TODO: do something when cannot generate so chung tu
                 return "0000001";
             }
         }
@@ -96,6 +95,9 @@ namespace Web_IT_HELPDESK
 
     [MetadataType(typeof(EmployeeMetadata))]
     public partial class Employee { }
+
+    [MetadataType(typeof(Employee_NewMetadata))]
+    public partial class Employee_New { }
 
     [MetadataType(typeof(Order_Metadata))]
     public partial class Order_

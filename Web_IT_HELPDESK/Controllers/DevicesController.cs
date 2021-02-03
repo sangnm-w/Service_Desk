@@ -25,7 +25,8 @@ namespace Web_IT_HELPDESK.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            //string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            string curr_plantId = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
             IEnumerable<DeviceViewModel> devices = DeviceModel.Instance.GetDevicesByPlantId(curr_plantId);
             return View(devices.ToList());
         }
@@ -55,7 +56,8 @@ namespace Web_IT_HELPDESK.Controllers
         [Authorize]
         public ActionResult Create()
         {
-            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            //string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            string empPlantID = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
 
             ViewBag.Plant_Id = empPlantID;
 
@@ -79,7 +81,8 @@ namespace Web_IT_HELPDESK.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Device device)
         {
-            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            //string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            string empPlantID = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
 
             DateTime purchaseD = device.Purchase_Date.GetValueOrDefault();
             DateTime depreciationD = device.Depreciation.GetValueOrDefault();
@@ -119,7 +122,8 @@ namespace Web_IT_HELPDESK.Controllers
         [Authorize]
         public ActionResult CreateOthers()
         {
-            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            //string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            string empPlantID = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
 
             ViewBag.Plant_Id = empPlantID;
 
@@ -143,7 +147,8 @@ namespace Web_IT_HELPDESK.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateOthers(Device device)
         {
-            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            //string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            string empPlantID = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
 
             //if (device.Contract_Id == null)
             //    ModelState.AddModelError("Contract_Id", "Please select one contract!");
@@ -205,7 +210,8 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 return HttpNotFound();
             }
-            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            //string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            string empPlantID = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
 
             ViewBag.Device_Type_Name = en.Device_Type.FirstOrDefault(t => t.Device_Type_Id == device.Device_Type_Id).Device_Type_Name;
 
@@ -217,7 +223,8 @@ namespace Web_IT_HELPDESK.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Device device)
         {
-            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            //string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            string empPlantID = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
             DateTime purchaseD = device.Purchase_Date.GetValueOrDefault();
             DateTime depreciationD = device.Depreciation.GetValueOrDefault();
             if (purchaseD >= depreciationD)
@@ -252,7 +259,8 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 return HttpNotFound();
             }
-            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            //string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            string empPlantID = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
 
             ViewBag.Device_Type_Name = en.Device_Type.FirstOrDefault(t => t.Device_Type_Id == device.Device_Type_Id).Device_Type_Name;
 
@@ -264,7 +272,8 @@ namespace Web_IT_HELPDESK.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditOthers(Device device)
         {
-            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            //string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            string empPlantID = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
             DateTime purchaseD = device.Purchase_Date.GetValueOrDefault();
             DateTime depreciationD = device.Depreciation.GetValueOrDefault();
             if (purchaseD >= depreciationD)
@@ -320,7 +329,8 @@ namespace Web_IT_HELPDESK.Controllers
         [Authorize]
         public ActionResult UploadDevices(HttpPostedFileBase FileUpload)
         {
-            string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            //string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            string curr_plantId = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
             if (FileUpload != null)
             {
                 if (FileUpload.ContentType == "application/vnd.ms-excel" || FileUpload.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
@@ -394,7 +404,8 @@ namespace Web_IT_HELPDESK.Controllers
             //if (hasPermission.Value == false)
             //    return RedirectToAction("Index", "Home");
 
-            string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            //string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            string curr_plantId = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
             var devices = DeviceModel.Instance.GetQRDevicesByPlantID(curr_plantId);
 
             var stream = ExcelHelper.Instance.CreateQRExcel(null, devices.ToList(), ExcelTitle.Instance.QRDevices(), null);

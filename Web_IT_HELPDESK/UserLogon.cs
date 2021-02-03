@@ -21,5 +21,6 @@ namespace Web_IT_HELPDESK
         public Nullable<bool> Del { get; set; }
     
         public virtual Employee Employee { get; set; }
+        public virtual Employee_New Employee_New { get; set; }
     }
 }

@@ -9,6 +9,13 @@
         .borderlastcol {
             border-left: 1px solid black;
         }
+
+        .truncate {
+            max-width: 300px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     </style>
 }
 
@@ -202,8 +209,9 @@
 
         $('#device').DataTable({
             'aaSorting': [0, 'desc'],
-            "columnDefs": [
-                { className: "borderlastcol", "targets": [18] }
+            'columnDefs': [
+                { className: "truncate", targets: 12 },
+                { className: "borderlastcol", targets: 18 }
             ],
             'scrollX': true,
         });

@@ -17,8 +17,9 @@ namespace Web_IT_HELPDESK.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            string curr_PlantID = CurrentUser.Instance.User.Plant_Id;
-            var contactlist = en.Employees.Where(e => e.Deactive != true && e.Plant_Id == curr_PlantID);
+            string curr_PlantID = CurrentUser.Instance.User.Plant_ID;
+            //var contactlist = en.Employees.Where(e => e.Deactive != true && e.Plant_Id == curr_PlantID);
+            var contactlist = en.Employee_New.Where(e => e.Deactive != true && e.Plant_ID == curr_PlantID);
 
             List<PlantViewModel> plants = en.Departments
                 .Select(d => new PlantViewModel
@@ -46,8 +47,9 @@ namespace Web_IT_HELPDESK.Controllers
         [HttpPost]
         public ActionResult Index(string plantid)
         {
-            var contactlist = en.Employees
-                .Where(e => e.Deactive != true && e.Plant_Id == plantid);
+            //var contactlist = en.Employees
+            var contactlist = en.Employee_New
+                .Where(e => e.Deactive != true && e.Plant_ID == plantid);
 
             List<PlantViewModel> plants = en.Departments
                 .Select(d => new PlantViewModel
@@ -74,12 +76,13 @@ namespace Web_IT_HELPDESK.Controllers
         public ActionResult Download(string plantid)
         {
             string plantName = en.Departments.FirstOrDefault(d => d.Plant_Id == plantid).Plant_Name;
-            var contactlist = en.Employees
-               .Where(e => e.Deactive != true && e.Plant_Id == plantid)
+            //var contactlist = en.Employees
+            var contactlist = en.Employee_New
+               .Where(e => e.Deactive != true && e.Plant_ID == plantid)
                .Select(c => new
                {
                    Emp_CJ = c.Emp_CJ,
-                   EmployeeName = c.EmployeeName,
+                   EmployeeName = c.Employee_Name,
                    Email = c.Email,
                    Phone = c.Phone,
                    Birthday = c.Birthday

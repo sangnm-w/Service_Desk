@@ -17,7 +17,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
         }
         private Biz_TripHelper() { }
 
-        public bool sendBiz_TripEmail(BIZ_TRIP biztrip, int level_confirm, Employee userRequest, string linkConfirm = null)
+        public bool sendBiz_TripEmail(BIZ_TRIP biztrip, int level_confirm, Employee_New userRequest, string linkConfirm = null)
         {
             string subject = "";
             string body = "";
@@ -68,7 +68,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                       "-------------------------------------" + "\n" +
                       "   Follow the link to confirm: " + domainName + "/servicedesk/BIZ_TRIP/dept_confirm/" + biztrip.ID + "\n" + "\n" +
                       "Regards!";
-            } // TODO: Need Action Method
+            } 
             else if (level == 3) // Level 3: BOD
             {
                 subject = "[Need Confirm by BOD] - Business Trip Registration: " + biztrip.NAME + " - Date: " + biztrip.DATE;

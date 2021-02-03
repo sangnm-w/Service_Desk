@@ -14,7 +14,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
         public static InformationHelper Instance { get { if (_Instance == null) _Instance = new InformationHelper(); return _Instance; } set => _Instance = value; }
         private InformationHelper() { }
 
-        public bool Send_Mail(int level_confirm, string subject, string body, Employee userRequest)
+        public bool Send_Mail(int level_confirm, string subject, string body, Employee_New userRequest)
         {
             ServiceDeskEntities en = new ServiceDeskEntities();
 
@@ -24,51 +24,51 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
 
             if (level_confirm == 1) // Level 1: Department Manager
             {
-                toMails.Add(en.Departments.FirstOrDefault(d => d.Plant_Id == userRequest.Plant_Id && d.Department_Id == userRequest.Department_Id).Manager_Email);
+                toMails.Add(en.Departments.FirstOrDefault(d => d.Plant_Id == userRequest.Plant_ID && d.Department_Id == userRequest.Department_ID).Manager_Email);
                 //ccMails.Add("test01.it@cjvina.com");
                 bccMails.Add("it-servicedesk@cjvina.com");
             }
             else if (level_confirm == 2) // Level 2: Resend
             {
-                toMails.Add(en.Departments.FirstOrDefault(d => d.Plant_Id == userRequest.Plant_Id && d.Department_Id == userRequest.Department_Id).Manager_Email);
+                toMails.Add(en.Departments.FirstOrDefault(d => d.Plant_Id == userRequest.Plant_ID && d.Department_Id == userRequest.Department_ID).Manager_Email);
                 //ccMails.Add("test01.it@cjvina.com");
                 bccMails.Add("it-servicedesk@cjvina.com");
             }
             else if (level_confirm == 3) // Level 3: BOD
             {
-                toMails.Add(en.Departments.FirstOrDefault(d => d.Plant_Id == userRequest.Plant_Id && d.Department_Id == userRequest.Department_Id).BOD_Email);
+                toMails.Add(en.Departments.FirstOrDefault(d => d.Plant_Id == userRequest.Plant_ID && d.Department_Id == userRequest.Department_ID).BOD_Email);
                 //ccMails.Add("test01.it@cjvina.com");
                 bccMails.Add("it-servicedesk@cjvina.com");
             }
             else if (level_confirm == 4) // Level 4: HR Manager
             {
-                toMails.Add(en.Departments.FirstOrDefault(d => d.Plant_Id == userRequest.Plant_Id && d.Department_Name.Contains(")HR")).Manager_Email);
+                toMails.Add(en.Departments.FirstOrDefault(d => d.Plant_Id == userRequest.Plant_ID && d.Department_Name.Contains(")HR")).Manager_Email);
                 //ccMails.Add("test01.it@cjvina.com");
                 bccMails.Add("it-servicedesk@cjvina.com");
 
             }
             else if (level_confirm == 5) // Level 5: HR Admin
             {
-                toMails.Add(en.Departments.FirstOrDefault(d => d.Plant_Id == userRequest.Plant_Id && d.Department_Name.Contains(") HR-Admin")).Manager_Email);
+                toMails.Add(en.Departments.FirstOrDefault(d => d.Plant_Id == userRequest.Plant_ID && d.Department_Name.Contains(") HR-Admin")).Manager_Email);
                 //ccMails.Add("test01.it@cjvina.com");
                 bccMails.Add("it-servicedesk@cjvina.com");
             }
             else if (level_confirm == 6) // Level 6: HR Seal Using
             {
-                toMails.Add(en.Departments.FirstOrDefault(d => d.Plant_Id == userRequest.Plant_Id && d.Department_Name.Contains(") HR-Seal Using")).Manager_Email);
+                toMails.Add(en.Departments.FirstOrDefault(d => d.Plant_Id == userRequest.Plant_ID && d.Department_Name.Contains(") HR-Seal Using")).Manager_Email);
                 //ccMails.Add("test01.it@cjvina.com");
                 bccMails.Add("it-servicedesk@cjvina.com");
             }
             else if (level_confirm == 7) // Level 7: Return APPROVED
             {
                 toMails.Add(userRequest.Email);
-                ccMails.Add(en.Departments.FirstOrDefault(d => d.Plant_Id == userRequest.Plant_Id && d.Department_Id == userRequest.Department_Id).Manager_Email);
+                ccMails.Add(en.Departments.FirstOrDefault(d => d.Plant_Id == userRequest.Plant_ID && d.Department_Id == userRequest.Department_ID).Manager_Email);
                 bccMails.Add("it-servicedesk@cjvina.com");
             }
             else if (level_confirm == 8) // Level 8: Return NOT APPROVED
             {
                 toMails.Add(userRequest.Email);
-                ccMails.Add(en.Departments.FirstOrDefault(d => d.Plant_Id == userRequest.Plant_Id && d.Department_Id == userRequest.Department_Id).Manager_Email);
+                ccMails.Add(en.Departments.FirstOrDefault(d => d.Plant_Id == userRequest.Plant_ID && d.Department_Id == userRequest.Department_ID).Manager_Email);
                 bccMails.Add("it-servicedesk@cjvina.com");
             }
 
