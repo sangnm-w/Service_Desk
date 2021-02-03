@@ -270,6 +270,9 @@
     <Compile Include="EmployeeInfo.cs">
       <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
+    <Compile Include="Employee_New.cs">
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
+    </Compile>
     <Compile Include="Employee_Screen.cs">
       <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>

@@ -26,7 +26,8 @@ namespace Web_IT_HELPDESK.Controllers
         //GetPlant_id
         private string GetPlant_id(string v_emp)
         {
-            string plant_id = en.Employees.Where(f => (f.EmployeeID == v_emp)).Select(f => f.Plant_Id).SingleOrDefault();
+            //string plant_id = en.Employees.Where(f => (f.EmployeeID == v_emp)).Select(f => f.Plant_Id).SingleOrDefault();
+            string plant_id = en.Employee_New.Where(f => (f.Emp_CJ == v_emp)).Select(f => f.Plant_ID).SingleOrDefault();
             return plant_id;
         }
 
@@ -247,7 +248,6 @@ namespace Web_IT_HELPDESK.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
 
                 return RedirectToAction("Index");
             }
@@ -328,11 +328,13 @@ namespace Web_IT_HELPDESK.Controllers
             if (orderId != 0)
             {
                 var v_empno = en.Order_.Where(i => i.OrderId == orderId).SingleOrDefault().EmployeeID;
-                dept_id = en.Employees.Where(f => (f.EmployeeID == v_empno)).Select(f => f.Department_Id).SingleOrDefault();
+                //dept_id = en.Employees.Where(f => (f.EmployeeID == v_empno)).Select(f => f.Department_Id).SingleOrDefault();
+                dept_id = en.Employee_New.Where(f => (f.Emp_CJ == v_empno)).Select(f => f.Department_ID).SingleOrDefault();
             }
             else
             {
-                dept_id = en.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.Department_Id).SingleOrDefault();
+                //dept_id = en.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.Department_Id).SingleOrDefault();
+                dept_id = en.Employee_New.Where(f => (f.Emp_CJ == session_emp)).Select(f => f.Department_ID).SingleOrDefault();
             }
             return dept_id;
         }

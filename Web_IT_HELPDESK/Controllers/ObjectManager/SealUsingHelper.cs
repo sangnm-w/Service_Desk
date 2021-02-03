@@ -18,7 +18,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
         }
         private SealUsingHelper() { }
 
-        public bool sendSealUsingEmail(Seal_Using sealUsing, int level_confirm, Employee userRequest)
+        public bool sendSealUsingEmail(Seal_Using sealUsing, int level_confirm, Employee_New userRequest)
         {
             string subject = "";
             string body = "";

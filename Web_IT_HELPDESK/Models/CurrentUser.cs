@@ -19,14 +19,15 @@ namespace Web_IT_HELPDESK.Models
 
         private static string sessionUserID = null;
         private ServiceDeskEntities entity = null;
-        private Employee _user;
-        public Employee User
+        private Employee_New _user;
+        public Employee_New User
         {
             get
             {
                 if (_user == null)
                 {
-                    _user = entity.Employees.FirstOrDefault(e => e.Emp_CJ == sessionUserID);
+                    //_user = entity.Employees.FirstOrDefault(e => e.Emp_CJ == sessionUserID);
+                    _user = entity.Employee_New.FirstOrDefault(e => e.Emp_CJ == sessionUserID);
                 }
                 return _user;
             }

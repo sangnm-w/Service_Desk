@@ -35,8 +35,8 @@ namespace Web_IT_HELPDESK.Controllers
             ////int pageNumber = (page ?? 1);
             #endregion
 
-            string curr_PlantId = CurrentUser.Instance.User.Plant_Id;
-            string curr_DeptId = CurrentUser.Instance.User.Department_Id;
+            string curr_PlantId = CurrentUser.Instance.User.Plant_ID;
+            string curr_DeptId = CurrentUser.Instance.User.Department_ID;
             bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantId && d.Department_Id == curr_DeptId && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
             ViewBag.currUserIsManager = currUserIsManager;
 
@@ -65,8 +65,8 @@ namespace Web_IT_HELPDESK.Controllers
         [HttpPost]
         public ActionResult Index(string search_, DateTime? date_, ICollection<string> v_depts, string v_contract_type, int daynum_)
         {
-            string curr_PlantId = CurrentUser.Instance.User.Plant_Id;
-            string curr_DeptId = CurrentUser.Instance.User.Department_Id;
+            string curr_PlantId = CurrentUser.Instance.User.Plant_ID;
+            string curr_DeptId = CurrentUser.Instance.User.Department_ID;
             bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantId && d.Department_Id == curr_DeptId && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
             ViewBag.currUserIsManager = currUserIsManager;
 
@@ -239,9 +239,9 @@ namespace Web_IT_HELPDESK.Controllers
                 contract.ID = Guid.NewGuid();
                 contract.CONTENT = contentBinary.ToArray();
                 contract.NOTE = System.IO.Path.GetFileName(contractFile.FileName);
-                contract.DEPARTMENTID = CurrentUser.Instance.User.Department_Id;
+                contract.DEPARTMENTID = CurrentUser.Instance.User.Department_ID;
                 contract.USER_CREATE = CurrentUser.Instance.User.Emp_CJ;
-                contract.PLANT = CurrentUser.Instance.User.Plant_Id;
+                contract.PLANT = CurrentUser.Instance.User.Plant_ID;
                 contract.DATE_CREATE = DateTime.Now;
                 en.CONTRACTs.Add(contract);
 
@@ -258,7 +258,7 @@ namespace Web_IT_HELPDESK.Controllers
                     item.ContractSub.CONTENT = subcontentBinary.ToArray();
                     item.ContractSub.NOTE = Path.GetFileName(item.ContentSubFile.FileName);
                     item.ContractSub.USER_CREATE = CurrentUser.Instance.User.Emp_CJ;
-                    item.ContractSub.PLANT = CurrentUser.Instance.User.Plant_Id;
+                    item.ContractSub.PLANT = CurrentUser.Instance.User.Plant_ID;
 
                     en.CONTRACT_SUB.Add(item.ContractSub);
                 }
@@ -404,7 +404,7 @@ namespace Web_IT_HELPDESK.Controllers
                         sub.ID = Guid.NewGuid();
                         sub.CONTRACTID = contract.ID;
                         sub.USER_CREATE = CurrentUser.Instance.User.Emp_CJ;
-                        sub.PLANT = CurrentUser.Instance.User.Plant_Id;
+                        sub.PLANT = CurrentUser.Instance.User.Plant_ID;
 
                         en.CONTRACT_SUB.Add(sub);
                     }

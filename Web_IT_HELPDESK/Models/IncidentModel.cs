@@ -37,13 +37,15 @@ namespace Web_IT_HELPDESK.Models
                     (iwsal, dept) => new { iwsal.inc, iwsal.StatusName, iwsal.LevelName, dept.Department_Name }
                 )
                 .Join(
-                    en.Employees,
+                    //en.Employees,
+                    en.Employee_New,
                     isld => isld.inc.User_create,
                     e => e.Emp_CJ,
-                    (isld, e) => new { isld.inc, isld.StatusName, isld.LevelName, isld.Department_Name, e.EmployeeName }
+                    (isld, e) => new { isld.inc, isld.StatusName, isld.LevelName, isld.Department_Name, e.Employee_Name }
                 )
                 .GroupJoin(
-                    en.Employees,
+                    //en.Employees,
+                    en.Employee_New,
                     i => i.inc.User_resolve,
                     e => e.Emp_CJ,
                     (i, employeesGroup) => new { i, employeesGroup }
@@ -68,8 +70,8 @@ namespace Web_IT_HELPDESK.Models
                         StatusId = temp0.i.inc.StatusId,
                         LevelId = temp0.i.inc.LevelId,
                         DepartmentId = temp0.i.inc.DepartmentId,
-                        userCreateName = temp0.i.EmployeeName,
-                        userResolveName = emp.EmployeeName,
+                        userCreateName = temp0.i.Employee_Name,
+                        userResolveName = emp.Employee_Name,
                         statusName = temp0.i.StatusName,
                         levelName = temp0.i.LevelName,
                         departmentName = temp0.i.Department_Name

@@ -19,8 +19,8 @@ namespace Web_IT_HELPDESK.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            string curr_PlantID = CurrentUser.Instance.User.Plant_Id;
-            string curr_DeptID = CurrentUser.Instance.User.Department_Id;
+            string curr_PlantID = CurrentUser.Instance.User.Plant_ID;
+            string curr_DeptID = CurrentUser.Instance.User.Department_ID;
 
             DateTime now = DateTime.Now;
             DateTime from_date = new DateTime(now.Year, now.Month, 1);
@@ -75,8 +75,8 @@ namespace Web_IT_HELPDESK.Controllers
         [HttpPost]
         public ActionResult Index(string searchString, string _datetime, int? page)
         {
-            string curr_PlantID = CurrentUser.Instance.User.Plant_Id;
-            string curr_DeptID = CurrentUser.Instance.User.Department_Id;
+            string curr_PlantID = CurrentUser.Instance.User.Plant_ID;
+            string curr_DeptID = CurrentUser.Instance.User.Department_ID;
 
             DateTime from_date = DateTime.ParseExact("01/" + _datetime, "dd/MM/yyyy", null);
             DateTime to_date = from_date.AddMonths(1).AddSeconds(-1);
@@ -175,7 +175,8 @@ namespace Web_IT_HELPDESK.Controllers
                 {
                     en.Seal_Using.Add(su);
                     en.SaveChanges();
-                    Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == su.Employee_ID);
+                    //Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == su.Employee_ID);
+                    Employee_New userRequest = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == su.Employee_ID);
                     bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(su, 1, userRequest); // Level 1: Department Manager 
                     if (resultMailing)
                     {
@@ -229,7 +230,8 @@ namespace Web_IT_HELPDESK.Controllers
 
             string result = "";
 
-            Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == seal_Using.Employee_ID);
+            //Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == seal_Using.Employee_ID);
+            Employee_New userRequest = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == seal_Using.Employee_ID);
             bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(seal_Using, 2, userRequest); // Level 2: Resend
             if (resultMailing)
             {
@@ -240,8 +242,8 @@ namespace Web_IT_HELPDESK.Controllers
                 result = string.Format("Can't send confirm email to Department Manager. Please contact for support: minhsang.it@cjvina.com");
             }
 
-            string curr_PlantID = CurrentUser.Instance.User.Plant_Id;
-            string curr_DeptID = CurrentUser.Instance.User.Department_Id;
+            string curr_PlantID = CurrentUser.Instance.User.Plant_ID;
+            string curr_DeptID = CurrentUser.Instance.User.Department_ID;
 
             DateTime now = DateTime.Now;
             DateTime from_date = new DateTime(now.Year, now.Month, 1);
@@ -326,7 +328,8 @@ namespace Web_IT_HELPDESK.Controllers
             string deptName = DepartmentModel.Instance.getDeptName(sealUsing.Plant, sealUsing.DepartmentId);
             if (ModelState.IsValid)
             {
-                Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == sealUsing.Employee_ID);
+                //Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == sealUsing.Employee_ID);
+                Employee_New userRequest = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == sealUsing.Employee_ID);
 
                 try
                 {
@@ -420,7 +423,8 @@ namespace Web_IT_HELPDESK.Controllers
             string deptName = DepartmentModel.Instance.getDeptName(sealUsing.Plant, sealUsing.DepartmentId);
             if (ModelState.IsValid)
             {
-                Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == sealUsing.Employee_ID);
+                //Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == sealUsing.Employee_ID);
+                Employee_New userRequest = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == sealUsing.Employee_ID);
 
                 try
                 {
@@ -486,8 +490,8 @@ namespace Web_IT_HELPDESK.Controllers
         {
             Seal_Using seal_using = en.Seal_Using.Find(id);
             ViewBag.Department_confirm_date = DateTime.Now;
-            string plant_id = CurrentUser.Instance.User.Plant_Id;
-            ViewBag.DepartmentId = CurrentUser.Instance.User.Department_Id;
+            string plant_id = CurrentUser.Instance.User.Plant_ID;
+            ViewBag.DepartmentId = CurrentUser.Instance.User.Department_ID;
             return View(seal_using);
         }
 

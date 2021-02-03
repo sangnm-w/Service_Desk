@@ -19,8 +19,8 @@ namespace Web_IT_HELPDESK.Controllers
     {
         private ServiceDeskEntities en = new ServiceDeskEntities();
         private string session_emp = CurrentUser.Instance.User.Emp_CJ;
-        private string curr_PlantID = CurrentUser.Instance.User.Plant_Id;
-        private string curr_DeptID = CurrentUser.Instance.User.Department_Id;
+        private string curr_PlantID = CurrentUser.Instance.User.Plant_ID;
+        private string curr_DeptID = CurrentUser.Instance.User.Department_ID;
 
         private DateTime from_date { get; set; }
         private DateTime to_date { get; set; }
@@ -58,7 +58,7 @@ namespace Web_IT_HELPDESK.Controllers
             }
             else // Not Assign by Rights
             {
-                permissionPlants.Add(CurrentUser.Instance.User.Plant_Id);
+                permissionPlants.Add(CurrentUser.Instance.User.Plant_ID);
 
                 ViewBag.Plants = en.Departments.Where(d => d.Plant_Id == curr_PlantID).Select(d => new PlantViewModel { Plant_Id = d.Plant_Id, Plant_Name = d.Plant_Name }).Distinct().ToList();
             }
@@ -137,7 +137,7 @@ namespace Web_IT_HELPDESK.Controllers
             }
             else // Not Assign by Rights
             {
-                permissionPlants.Add(CurrentUser.Instance.User.Plant_Id);
+                permissionPlants.Add(CurrentUser.Instance.User.Plant_ID);
 
                 ViewBag.Plants = en.Departments.Where(d => d.Plant_Id == curr_PlantID).Select(d => new PlantViewModel { Plant_Id = d.Plant_Id, Plant_Name = d.Plant_Name }).Distinct().ToList();
             }
@@ -208,8 +208,10 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.plantName = DepartmentModel.Instance.getPlantName(inc.Plant);
             ViewBag.DepartmentName = DepartmentModel.Instance.getDeptName(inc.Plant, inc.DepartmentId);
 
-            ViewBag.User_Create = en.Employees.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.EmployeeName;
-            ViewBag.User_Resolve = en.Employees.FirstOrDefault(e => e.Emp_CJ == inc.User_resolve)?.EmployeeName;
+            //ViewBag.User_Create = en.Employees.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.EmployeeName;
+            //ViewBag.User_Resolve = en.Employees.FirstOrDefault(e => e.Emp_CJ == inc.User_resolve)?.EmployeeName;
+            ViewBag.User_Create = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.Employee_Name;
+            ViewBag.User_Resolve = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == inc.User_resolve)?.Employee_Name;
             return View(inc);
         }
 
@@ -225,7 +227,7 @@ namespace Web_IT_HELPDESK.Controllers
             inc.DepartmentId = curr_DeptID;
             inc.StatusId = "ST1";
 
-            ViewBag.UserCreateName = CurrentUser.Instance.User.EmployeeName;
+            ViewBag.UserCreateName = CurrentUser.Instance.User.Employee_Name;
             ViewBag.plantName = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantID).Plant_Name;
             ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", en.Levels.First().LevelId);
             ViewBag.StatusName = en.Status.FirstOrDefault(s => s.StatusId == "ST1").StatusName;
@@ -256,7 +258,7 @@ namespace Web_IT_HELPDESK.Controllers
                         incident.FileName = Path.GetFileName(Request.Files[upload].FileName);
                     }
                 }
-
+                incident.Solved = false;
                 en.Incidents.Add(incident);
                 en.SaveChanges();
 
@@ -267,11 +269,13 @@ namespace Web_IT_HELPDESK.Controllers
 
                 if (curr_PlantID == "V2010")
                 {
-                    toMails = en.Employees.Where(e => e.Plant_Id == "V2090" && e.Department_Id == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
+                    //toMails = en.Employees.Where(e => e.Plant_Id == "V2090" && e.Department_Id == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
+                    toMails = en.Employee_New.Where(e => e.Plant_ID == "V2090" && e.Department_ID == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
                 }
                 else
                 {
-                    toMails = en.Employees.Where(e => e.Plant_Id == curr_PlantID && e.Department_Id == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
+                    //toMails = en.Employees.Where(e => e.Plant_Id == curr_PlantID && e.Department_Id == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
+                    toMails = en.Employee_New.Where(e => e.Plant_ID == curr_PlantID && e.Department_ID == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
                 }
 
                 List<string> ccMails = new List<string>();
@@ -287,7 +291,8 @@ namespace Web_IT_HELPDESK.Controllers
                 return RedirectToAction("Index", "Incident");
             }
 
-            ViewBag.UserCreateName = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).EmployeeName;
+            //ViewBag.UserCreateName = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).EmployeeName;
+            ViewBag.UserCreateName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Employee_Name;
             ViewBag.plantName = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantID).Plant_Name;
             ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", en.Levels.First().LevelId);
             ViewBag.StatusName = en.Status.FirstOrDefault(s => s.StatusId == "ST1").StatusName;
@@ -310,7 +315,8 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.DepartmentName = DepartmentModel.Instance.getDeptName(inc.Plant, inc.DepartmentId);
             ViewBag.StatusId = new SelectList(en.Status.Where(s => s.StatusId != "ST6" && s.StatusId != "ST2"), "StatusId", "StatusName", inc.StatusId);
             ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", inc.LevelId);
-            ViewBag.UserCreateName = en.Employees.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.EmployeeName;
+            //ViewBag.UserCreateName = en.Employees.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.EmployeeName;
+            ViewBag.UserCreateName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.Employee_Name;
 
             return View(inc);
         }
@@ -352,11 +358,13 @@ namespace Web_IT_HELPDESK.Controllers
 
                 if (curr_PlantID == "V2010")
                 {
-                    toMails = en.Employees.Where(e => e.Plant_Id == "V2090" && e.Department_Id == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
+                    //toMails = en.Employees.Where(e => e.Plant_Id == "V2090" && e.Department_Id == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
+                    toMails = en.Employee_New.Where(e => e.Plant_ID == "V2090" && e.Department_ID == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
                 }
                 else
                 {
-                    toMails = en.Employees.Where(e => e.Plant_Id == curr_PlantID && e.Department_Id == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
+                    //toMails = en.Employees.Where(e => e.Plant_Id == curr_PlantID && e.Department_Id == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
+                    toMails = en.Employee_New.Where(e => e.Plant_ID == curr_PlantID && e.Department_ID == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
                 }
 
                 List<string> ccMails = new List<string>();
@@ -372,7 +380,8 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.DepartmentName = DepartmentModel.Instance.getDeptName(inc.Plant, inc.DepartmentId);
             ViewBag.StatusId = new SelectList(en.Status.Where(s => s.StatusId != "ST6" && s.StatusId != "ST2"), "StatusId", "StatusName", inc.StatusId);
             ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", inc.LevelId);
-            ViewBag.UserCreateName = en.Employees.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.EmployeeName;
+            //ViewBag.UserCreateName = en.Employees.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.EmployeeName;
+            ViewBag.UserCreateName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.Employee_Name;
 
             return View(inc);
         }
@@ -392,8 +401,10 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.DepartmentName = DepartmentModel.Instance.getDeptName(curr_PlantID, curr_DeptID);
             ViewBag.StatusName = en.Status.FirstOrDefault(s => s.StatusId == "ST6").StatusName;
             ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", inc.LevelId);
-            ViewBag.UserCreateName = en.Employees.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.EmployeeName;
-            ViewBag.UserResolveName = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp)?.EmployeeName;
+            //ViewBag.UserCreateName = en.Employees.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.EmployeeName;
+            //ViewBag.UserResolveName = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp)?.EmployeeName;
+            ViewBag.UserCreateName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.Employee_Name;
+            ViewBag.UserResolveName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp)?.Employee_Name;
 
             return View(inc);
         }
@@ -417,17 +428,20 @@ namespace Web_IT_HELPDESK.Controllers
 
                 /*1========== Sending Mail ==========================================================================================*/
                 IncidentViewModel incEx = IncidentModel.Instance.get_Incident(inc.Id);
-                List<string> toMails = new List<string>() { en.Employees.FirstOrDefault(e => e.Emp_CJ == inc.User_create).Email };
+                //List<string> toMails = new List<string>() { en.Employees.FirstOrDefault(e => e.Emp_CJ == inc.User_create).Email };
+                List<string> toMails = new List<string>() { en.Employee_New.FirstOrDefault(e => e.Emp_CJ == inc.User_create).Email };
 
                 List<string> ccMails = new List<string>();
 
                 if (curr_PlantID == "V2010")
                 {
-                    ccMails = en.Employees.Where(e => e.Plant_Id == "V2090" && e.Department_Id == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
+                    //ccMails = en.Employees.Where(e => e.Plant_Id == "V2090" && e.Department_Id == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
+                    ccMails = en.Employee_New.Where(e => e.Plant_ID == "V2090" && e.Department_ID == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
                 }
                 else
                 {
-                    ccMails = en.Employees.Where(e => e.Plant_Id == curr_PlantID && e.Department_Id == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
+                    //ccMails = en.Employees.Where(e => e.Plant_Id == curr_PlantID && e.Department_Id == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
+                    ccMails = en.Employee_New.Where(e => e.Plant_ID == curr_PlantID && e.Department_ID == "V20S000001" && e.Deactive != true).Select(e => e.Email).ToList();
                 }
 
                 string managerMail = en.Departments.FirstOrDefault(d => d.Plant_Id == inc.Plant && d.Department_Id == inc.DepartmentId).Manager_Email;
@@ -446,8 +460,10 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.DepartmentName = DepartmentModel.Instance.getDeptName(curr_PlantID, curr_DeptID);
             ViewBag.StatusName = en.Status.FirstOrDefault(s => s.StatusId == "ST6").StatusName;
             ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", inc.LevelId);
-            ViewBag.UserCreateName = en.Employees.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.EmployeeName;
-            ViewBag.UserResolveName = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp)?.EmployeeName;
+            //ViewBag.UserCreateName = en.Employees.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.EmployeeName;
+            //ViewBag.UserResolveName = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp)?.EmployeeName;
+            ViewBag.UserCreateName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.Employee_Name;
+            ViewBag.UserResolveName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp)?.Employee_Name;
 
             return View(inc);
         }
@@ -473,7 +489,6 @@ namespace Web_IT_HELPDESK.Controllers
 
             try
             {
-                // TODO: Add delete logic here
 
                 return RedirectToAction("Index");
             }
@@ -549,9 +564,13 @@ namespace Web_IT_HELPDESK.Controllers
                                     && i.datetime <= to_date
                                     && i.Plant == curr_PlantID);
 
-                    if (solved != "all")
+                    if (Convert.ToBoolean(solved))
                     {
-                        inc = inc.Where(i => i.Solved == Convert.ToBoolean(solved));
+                        inc = inc.Where(i => i.Solved == true);
+                    }
+                    else
+                    {
+                        inc = inc.Where(i => i.Solved != true);
                     }
                 }
 

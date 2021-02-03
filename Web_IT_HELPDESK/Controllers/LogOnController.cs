@@ -34,13 +34,15 @@ namespace Web_IT_HELPDESK.Controllers
 
         private string GetPlant_id(string v_emp)
         {
-            string plant_id = en.Employees.Where(f => (f.Emp_CJ == v_emp)).Select(f => f.Plant_Id).SingleOrDefault();
+            //string plant_id = en.Employees.Where(f => (f.Emp_CJ == v_emp)).Select(f => f.Plant_Id).SingleOrDefault();
+            string plant_id = en.Employee_New.Where(f => (f.Emp_CJ == v_emp)).Select(f => f.Plant_ID).SingleOrDefault();
             return plant_id;
         }
 
         private string GetDept_id(string v_plant_id, string session_emp)
         {
-            string dept_id = en.Employees.Where(f => (f.Emp_CJ == session_emp && f.Plant_Id == v_plant_id)).Select(f => f.Department_Id).SingleOrDefault();
+            //string dept_id = en.Employees.Where(f => (f.Emp_CJ == session_emp && f.Plant_Id == v_plant_id)).Select(f => f.Department_Id).SingleOrDefault();
+            string dept_id = en.Employee_New.Where(f => (f.Emp_CJ == session_emp && f.Plant_ID == v_plant_id)).Select(f => f.Department_ID).SingleOrDefault();
             return dept_id;
         }
 
@@ -111,7 +113,6 @@ namespace Web_IT_HELPDESK.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
 
                 return RedirectToAction("Index");
             }
@@ -137,7 +138,6 @@ namespace Web_IT_HELPDESK.Controllers
         {
             try
             {
-                // TODO: Add update logic here
 
                 return RedirectToAction("Index");
             }
@@ -163,7 +163,6 @@ namespace Web_IT_HELPDESK.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
 
                 return RedirectToAction("Index");
             }

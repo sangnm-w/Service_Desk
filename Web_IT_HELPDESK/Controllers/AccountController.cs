@@ -24,11 +24,13 @@ namespace Web_IT_HELPDESK.Controllers
         {
             if (ModelState.IsValid)
             {
-                Employee logonUser = en.Employees.FirstOrDefault(e => e.Emp_CJ == emp.Emp_CJ && e.Password == emp.Password);
+                //Employee logonUser = en.Employees.FirstOrDefault(e => e.Emp_CJ == emp.Emp_CJ && e.Password == emp.Password);
+                Employee_New logonUser = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == emp.Emp_CJ && e.Password == emp.Password);
+
                 if (logonUser != null)
                 {
-                    string curr_plantId = logonUser.Plant_Id;
-                    string curr_deptId = logonUser.Department_Id;
+                    string curr_plantId = logonUser.Plant_ID;
+                    string curr_deptId = logonUser.Department_ID;
 
                     FormsAuthentication.SetAuthCookie(emp.Emp_CJ, false);
                     if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")

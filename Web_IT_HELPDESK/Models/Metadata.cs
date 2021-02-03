@@ -118,6 +118,19 @@ namespace Web_IT_HELPDESK
         public DateTime Birthday { get; set; }
     }
 
+    public class Employee_NewMetadata
+    {
+        [Required]
+        [Display(Name = "User Login")]
+        public string Emp_CJ { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime Birthday { get; set; }
+    }
     public class Order_Metadata
     {
         [ScaffoldColumn(false)]
