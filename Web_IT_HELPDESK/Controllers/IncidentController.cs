@@ -311,7 +311,7 @@ namespace Web_IT_HELPDESK.Controllers
 
             Incident inc = en.Incidents.Find(inc_id);
 
-            ViewBag.plantName = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantID).Plant_Name;
+            ViewBag.plantName = en.Departments.FirstOrDefault(d => d.Plant_Id == inc.Plant).Plant_Name;
             ViewBag.DepartmentName = DepartmentModel.Instance.getDeptName(inc.Plant, inc.DepartmentId);
             ViewBag.StatusId = new SelectList(en.Status.Where(s => s.StatusId != "ST6" && s.StatusId != "ST2"), "StatusId", "StatusName", inc.StatusId);
             ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", inc.LevelId);
@@ -376,7 +376,7 @@ namespace Web_IT_HELPDESK.Controllers
                 return RedirectToAction("Index", "Incident");
             }
 
-            ViewBag.plantName = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantID).Plant_Name;
+            ViewBag.plantName = en.Departments.FirstOrDefault(d => d.Plant_Id == inc.Plant).Plant_Name;
             ViewBag.DepartmentName = DepartmentModel.Instance.getDeptName(inc.Plant, inc.DepartmentId);
             ViewBag.StatusId = new SelectList(en.Status.Where(s => s.StatusId != "ST6" && s.StatusId != "ST2"), "StatusId", "StatusName", inc.StatusId);
             ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", inc.LevelId);
