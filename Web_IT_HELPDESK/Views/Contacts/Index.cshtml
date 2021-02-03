@@ -82,7 +82,10 @@
                                             @Html.DisplayFor(modelItem => item.Email)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.Phone)
+                                            @if (!string.IsNullOrWhiteSpace(item.Email) && !item.Email.Contains("@cj.net"))
+                                            {
+                                                @Html.DisplayFor(modelItem => item.Phone)
+                                            }
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Birthday)
