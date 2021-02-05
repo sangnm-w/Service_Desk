@@ -127,7 +127,7 @@
                             </td>
                             <td>
                                 @Html.ActionLink("Details", "Details", new { id = item.SealUsing.Id }, new { @class = "btn btn-primary btn-xs", @role = "button" })
-                                @if ((bool)ViewBag.IsResend)
+                                @if (ViewBag.IsResend == true)
                                 {
                                     @Html.ActionLink("Resend", "Resend", new { id = item.SealUsing.Id }, new { @class = "btn btn-primary btn-xs", @role = "button" })
                                 }

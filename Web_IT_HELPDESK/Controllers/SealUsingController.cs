@@ -114,6 +114,11 @@ namespace Web_IT_HELPDESK.Controllers
             if (currUserIsManager == false && currUserIsHRSealUsing == false)
             {
                 suVM = suVM.Where(i => i.SealUsing.Employee_ID == CurrentUser.Instance.User.Emp_CJ).ToList();
+                ViewBag.IsResend = false;
+            }
+            else
+            {
+                ViewBag.IsResend = true;
             }
 
             if (!String.IsNullOrEmpty(searchString))
