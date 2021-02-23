@@ -15,7 +15,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
         /// <summary>
         /// This method just send mail
         /// </summary>
-        /// <param name="msg"></param>
+        /// <param name="msg"> This is email is initialized in Define_Email method </param>
         /// <returns> (bool) Result of sending </returns>
         public static bool Send_Mail(MailMessage msg)
         {
@@ -24,7 +24,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                 try
                 {
                     SmtpServer.Port = 25;
-                    SmtpServer.Credentials = new System.Net.NetworkCredential(Resources.SenderID, Resources.SenderPW);
+                    SmtpServer.Credentials = new System.Net.NetworkCredential(ConfigurationManager.AppSettings.Get("EmailID"), ConfigurationManager.AppSettings.Get("EmailPW"));
                     SmtpServer.EnableSsl = false;
                     SmtpServer.Send(msg);
                     return true;
