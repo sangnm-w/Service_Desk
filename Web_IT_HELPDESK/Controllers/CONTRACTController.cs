@@ -18,6 +18,7 @@ namespace Web_IT_HELPDESK.Controllers
     public class CONTRACTController : Controller
     {
         ServiceDeskEntities en = new ServiceDeskEntities();
+
         // GET: Index
         [Authorize]
         public ActionResult Index()
@@ -46,6 +47,7 @@ namespace Web_IT_HELPDESK.Controllers
                 Department_Name = d.Department_Name
             }).OrderByDescending(d => d.Department_Name).ToList();
             ViewBag.Departments = depts;
+            ViewBag.Selected_depts = new List<string>();
 
             var contract_types = en.CONTRACT_TYPE;
             ViewBag.Contract_Types = contract_types;
@@ -57,6 +59,20 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 contract_list = contract_list.Where(c => c.USER_CREATE == CurrentUser.Instance.User.Emp_CJ);
             }
+
+            //Store value of filter parameters
+            Dictionary<object, object> filter_Contracts = new Dictionary<object, object>();
+
+            filter_Contracts.Add("filter_search", "");
+            filter_Contracts.Add("filter_date", DateTime.Now);
+            filter_Contracts.Add("filter_depts", null);
+            filter_Contracts.Add("filter_contractType", "ALL");
+            filter_Contracts.Add("filter_daynum", 30);
+
+            Session.Clear();
+            Session["filter_Contracts"] = filter_Contracts;
+            //
+
             return View(contract_list);
         }
 
@@ -78,6 +94,16 @@ namespace Web_IT_HELPDESK.Controllers
                }
                ).OrderByDescending(d => d.Department_Name).ToList();
             ViewBag.Departments = depts;
+
+            List<string> selectedDepts = new List<string>();
+            if (v_depts == null)
+            {
+                ViewBag.Selected_depts = selectedDepts = depts.Select(m => m.Department_Id).ToList();
+            }
+            else
+            {
+                ViewBag.Selected_depts = selectedDepts = v_depts.ToList();
+            }
 
             var contract_types = en.CONTRACT_TYPE;
             ViewBag.Contract_Types = contract_types;
@@ -206,6 +232,18 @@ namespace Web_IT_HELPDESK.Controllers
             //} 
             #endregion
 
+            //Store value of filter parameters
+            Dictionary<object, object> filter_Contracts = new Dictionary<object, object>();
+
+            filter_Contracts.Add("filter_search", search_);
+            filter_Contracts.Add("filter_date", date_);
+            filter_Contracts.Add("filter_depts", v_depts);
+            filter_Contracts.Add("filter_contractType", v_contract_type);
+            filter_Contracts.Add("filter_daynum", daynum_);
+
+            Session["filter_Contracts"] = filter_Contracts;
+            //
+
             return View(contract_list);
         }
 
@@ -237,7 +275,10 @@ namespace Web_IT_HELPDESK.Controllers
 
                 CONTRACT contract = _contractviewModel.CONTRACT;
                 contract.ID = Guid.NewGuid();
+
                 contract.CONTENT = contentBinary.ToArray();
+                string filePath = ContractHelper.SaveContractFile(contract, contractFile);
+
                 contract.NOTE = System.IO.Path.GetFileName(contractFile.FileName);
                 contract.DEPARTMENTID = CurrentUser.Instance.User.Department_Id;
                 contract.USER_CREATE = CurrentUser.Instance.User.Emp_CJ;
@@ -270,11 +311,11 @@ namespace Web_IT_HELPDESK.Controllers
             _contractviewModel.Periods = en.PERIODs;
             return View(_contractviewModel);
         }
-               
+
         // GET: CONTRACT/Edit
         public ActionResult Edit(Guid id)
         {
-            ContractViewModel.EditContractViewModel _contractviewmodel = new ContractViewModel.EditContractViewModel();
+            ContractViewModel.Edit _contractviewmodel = new ContractViewModel.Edit();
             _contractviewmodel.Contract_Types = en.CONTRACT_TYPE;
             _contractviewmodel.Periods = en.PERIODs;
 
@@ -293,7 +334,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         // POST: CONTRACT/Edit
         [HttpPost]
-        public ActionResult Edit(ContractViewModel.EditContractViewModel _contractviewModel)
+        public ActionResult Edit(ContractViewModel.Edit _contractviewModel)
         {
             //check subfile of new contractsub
             int subCount = 0;
@@ -419,6 +460,75 @@ namespace Web_IT_HELPDESK.Controllers
             _contractviewModel.Periods = en.PERIODs.ToList();
 
             return View(_contractviewModel);
+        }
+
+        public FileContentResult Download()
+        {
+            //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.DOWNLOAD, Commons.ModuleConstant.INCIDENT);
+            //if (hasPermission.Value == false)
+            //    return RedirectToAction("Index", "Home");
+
+            Dictionary<object, object> filter_Contracts = (Dictionary<object, object>)Session["filter_Contracts"];
+
+            string filter_search = filter_Contracts["filter_search"].ToString();
+            DateTime? filter_date = Convert.ToDateTime(filter_Contracts["filter_date"]);
+            List<string> filter_depts = ((ICollection<string>)filter_Contracts["filter_depts"])?.ToList();
+            string filter_contractType = filter_Contracts["filter_contractType"].ToString();
+            int filter_daynum = Convert.ToInt32(filter_Contracts["filter_daynum"]);
+
+
+            string curr_PlantID = CurrentUser.Instance.User.Plant_Id;
+            string curr_DeptID = CurrentUser.Instance.User.Department_Id;
+            bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantID && d.Department_Id == curr_DeptID && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
+            var contracts = en.CONTRACTs.Where(c => c.DEL != true
+                                     && c.PLANT == curr_PlantID
+                                     && filter_date <= DbFunctions.AddDays(c.DATE, filter_daynum)).ToList();
+
+            if (currUserIsManager == true)
+            {
+                string v_dept_string = "";
+                if (filter_depts != null)
+                {
+                    foreach (var v_dept in filter_depts)
+                    {
+                        v_dept_string += v_dept.ToString() + " ";
+                    }
+                    contracts = contracts.Where(c => v_dept_string.Trim().Contains(c.DEPARTMENTID)).ToList();
+                }
+            }
+            else
+            {
+                contracts = contracts.Where(c => c.USER_CREATE == CurrentUser.Instance.User.Emp_CJ).ToList();
+            }
+
+
+            if (filter_contractType != "ALL")
+            {
+                contracts = contracts.Where(c => c.CONTRACT_TYPE_ID == filter_contractType).ToList();
+            }
+
+            if (filter_search != "")
+            {
+                contracts = contracts.Where(c => c.CONTRACTNAME.Contains(filter_search)).ToList();
+            }
+
+            List<ContractViewModel.Excel> contractsForExport = ContractModel.Instance.GetContractsForExport(curr_DeptID, curr_PlantID, contracts.ToList());
+
+            List<int> colDates = new List<int>()
+            {
+                9, 11, 16
+            };
+
+            var stream = ExcelHelper.Instance.CreateExcelFile(null, contractsForExport, ExcelTitle.Instance.Contracts(), colDates);
+            var buffer = stream as MemoryStream;
+            //Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            //Response.AddHeader("Content-Disposition", "attachment; filename=IT Order Request.xlsx");
+            //Response.BinaryWrite(buffer.ToArray());
+            //Response.Flush();
+            //Response.End();
+            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            string fileName = "Contract Report.xlsx";
+            return File(buffer.ToArray(), contentType, fileName);
         }
 
         [HttpGet]

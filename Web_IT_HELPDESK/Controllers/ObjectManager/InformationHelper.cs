@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net.Mail;
 using System.Web;
@@ -119,7 +120,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                                 msg.Bcc.Add(m);
 
                     ///Define mail message
-                    msg.From = new MailAddress(Resources.SenderID); // from sender
+                    msg.From = new MailAddress(ConfigurationManager.AppSettings.Get("EmailID")); // from it-servicedesk@cjvina.com
 
                     msg.Subject = subject;
                     msg.Body = body;

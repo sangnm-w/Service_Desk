@@ -19,14 +19,13 @@
                         @foreach (var item in ViewBag.Contract_Types)
                         {
                             <div class="col-md-2">
-                                <input value="@item.CONTRACT_TYPE_ID" name="v_contract_type" type="radio" />
-                                <label style="vertical-align: middle; margin-left: 7px;">
-                                    @item.CONTRACT_TYPE_NAME
-                                </label>
+                                @Html.RadioButton("v_contract_type", (string)item.CONTRACT_TYPE_ID, false)<label style="vertical-align: middle; margin-left: 7px;">@item.CONTRACT_TYPE_NAME</label>
                             </div>
                         }
-                        <div class="col-md-2">
-                            <input name="v_contract_type" type="radio" value="ALL" checked="checked"><label style="vertical-align: middle; margin-left: 7px;">All</label>
+
+
+                        <div class="col-sm-2">
+                            @Html.RadioButton("v_contract_type", "ALL", true)<label style="vertical-align: middle; margin-left: 7px;">All</label>
                         </div>
                     </div>
                 </div>
@@ -35,53 +34,57 @@
                     <div class="form-group show">
                         <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Departments :</label>
                         <br />
-                        <input type="button" name="deptCheck" id="uncheckall" value="Uncheck all" />
+                        @if ((ViewBag.Departments).Count > ((List<string>)ViewBag.Selected_depts).Count)
+                        {
+                            <input type="button" name="deptCheck" id="checkall" value="Check all" />
+                        }
+                        else
+                        {
+                            <input type="button" name="deptCheck" id="uncheckall" value="Uncheck all" />
+                        }
                         <div class="row">
                             @foreach (var item in ViewBag.Departments)
                             {
                                 <div class="col-md-3 col-sm-2">
-                                    <input value="@item.Department_Id" name="v_depts" type="checkbox" checked><label style="margin-left:5px;">@item.Department_Name</label>
+                                    <input value="@item.Department_Id"
+                                           name="v_depts"
+                                           type="checkbox"
+                                           @if (((List<string>)ViewBag.Selected_Depts).Contains(item.Department_Id)) { <text> checked </text> }>
+                                    <label style="margin-left:5px;">@item.Department_Name</label>
                                 </div>
                             }
                         </div>
                     </div>
-                }
-                else
-                {
-                    <div class="form-group hide">
-                        <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Departments :</label>
-                        <br />
-                        <input type="button" name="deptCheck" id="uncheckall" value="Uncheck all" />
-                        <div class="row">
-                            @foreach (var item in ViewBag.Departments)
-                            {
-                                <div class="col-md-3 col-sm-2">
-                                    <input value="@item.Department_Id" name="v_depts" type="checkbox" checked><label style="margin-left:5px;">@item.Department_Name</label>
-                                </div>
-                            }
-                        </div>
-                    </div>
-
                 }
                 <div class="form-group">
                     <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Filter :</label>
                     <div class="row">
-                        <div class="col-md-6">  
+                        <div class="col-md-6">
                             <label class="control-label">Search</label>
-                            <input type="text" name="search_" class="form-control" placeholder="Search..." style="background:#A9BCF5; color:red; font-style: italic;">
+                            @*<input type="text" name="search_" class="form-control" placeholder="Search..." style="background:#A9BCF5; color:red; font-style: italic;">*@
+                            @Html.Editor("search_", "", new { htmlAttributes = new { @class = "form-control", placeholder = "Search...", style = "background:#A9BCF5; color:red; font-style: italic;" } })
+
                         </div>
                         <div class="col-md-3">
-                            <label class="control-label">Maturity (mm/dd/yyyy)</label>
-                            <div class="input-group date" id="date_picker">
-                                <input type="text" id="date_" name="date_" class="form-control" autocomplete="off" style="background:#A9BCF5;" />
+                            <label class="control-label">Maturity</label>
+                            @Html.Hidden("date_", "", new { @id = "dp_date_val" })
+                            <div class="input-group date" id="dp_date">
+                                @*<input type="text" id="date_" name="date_" class="form-control" autocomplete="off" style="background:#A9BCF5;" />*@
+                                @Html.TextBox("date_", "", new { type = "text", @class = "form-control", autocomplete = "off", style = "background:#A9BCF5;" })
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
                             </div>
+                            @*<div class="form-group">
+                                    <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Month :</label>
+                                    @Html.TextBox("date_", DateTime.Now.ToString("mm-dd-yyyy"), new { @type = "date", @class = "form-control", @style = "width: auto; display: inline-block" })
+                                </div>*@
                         </div>
                         <div class="col-md-3">
                             <label class="control-label">Day number</label>
-                            <input type="number" id="daynum" name="daynum_" class="form-control" style="background:#A9BCF5;" value="30" max="999999" required>
+                            @*<input type="number" id="daynum" name="daynum_" class="form-control" style="background:#A9BCF5;" value="30" max="999999" required>*@
+
+                            @Html.Editor("daynum_", new { htmlAttributes = new { id = "daynum", @type = "number", @min = "0", @max = "365", @class = "form-control", style = "background:#A9BCF5;", required = "required" } })
                         </div>
                     </div>
                 </div>
@@ -94,7 +97,7 @@
             <div class="panel-title">Contract List</div>
 
             <div class="panel-options">
-                <a href="@Url.Action("Download", "Contract")">
+                <a href="@Url.Action("Download", "Contract", new { model = Model.ToList()})">
                     <i class="glyphicon glyphicon glyphicon-download"></i>
                 </a>
             </div>
@@ -197,8 +200,8 @@
                                 }
                             </td>
                             <td>
-                                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "btn btn-default btn-xs", @role = "button" })
-                                </td>
+                                @Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "btn btn-default btn-xs", @role = "button" })
+                            </td>
                         </tr>
                     }
                 </tbody>
@@ -230,11 +233,30 @@
             'scrollX': true,
         });
 
-        $('#date_picker').datepicker({
+        $('#dp_date').datepicker({
+            format: 'dd/mm/yyyy',
             autoclose: true,
             todayHighlight: true
         });
 
-        $('#date_picker').datepicker('setDate', 'today');
+        $('#dp_date').on('changeDate', function () {
+            var d = new Date($('#dp_date').datepicker('getDate'));
+            $('#dp_date_val').val(
+                moment(d).format()
+            );
+        });
+
+        var dp_date_val = $("#dp_date_val").val();
+        if (dp_date_val.length > 0) {
+            $("#dp_date").datepicker('setDate', new Date(dp_date_val));
+        }
+        else {
+            $("#dp_date").datepicker('setDate', 'today');
+        }
+
+        var daynum_val = $("#daynum").val();
+        if (daynum_val.length <= 0) {
+            $("#daynum").val("365");
+        }
     </script>
 }

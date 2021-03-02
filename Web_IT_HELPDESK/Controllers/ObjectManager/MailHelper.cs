@@ -24,7 +24,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                 try
                 {
                     SmtpServer.Port = 25;
-                    SmtpServer.Credentials = new System.Net.NetworkCredential(Resources.SenderID, Resources.SenderPW);
+                    SmtpServer.Credentials = new System.Net.NetworkCredential(ConfigurationManager.AppSettings.Get("EmailID"), ConfigurationManager.AppSettings.Get("EmailPW"));
                     SmtpServer.EnableSsl = false;
                     SmtpServer.Send(msg);
                     return true;
