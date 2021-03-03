@@ -20,7 +20,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         // POST: /LogOn/
         [HttpPost]
-        public ActionResult LogOn(Employee emp, string returnUrl)
+        public ActionResult LogOn(Employee_New emp, string returnUrl)
         {
             if (ModelState.IsValid)
             {
