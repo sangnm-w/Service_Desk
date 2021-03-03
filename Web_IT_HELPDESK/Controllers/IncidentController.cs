@@ -31,8 +31,8 @@ namespace Web_IT_HELPDESK.Controllers
         {
             bool IsAdmin = CurrentUser.Instance.isAdministrator.HasValue ? CurrentUser.Instance.isAdministrator.Value : false;
             ViewBag.IsAdmin = IsAdmin;
-            List<string> currentRules = CurrentUser.Instance.RulesByModuleName(Commons.ModuleConstant.INCIDENT).Select(r => r.Rule_Name).ToList();
-
+            //List<string> currentRules = CurrentUser.Instance.RulesByModuleName(Commons.ModuleConstant.INCIDENT).Select(r => r.Rule_Name).ToList();
+            List<string> currentRules = new List<string>();
             if (currentRules.Count > 0)
             {
                 ViewBag.Rules = currentRules;
@@ -111,8 +111,8 @@ namespace Web_IT_HELPDESK.Controllers
         {
             bool IsAdmin = CurrentUser.Instance.isAdministrator.HasValue ? CurrentUser.Instance.isAdministrator.Value : false;
             ViewBag.IsAdmin = IsAdmin;
-            List<string> currentRules = CurrentUser.Instance.RulesByModuleName(Commons.ModuleConstant.INCIDENT).Select(r => r.Rule_Name).ToList();
-
+            //List<string> currentRules = CurrentUser.Instance.RulesByModuleName(Commons.ModuleConstant.INCIDENT).Select(r => r.Rule_Name).ToList();
+            List<string> currentRules = new List<string>();
             if (currentRules.Count > 0)
             {
                 ViewBag.Rules = currentRules;

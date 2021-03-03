@@ -70,29 +70,20 @@ namespace Web_IT_HELPDESK.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ~\Library\Document\Contract\.
+        /// </summary>
+        internal static string ContractPath {
+            get {
+                return ResourceManager.GetString("ContractPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ~\Library\Picture\Device\.
         /// </summary>
         internal static string DeviceQRCodePath {
             get {
                 return ResourceManager.GetString("DeviceQRCodePath", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to it-servicedesk@cjvina.com.
-        /// </summary>
-        internal static string SenderID {
-            get {
-                return ResourceManager.GetString("SenderID", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to qwer4321!.
-        /// </summary>
-        internal static string SenderPW {
-            get {
-                return ResourceManager.GetString("SenderPW", resourceCulture);
             }
         }
     }

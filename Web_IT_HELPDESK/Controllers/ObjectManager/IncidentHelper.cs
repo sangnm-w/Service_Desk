@@ -4,6 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Net.Mail;
 using System.Web;
+using System.Web.Hosting;
 using Web_IT_HELPDESK.Models;
 using Web_IT_HELPDESK.Properties;
 using Web_IT_HELPDESK.ViewModels;
@@ -98,7 +99,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
 
                     //Create mail body html
                     string bodyHtml = string.Empty;
-                    using (StreamReader reader = new StreamReader(HttpContext.Current.Server.MapPath(@"~/Views/Incident/IncidentEmail.cshtml")))
+                    using (StreamReader reader = new StreamReader(HostingEnvironment.MapPath(@"~/Views/Incident/IncidentEmail.cshtml")))
                     {
                         bodyHtml = reader.ReadToEnd();
                     }
@@ -135,7 +136,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                                 msg.Bcc.Add(m);
 
                     ///Define mail message
-                    msg.From = new MailAddress(ConfigurationManager.AppSettings.Get("EmailID")); // from sender
+                    msg.From = new MailAddress(ConfigurationManager.AppSettings.Get("EmailID")); // from it-servicedesk@cjvina.com
                     msg.Subject = subject;
                     msg.IsBodyHtml = true;
                     msg.Body = bodyHtml.ToString();

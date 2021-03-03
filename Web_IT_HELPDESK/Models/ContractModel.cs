@@ -13,13 +13,16 @@ namespace Web_IT_HELPDESK.Models
         public static ContractModel Instance { get { if (instance == null) instance = new ContractModel(); return instance; } set => instance = value; }
         private ContractModel() { }
 
-        public List<ContractViewModel.Excel> GetContractForExport(string deptID, string plantID)
+        public List<ContractViewModel.Excel> GetContractsForExport(string deptID, string plantID, List<CONTRACT> contracts = null)
         {
             ServiceDeskEntities en = new ServiceDeskEntities();
 
             List<ContractViewModel.Excel> contractAndSubs = new List<ContractViewModel.Excel>();
 
-            List<CONTRACT> contracts = en.CONTRACTs.Where(model => model.DEL != true && model.DEPARTMENTID == deptID && model.PLANT == plantID).ToList();
+            if (contracts == null || contracts.Count <= 0)
+            {
+                contracts = en.CONTRACTs.Where(model => model.DEL != true && model.DEPARTMENTID == deptID && model.PLANT == plantID).ToList();
+            }
 
             int countContract = 0, countsub = 0;
             foreach (var c in contracts)
@@ -32,7 +35,7 @@ namespace Web_IT_HELPDESK.Models
                 {
                     foreach (var s in subs)
                     {
-                        ContractViewModel.Excel subEx = new ContractViewModel.Excel(s, "Contract_" + countContract+" - Sub_" + countsub);
+                        ContractViewModel.Excel subEx = new ContractViewModel.Excel(s, "Contract_" + countContract + " - Sub_" + countsub);
                         contractAndSubs.Add(subEx);
                     }
                 }

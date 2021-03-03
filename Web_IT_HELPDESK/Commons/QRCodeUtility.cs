@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
 using QRCoder;
 
 namespace Web_IT_HELPDESK.Commons
@@ -16,7 +17,7 @@ namespace Web_IT_HELPDESK.Commons
 
         public Bitmap GetBitmapQRCode(string QRText)
         {
-            string logoPath = HttpContext.Current.Server.MapPath(@"~/Library/Picture/Logo.jpg");
+            string logoPath = HostingEnvironment.MapPath(@"~/Library/Picture/Logo.jpg");
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
             QRCodeData qrCodeData = qrGenerator.CreateQrCode(QRText, QRCodeGenerator.ECCLevel.Q, forceUtf8: true);
             QRCode qrCode = new QRCode(qrCodeData);

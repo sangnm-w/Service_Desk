@@ -22,8 +22,8 @@ namespace Web_IT_HELPDESK
         }
         partial void OnConstructorInit();
     
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public int Role_ID { get; set; }
+        public string Role_Name { get; set; }
         public string Description { get; set; }
         public Nullable<bool> Deactive { get; set; }
     

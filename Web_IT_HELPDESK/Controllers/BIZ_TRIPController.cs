@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using Web_IT_HELPDESK.Controllers.ObjectManager;
@@ -758,7 +759,7 @@ namespace Web_IT_HELPDESK.Controllers
         {
             string reportid = "PDF";
             LocalReport lr = new LocalReport();
-            string path = Path.Combine(Server.MapPath("~/Report"), "Report_BizTrip.rdlc");
+            string path = Path.Combine(HostingEnvironment.MapPath("~/Report"), "Report_BizTrip.rdlc");
             if (System.IO.File.Exists(path))
             {
                 lr.ReportPath = path;

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -755,7 +756,7 @@ namespace Web_IT_HELPDESK.Controllers
             if (reportid != "")
             {
                 LocalReport lr = new LocalReport();
-                string path = Path.Combine(Server.MapPath("~/Report"), "Report_Viewer.rdlc");
+                string path = Path.Combine(HostingEnvironment.MapPath("~/Report"), "Report_Viewer.rdlc");
                 if (System.IO.File.Exists(path))
                 {
                     lr.ReportPath = path;

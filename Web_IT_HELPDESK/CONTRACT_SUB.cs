@@ -18,6 +18,7 @@ namespace Web_IT_HELPDESK
         public Nullable<System.Guid> CONTRACTID { get; set; }
         public string SUBNAME { get; set; }
         public byte[] CONTENT { get; set; }
+        public string FILE_PATH { get; set; }
         public string PERIODID { get; set; }
         public Nullable<System.DateTime> DATE { get; set; }
         public string USER_CREATE { get; set; }

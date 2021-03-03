@@ -84,17 +84,18 @@ namespace Web_IT_HELPDESK.Models
 
         public List<Rule> RulesByModuleName(string moduleName)
         {
-            return entity.Rights_Management
-                    .Join
-                    (
-                        entity.Rules,
-                        a => a.Rule_Id,
-                        b => b.Id,
-                        (a, b) => new { a, b }
-                    )
-                    .Where(temp0 => temp0.b.Module_Name == moduleName && temp0.a.Employee_Id == sessionUserID)
-                    .Select(temp0 => temp0.b)
-                    .ToList();
+            //return entity.Rights_Management
+            //        .Join
+            //        (
+            //            entity.Rules,
+            //            a => a.Rule_Id,
+            //            b => b.Rule_ID,
+            //            (a, b) => new { a, b }
+            //        )
+            //        .Where(temp0 => temp0.b.Module_Name == moduleName && temp0.a.Employee_Id == sessionUserID)
+            //        .Select(temp0 => temp0.b)
+            //        .ToList();
+            return null;
         }
 
         private static bool sessionUser_Changed()

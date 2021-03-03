@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Web;
+using System.Web.Hosting;
 using Web_IT_HELPDESK.ViewModels;
 
 namespace Web_IT_HELPDESK.Controllers.ObjectManager
@@ -203,7 +204,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
 
         private void AddImage(ExcelWorksheet oSheet, int rowIndex, int colIndex, string imagePath)
         {
-            Bitmap image = new Bitmap(HttpContext.Current.Server.MapPath(imagePath));
+            Bitmap image = new Bitmap(HostingEnvironment.MapPath(imagePath));
             ExcelPicture excelImage = null;
             if (image != null)
             {
