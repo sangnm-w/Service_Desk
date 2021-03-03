@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
 using Web_IT_HELPDESK.Commons;
 using Web_IT_HELPDESK.Models;
 using Web_IT_HELPDESK.Properties;
@@ -57,7 +58,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             QRText = QRText + "\n" + DetailsLink;
 
             string filePath = Path.Combine(Resources.DeviceQRCodePath, device.Plant_Id);
-            string serverPath = HttpContext.Current.Server.MapPath(filePath);
+            string serverPath = HostingEnvironment.MapPath(filePath);
             if (!Directory.Exists(serverPath))
             {
                 Directory.CreateDirectory(serverPath);

@@ -33,6 +33,7 @@ namespace Web_IT_HELPDESK
         public Nullable<System.DateTime> DATE_CREATE { get; set; }
         public string CONTRACTNAME { get; set; }
         public byte[] CONTENT { get; set; }
+        public string FILE_PATH { get; set; }
         public string NOTE { get; set; }
         public string USER_CREATE { get; set; }
         public string DEPARTMENTID { get; set; }

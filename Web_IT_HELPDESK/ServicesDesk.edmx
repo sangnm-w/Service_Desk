@@ -105,6 +105,7 @@
           <Property Name="DATE_CREATE" Type="datetime" />
           <Property Name="CONTRACTNAME" Type="nvarchar" MaxLength="50" />
           <Property Name="CONTENT" Type="varbinary(max)" />
+          <Property Name="FILE_PATH" Type="nvarchar(max)" />
           <Property Name="NOTE" Type="nvarchar" MaxLength="250" />
           <Property Name="USER_CREATE" Type="nvarchar" MaxLength="50" />
           <Property Name="DEPARTMENTID" Type="nvarchar" MaxLength="50" />
@@ -123,6 +124,7 @@
           <Property Name="CONTRACTID" Type="uniqueidentifier" />
           <Property Name="SUBNAME" Type="nvarchar" MaxLength="200" />
           <Property Name="CONTENT" Type="varbinary(max)" />
+          <Property Name="FILE_PATH" Type="nvarchar(max)" />
           <Property Name="PERIODID" Type="nvarchar" MaxLength="50" />
           <Property Name="DATE" Type="datetime" />
           <Property Name="USER_CREATE" Type="nvarchar" MaxLength="50" />
@@ -416,20 +418,20 @@
         </EntityType>
         <EntityType Name="Role">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="Role_ID" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Role_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Role_Name" Type="nvarchar" MaxLength="50" />
           <Property Name="Description" Type="nvarchar" MaxLength="500" />
           <Property Name="Deactive" Type="bit" />
         </EntityType>
         <EntityType Name="Rule">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="Rule_ID" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Rule_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Rule_Name" Type="nvarchar" MaxLength="50" />
-          <Property Name="Module_Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Module_ID" Type="nvarchar" MaxLength="100" />
           <Property Name="Deactive" Type="bit" />
         </EntityType>
         <EntityType Name="Screen">
@@ -798,7 +800,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <End Role="Rights_Management" Type="Self.Rights_Management" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Role">
-              <PropertyRef Name="Id" />
+              <PropertyRef Name="Role_ID" />
             </Principal>
             <Dependent Role="Rights_Management">
               <PropertyRef Name="Role_Id" />
@@ -810,7 +812,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <End Role="Rights_Management" Type="Self.Rights_Management" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Rule">
-              <PropertyRef Name="Id" />
+              <PropertyRef Name="Rule_ID" />
             </Principal>
             <Dependent Role="Rights_Management">
               <PropertyRef Name="Rule_Id" />
@@ -1167,6 +1169,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="DATE_CREATE" Type="DateTime" Precision="3" />
           <Property Name="CONTRACTNAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CONTENT" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="FILE_PATH" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="NOTE" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="USER_CREATE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DEPARTMENTID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -1191,6 +1194,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="CONTRACTID" Type="Guid" />
           <Property Name="SUBNAME" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="CONTENT" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="FILE_PATH" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="PERIODID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DATE" Type="DateTime" Precision="3" />
           <Property Name="USER_CREATE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -1503,28 +1507,28 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="Plant_Id" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Department" Relationship="Self.FK_Rights_Management_Department" FromRole="Rights_Management" ToRole="Department" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_Rights_Management_Employee" FromRole="Rights_Management" ToRole="Employee" />
-          <NavigationProperty Name="Role" Relationship="Self.FK_Rights_Management_Role" FromRole="Rights_Management" ToRole="Role" />
-          <NavigationProperty Name="Rule" Relationship="Self.FK_Rights_Management_Rule" FromRole="Rights_Management" ToRole="Rule" />
+          <NavigationProperty Name="Role" Relationship="ServiceDeskModel.FK_Rights_Management_Role" FromRole="Rights_Management" ToRole="Role" />
+          <NavigationProperty Name="Rule" Relationship="ServiceDeskModel.FK_Rights_Management_Rule" FromRole="Rights_Management" ToRole="Rule" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="Role_ID" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Role_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="Role_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Deactive" Type="Boolean" />
-          <NavigationProperty Name="Rights_Management" Relationship="Self.FK_Rights_Management_Role" FromRole="Role" ToRole="Rights_Management" />
+          <NavigationProperty Name="Rights_Management" Relationship="ServiceDeskModel.FK_Rights_Management_Role" FromRole="Role" ToRole="Rights_Management" />
         </EntityType>
         <EntityType Name="Rule">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="Rule_ID" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Rule_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" />
           <Property Name="Rule_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Deactive" Type="Boolean" />
-          <NavigationProperty Name="Rights_Management" Relationship="Self.FK_Rights_Management_Rule" FromRole="Rule" ToRole="Rights_Management" />
-          <Property Name="Module_Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Module_ID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Rights_Management" Relationship="ServiceDeskModel.FK_Rights_Management_Rule" FromRole="Rule" ToRole="Rights_Management" />
         </EntityType>
         <EntityType Name="Screen">
           <Key>
@@ -1875,30 +1879,6 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Rights_Management_Role">
-          <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
-          <End Role="Rights_Management" Type="Self.Rights_Management" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Role">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Rights_Management">
-              <PropertyRef Name="Role_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Rights_Management_Rule">
-          <End Role="Rule" Type="Self.Rule" Multiplicity="0..1" />
-          <End Role="Rights_Management" Type="Self.Rights_Management" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Rule">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Rights_Management">
-              <PropertyRef Name="Rule_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="ServiceDeskEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Albums" EntityType="Self.Album" />
           <EntitySet Name="AlbumTypes" EntityType="Self.AlbumType" />
@@ -2027,14 +2007,6 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             <End Role="Order_" EntitySet="Order_" />
             <End Role="OrderDetail" EntitySet="OrderDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK_Rights_Management_Role" Association="Self.FK_Rights_Management_Role">
-            <End Role="Role" EntitySet="Roles" />
-            <End Role="Rights_Management" EntitySet="Rights_Management" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Rights_Management_Rule" Association="Self.FK_Rights_Management_Rule">
-            <End Role="Rule" EntitySet="Rules" />
-            <End Role="Rights_Management" EntitySet="Rights_Management" />
-          </AssociationSet>
           <FunctionImport Name="func_report_detail" IsComposable="true" ReturnType="Collection(ServiceDeskModel.func_report_detail_Result)">
             <Parameter Name="v_fromdate" Mode="In" Type="DateTime" />
             <Parameter Name="v_todate" Mode="In" Type="DateTime" />
@@ -2050,6 +2022,14 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             <End Role="Employee_Screen" EntitySet="Employee_Screen" />
           </AssociationSet>
           <FunctionImport Name="GetLastAllocationOfDevice" IsComposable="true" EntitySet="Allocations" ReturnType="Collection(ServiceDeskModel.Allocation)" />
+          <AssociationSet Name="FK_Rights_Management_Role" Association="ServiceDeskModel.FK_Rights_Management_Role">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="Rights_Management" EntitySet="Rights_Management" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rights_Management_Rule" Association="ServiceDeskModel.FK_Rights_Management_Rule">
+            <End Role="Rule" EntitySet="Rules" />
+            <End Role="Rights_Management" EntitySet="Rights_Management" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Employee_Screen">
           <Key>
@@ -2084,6 +2064,30 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </Principal>
             <Dependent Role="Employee_Screen">
               <PropertyRef Name="ScreenId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rights_Management_Role">
+          <End Type="ServiceDeskModel.Role" Role="Role" Multiplicity="0..1" />
+          <End Type="ServiceDeskModel.Rights_Management" Role="Rights_Management" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Role_ID" />
+            </Principal>
+            <Dependent Role="Rights_Management">
+              <PropertyRef Name="Role_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rights_Management_Rule">
+          <End Type="ServiceDeskModel.Rule" Role="Rule" Multiplicity="0..1" />
+          <End Type="ServiceDeskModel.Rights_Management" Role="Rights_Management" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rule">
+              <PropertyRef Name="Rule_ID" />
+            </Principal>
+            <Dependent Role="Rights_Management">
+              <PropertyRef Name="Rule_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2187,6 +2191,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <EntitySetMapping Name="CONTRACTs">
             <EntityTypeMapping TypeName="ServiceDeskModel.CONTRACT">
               <MappingFragment StoreEntitySet="CONTRACT">
+                <ScalarProperty Name="FILE_PATH" ColumnName="FILE_PATH" />
                 <ScalarProperty Name="ADDRESS" ColumnName="ADDRESS" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="VENDOR" ColumnName="VENDOR" />
@@ -2212,6 +2217,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <EntitySetMapping Name="CONTRACT_SUB">
             <EntityTypeMapping TypeName="ServiceDeskModel.CONTRACT_SUB">
               <MappingFragment StoreEntitySet="CONTRACT_SUB">
+                <ScalarProperty Name="FILE_PATH" ColumnName="FILE_PATH" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="CONTRACTID" ColumnName="CONTRACTID" />
                 <ScalarProperty Name="SUBNAME" ColumnName="SUBNAME" />
@@ -2522,8 +2528,8 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <EntitySetMapping Name="Roles">
             <EntityTypeMapping TypeName="ServiceDeskModel.Role">
               <MappingFragment StoreEntitySet="Role">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Role_Name" ColumnName="Role_Name" />
+                <ScalarProperty Name="Role_ID" ColumnName="Role_ID" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Deactive" ColumnName="Deactive" />
               </MappingFragment>
@@ -2532,8 +2538,8 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <EntitySetMapping Name="Rules">
             <EntityTypeMapping TypeName="ServiceDeskModel.Rule">
               <MappingFragment StoreEntitySet="Rule">
-                <ScalarProperty Name="Module_Name" ColumnName="Module_Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Module_ID" ColumnName="Module_ID" />
+                <ScalarProperty Name="Rule_ID" ColumnName="Rule_ID" />
                 <ScalarProperty Name="Rule_Name" ColumnName="Rule_Name" />
                 <ScalarProperty Name="Deactive" ColumnName="Deactive" />
               </MappingFragment>

@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Web_IT_HELPDESK.Controllers
@@ -126,7 +122,7 @@ namespace Web_IT_HELPDESK.Controllers
                 en.SaveChanges();
                 //ViewBag.Message = "CAC BAN DA HOAN THANH DANH GIA, XIN CHAN THANH CAM ON DANH GIA CUA BAN GIUP CHUNG TOI HOAN THIEN HON ./."; 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 result = false;
             }

@@ -22,10 +22,10 @@ namespace Web_IT_HELPDESK
         }
         partial void OnConstructorInit();
     
-        public int Id { get; set; }
+        public int Rule_ID { get; set; }
         public string Rule_Name { get; set; }
         public Nullable<bool> Deactive { get; set; }
-        public string Module_Name { get; set; }
+        public string Module_ID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Rights_Management> Rights_Management { get; set; }
