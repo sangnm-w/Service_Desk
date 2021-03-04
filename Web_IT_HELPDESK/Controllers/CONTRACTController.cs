@@ -50,9 +50,12 @@ namespace Web_IT_HELPDESK.Controllers
             var contract_types = en.CONTRACT_TYPE;
             ViewBag.Contract_Types = contract_types;
 
+            DateTime minDate = DateTime.Now;
+            DateTime maxDate = DateTime.Now.AddYears(1);
+
             var contract_list = en.CONTRACTs.Where(c => c.DEL != true
                                                  && c.PLANT == curr_PlantId
-                                                 && DateTime.Now <= DbFunctions.AddDays(c.DATE, 365));
+                                                 && (minDate < c.DATE_MATURITY && c.DATE_MATURITY <= maxDate));
             if (currUserIsManager != true)
             {
                 contract_list = contract_list.Where(c => c.USER_CREATE == CurrentUser.Instance.User.Emp_CJ);
@@ -106,9 +109,12 @@ namespace Web_IT_HELPDESK.Controllers
             var contract_types = en.CONTRACT_TYPE;
             ViewBag.Contract_Types = contract_types;
 
+            DateTime minDate = date_.Value.AddDays(-daynum_);
+            DateTime maxDate = date_.Value;
+
             var contract_list = en.CONTRACTs.Where(c => c.DEL != true
                                                  && c.PLANT == curr_PlantId
-                                                 && date_ <= DbFunctions.AddDays(c.DATE, daynum_));
+                                                 && (minDate < c.DATE_MATURITY && c.DATE_MATURITY <= maxDate));
 
             if (currUserIsManager == true)
             {
@@ -275,6 +281,7 @@ namespace Web_IT_HELPDESK.Controllers
                 contract.DEPARTMENTID = CurrentUser.Instance.User.Department_ID;
                 contract.USER_CREATE = CurrentUser.Instance.User.Emp_CJ;
                 contract.PLANT = CurrentUser.Instance.User.Plant_ID;
+                contract.DATE_MATURITY = contract.DATE.Value.AddMonths((int)contract.MONTHS);
                 contract.DATE_CREATE = DateTime.Now;
 
                 contract.FILE_PATH = ContractHelper.SaveContractFile(contract, contractFile);
@@ -361,6 +368,7 @@ namespace Web_IT_HELPDESK.Controllers
                 modifyContract.PERIODID = contract.PERIODID;
                 modifyContract.DATE = contract.DATE;
                 modifyContract.MONTHS = contract.MONTHS;
+                modifyContract.DATE_MATURITY = modifyContract.DATE.Value.AddMonths((int)modifyContract.MONTHS);
 
                 if (contractFile != null)
                 {
