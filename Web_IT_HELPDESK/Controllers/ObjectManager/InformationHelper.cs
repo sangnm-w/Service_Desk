@@ -120,7 +120,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                                 msg.Bcc.Add(m);
 
                     ///Define mail message
-                    msg.From = new MailAddress(ConfigurationManager.AppSettings.Get("EmailPW")); // from sender
+                    msg.From = new MailAddress(ConfigurationManager.AppSettings.Get("EmailID")); // from it-servicedesk@cjvina.com
 
                     msg.Subject = subject;
                     msg.Body = body;

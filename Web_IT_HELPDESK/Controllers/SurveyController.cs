@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity;
 using System.Linq;
-using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using Web_IT_HELPDESK;
 using Web_IT_HELPDESK.Models;
 
 namespace Web_IT_HELPDESK.Controllers
@@ -65,7 +61,7 @@ namespace Web_IT_HELPDESK.Controllers
 
                 db.SaveChanges();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 result = false;
             }
@@ -130,7 +126,7 @@ namespace Web_IT_HELPDESK.Controllers
 
                 db.SaveChanges();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 result = false;
             }

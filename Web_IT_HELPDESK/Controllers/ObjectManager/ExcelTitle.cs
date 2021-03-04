@@ -105,6 +105,29 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             return res;
         }
 
+        //Contract title following ContractViewModel.Excel.ContractAndSub
+        public Dictionary<int, string> Contracts()
+        {
+            Dictionary<int, string> res = new Dictionary<int, string>();
+            res.Add(1, "OrderName");
+            res.Add(2, "VENDOR");
+            res.Add(3, "ADDRESS");
+            res.Add(4, "PHONE");
+            res.Add(5, "CONTRACT NAME");
+            res.Add(6, "CONTRACT TYPE");
+            res.Add(7, "PERIOD");
+            res.Add(8, "REPRESENTATION");
+            res.Add(9, "DATE");
+            res.Add(10, "MONTH");
+            res.Add(11, "DATE MATURITY");
+            res.Add(12, "NOTE");
+            res.Add(13, "DEPARTMENTID");
+            res.Add(14, "PLANT");
+            res.Add(15, "USER CREATE");
+            res.Add(16, "DATE CREATE");
+            return res;
+        }
+
         private ExcelTitle() { }
 
         private static ExcelTitle _instance;

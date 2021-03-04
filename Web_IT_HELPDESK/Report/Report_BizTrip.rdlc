@@ -643,8 +643,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>4.805in</Top>
-            <Left>0.51777in</Left>
+            <Top>4.81889in</Top>
+            <Left>0.53166in</Left>
             <Height>0.25in</Height>
             <Width>3.4in</Width>
             <ZIndex>14</ZIndex>
@@ -759,7 +759,7 @@
             <rd:DefaultName>Textbox1</rd:DefaultName>
             <Top>5.06889in</Top>
             <Left>0.53166in</Left>
-            <Height>0.5in</Height>
+            <Height>0.48611in</Height>
             <Width>3.4in</Width>
             <ZIndex>17</ZIndex>
             <Style>
@@ -789,7 +789,7 @@
             <rd:DefaultName>Textbox1</rd:DefaultName>
             <Top>5.06889in</Top>
             <Left>5.73444in</Left>
-            <Height>0.5in</Height>
+            <Height>0.48611in</Height>
             <Width>1.73055in</Width>
             <ZIndex>18</ZIndex>
             <Style>
@@ -819,7 +819,7 @@
             <rd:DefaultName>Textbox1</rd:DefaultName>
             <Top>5.06889in</Top>
             <Left>3.93166in</Left>
-            <Height>0.5in</Height>
+            <Height>0.48611in</Height>
             <Width>1.80278in</Width>
             <ZIndex>19</ZIndex>
             <Style>
@@ -868,7 +868,7 @@
             <Top>3.62445in</Top>
             <Left>0.53166in</Left>
             <Height>0.25in</Height>
-            <Width>6.93333in</Width>
+            <Width>3.4in</Width>
             <ZIndex>20</ZIndex>
             <Style>
               <Border>
@@ -887,7 +887,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Department (Bộ phận):                                                                         Tel. (ĐT):</Value>
+                    <Value>Department (Bộ phận): </Value>
                     <Style>
                       <FontStyle>Normal</FontStyle>
                       <FontFamily>Times New Roman</FontFamily>
@@ -903,10 +903,10 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>5.56889in</Top>
-            <Left>0.53999in</Left>
-            <Height>0.25in</Height>
-            <Width>6.93333in</Width>
+            <Top>5.555in</Top>
+            <Left>0.53166in</Left>
+            <Height>0.33334in</Height>
+            <Width>1.48111in</Width>
             <ZIndex>21</ZIndex>
             <Style>
               <Border>
@@ -1209,13 +1209,13 @@
             </Paragraphs>
             <rd:DefaultName>Textbox37</rd:DefaultName>
             <Top>3.62445in</Top>
-            <Left>4.11666in</Left>
+            <Left>3.93443in</Left>
             <Height>0.25in</Height>
-            <Width>3.34834in</Width>
+            <Width>3.53057in</Width>
             <ZIndex>32</ZIndex>
             <Style>
               <Border>
-                <Style>None</Style>
+                <Style>Solid</Style>
               </Border>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
@@ -1238,14 +1238,14 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>5.56889in</Top>
-            <Left>1.86694in</Left>
-            <Height>0.25in</Height>
-            <Width>2.41945in</Width>
+            <Top>5.555in</Top>
+            <Left>2.01277in</Left>
+            <Height>0.33334in</Height>
+            <Width>1.91889in</Width>
             <ZIndex>33</ZIndex>
             <Style>
               <Border>
-                <Style>None</Style>
+                <Style>Solid</Style>
               </Border>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
@@ -1268,14 +1268,46 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>5.56889in</Top>
-            <Left>4.93443in</Left>
-            <Height>0.25in</Height>
-            <Width>2.41945in</Width>
+            <Top>5.555in</Top>
+            <Left>4.6011in</Left>
+            <Height>0.33334in</Height>
+            <Width>2.86389in</Width>
             <ZIndex>34</ZIndex>
             <Style>
               <Border>
-                <Style>None</Style>
+                <Style>Solid</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox27">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Tel (ĐT):</Value>
+                    <Style>
+                      <FontFamily>Times New Roman</FontFamily>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox27</rd:DefaultName>
+            <Top>5.555in</Top>
+            <Left>3.93443in</Left>
+            <Height>0.33334in</Height>
+            <Width>0.66667in</Width>
+            <ZIndex>35</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
               </Border>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
@@ -1287,7 +1319,7 @@
         <Height>9.76667in</Height>
         <Style />
       </Body>
-      <Width>7.55333in</Width>
+      <Width>7.56375in</Width>
       <Page>
         <PageHeight>8.27in</PageHeight>
         <PageWidth>5.83in</PageWidth>

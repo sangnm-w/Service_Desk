@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Validation;
 using System.Data.Linq;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using Web_IT_HELPDESK.Controllers.ObjectManager;
 using Web_IT_HELPDESK.Models;
@@ -18,6 +16,7 @@ namespace Web_IT_HELPDESK.Controllers
     public class CONTRACTController : Controller
     {
         ServiceDeskEntities en = new ServiceDeskEntities();
+
         // GET: Index
         [Authorize]
         public ActionResult Index()
@@ -46,17 +45,32 @@ namespace Web_IT_HELPDESK.Controllers
                 Department_Name = d.Department_Name
             }).OrderByDescending(d => d.Department_Name).ToList();
             ViewBag.Departments = depts;
+            ViewBag.Selected_depts = new List<string>();
 
             var contract_types = en.CONTRACT_TYPE;
             ViewBag.Contract_Types = contract_types;
 
             var contract_list = en.CONTRACTs.Where(c => c.DEL != true
                                                  && c.PLANT == curr_PlantId
-                                                 && DateTime.Now <= DbFunctions.AddDays(c.DATE, 30));
+                                                 && DateTime.Now <= DbFunctions.AddDays(c.DATE, 365));
             if (currUserIsManager != true)
             {
                 contract_list = contract_list.Where(c => c.USER_CREATE == CurrentUser.Instance.User.Emp_CJ);
             }
+
+            //Store value of filter parameters
+            Dictionary<object, object> filter_Contracts = new Dictionary<object, object>();
+
+            filter_Contracts.Add("filter_search", "");
+            filter_Contracts.Add("filter_date", DateTime.Now);
+            filter_Contracts.Add("filter_depts", null);
+            filter_Contracts.Add("filter_contractType", "ALL");
+            filter_Contracts.Add("filter_daynum", 365);
+
+            Session.Clear();
+            Session["filter_Contracts"] = filter_Contracts;
+            //
+
             return View(contract_list);
         }
 
@@ -78,6 +92,16 @@ namespace Web_IT_HELPDESK.Controllers
                }
                ).OrderByDescending(d => d.Department_Name).ToList();
             ViewBag.Departments = depts;
+
+            List<string> selectedDepts = new List<string>();
+            if (v_depts == null)
+            {
+                ViewBag.Selected_depts = selectedDepts = depts.Select(m => m.Department_Id).ToList();
+            }
+            else
+            {
+                ViewBag.Selected_depts = selectedDepts = v_depts.ToList();
+            }
 
             var contract_types = en.CONTRACT_TYPE;
             ViewBag.Contract_Types = contract_types;
@@ -206,6 +230,18 @@ namespace Web_IT_HELPDESK.Controllers
             //} 
             #endregion
 
+            //Store value of filter parameters
+            Dictionary<object, object> filter_Contracts = new Dictionary<object, object>();
+
+            filter_Contracts.Add("filter_search", search_);
+            filter_Contracts.Add("filter_date", date_);
+            filter_Contracts.Add("filter_depts", v_depts);
+            filter_Contracts.Add("filter_contractType", v_contract_type);
+            filter_Contracts.Add("filter_daynum", daynum_);
+
+            Session["filter_Contracts"] = filter_Contracts;
+            //
+
             return View(contract_list);
         }
 
@@ -231,18 +267,18 @@ namespace Web_IT_HELPDESK.Controllers
                 contractFile.InputStream.Read(contentData, 0, Convert.ToInt32(contractFile.InputStream.Length));
                 Binary contentBinary = new Binary(contentData);
 
-                //var fileName = Path.GetFileName(_contractviewModel.ContractFile.FileName);
-                //var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);
-                //_contractviewModel.ContractFile.SaveAs(path);
-
                 CONTRACT contract = _contractviewModel.CONTRACT;
                 contract.ID = Guid.NewGuid();
+
                 contract.CONTENT = contentBinary.ToArray();
-                contract.NOTE = System.IO.Path.GetFileName(contractFile.FileName);
+                contract.NOTE = Path.GetFileName(contractFile.FileName);
                 contract.DEPARTMENTID = CurrentUser.Instance.User.Department_ID;
                 contract.USER_CREATE = CurrentUser.Instance.User.Emp_CJ;
                 contract.PLANT = CurrentUser.Instance.User.Plant_ID;
                 contract.DATE_CREATE = DateTime.Now;
+
+                contract.FILE_PATH = ContractHelper.SaveContractFile(contract, contractFile);
+
                 en.CONTRACTs.Add(contract);
 
                 Guid contract_id = contract.ID;
@@ -260,6 +296,8 @@ namespace Web_IT_HELPDESK.Controllers
                     item.ContractSub.USER_CREATE = CurrentUser.Instance.User.Emp_CJ;
                     item.ContractSub.PLANT = CurrentUser.Instance.User.Plant_ID;
 
+                    item.ContractSub.FILE_PATH = ContractHelper.SaveContractFile(item.ContractSub, contractFile);
+
                     en.CONTRACT_SUB.Add(item.ContractSub);
                 }
                 en.SaveChanges();
@@ -270,11 +308,11 @@ namespace Web_IT_HELPDESK.Controllers
             _contractviewModel.Periods = en.PERIODs;
             return View(_contractviewModel);
         }
-               
+
         // GET: CONTRACT/Edit
         public ActionResult Edit(Guid id)
         {
-            ContractViewModel.EditContractViewModel _contractviewmodel = new ContractViewModel.EditContractViewModel();
+            ContractViewModel.Edit _contractviewmodel = new ContractViewModel.Edit();
             _contractviewmodel.Contract_Types = en.CONTRACT_TYPE;
             _contractviewmodel.Periods = en.PERIODs;
 
@@ -293,7 +331,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         // POST: CONTRACT/Edit
         [HttpPost]
-        public ActionResult Edit(ContractViewModel.EditContractViewModel _contractviewModel)
+        public ActionResult Edit(ContractViewModel.Edit _contractviewModel)
         {
             //check subfile of new contractsub
             int subCount = 0;
@@ -313,19 +351,6 @@ namespace Web_IT_HELPDESK.Controllers
                 HttpPostedFileBase contractFile = _contractviewModel.ContractFile;
 
                 CONTRACT modifyContract = en.CONTRACTs.FirstOrDefault(c => c.ID == contract.ID);
-                if (contractFile != null)
-                {
-                    byte[] contentData = new byte[contractFile.InputStream.Length];
-                    contractFile.InputStream.Read(contentData, 0, Convert.ToInt32(contractFile.InputStream.Length));
-                    Binary contentBinary = new Binary(contentData);
-
-                    //var fileName = Path.GetFileName(_contractviewModel.ContractFile.FileName);
-                    //var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);
-                    //_contractviewModel.ContractFile.SaveAs(path);
-
-                    modifyContract.CONTENT = contentBinary.ToArray();
-                    modifyContract.NOTE = System.IO.Path.GetFileName(contractFile.FileName);
-                }
 
                 modifyContract.VENDOR = contract.VENDOR;
                 modifyContract.PHONE = contract.PHONE;
@@ -336,6 +361,18 @@ namespace Web_IT_HELPDESK.Controllers
                 modifyContract.PERIODID = contract.PERIODID;
                 modifyContract.DATE = contract.DATE;
                 modifyContract.MONTHS = contract.MONTHS;
+
+                if (contractFile != null)
+                {
+                    byte[] contentData = new byte[contractFile.InputStream.Length];
+                    contractFile.InputStream.Read(contentData, 0, Convert.ToInt32(contractFile.InputStream.Length));
+                    Binary contentBinary = new Binary(contentData);
+
+                    modifyContract.CONTENT = contentBinary.ToArray();
+                    modifyContract.NOTE = Path.GetFileName(contractFile.FileName);
+
+                    modifyContract.FILE_PATH = ContractHelper.SaveContractFile(modifyContract, contractFile);
+                }
 
                 en.Entry(modifyContract).State = EntityState.Modified;
                 en.SaveChanges();
@@ -363,9 +400,14 @@ namespace Web_IT_HELPDESK.Controllers
                 {
                     CONTRACT_SUB sub = csVM.ContractSub;
                     HttpPostedFileBase subFile = csVM.ContentSubFile;
-                    if (oldSubs.Contains(sub)) // newSub existed in database => modify
+                    if (oldSubs.Contains(sub))                                                                  // newSub existed in database => modify
                     {
                         CONTRACT_SUB modifySub = en.CONTRACT_SUB.FirstOrDefault(c => c.ID == sub.ID);
+
+                        modifySub.DATE = sub.DATE;
+                        modifySub.SUBNAME = sub.SUBNAME;
+                        modifySub.PERIODID = sub.PERIODID;
+
                         if (subFile != null)
                         {
                             byte[] subcontentData = new byte[subFile.InputStream.Length];
@@ -374,14 +416,19 @@ namespace Web_IT_HELPDESK.Controllers
 
                             modifySub.CONTENT = subcontentBinary.ToArray();
                             modifySub.NOTE = Path.GetFileName(subFile.FileName);
+
+                            modifySub.FILE_PATH = ContractHelper.SaveContractFile(modifySub, subFile);
                         }
-                        modifySub.DATE = sub.DATE;
-                        modifySub.SUBNAME = sub.SUBNAME;
-                        modifySub.PERIODID = sub.PERIODID;
+
                         en.Entry(modifySub).State = EntityState.Modified;
                     }
-                    else // newSub not existed in database => insert
+                    else                                                                                        // newSub not existed in database => insert
                     {
+                        sub.ID = Guid.NewGuid();
+                        sub.CONTRACTID = contract.ID;
+                        sub.USER_CREATE = CurrentUser.Instance.User.Emp_CJ;
+                        sub.PLANT = CurrentUser.Instance.User.Plant_ID;
+
                         if (subFile != null)
                         {
                             byte[] subcontentData = new byte[subFile.InputStream.Length];
@@ -390,6 +437,8 @@ namespace Web_IT_HELPDESK.Controllers
 
                             sub.CONTENT = subcontentBinary.ToArray();
                             sub.NOTE = Path.GetFileName(subFile.FileName);
+
+                            sub.FILE_PATH = ContractHelper.SaveContractFile(sub, subFile);
                         }
                         else
                         {
@@ -400,11 +449,6 @@ namespace Web_IT_HELPDESK.Controllers
 
                             return View(_contractviewModel);
                         }
-
-                        sub.ID = Guid.NewGuid();
-                        sub.CONTRACTID = contract.ID;
-                        sub.USER_CREATE = CurrentUser.Instance.User.Emp_CJ;
-                        sub.PLANT = CurrentUser.Instance.User.Plant_ID;
 
                         en.CONTRACT_SUB.Add(sub);
                     }
@@ -421,48 +465,88 @@ namespace Web_IT_HELPDESK.Controllers
             return View(_contractviewModel);
         }
 
-        [HttpGet]
-        public FileContentResult Get_file(Guid? con_id)
+        public FileContentResult Download()
         {
-            //CONTRACT con = en.CONTRACTs.Find(con_id);
-            //string inc_code = con.Code;
+            //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.DOWNLOAD, Commons.ModuleConstant.INCIDENT);
+            //if (hasPermission.Value == false)
+            //    return RedirectToAction("Index", "Home");
 
-            //declare byte array to get file content from database and string to store file name
-            byte[] fileData;
-            string fileName;
-            //create object of LINQ to SQL class
-            //using LINQ expression to get record from database for given id value
-            var record = from p in en.CONTRACTs
-                         where p.ID == con_id
-                         select p;
-            //only one record will be returned from database as expression uses condtion on primary field
-            //so get first record from returned values and retrive file content (binary) and filename
-            fileData = (byte[])record.First().CONTENT.ToArray();
-            fileName = record.First().NOTE;
-            //return file and provide byte file content and file name
-            return File(fileData, "text", fileName);
+            Dictionary<object, object> filter_Contracts = (Dictionary<object, object>)Session["filter_Contracts"];
+
+            string filter_search = filter_Contracts["filter_search"] != null ? filter_Contracts["filter_search"].ToString() : "";
+            DateTime? filter_date = filter_Contracts["filter_date"] != null ? Convert.ToDateTime(filter_Contracts["filter_date"]) : DateTime.Now;
+            List<string> filter_depts = filter_Contracts["filter_depts"] != null ? ((ICollection<string>)filter_Contracts["filter_depts"]).ToList() : null;
+            string filter_contractType = filter_Contracts["filter_contractType"] != null ? filter_Contracts["filter_contractType"].ToString() : "ALL";
+            int filter_daynum = filter_Contracts["filter_daynum"] != null ? Convert.ToInt32(filter_Contracts["filter_daynum"]) : 365;
+
+
+            string curr_PlantID = CurrentUser.Instance.User.Plant_ID;
+            string curr_DeptID = CurrentUser.Instance.User.Department_ID;
+            bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantID && d.Department_Id == curr_DeptID && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
+            var contracts = en.CONTRACTs.Where(c => c.DEL != true
+                                     && c.PLANT == curr_PlantID
+                                     && filter_date <= DbFunctions.AddDays(c.DATE, filter_daynum)).ToList();
+
+            if (currUserIsManager == true)
+            {
+                string v_dept_string = "";
+                if (filter_depts != null)
+                {
+                    foreach (var v_dept in filter_depts)
+                    {
+                        v_dept_string += v_dept.ToString() + " ";
+                    }
+                    contracts = contracts.Where(c => v_dept_string.Trim().Contains(c.DEPARTMENTID)).ToList();
+                }
+            }
+            else
+            {
+                contracts = contracts.Where(c => c.USER_CREATE == CurrentUser.Instance.User.Emp_CJ).ToList();
+            }
+
+
+            if (filter_contractType != "ALL")
+            {
+                contracts = contracts.Where(c => c.CONTRACT_TYPE_ID == filter_contractType).ToList();
+            }
+
+            if (filter_search != "")
+            {
+                contracts = contracts.Where(c => c.CONTRACTNAME.Contains(filter_search)).ToList();
+            }
+
+            List<ContractViewModel.Excel> contractsForExport = ContractModel.Instance.GetContractsForExport(curr_DeptID, curr_PlantID, contracts.ToList());
+
+            List<int> colDates = new List<int>()
+            {
+                9, 11, 16
+            };
+
+            var stream = ExcelHelper.Instance.CreateExcelFile(null, contractsForExport, ExcelTitle.Instance.Contracts(), colDates);
+            var buffer = stream as MemoryStream;
+            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            string fileName = "Contract Report.xlsx";
+            return File(buffer.ToArray(), contentType, fileName);
         }
 
         [HttpGet]
-        public FileContentResult Get_sub(Guid? sub_id)
+        public FileResult Get_file(Guid? con_id)
         {
-            //CONTRACT con = en.CONTRACTs.Find(con_id);
-            //string inc_code = con.Code;
+            var contract = en.CONTRACTs.FirstOrDefault(c => c.ID == con_id);
+            string contractFile = HostingEnvironment.MapPath(contract.FILE_PATH);
+            var mimeType = MimeMapping.GetMimeMapping(contractFile);
 
-            //declare byte array to get file content from database and string to store file name
-            byte[] fileData;
-            string fileName;
-            //create object of LINQ to SQL class
-            //using LINQ expression to get record from database for given id value
-            var record = from p in en.CONTRACT_SUB
-                         where p.ID == sub_id
-                         select p;
-            //only one record will be returned from database as expression uses condtion on primary field
-            //so get first record from returned values and retrive file content (binary) and filename
-            fileData = (byte[])record.First().CONTENT.ToArray();
-            fileName = record.First().NOTE;
-            //return file and provide byte file content and file name
-            return File(fileData, "text", fileName);
+            return File(contractFile, mimeType, Path.GetFileName(contractFile));
+        }
+
+        [HttpGet]
+        public FileResult Get_sub(Guid? sub_id)
+        {
+            var sub = en.CONTRACT_SUB.FirstOrDefault(c => c.ID == sub_id);
+            string subFile = HostingEnvironment.MapPath(sub.FILE_PATH);
+            var mimeType = MimeMapping.GetMimeMapping(subFile);
+
+            return File(subFile, mimeType, Path.GetFileName(subFile));
         }
     }
 }
