@@ -52,7 +52,7 @@ namespace Web_IT_HELPDESK.Controllers
 
             var contract_list = en.CONTRACTs.Where(c => c.DEL != true
                                                  && c.PLANT == curr_PlantId
-                                                 && DateTime.Now <= DbFunctions.AddDays(c.DATE, 30));
+                                                 && DateTime.Now <= DbFunctions.AddDays(c.DATE, 365));
             if (currUserIsManager != true)
             {
                 contract_list = contract_list.Where(c => c.USER_CREATE == CurrentUser.Instance.User.Emp_CJ);
@@ -65,7 +65,7 @@ namespace Web_IT_HELPDESK.Controllers
             filter_Contracts.Add("filter_date", DateTime.Now);
             filter_Contracts.Add("filter_depts", null);
             filter_Contracts.Add("filter_contractType", "ALL");
-            filter_Contracts.Add("filter_daynum", 30);
+            filter_Contracts.Add("filter_daynum", 365);
 
             Session.Clear();
             Session["filter_Contracts"] = filter_Contracts;
@@ -272,7 +272,7 @@ namespace Web_IT_HELPDESK.Controllers
 
                 contract.CONTENT = contentBinary.ToArray();
                 contract.NOTE = Path.GetFileName(contractFile.FileName);
-                contract.DEPARTMENTID = CurrentUser.Instance.User.Department_Id;
+                contract.DEPARTMENTID = CurrentUser.Instance.User.Department_ID;
                 contract.USER_CREATE = CurrentUser.Instance.User.Emp_CJ;
                 contract.PLANT = CurrentUser.Instance.User.Plant_ID;
                 contract.DATE_CREATE = DateTime.Now;
@@ -427,7 +427,7 @@ namespace Web_IT_HELPDESK.Controllers
                         sub.ID = Guid.NewGuid();
                         sub.CONTRACTID = contract.ID;
                         sub.USER_CREATE = CurrentUser.Instance.User.Emp_CJ;
-                        sub.PLANT = CurrentUser.Instance.User.Plant_Id;
+                        sub.PLANT = CurrentUser.Instance.User.Plant_ID;
 
                         if (subFile != null)
                         {
@@ -477,11 +477,11 @@ namespace Web_IT_HELPDESK.Controllers
             DateTime? filter_date = filter_Contracts["filter_date"] != null ? Convert.ToDateTime(filter_Contracts["filter_date"]) : DateTime.Now;
             List<string> filter_depts = filter_Contracts["filter_depts"] != null ? ((ICollection<string>)filter_Contracts["filter_depts"]).ToList() : null;
             string filter_contractType = filter_Contracts["filter_contractType"] != null ? filter_Contracts["filter_contractType"].ToString() : "ALL";
-            int filter_daynum = filter_Contracts["filter_daynum"] != null ? Convert.ToInt32(filter_Contracts["filter_daynum"]) : 30;
+            int filter_daynum = filter_Contracts["filter_daynum"] != null ? Convert.ToInt32(filter_Contracts["filter_daynum"]) : 365;
 
 
-            string curr_PlantID = CurrentUser.Instance.User.Plant_Id;
-            string curr_DeptID = CurrentUser.Instance.User.Department_Id;
+            string curr_PlantID = CurrentUser.Instance.User.Plant_ID;
+            string curr_DeptID = CurrentUser.Instance.User.Department_ID;
             bool currUserIsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == curr_PlantID && d.Department_Id == curr_DeptID && d.Manager_Id == CurrentUser.Instance.User.Emp_CJ) != null ? true : false;
             var contracts = en.CONTRACTs.Where(c => c.DEL != true
                                      && c.PLANT == curr_PlantID

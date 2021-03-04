@@ -32,7 +32,15 @@ namespace Web_IT_HELPDESK.Controllers
             bool IsAdmin = CurrentUser.Instance.isAdministrator.HasValue ? CurrentUser.Instance.isAdministrator.Value : false;
             ViewBag.IsAdmin = IsAdmin;
             //List<string> currentRules = CurrentUser.Instance.RulesByModuleName(Commons.ModuleConstant.INCIDENT).Select(r => r.Rule_Name).ToList();
+
             List<string> currentRules = new List<string>();
+
+            if (curr_DeptID == "V20S000001")
+            {
+                currentRules.Add("EDIT");
+                currentRules.Add("SOLVE");
+            }
+
             if (currentRules.Count > 0)
             {
                 ViewBag.Rules = currentRules;
@@ -41,7 +49,6 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 ViewBag.Rules = new List<string>() { "VIEW" };
             }
-
 
             List<string> permissionPlants = CurrentUser.Instance.Rights.Select(c => c.Plant_Id).Distinct().ToList();
 
@@ -112,7 +119,15 @@ namespace Web_IT_HELPDESK.Controllers
             bool IsAdmin = CurrentUser.Instance.isAdministrator.HasValue ? CurrentUser.Instance.isAdministrator.Value : false;
             ViewBag.IsAdmin = IsAdmin;
             //List<string> currentRules = CurrentUser.Instance.RulesByModuleName(Commons.ModuleConstant.INCIDENT).Select(r => r.Rule_Name).ToList();
+
             List<string> currentRules = new List<string>();
+
+            if (curr_DeptID == "V20S000001")
+            {
+                currentRules.Add("EDIT");
+                currentRules.Add("SOLVE");
+            }
+
             if (currentRules.Count > 0)
             {
                 ViewBag.Rules = currentRules;

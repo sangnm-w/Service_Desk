@@ -1664,8 +1664,6 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="Plant_Id" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Department" Relationship="Self.FK_Rights_Management_Department" FromRole="Rights_Management" ToRole="Department" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_Rights_Management_Employee" FromRole="Rights_Management" ToRole="Employee" />
-          <NavigationProperty Name="Role" Relationship="Self.FK_Rights_Management_Role" FromRole="Rights_Management" ToRole="Role" />
-          <NavigationProperty Name="Rule" Relationship="Self.FK_Rights_Management_Rule" FromRole="Rights_Management" ToRole="Rule" />
           <NavigationProperty Name="Employee_New" Relationship="ServiceDeskModel.FK_Rights_Management_Employee_New" FromRole="Rights_Management" ToRole="Employee_New" />
           <NavigationProperty Name="Role" Relationship="ServiceDeskModel.FK_Rights_Management_Role" FromRole="Rights_Management" ToRole="Role" />
           <NavigationProperty Name="Rule" Relationship="ServiceDeskModel.FK_Rights_Management_Rule" FromRole="Rights_Management" ToRole="Rule" />
