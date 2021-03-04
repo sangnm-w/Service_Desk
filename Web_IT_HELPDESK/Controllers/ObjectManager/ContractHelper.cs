@@ -57,7 +57,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             string filePath = Path.Combine(Resources.ContractPath, contract.PLANT);
 
             var extension = Path.GetExtension(file.FileName.ToLowerInvariant());
-            string fileName = contract.CONTRACTNAME + "-" + contract.DATE?.ToString("dd-MM-yyyy") + extension;
+            string fileName = contract.ID + "_" + contract.DATE?.ToString("dd-MM-yyyy") + extension;
 
             string savePath = SaveContractFile(file, filePath, fileName);
             return savePath;
@@ -67,7 +67,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             string filePath = Path.Combine(Resources.ContractPath, contractSub.PLANT);
 
             var extension = Path.GetExtension(file.FileName.ToLowerInvariant());
-            string fileName = contractSub.SUBNAME + "-" + contractSub.DATE?.ToString("dd-MM-yyyy") + extension;
+            string fileName = contractSub.ID + "_" + contractSub.DATE?.ToString("dd-MM-yyyy") + extension;
 
             string savePath = SaveContractFile(file, filePath, fileName);
             return savePath;
