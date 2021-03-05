@@ -269,21 +269,16 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 HttpPostedFileBase contractFile = _contractviewModel.ContractFile;
 
-                byte[] contentData = new byte[contractFile.InputStream.Length];
-                contractFile.InputStream.Read(contentData, 0, Convert.ToInt32(contractFile.InputStream.Length));
-                Binary contentBinary = new Binary(contentData);
-
                 CONTRACT contract = _contractviewModel.CONTRACT;
                 contract.ID = Guid.NewGuid();
 
-                contract.CONTENT = contentBinary.ToArray();
-                contract.NOTE = Path.GetFileName(contractFile.FileName);
                 contract.DEPARTMENTID = CurrentUser.Instance.User.Department_ID;
                 contract.USER_CREATE = CurrentUser.Instance.User.Emp_CJ;
                 contract.PLANT = CurrentUser.Instance.User.Plant_ID;
                 contract.DATE_MATURITY = contract.DATE.Value.AddMonths((int)contract.MONTHS);
                 contract.DATE_CREATE = DateTime.Now;
 
+                contract.NOTE = Path.GetFileName(contractFile.FileName);
                 contract.FILE_PATH = ContractHelper.SaveContractFile(contract, contractFile);
 
                 en.CONTRACTs.Add(contract);
@@ -292,17 +287,12 @@ namespace Web_IT_HELPDESK.Controllers
 
                 foreach (var item in _contractviewModel.ContractSubViewModels)
                 {
-                    byte[] subcontentData = new byte[item.ContentSubFile.InputStream.Length];
-                    item.ContentSubFile.InputStream.Read(subcontentData, 0, Convert.ToInt32(item.ContentSubFile.InputStream.Length));
-                    Binary subcontentBinary = new Binary(subcontentData);
-
                     item.ContractSub.ID = Guid.NewGuid();
                     item.ContractSub.CONTRACTID = contract_id;
-                    item.ContractSub.CONTENT = subcontentBinary.ToArray();
-                    item.ContractSub.NOTE = Path.GetFileName(item.ContentSubFile.FileName);
                     item.ContractSub.USER_CREATE = CurrentUser.Instance.User.Emp_CJ;
                     item.ContractSub.PLANT = CurrentUser.Instance.User.Plant_ID;
 
+                    item.ContractSub.NOTE = Path.GetFileName(item.ContentSubFile.FileName);
                     item.ContractSub.FILE_PATH = ContractHelper.SaveContractFile(item.ContractSub, contractFile);
 
                     en.CONTRACT_SUB.Add(item.ContractSub);
@@ -372,13 +362,7 @@ namespace Web_IT_HELPDESK.Controllers
 
                 if (contractFile != null)
                 {
-                    byte[] contentData = new byte[contractFile.InputStream.Length];
-                    contractFile.InputStream.Read(contentData, 0, Convert.ToInt32(contractFile.InputStream.Length));
-                    Binary contentBinary = new Binary(contentData);
-
-                    modifyContract.CONTENT = contentBinary.ToArray();
                     modifyContract.NOTE = Path.GetFileName(contractFile.FileName);
-
                     modifyContract.FILE_PATH = ContractHelper.SaveContractFile(modifyContract, contractFile);
                 }
 
@@ -418,13 +402,7 @@ namespace Web_IT_HELPDESK.Controllers
 
                         if (subFile != null)
                         {
-                            byte[] subcontentData = new byte[subFile.InputStream.Length];
-                            subFile.InputStream.Read(subcontentData, 0, Convert.ToInt32(subFile.InputStream.Length));
-                            Binary subcontentBinary = new Binary(subcontentData);
-
-                            modifySub.CONTENT = subcontentBinary.ToArray();
                             modifySub.NOTE = Path.GetFileName(subFile.FileName);
-
                             modifySub.FILE_PATH = ContractHelper.SaveContractFile(modifySub, subFile);
                         }
 
@@ -439,13 +417,7 @@ namespace Web_IT_HELPDESK.Controllers
 
                         if (subFile != null)
                         {
-                            byte[] subcontentData = new byte[subFile.InputStream.Length];
-                            subFile.InputStream.Read(subcontentData, 0, Convert.ToInt32(subFile.InputStream.Length));
-                            Binary subcontentBinary = new Binary(subcontentData);
-
-                            sub.CONTENT = subcontentBinary.ToArray();
                             sub.NOTE = Path.GetFileName(subFile.FileName);
-
                             sub.FILE_PATH = ContractHelper.SaveContractFile(sub, subFile);
                         }
                         else
