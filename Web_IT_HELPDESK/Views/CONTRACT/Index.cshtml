@@ -185,7 +185,7 @@
                                 @Html.DisplayFor(modelItem => item.USER_CREATE)
                             </td>
                             <td>
-                                @if (item.CONTENT != null)
+                                @if (!string.IsNullOrWhiteSpace(item.NOTE))
                                 {
                                     @Html.ActionLink("Contract File", "Get_file", new { con_id = item.ID }, new { @class = "button" })
                                 }

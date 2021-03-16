@@ -364,6 +364,8 @@ namespace Web_IT_HELPDESK.Controllers
                     }
                 }
 
+                inc.User_resolve = CurrentUser.Instance.User.Emp_CJ;
+
                 en.Entry(inc).State = EntityState.Modified;
                 en.SaveChanges();
 
