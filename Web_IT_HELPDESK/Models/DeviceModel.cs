@@ -113,13 +113,13 @@ namespace Web_IT_HELPDESK.Models
             ServiceDeskEntities en = new ServiceDeskEntities();
             var devices = en.Devices.Include(d => d.CONTRACT).Include(d => d.Device_Type);
 
-            var plants = en.Departments.Select(p => new { p.Plant_Id, p.Plant_Name }).Distinct();
+            var plants = en.Plants.Select(p => new { p.Plant_ID, p.Plant_Name }).Distinct();
 
             var dvm = devices
                 .Join(
                 plants,
                 d => d.Plant_Id,
-                p => p.Plant_Id,
+                p => p.Plant_ID,
                 (d, p) => new DeviceViewModel
                 {
                     Device = d,
@@ -133,13 +133,13 @@ namespace Web_IT_HELPDESK.Models
             ServiceDeskEntities en = new ServiceDeskEntities();
             var devices = en.Devices.Include(d => d.CONTRACT).Include(d => d.Device_Type).Where(d => d.Plant_Id == plantId);
 
-            var plants = en.Departments.Select(p => new { p.Plant_Id, p.Plant_Name }).Distinct();
+            var plants = en.Plants.Select(p => new { p.Plant_ID, p.Plant_Name }).Distinct();
 
             var dvm = devices
                 .Join(
                 plants,
                 d => d.Plant_Id,
-                p => p.Plant_Id,
+                p => p.Plant_ID,
                 (d, p) => new DeviceViewModel
                 {
                     Device = d,
@@ -176,7 +176,7 @@ namespace Web_IT_HELPDESK.Models
                 {
                     //string allocationEmpName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).EmployeeName;
                     string allocationEmpName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).Employee_Name;
-                    string allocationDeptName = DepartmentModel.Instance.getDeptName(allocation.Plant_Id, allocation.Department_Id);
+                    string allocationDeptName = DepartmentModel.Instance.getDeptName(allocation.Department_Id);
                     string allocationDeliveryDate = allocation.Delivery_Date?.ToString("dd/MM/yyyy");
                     QRText = QRText
                          + "- Employee: " + allocationEmpName + " \n"

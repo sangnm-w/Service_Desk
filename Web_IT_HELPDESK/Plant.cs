@@ -12,21 +12,20 @@ namespace Web_IT_HELPDESK
     using System;
     using System.Collections.Generic;
     
-    public partial class Rule
+    public partial class Plant
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Rule()
+        public Plant()
         {
-            this.Roles = new HashSet<Role>();
+            this.Departments = new HashSet<Department>();
             OnConstructorInit();
         }
         partial void OnConstructorInit();
     
-        public int Rule_ID { get; set; }
-        public string Rule_Name { get; set; }
-        public Nullable<bool> Deactive { get; set; }
+        public string Plant_ID { get; set; }
+        public string Plant_Name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Role> Roles { get; set; }
+        public virtual ICollection<Department> Departments { get; set; }
     }
 }

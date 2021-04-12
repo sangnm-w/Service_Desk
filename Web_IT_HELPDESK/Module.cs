@@ -12,16 +12,11 @@ namespace Web_IT_HELPDESK
     using System;
     using System.Collections.Generic;
     
-    public partial class Employee_Screen
+    public partial class Module
     {
-        public System.Guid Id { get; set; }
-        public Nullable<int> ScreenId { get; set; }
-        public string EmployeeId { get; set; }
-        public Nullable<bool> Use { get; set; }
-        public Nullable<bool> Read { get; set; }
-    
-        public virtual Employee Employee { get; set; }
-        public virtual Screen Screen { get; set; }
-        public virtual Employee_New Employee_New { get; set; }
+        public int Module_ID { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public Nullable<bool> Deactive { get; set; }
     }
 }

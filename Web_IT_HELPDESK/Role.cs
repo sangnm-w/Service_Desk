@@ -17,7 +17,8 @@ namespace Web_IT_HELPDESK
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Role()
         {
-            this.Rights_Management = new HashSet<Rights_Management>();
+            this.Authorizations = new HashSet<Authorization>();
+            this.Rules = new HashSet<Rule>();
             OnConstructorInit();
         }
         partial void OnConstructorInit();
@@ -28,6 +29,8 @@ namespace Web_IT_HELPDESK
         public Nullable<bool> Deactive { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Rights_Management> Rights_Management { get; set; }
+        public virtual ICollection<Authorization> Authorizations { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Rule> Rules { get; set; }
     }
 }

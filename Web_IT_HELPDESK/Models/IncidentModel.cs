@@ -32,8 +32,8 @@ namespace Web_IT_HELPDESK.Models
                 )
                 .Join(
                     en.Departments,
-                    iwsal => new { deptID = iwsal.inc.DepartmentId, plantID = iwsal.inc.Plant },
-                    dept => new { deptID = dept.Department_Id, plantID = dept.Plant_Id },
+                    iwsal => iwsal.inc.DepartmentId,
+                    dept => dept.Department_ID,
                     (iwsal, dept) => new { iwsal.inc, iwsal.StatusName, iwsal.LevelName, dept.Department_Name }
                 )
                 .Join(
@@ -115,11 +115,37 @@ namespace Web_IT_HELPDESK.Models
             return plantId + "-" + strIncidentCode;
         }
 
-        public List<Rule> get_IncidentRules()
+        public List<string> GetITMemberEmails(string plantId)
         {
             ServiceDeskEntities en = new ServiceDeskEntities();
-            //return en.Rules.Where(r => r.Module_Name == Commons.ModuleConstant.INCIDENT && r.Deactive == false).ToList();
-            return null;
+
+            List<string> result = new List<string>();
+            if (plantId == "V2010")
+            {
+                string departmentId = "V2090S0001";
+                result = en.Employee_New
+                    .Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d })
+                    .Where(grp => grp.d.Plant_ID == "V2090" && grp.d.Department_ID == departmentId && grp.e.Deactive != true)
+                    .Select(grp => grp.e.Email).ToList();
+            }
+            else if (plantId == "V2080")
+            {
+                string departmentId = "V2020S0001";
+                result = en.Employee_New
+                    .Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d })
+                    .Where(grp => grp.d.Plant_ID == "V2020" && grp.d.Department_ID == departmentId && grp.e.Deactive != true)
+                    .Select(grp => grp.e.Email).ToList();
+            }
+            else
+            {
+                string departmentId = plantId + "S0001";
+                result = en.Employee_New
+                    .Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d })
+                    .Where(grp => grp.d.Plant_ID == plantId && grp.d.Department_ID == departmentId && grp.e.Deactive != true)
+                    .Select(grp => grp.e.Email).ToList();
+            }
+
+            return result;
         }
     }
 }

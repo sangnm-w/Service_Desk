@@ -192,6 +192,9 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Authorization.cs">
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
+    </Compile>
     <Compile Include="BIZ_TRIP.cs">
       <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
@@ -286,9 +289,6 @@
     <Compile Include="Employee_New.cs">
       <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
-    <Compile Include="Employee_Screen.cs">
-      <DependentUpon>ServicesDesk.tt</DependentUpon>
-    </Compile>
     <Compile Include="EMP_ANSWER.cs">
       <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
@@ -318,6 +318,14 @@
     <Compile Include="Models\AutoCompleteModel.cs" />
     <Compile Include="Models\Biz_TripViewModel.cs" />
     <Compile Include="Models\ContractModel.cs" />
+    <Compile Include="Models\Extensions\ApplicationUser.cs" />
+    <Compile Include="Models\Extensions\CustomAuthorize.cs" />
+    <Compile Include="Module.cs">
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Plant.cs">
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\ContractTypeViewModel.cs" />
     <Compile Include="ViewModels\ChangePasswordViewModel.cs" />
     <Compile Include="ViewModels\ContactsViewModel.cs" />
@@ -366,9 +374,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="QUESTION.cs">
-      <DependentUpon>ServicesDesk.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Rights_Management.cs">
       <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="Role.cs">

@@ -34,15 +34,16 @@ namespace Web_IT_HELPDESK.Controllers
 
         private string GetPlant_id(string v_emp)
         {
-            //string plant_id = en.Employees.Where(f => (f.Emp_CJ == v_emp)).Select(f => f.Plant_Id).SingleOrDefault();
-            string plant_id = en.Employee_New.Where(f => (f.Emp_CJ == v_emp)).Select(f => f.Plant_ID).SingleOrDefault();
+            string plant_id = en.Employee_New
+                .Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d })
+                .Where(grp => grp.e.Emp_CJ == v_emp)
+                .Select(grp => grp.d.Plant_ID).SingleOrDefault();
             return plant_id;
         }
 
-        private string GetDept_id(string v_plant_id, string session_emp)
+        private string GetDept_id(string session_emp)
         {
-            //string dept_id = en.Employees.Where(f => (f.Emp_CJ == session_emp && f.Plant_Id == v_plant_id)).Select(f => f.Department_Id).SingleOrDefault();
-            string dept_id = en.Employee_New.Where(f => (f.Emp_CJ == session_emp && f.Plant_ID == v_plant_id)).Select(f => f.Department_ID).SingleOrDefault();
+            string dept_id = en.Employee_New.Where(f => f.Emp_CJ == session_emp).Select(f => f.Department_ID).SingleOrDefault();
             return dept_id;
         }
 
@@ -62,14 +63,14 @@ namespace Web_IT_HELPDESK.Controllers
                     {
                         Session["employee_id"] = emp.Emp_CJ;
                         Session["plant_id"] = GetPlant_id(emp.Emp_CJ);
-                        Session["dept_id"] = GetDept_id(Convert.ToString(GetPlant_id(emp.Emp_CJ)), emp.Emp_CJ);
+                        Session["dept_id"] = GetDept_id(emp.Emp_CJ);
                         return Redirect(returnUrl);
                     }
                     else
                     {
                         Session["employee_id"] = emp.Emp_CJ;
                         Session["plant_id"] = GetPlant_id(emp.Emp_CJ);
-                        Session["dept_id"] = GetDept_id(Convert.ToString(GetPlant_id(emp.Emp_CJ)), emp.Emp_CJ);
+                        Session["dept_id"] = GetDept_id(emp.Emp_CJ);
                         string emailcookies = System.Web.HttpContext.Current.User.Identity.Name;
                         return RedirectToAction("Index", "Home");
                     }

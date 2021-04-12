@@ -17,29 +17,39 @@ namespace Web_IT_HELPDESK.Models
         {
             ServiceDeskEntities en = new ServiceDeskEntities();
 
-            return en.Departments.FirstOrDefault(d => d.Plant_Id == plantId).Plant_Name;
+            return en.Plants.FirstOrDefault(d => d.Plant_ID == plantId).Plant_Name;
         }
 
-        public string getDeptName(string plantId, string deptId)
+        public string getDeptName(string deptId)
         {
             ServiceDeskEntities en = new ServiceDeskEntities();
 
-            return en.Departments.FirstOrDefault(d => d.Plant_Id == plantId && d.Department_Id == deptId).Department_Name;
+            return en.Departments.FirstOrDefault(d => d.Department_ID == deptId).Department_Name;
         }
 
         public string getManagerEmail(string plantId, string deptId)
         {
             ServiceDeskEntities en = new ServiceDeskEntities();
 
-            return en.Departments.FirstOrDefault(d => d.Plant_Id == plantId && d.Department_Id == deptId).Manager_Email;
+            return en.Departments.FirstOrDefault(d => d.Department_ID == deptId).Manager_Email;
         }
 
-        public string getManagerEmailbyID(string plantId, string deptId, string empId)
+        public string getManagerEmailbyID(string deptId, string empId)
         {
             ServiceDeskEntities en = new ServiceDeskEntities();
 
-            return en.Departments.Join(en.Employee_New, (d) => d.Manager_Id, (e) => e.Emp_CJ, (d, e) => new { e.Emp_CJ, e.Email, d.Plant_Id, d.Department_Id }).FirstOrDefault(d => d.Plant_Id == plantId && d.Department_Id == deptId && d.Emp_CJ == empId).Email;
-            //return en.Departments.Join(en.Employees, (d) => d.Manager_Id, (e) => e.Emp_CJ, (d, e) => new { e.Emp_CJ, e.Email, d.Plant_Id, d.Department_Id }).FirstOrDefault(d => d.Plant_Id == plantId && d.Department_Id == deptId && d.Emp_CJ == empId).Email;
+            return en.Departments
+                .Join(en.Employee_New,
+                      d => d.Manager_ID,
+                      e => e.Emp_CJ,
+                      (d, e) => new
+                      {
+                          e.Emp_CJ,
+                          e.Email,
+                          d.Department_ID
+                      })
+                .FirstOrDefault(d => d.Department_ID == deptId && d.Emp_CJ == empId)
+                .Email;
         }
     }
 }

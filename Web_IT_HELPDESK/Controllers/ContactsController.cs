@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using Web_IT_HELPDESK.Controllers.ObjectManager;
 using Web_IT_HELPDESK.Models;
+using Web_IT_HELPDESK.Models.Extensions;
 using Web_IT_HELPDESK.ViewModels;
 
 namespace Web_IT_HELPDESK.Controllers
@@ -17,23 +18,25 @@ namespace Web_IT_HELPDESK.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            string curr_PlantID = CurrentUser.Instance.User.Plant_ID;
-            //var contactlist = en.Employees.Where(e => e.Deactive != true && e.Plant_Id == curr_PlantID);
-            var contactlist = en.Employee_New.Where(e => e.Deactive != true && e.Plant_ID == curr_PlantID);
+            string curr_PlantID = ApplicationUser.Instance.GetPlantID();
+            var contactlist = en.Employee_New
+                .Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d })
+                .Where(grp => grp.e.Deactive != true && grp.d.Plant_ID == curr_PlantID)
+                .Select(grp => grp.e);
 
-            List<PlantViewModel> plants = en.Departments
-                .Select(d => new PlantViewModel
+            List<PlantViewModel> plants = en.Plants
+                .Select(p => new PlantViewModel
                 {
-                    Plant_Id = d.Plant_Id,
-                    Plant_Name = d.Plant_Name
+                    Plant_Id = p.Plant_ID,
+                    Plant_Name = p.Plant_Name
                 }).Distinct().ToList();
             ViewBag.plants = plants;
 
             List<DepartmentViewModel> departments = en.Departments
-                .Where(d => d.Plant_Id == curr_PlantID)
+                .Where(d => d.Plant_ID == curr_PlantID)
                 .Select(d => new DepartmentViewModel
                 {
-                    Department_Id = d.Department_Id,
+                    Department_Id = d.Department_ID,
                     Department_Name = d.Department_Name
                 }).Distinct().ToList();
             ViewBag.departments = departments;
@@ -47,23 +50,24 @@ namespace Web_IT_HELPDESK.Controllers
         [HttpPost]
         public ActionResult Index(string plantid)
         {
-            //var contactlist = en.Employees
             var contactlist = en.Employee_New
-                .Where(e => e.Deactive != true && e.Plant_ID == plantid);
+                .Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d })
+                .Where(grp => grp.e.Deactive != true && grp.d.Plant_ID == plantid)
+                .Select(grp => grp.e);
 
-            List<PlantViewModel> plants = en.Departments
-                .Select(d => new PlantViewModel
-                {
-                    Plant_Id = d.Plant_Id,
-                    Plant_Name = d.Plant_Name
-                }).Distinct().ToList();
+            List<PlantViewModel> plants = en.Plants
+              .Select(p => new PlantViewModel
+              {
+                  Plant_Id = p.Plant_ID,
+                  Plant_Name = p.Plant_Name
+              }).Distinct().ToList();
             ViewBag.plants = plants;
 
             List<DepartmentViewModel> departments = en.Departments
-                .Where(d => d.Plant_Id == plantid)
+                .Where(d => d.Plant_ID == plantid)
                 .Select(d => new DepartmentViewModel
                 {
-                    Department_Id = d.Department_Id,
+                    Department_Id = d.Department_ID,
                     Department_Name = d.Department_Name
                 }).Distinct().ToList();
             ViewBag.departments = departments;
@@ -75,18 +79,18 @@ namespace Web_IT_HELPDESK.Controllers
 
         public ActionResult Download(string plantid)
         {
-            string plantName = en.Departments.FirstOrDefault(d => d.Plant_Id == plantid).Plant_Name;
-            //var contactlist = en.Employees
+            string plantName = en.Plants.FirstOrDefault(d => d.Plant_ID == plantid).Plant_Name;
             var contactlist = en.Employee_New
-               .Where(e => e.Deactive != true && e.Plant_ID == plantid)
-               .Select(c => new
-               {
-                   Emp_CJ = c.Emp_CJ,
-                   EmployeeName = c.Employee_Name,
-                   Email = c.Email,
-                   Phone = c.Phone,
-                   Birthday = c.Birthday
-               }).ToList();
+                .Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d })
+                .Where(grp => grp.e.Deactive != true && grp.d.Plant_ID == plantid).OrderBy(grp => grp.d.Department_ID)
+                .Select(grp => new
+                {
+                    Emp_CJ = grp.e.Emp_CJ,
+                    EmployeeName = grp.e.Employee_Name,
+                    Email = grp.e.Email,
+                    Phone = grp.e.Phone,
+                    Birthday = grp.e.Birthday
+                }).ToList();
 
             //Col need format date
             List<int> colsDate = new List<int>()
