@@ -29,6 +29,8 @@ namespace Web_IT_HELPDESK
         public string DepartmentId { get; set; }
         public Nullable<bool> Solved { get; set; }
         public Nullable<System.DateTime> Solve_datetime { get; set; }
-        public string Plant { get; set; }
+    
+        public virtual Department Department { get; set; }
+        public virtual Status Status { get; set; }
     }
 }

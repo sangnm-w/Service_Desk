@@ -34,17 +34,16 @@ namespace Web_IT_HELPDESK.Models
                     en.Departments,
                     iwsal => iwsal.inc.DepartmentId,
                     dept => dept.Department_ID,
-                    (iwsal, dept) => new { iwsal.inc, iwsal.StatusName, iwsal.LevelName, dept.Department_Name }
+                    (iwsal, dept) => new { iwsal.inc, iwsal.StatusName, iwsal.LevelName, dept.Department_Name, dept.Plant_ID }
                 )
                 .Join(
                     //en.Employees,
                     en.Employee_New,
                     isld => isld.inc.User_create,
                     e => e.Emp_CJ,
-                    (isld, e) => new { isld.inc, isld.StatusName, isld.LevelName, isld.Department_Name, e.Employee_Name }
+                    (isld, e) => new { isld.inc, isld.StatusName, isld.LevelName, isld.Department_Name, isld.Plant_ID, e.Employee_Name }
                 )
                 .GroupJoin(
-                    //en.Employees,
                     en.Employee_New,
                     i => i.inc.User_resolve,
                     e => e.Emp_CJ,
@@ -61,7 +60,7 @@ namespace Web_IT_HELPDESK.Models
                         FileName = temp0.i.inc.FileName,
                         Id = temp0.i.inc.Id,
                         Note = temp0.i.inc.Note,
-                        Plant = temp0.i.inc.Plant,
+                        plantId = temp0.i.Plant_ID,
                         Reply = temp0.i.inc.Reply,
                         Solved = temp0.i.inc.Solved,
                         Solve_datetime = temp0.i.inc.Solve_datetime,
@@ -78,7 +77,6 @@ namespace Web_IT_HELPDESK.Models
                     }
                 )
                 .Distinct();
-
             return incMode;
         }
 
@@ -91,7 +89,11 @@ namespace Web_IT_HELPDESK.Models
         {
             ServiceDeskEntities en = new ServiceDeskEntities();
 
-            List<string> strIncidentCodes = en.Incidents.Where(i => i.Code != null && i.Plant == plantId).Select(i => i.Code).ToList();
+            List<string> strIncidentCodes = en.Incidents
+                .Join(en.Departments, i => i.DepartmentId, d => d.Department_ID, (i, d) => new { i, d })
+                .Where(grp => grp.i.Code != null && grp.d.Plant_ID == plantId)
+                .Select(grp => grp.i.Code)
+                .ToList();
 
             if (strIncidentCodes.Count <= 0)
             {

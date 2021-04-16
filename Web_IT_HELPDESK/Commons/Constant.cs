@@ -8,23 +8,23 @@ namespace Web_IT_HELPDESK.Commons
 {
     public class ModuleConstant
     {
-        public static string INCIDENT = "INCIDENT";
-        public static string DEVICE = "DEVICE";
-        public static string DEVICE_PROVIDING = "DEVICE_PROVIDING";
-        public static string CONTRACT = "CONTRACT";
-        public static string BIZ_TRIP = "BIZ_TRIP";
+        public const string INCIDENT = "INCIDENT";
+        public const string DEVICE = "DEVICE";
+        public const string DEVICE_PROVIDING = "DEVICE_PROVIDING";
+        public const string CONTRACT = "CONTRACT";
+        public const string BIZ_TRIP = "BIZ_TRIP";
     }
 
     public class ActionConstant
     {
-        public static string INDEX = "INDEX";
-        public static string DETAILS = "DETAILS";
-        public static string CREATE = "CREATE";
-        public static string DELETE = "DELETE";
-        public static string EDIT = "EDIT";
-        public static string SOLVE = "SOLVE";
-        public static string DOWNLOAD = "DOWNLOAD";
-        public static string UPLOAD = "UPLOAD";
+        public const string INDEX = "INDEX";
+        public const string DETAILS = "DETAILS";
+        public const string CREATE = "CREATE";
+        public const string DELETE = "DELETE";
+        public const string EDIT = "EDIT";
+        public const string SOLVE = "SOLVE";
+        public const string DOWNLOAD = "DOWNLOAD";
+        public const string UPLOAD = "UPLOAD";
     }
 
     public class RoleConstant

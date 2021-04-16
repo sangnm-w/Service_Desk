@@ -298,6 +298,9 @@
     <Compile Include="func_report_detail_Result.cs">
       <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
+    <Compile Include="GetLastAllocationOfDevice_Result.cs">
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -1611,7 +1614,7 @@
     <Content Include="Views\Order_\OrderPrint.cshtml" />
     <Content Include="Views\Employee\ChangePasword.cshtml" />
     <Content Include="Views\DrinkingRequest\Resend.cshtml" />
-    <Content Include="Views\BIZ_TRIP\biz_trip_index.cshtml" />
+    <Content Include="Views\BIZ_TRIP\Index.cshtml" />
     <Content Include="Views\BIZ_TRIP\Create.cshtml" />
     <Content Include="Views\BIZ_TRIP\dept_confirm.cshtml" />
     <Content Include="Views\BIZ_TRIP\hr_confirm.cshtml" />
@@ -1665,7 +1668,6 @@
     <Content Include="Views\Devices\EditOthers.cshtml" />
     <Content Include="Views\Allocations\Revoke.cshtml" />
     <Content Include="Views\Allocations\Index - CopyForCollapse.cshtml" />
-    <Content Include="Views\BIZ_TRIP\Create - Copy.cshtml" />
     <Content Include="Views\Incident\IncidentEmail.cshtml" />
     <Content Include="Views\Account\LogOn.cshtml" />
     <Content Include="Views\Shared\Messenger.cshtml" />
@@ -1729,9 +1731,7 @@
     <Content Include="Views\SealUsing\Edit - Copy.cshtml" />
     <Content Include="Views\SealUsing\Edit.cshtml" />
     <Content Include="Views\Contacts\Index.cshtml" />
-    <Content Include="Views\BIZ_TRIP\dept_confirm - Copy.cshtml" />
     <Content Include="Views\BIZ_TRIP\hr_admin.cshtml" />
-    <Content Include="Views\BIZ_TRIP\biz_trip_index - Copy.cshtml" />
     <Content Include="Views\Shared\_Layout - Copy.cshtml" />
     <Content Include="Views\CONTRACT\Edit.cshtml" />
     <Content Include="Views\BIZ_TRIP\bod_confirm.cshtml" />

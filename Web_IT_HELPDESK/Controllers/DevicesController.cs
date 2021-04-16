@@ -11,6 +11,7 @@ using System.Web;
 using System.Web.Mvc;
 using Web_IT_HELPDESK.Controllers.ObjectManager;
 using Web_IT_HELPDESK.Models;
+using Web_IT_HELPDESK.Models.Extensions;
 using Web_IT_HELPDESK.ViewModels;
 using EntityState = System.Data.Entity.EntityState;
 
@@ -19,14 +20,14 @@ namespace Web_IT_HELPDESK.Controllers
     public class DevicesController : Controller
     {
         private ServiceDeskEntities en = new ServiceDeskEntities();
-        private string session_emp = System.Web.HttpContext.Current.User.Identity.Name;
+        private string currUserId = ApplicationUser.Instance.EmployeeID;
+        private string currUserPlantId = ApplicationUser.Instance.GetPlantID();
 
         // GET: Devices
         [Authorize]
         public ActionResult Index()
         {
-            //string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
-            string curr_plantId = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
+            string curr_plantId = ApplicationUser.Instance.GetPlantID();
             IEnumerable<DeviceViewModel> devices = DeviceModel.Instance.GetDevicesByPlantId(curr_plantId);
             return View(devices.ToList());
         }
@@ -56,16 +57,7 @@ namespace Web_IT_HELPDESK.Controllers
         [Authorize]
         public ActionResult Create()
         {
-            //string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
-            string empPlantID = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
-
-            ViewBag.Plant_Id = empPlantID;
-
-            //List<SelectListItem> Contract_Id = new List<SelectListItem>();
-            //Contract_Id.AddRange(new SelectList(en.CONTRACTs.Where(c => c.PLANT == empPlantID), "ID", "CONTRACTNAME", ""));
-            //Contract_Id.Insert(0, new SelectListItem { Text = "None", Value = "" });
-
-            //ViewBag.Contract_Id = Contract_Id;
+            ViewBag.Plant_Id = currUserPlantId;
 
             List<SelectListItem> Device_Type_Id = new List<SelectListItem>();
             Device_Type_Id.AddRange(new SelectList(en.Device_Type.Where(dt => dt.Device_Type_Id == 3 || dt.Device_Type_Id == 6), "Device_Type_Id", "Device_Type_Name"));
@@ -81,9 +73,6 @@ namespace Web_IT_HELPDESK.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Device device)
         {
-            //string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
-            string empPlantID = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
-
             DateTime purchaseD = device.Purchase_Date.GetValueOrDefault();
             DateTime depreciationD = device.Depreciation.GetValueOrDefault();
             if (purchaseD >= depreciationD)
@@ -94,11 +83,11 @@ namespace Web_IT_HELPDESK.Controllers
             if (ModelState.IsValid)
             {
                 device.Device_Id = Guid.NewGuid();
-                device.Device_Code = DeviceModel.Instance.Generate_DeviceCode(empPlantID, device.Device_Type_Id);
+                device.Device_Code = DeviceModel.Instance.Generate_DeviceCode(currUserPlantId, device.Device_Type_Id);
                 device.Create_Date = DateTime.Now;
                 device.Device_Status = DeviceModel.DeviceStatus.In_Stock.ToString();
 
-                device.Plant_Id = empPlantID;
+                device.Plant_Id = currUserPlantId;
 
                 string deviceQRPath = DeviceHelper.Instance.CreateQRCode(device);
                 device.QRCodeFile = deviceQRPath;
@@ -122,8 +111,7 @@ namespace Web_IT_HELPDESK.Controllers
         [Authorize]
         public ActionResult CreateOthers()
         {
-            //string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
-            string empPlantID = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
+            string empPlantID = ApplicationUser.Instance.GetPlantID();
 
             ViewBag.Plant_Id = empPlantID;
 
@@ -147,15 +135,6 @@ namespace Web_IT_HELPDESK.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateOthers(Device device)
         {
-            //string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
-            string empPlantID = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
-
-            //if (device.Contract_Id == null)
-            //    ModelState.AddModelError("Contract_Id", "Please select one contract!");
-
-            //if (device.Device_Type_Id == null)
-            //    ModelState.AddModelError("Device_Type_Id", "Please select one type!");
-            //
             DateTime purchaseD = device.Purchase_Date.GetValueOrDefault();
             DateTime depreciationD = device.Depreciation.GetValueOrDefault();
             if (purchaseD >= depreciationD)
@@ -166,10 +145,10 @@ namespace Web_IT_HELPDESK.Controllers
             if (ModelState.IsValid)
             {
                 device.Device_Id = Guid.NewGuid();
-                device.Device_Code = DeviceModel.Instance.Generate_DeviceCode(empPlantID, device.Device_Type_Id);
+                device.Device_Code = DeviceModel.Instance.Generate_DeviceCode(currUserPlantId, device.Device_Type_Id);
                 device.Create_Date = DateTime.Now;
                 device.Device_Status = DeviceModel.DeviceStatus.In_Stock.ToString();
-                device.Plant_Id = empPlantID;
+                device.Plant_Id = currUserPlantId;
 
                 string deviceQRPath = DeviceHelper.Instance.CreateQRCode(device);
                 device.QRCodeFile = deviceQRPath;
@@ -210,8 +189,6 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 return HttpNotFound();
             }
-            //string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
-            string empPlantID = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
 
             ViewBag.Device_Type_Name = en.Device_Type.FirstOrDefault(t => t.Device_Type_Id == device.Device_Type_Id).Device_Type_Name;
 
@@ -223,8 +200,6 @@ namespace Web_IT_HELPDESK.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Device device)
         {
-            //string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
-            string empPlantID = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
             DateTime purchaseD = device.Purchase_Date.GetValueOrDefault();
             DateTime depreciationD = device.Depreciation.GetValueOrDefault();
             if (purchaseD >= depreciationD)
@@ -259,8 +234,6 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 return HttpNotFound();
             }
-            //string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
-            string empPlantID = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
 
             ViewBag.Device_Type_Name = en.Device_Type.FirstOrDefault(t => t.Device_Type_Id == device.Device_Type_Id).Device_Type_Name;
 
@@ -272,8 +245,6 @@ namespace Web_IT_HELPDESK.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditOthers(Device device)
         {
-            //string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
-            string empPlantID = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
             DateTime purchaseD = device.Purchase_Date.GetValueOrDefault();
             DateTime depreciationD = device.Depreciation.GetValueOrDefault();
             if (purchaseD >= depreciationD)
@@ -329,8 +300,6 @@ namespace Web_IT_HELPDESK.Controllers
         [Authorize]
         public ActionResult UploadDevices(HttpPostedFileBase FileUpload)
         {
-            //string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
-            string curr_plantId = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
             if (FileUpload != null)
             {
                 if (FileUpload.ContentType == "application/vnd.ms-excel" || FileUpload.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
@@ -380,41 +349,29 @@ namespace Web_IT_HELPDESK.Controllers
                         ViewBag.Error = "Upload success!";
                     }
 
-                    IEnumerable<DeviceViewModel> devices = DeviceModel.Instance.GetDevicesByPlantId(curr_plantId);
-                    return View("Index", devices.ToList());
                 }
                 else
                 {
                     ViewBag.Error = "Only Excel file format is allowed";
-                    IEnumerable<DeviceViewModel> devices = DeviceModel.Instance.GetDevicesByPlantId(curr_plantId);
-                    return View("Index", devices.ToList());
                 }
             }
             else
             {
                 ViewBag.Error = "Please choose Devices Excel file";
-                IEnumerable<DeviceViewModel> devices = DeviceModel.Instance.GetDevicesByPlantId(curr_plantId);
-                return View("Index", devices.ToList());
             }
+            IEnumerable<DeviceViewModel> devices = DeviceModel.Instance.GetDevicesByPlantId(currUserPlantId);
+            return View("Index", devices.ToList());
         }
 
         public FileContentResult Download()
         {
-            //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.DOWNLOAD, Commons.ModuleConstant.INCIDENT);
-            //if (hasPermission.Value == false)
-            //    return RedirectToAction("Index", "Home");
 
-            //string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
-            string curr_plantId = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
+            string curr_plantId = ApplicationUser.Instance.GetPlantID();
             var devices = DeviceModel.Instance.GetQRDevicesByPlantID(curr_plantId);
 
             var stream = ExcelHelper.Instance.CreateQRExcel(null, devices.ToList(), ExcelTitle.Instance.QRDevices(), null);
             var buffer = stream as MemoryStream;
-            //Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            //Response.AddHeader("Content-Disposition", "attachment; filename=IT Order Request.xlsx");
-            //Response.BinaryWrite(buffer.ToArray());
-            //Response.Flush();
-            //Response.End();
+
             string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             string fileName = "QR Code Devices.xlsx";
             return File(buffer.ToArray(), contentType, fileName);

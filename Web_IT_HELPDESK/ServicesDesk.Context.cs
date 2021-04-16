@@ -29,7 +29,6 @@ namespace Web_IT_HELPDESK
     
         public virtual DbSet<Album> Albums { get; set; }
         public virtual DbSet<AlbumType> AlbumTypes { get; set; }
-        public virtual DbSet<Allocation> Allocations { get; set; }
         public virtual DbSet<BIZ_TRIP> BIZ_TRIP { get; set; }
         public virtual DbSet<Cart> Carts { get; set; }
         public virtual DbSet<CONTRACT> CONTRACTs { get; set; }
@@ -47,24 +46,25 @@ namespace Web_IT_HELPDESK
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<hr_emp_infor> hr_emp_infor { get; set; }
         public virtual DbSet<hr_emp_meal> hr_emp_meal { get; set; }
-        public virtual DbSet<Incident> Incidents { get; set; }
         public virtual DbSet<Level> Levels { get; set; }
         public virtual DbSet<Order_> Order_ { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
         public virtual DbSet<PERIOD> PERIODs { get; set; }
         public virtual DbSet<QUESTION> QUESTIONs { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
-        public virtual DbSet<Rule> Rules { get; set; }
         public virtual DbSet<Screen> Screens { get; set; }
-        public virtual DbSet<Seal_Using> Seal_Using { get; set; }
         public virtual DbSet<Status> Status { get; set; }
         public virtual DbSet<UserLogon> UserLogons { get; set; }
         public virtual DbSet<ORDER_TYPE_VIEW> ORDER_TYPE_VIEW { get; set; }
         public virtual DbSet<Employee_New> Employee_New { get; set; }
         public virtual DbSet<Authorization> Authorizations { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
-        public virtual DbSet<Module> Modules { get; set; }
         public virtual DbSet<Plant> Plants { get; set; }
+        public virtual DbSet<Module> Modules { get; set; }
+        public virtual DbSet<Rule> Rules { get; set; }
+        public virtual DbSet<Allocation> Allocations { get; set; }
+        public virtual DbSet<Incident> Incidents { get; set; }
+        public virtual DbSet<Seal_Using> Seal_Using { get; set; }
     
         [DbFunction("ServiceDeskEntities", "func_report_detail")]
         public virtual IQueryable<func_report_detail_Result> func_report_detail(Nullable<System.DateTime> v_fromdate, Nullable<System.DateTime> v_todate, string v_plant)

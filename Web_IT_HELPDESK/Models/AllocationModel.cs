@@ -96,8 +96,8 @@ namespace Web_IT_HELPDESK.Models
                     ReceiverName = e.Employee_Name
                 })
                 .Join(en.Departments,
-                a => (new { Plant_Id = a.allocation.Plant_Id, Department_Id = a.allocation.Department_Id }),
-                d => (new { Plant_Id = d.Plant_Id, Department_Id = d.Department_Id }),
+                a => a.allocation.Department_Id,
+                d => d.Department_ID,
                 (a, d) => new
                 {
                     allocation = a.allocation,
@@ -217,8 +217,8 @@ namespace Web_IT_HELPDESK.Models
                     ReceiverName = e.Employee_Name
                 })
                 .Join(en.Departments,
-                a => (new { Plant_Id = a.allocation.Plant_Id, Department_Id = a.allocation.Department_Id }),
-                d => (new { Plant_Id = d.Plant_Id, Department_Id = d.Department_Id }),
+                a => a.allocation.Department_Id,
+                d => d.Department_ID,
                 (a, d) => new
                 {
                     allocation = a.allocation,

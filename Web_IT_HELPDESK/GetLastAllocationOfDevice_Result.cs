@@ -10,9 +10,8 @@
 namespace Web_IT_HELPDESK
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Allocation
+    public partial class GetLastAllocationOfDevice_Result
     {
         public System.Guid Allocation_Id { get; set; }
         public Nullable<System.Guid> Device_Id { get; set; }
@@ -23,14 +22,12 @@ namespace Web_IT_HELPDESK
         public Nullable<System.DateTime> Delivery_Date { get; set; }
         public Nullable<System.DateTime> Return_Date { get; set; }
         public string Department_Id { get; set; }
+        public string Plant_Id { get; set; }
         public string Note { get; set; }
         public string IP { get; set; }
         public Nullable<System.DateTime> Create_Date { get; set; }
         public Nullable<System.DateTime> Delete_Date { get; set; }
         public Nullable<bool> Flag_ReAllocation { get; set; }
         public string QRCodeFile { get; set; }
-    
-        public virtual Department Department { get; set; }
-        public virtual Device Device { get; set; }
     }
 }

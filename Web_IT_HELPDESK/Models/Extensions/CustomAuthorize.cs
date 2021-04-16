@@ -3,34 +3,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace Web_IT_HELPDESK.Models.Extensions
 {
-    public class CustomAuthorize : AuthorizeAttribute
+    public class CustomAuthorizeAttribute : AuthorizeAttribute
     {
         ServiceDeskEntities en = new ServiceDeskEntities();
         private readonly string[] allowedroles;
-        public CustomAuthorize(params string[] roles)
+        public CustomAuthorizeAttribute(params string[] roles)
         {
             this.allowedroles = roles;
         }
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
-            bool authorize = false;
 
-            bool? isDeactive = ApplicationUser.Instance.isDeactive;
-            if (isDeactive == true)
-                return authorize;
+            if (httpContext == null)
+            {
+                throw new ArgumentNullException("httpContext");
+            }
+            
+            if (!httpContext.User.Identity.IsAuthenticated)
+            {
+                return false;
+            }
 
             bool isAdmin = ApplicationUser.Instance.isAdmin;
             if (isAdmin)
-                return authorize = true;
+                return true;
 
             var rd = httpContext.Request.RequestContext.RouteData;
             string currentAction = rd.GetRequiredString("action");
             string currentController = rd.GetRequiredString("controller");
             string currentArea = rd.Values["area"] as string;
-
 
             List<Role> userRoles = ApplicationUser.Instance.GetRoles();
 
@@ -43,23 +48,22 @@ namespace Web_IT_HELPDESK.Models.Extensions
             }
 
             if (validRoles.Count() <= 0)
-                return authorize;
+                return false;
 
             List<Rule> validRules = ApplicationUser.Instance.GetRules(validRoles);
 
             if (validRules.Count() <= 0)
-                return authorize;
+                return false;
 
             foreach (var rule in validRules.Distinct())
             {
                 if (rule.Rule_Name.ToUpper() == currentAction.ToUpper())
                 {
-                    authorize = true;
-                    return authorize;
+                    return true;
                 }
             }
 
-            return authorize;
+            return false;
         }
         //protected override bool AuthorizeCore(HttpContextBase httpContext)
         //{
@@ -114,11 +118,6 @@ namespace Web_IT_HELPDESK.Models.Extensions
         //    return authorize;
         //}
 
-        protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
-        {
-            filterContext.Result = new HttpUnauthorizedResult();
-        }
-
         //protected override void HandleUnauthorizedRequest(HttpActionContext actionContext)
         //{
         //    actionContext.Response = new HttpResponseMessage
@@ -127,5 +126,19 @@ namespace Web_IT_HELPDESK.Models.Extensions
         //        Content = new StringContent("You are unauthorized to access this resource")
         //    };
         //}
+
+        protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
+        {
+            
+            filterContext.Result = new RedirectToRouteResult(
+                         new RouteValueDictionary(
+                             new
+                             {
+                                 controller = "LogOn",
+                                 action = "Logon",
+                                 returnUrl = filterContext.HttpContext.Request.Url.GetComponents(UriComponents.PathAndQuery, UriFormat.SafeUnescaped)
+                             })
+                         );
+        }
     }
 }

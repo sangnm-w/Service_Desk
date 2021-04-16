@@ -17,8 +17,10 @@ namespace Web_IT_HELPDESK
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Department()
         {
-            this.Allocations1 = new HashSet<Allocation>();
             this.Employee_New = new HashSet<Employee_New>();
+            this.Allocations = new HashSet<Allocation>();
+            this.Incidents = new HashSet<Incident>();
+            this.Seal_Using = new HashSet<Seal_Using>();
             OnConstructorInit();
         }
         partial void OnConstructorInit();
@@ -32,9 +34,13 @@ namespace Web_IT_HELPDESK
         public string Manager_ID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Allocation> Allocations1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Employee_New> Employee_New { get; set; }
         public virtual Plant Plant { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Allocation> Allocations { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Incident> Incidents { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Seal_Using> Seal_Using { get; set; }
     }
 }

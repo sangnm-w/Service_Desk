@@ -13,14 +13,40 @@ namespace Web_IT_HELPDESK.Models
 
         public static DepartmentModel Instance { get { if (_instance == null) _instance = new DepartmentModel(); return _instance; } private set => _instance = value; }
 
-        public string getPlantName(string plantId)
+        public List<string> getPlantNames()
         {
             ServiceDeskEntities en = new ServiceDeskEntities();
 
-            return en.Plants.FirstOrDefault(d => d.Plant_ID == plantId).Plant_Name;
+            return en.Plants.Select(p => p.Plant_Name).ToList();
         }
 
-        public string getDeptName(string deptId)
+        public string getPlantNameByPlantId(string plantId)
+        {
+            ServiceDeskEntities en = new ServiceDeskEntities();
+
+            return en.Plants.FirstOrDefault(p => p.Plant_ID == plantId).Plant_Name;
+        }
+        public string getPlantNameByDeptId(string deptId)
+        {
+            ServiceDeskEntities en = new ServiceDeskEntities();
+            string result = null;
+
+            result = en.Departments
+                .Join(en.Plants, d => d.Plant_ID, p => p.Plant_ID, (d, p) => new { d, p })
+                .Where(grp => grp.d.Department_ID == deptId)
+                .Select(grp => grp.p.Plant_Name)
+                .ToString();
+
+            return result;
+        }
+        public List<string> getDeptNames()
+        {
+            ServiceDeskEntities en = new ServiceDeskEntities();
+
+            return en.Departments.Where(d => d.Deactive != true).Select(d => d.Department_Name).ToList();
+        }
+
+        public string getDeptNameByDeptId(string deptId)
         {
             ServiceDeskEntities en = new ServiceDeskEntities();
 

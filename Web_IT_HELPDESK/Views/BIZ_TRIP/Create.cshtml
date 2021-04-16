@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                @Html.ActionLink("Close", "biz_trip_index", "BIZ_TRIP", null, new { @class = "btn btn-default" })
+                @Html.ActionLink("Close", "Index", "BIZ_TRIP", null, new { @class = "btn btn-default" })
                 @Html.ActionLink("Create new", "Create", "BIZ_TRIP", null, new { @class = "btn btn-primary" })
             </div>
         </div>
@@ -46,7 +46,7 @@
                         <input type="hidden" name="DATE" id="DATE_val" value="@Model.DATE" />
                     </div>
                     <div class="col-sm-6">
-                        DEPARTMENT <input type="text" class="form-control" disabled="disabled" id="DEPT" name="DEPT" value="@ViewBag.DEPT" readonly="readonly">
+                        DEPARTMENT <input type="text" class="form-control" disabled="disabled" id="DEPT" name="DEPT" value="@ViewBag.DepartmentId" readonly="readonly">
                     </div>
                 </div>
                 <div class="row">
@@ -322,7 +322,7 @@
                         <input type="submit" value="submit" class="btn btn-primary" />
                     </div>
                     <div class="col-sm-2">
-                        @Html.ActionLink("Back to List", "biz_trip_index", null, new { @class = "btn btn-default", @style = "float: right" })
+                        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default", @style = "float: right" })
                     </div>
                 </div>
             </div>

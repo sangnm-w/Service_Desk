@@ -38,7 +38,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                         if (ccMails.Contains(m))
                             ccMails.Remove(m);
 
-                
+
                 if (bccMails != null)
                 {
                     // Check duplicate between toMails and bccMails
@@ -106,7 +106,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
 
                     bodyHtml = bodyHtml.Replace("{incNo}", incM.Code);
                     bodyHtml = bodyHtml.Replace("{datetime}", incM.datetime.ToString());
-                    bodyHtml = bodyHtml.Replace("{plant}", DepartmentModel.Instance.getPlantName(incM.Plant));
+                    bodyHtml = bodyHtml.Replace("{plant}", DepartmentModel.Instance.getPlantNameByPlantId(incM.plantId));
                     bodyHtml = bodyHtml.Replace("{User_Create}", incM.userCreateName);
                     bodyHtml = bodyHtml.Replace("{Status}", incM.statusName);
                     bodyHtml = bodyHtml.Replace("{Level}", incM.levelName);

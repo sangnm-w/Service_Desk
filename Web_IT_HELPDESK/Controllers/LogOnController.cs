@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using Web_IT_HELPDESK.Controllers.ObjectManager;
 using Web_IT_HELPDESK.Models;
+using Web_IT_HELPDESK.Models.Extensions;
 
 namespace Web_IT_HELPDESK.Controllers
 {
@@ -18,6 +19,8 @@ namespace Web_IT_HELPDESK.Controllers
 
         public ActionResult Logon()
         {
+            var documents = en.Documents.OrderBy(d => d.Code);
+            ViewBag.Documents = documents.ToList();
             return View();
         }
 
@@ -80,6 +83,8 @@ namespace Web_IT_HELPDESK.Controllers
                     ModelState.AddModelError("LogonF", "The Id or Password is invalid!");
                 }
             }
+            var documents = en.Documents.OrderBy(d => d.Code);
+            ViewBag.Documents = documents;
             return View(emp);
         }
 
@@ -87,6 +92,7 @@ namespace Web_IT_HELPDESK.Controllers
         public ActionResult LogOff()
         {
             FormsAuthentication.SignOut();
+            ApplicationUser.Instance = null;
             return RedirectToAction("Logon", "Logon");
         }
 

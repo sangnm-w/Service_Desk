@@ -18,69 +18,77 @@ namespace Web_IT_HELPDESK.Controllers
 {
     public class IncidentController : Controller
     {
-        private ServiceDeskEntities en = new ServiceDeskEntities();
-        private string curr_EmployeeID = ApplicationUser.Instance.EmployeeID;
-        private string curr_DeptID = ApplicationUser.Instance.GetDepartmentID();
-        private string curr_PlantID = ApplicationUser.Instance.GetPlantID();
+        public ServiceDeskEntities en { get; set; }
+        public string currUserId { get; set; }
+        public string currUserDeptId { get; set; }
+        public string currUserPlantId { get; set; }
 
         private DateTime from_date { get; set; }
         private DateTime to_date { get; set; }
+
+        public IncidentController()
+        {
+            if (System.Web.HttpContext.Current.Request.IsAuthenticated)
+            {
+                en = new ServiceDeskEntities();
+                currUserId = ApplicationUser.Instance.EmployeeID;
+                currUserDeptId = ApplicationUser.Instance.GetDepartmentID();
+                currUserPlantId = ApplicationUser.Instance.GetPlantID();
+            }
+        }
 
         // GET: /Incident/Index
         [CustomAuthorize("End User", "IT Manager", "IT Staff")]
         public ActionResult Index()
         {
             List<Rule> userRules = new List<Rule>();
+            List<Role> userRoles = new List<Role>();
             List<PlantViewModel> userPlants = new List<PlantViewModel>();
+            string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
 
             bool IsAdmin = ApplicationUser.Instance.isAdmin;
-            ViewBag.IsAdmin = IsAdmin;
-
-            string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
-            if (IsAdmin)
-            {
-                //userRules = en.Rules.Join(en.Modules, ru => ru.Module_ID, mo => mo.Module_ID, (ru, mo) => ru).Where(grp => grp.ru.Deactive != true && grp.mo.Module_Name.ToUpper() == controllerName).ToList();
-
-                userPlants = en.Plants.Select(p => new PlantViewModel
-                {
-                    Plant_Id = p.Plant_ID,
-                    Plant_Name = p.Plant_Name
-                }).ToList();
-                ViewBag.Plants = userPlants;
-            }
-            else
-            {
-                // add moduleID ~ controller name as params
-                userRules = ApplicationUser.Instance.GetRules(null, controllerName);
-                ViewBag.userRules = userRules;
-
-                userPlants = ApplicationUser.Instance.GetAuthorizations()
-                   .Join(en.Plants, au => au.Plant_ID, p => p.Plant_ID,
-                   (au, p) => new PlantViewModel
-                   {
-                       Plant_Id = p.Plant_ID,
-                       Plant_Name = p.Plant_Name
-                   })
-                   .Distinct().ToList();
-                ViewBag.Plants = userPlants;
-            }
 
             from_date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             to_date = from_date.AddMonths(1).AddSeconds(-1);
 
-            IEnumerable<IncidentViewModel> ivm = IncidentModel.Instance.get_IEnum_Inc();
+            var ivm = IncidentModel.Instance.get_IEnum_Inc();
+            ivm = ivm.Where(i => i.Del != true && i.datetime >= from_date && i.datetime <= to_date);
 
-            ivm = ivm.Where(item => item.Del != true
-                                        && item.datetime >= from_date
-                                        && item.datetime <= to_date);
-
-            List<string> userPlantsId = userPlants.Select(p => p.Plant_Id).ToList();
-            if (IsAdmin == false) // Not Admin
+            if (IsAdmin)
             {
-                ivm = ivm.Where(i => i.Del != true
-                               && i.User_create == curr_EmployeeID
-                               && userPlantsId.Contains(i.Plant));
+                userRules = en.Rules
+                    .Join(en.Modules, ru => ru.Module_ID, mo => mo.Module_ID, (ru, mo) => new { ru, mo })
+                    .Where(grp => grp.ru.Deactive != true && grp.mo.Name.ToUpper() == controllerName.ToUpper())
+                    .Select(grp => grp.ru)
+                    .ToList();
+
+                userPlants = en.Plants
+                    .Select(p => new PlantViewModel { Plant_Id = p.Plant_ID, Plant_Name = p.Plant_Name })
+                    .ToList();
             }
+            else
+            {
+                var userAuths = ApplicationUser.Instance.GetAuthorizations();
+
+                userRoles = userAuths.Join(en.Roles, au => au.Role_ID, ro => ro.Role_ID, (au, ro) => ro).Distinct().ToList();
+                userRules = ApplicationUser.Instance.GetRules(userRoles, controllerName);
+
+                var uPlants = ApplicationUser.Instance.GetAuthorizations()
+               .Join(en.Plants, au => au.Plant_ID, p => p.Plant_ID, (au, p) => new { au, p }).Select(grp => new { grp.p.Plant_ID, grp.p.Plant_Name }).Distinct();
+
+                userPlants = uPlants.Select(p => new PlantViewModel { Plant_Id = p.Plant_ID, Plant_Name = p.Plant_Name }).ToList();
+
+                ivm = ivm.Where(i => userPlants.Select(p => p.Plant_Id).Contains(i.plantId));
+
+                bool isITStaff = userRoles.Where(ro => new[] { 2, 3 }.Contains(ro.Role_ID)).Count() > 0;
+                if (!isITStaff) // not IT Member or IT Manager
+                {
+                    ivm = ivm.Where(i => i.User_create == currUserId);
+                }
+            }
+
+            ViewBag.userRules = userRules.Select(ru => ru.Rule_Name).ToList();
+            ViewBag.userPlants = userPlants;
 
             Dictionary<string, string> Params = new Dictionary<string, string>();
 
@@ -91,77 +99,73 @@ namespace Web_IT_HELPDESK.Controllers
             Params.Add("to_date", to_date.ToString());
 
             Session["Params"] = Params;
-            ivm = ivm.OrderByDescending(i => i.Code);
             return View(ivm);
         }
 
         // POST: /Incident/Index
-        [Authorize]
         [HttpPost]
+        [CustomAuthorize("End User", "IT Manager", "IT Staff")]
         public ActionResult Index(string solved, string _datetime, string plants)
         {
             List<Rule> userRules = new List<Rule>();
+            List<Role> userRoles = new List<Role>();
             List<PlantViewModel> userPlants = new List<PlantViewModel>();
+            string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
 
             bool IsAdmin = ApplicationUser.Instance.isAdmin;
-            ViewBag.IsAdmin = IsAdmin;
-
-            string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
-            if (IsAdmin)
-            {
-                //userRules = en.Rules.Join(en.Modules, ru => ru.Module_ID, mo => mo.Module_ID, (ru, mo) => ru).Where(grp => grp.ru.Deactive != true && grp.mo.Module_Name.ToUpper() == controllerName).ToList();
-
-                userPlants = en.Plants.Select(p => new PlantViewModel
-                {
-                    Plant_Id = p.Plant_ID,
-                    Plant_Name = p.Plant_Name
-                }).ToList();
-                ViewBag.Plants = userPlants;
-            }
-            else
-            {
-                // add moduleID ~ controller name as params
-                userRules = ApplicationUser.Instance.GetRules(null, controllerName);
-                ViewBag.userRules = userRules;
-
-                userPlants = ApplicationUser.Instance.GetAuthorizations()
-                   .Join(en.Plants, au => au.Plant_ID, p => p.Plant_ID,
-                   (au, p) => new PlantViewModel
-                   {
-                       Plant_Id = p.Plant_ID,
-                       Plant_Name = p.Plant_Name
-                   })
-                   .Distinct().ToList();
-                ViewBag.Plants = userPlants;
-            }
 
             IFormatProvider culture = new CultureInfo("en-US", true);
             from_date = DateTime.ParseExact(_datetime, "yyyy-MM", culture);
             to_date = from_date.AddMonths(1).AddSeconds(-1);
 
-            IEnumerable<IncidentViewModel> inc = IncidentModel.Instance.get_IEnum_Inc();
+            var ivm = IncidentModel.Instance.get_IEnum_Inc();
+            ivm = ivm.Where(i => i.Del != true && i.datetime >= from_date && i.datetime <= to_date);
 
-            inc = inc.Where(item => item.Del != true
-                                            && item.datetime >= from_date
-                                            && item.datetime <= to_date);
-
-            List<string> userPlantsId = userPlants.Select(p => p.Plant_Id).ToList();
-            if (IsAdmin == false)
+            if (IsAdmin)
             {
-                inc = inc.Where(i => i.Del != true
-                               && i.User_create == curr_EmployeeID
-                               && userPlantsId.Contains(i.Plant));
+                userRules = en.Rules
+                    .Join(en.Modules, ru => ru.Module_ID, mo => mo.Module_ID, (ru, mo) => new { ru, mo })
+                    .Where(grp => grp.ru.Deactive != true && grp.mo.Name.ToUpper() == controllerName.ToUpper())
+                    .Select(grp => grp.ru)
+                    .ToList();
+
+                userPlants = en.Plants
+                    .Select(p => new PlantViewModel { Plant_Id = p.Plant_ID, Plant_Name = p.Plant_Name })
+                    .ToList();
+            }
+            else
+            {
+                var userAuths = ApplicationUser.Instance.GetAuthorizations();
+
+                userRoles = userAuths.Join(en.Roles, au => au.Role_ID, ro => ro.Role_ID, (au, ro) => ro).Distinct().ToList();
+                userRules = ApplicationUser.Instance.GetRules(userRoles, controllerName);
+
+                var uPlants = ApplicationUser.Instance.GetAuthorizations()
+               .Join(en.Plants, au => au.Plant_ID, p => p.Plant_ID, (au, p) => new { au, p }).Select(grp => new { grp.p.Plant_ID, grp.p.Plant_Name }).Distinct();
+
+                userPlants = uPlants.Select(p => new PlantViewModel { Plant_Id = p.Plant_ID, Plant_Name = p.Plant_Name }).ToList();
+
+                ivm = ivm.Where(i => userPlants.Select(p => p.Plant_Id).Contains(i.plantId));
+
+                bool isITStaff = userRoles.Where(ro => new[] { 2, 3 }.Contains(ro.Role_ID)).Count() > 0;
+                if (!isITStaff) // not IT Member or IT Manager
+                {
+                    ivm = ivm.Where(i => i.User_create == currUserId);
+                }
             }
 
             if (plants != "all" && plants != null)
             {
-                inc = inc.Where(i => i.Plant == plants);
-            }
-            if (solved != "all")
-            {
-                inc = inc.Where(i => i.Solved == Convert.ToBoolean(solved));
+                ivm = ivm.Where(i => i.plantId == plants);
             }
 
+            if (solved != "all")
+            {
+                ivm = ivm.Where(i => i.Solved == Convert.ToBoolean(solved));
+            }
+
+            ViewBag.userRules = userRules.Select(ru => ru.Rule_Name).ToList();
+            ViewBag.userPlants = userPlants;
 
             Dictionary<string, string> Params = new Dictionary<string, string>();
 
@@ -173,7 +177,7 @@ namespace Web_IT_HELPDESK.Controllers
 
             Session["Params"] = Params;
 
-            return View(inc);
+            return View(ivm);
         }
 
         // GET: /Incident/Details
@@ -185,8 +189,8 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.LevelName = en.Levels.FirstOrDefault(l => l.LevelId == inc.LevelId).LevelName;
             ViewBag.StatusName = en.Status.FirstOrDefault(s => s.StatusId == inc.StatusId).StatusName;
 
-            ViewBag.plantName = DepartmentModel.Instance.getPlantName(inc.Plant);
-            ViewBag.DepartmentName = DepartmentModel.Instance.getDeptName(inc.DepartmentId);
+            ViewBag.plantName = DepartmentModel.Instance.getPlantNameByDeptId(inc.DepartmentId);
+            ViewBag.DepartmentName = DepartmentModel.Instance.getDeptNameByDeptId(inc.DepartmentId);
 
             ViewBag.User_Create = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.Employee_Name;
             ViewBag.User_Resolve = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == inc.User_resolve)?.Employee_Name;
@@ -198,17 +202,16 @@ namespace Web_IT_HELPDESK.Controllers
         public ActionResult Create()
         {
             Incident inc = new Incident();
-            inc.Code = IncidentModel.Instance.Generate_IncidentCode(curr_PlantID);
-            inc.User_create = curr_EmployeeID;
-            inc.Plant = curr_PlantID;
-            inc.DepartmentId = curr_DeptID;
+            inc.Code = IncidentModel.Instance.Generate_IncidentCode(currUserPlantId);
+            inc.User_create = currUserId;
+            inc.DepartmentId = currUserDeptId;
             inc.StatusId = "ST1";
 
             ViewBag.UserCreateName = CurrentUser.Instance.User.Employee_Name;
-            ViewBag.plantName = en.Plants.FirstOrDefault(d => d.Plant_ID == curr_PlantID).Plant_Name;
+            ViewBag.plantName = en.Plants.FirstOrDefault(d => d.Plant_ID == currUserPlantId).Plant_Name;
             ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", en.Levels.First().LevelId);
             ViewBag.StatusName = en.Status.FirstOrDefault(s => s.StatusId == "ST1").StatusName;
-            ViewBag.DepartmentName = DepartmentModel.Instance.getDeptName(curr_DeptID);
+            ViewBag.DepartmentName = DepartmentModel.Instance.getDeptNameByDeptId(currUserDeptId);
             return View(inc);
         }
 
@@ -245,16 +248,16 @@ namespace Web_IT_HELPDESK.Controllers
 
                 List<string> toMails = new List<string>();
 
-                toMails = IncidentModel.Instance.GetITMemberEmails(curr_PlantID);
+                toMails = IncidentModel.Instance.GetITMemberEmails(currUserPlantId);
 
                 List<string> ccMails = new List<string>();
 
-                string managerIdOfUser = en.Departments.Find(curr_DeptID).Manager_ID;
+                string managerIdOfUser = en.Departments.Find(currUserDeptId).Manager_ID;
                 string managerMail = en.Employee_New.Find(managerIdOfUser).Email;
                 if (managerMail != null)
                     ccMails.Add(managerMail);
 
-                if (curr_PlantID != "V2090" && curr_PlantID != "V2010")
+                if (currUserPlantId != "V2090" && currUserPlantId != "V2010")
                     ccMails.Add("itgroup@cjvina.com");
 
                 bool resultSend = IncidentHelper.Instance.Send_IncidentEmail(incEx, "CREATE", toMails, ccMails);
@@ -263,11 +266,11 @@ namespace Web_IT_HELPDESK.Controllers
                 return RedirectToAction("Index", "Incident");
             }
 
-            ViewBag.UserCreateName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == curr_EmployeeID).Employee_Name;
-            ViewBag.plantName = DepartmentModel.Instance.getPlantName(curr_PlantID);
+            ViewBag.UserCreateName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == currUserId).Employee_Name;
+            ViewBag.plantName = DepartmentModel.Instance.getPlantNameByPlantId(currUserPlantId);
             ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", en.Levels.First().LevelId);
             ViewBag.StatusName = en.Status.FirstOrDefault(s => s.StatusId == "ST1").StatusName;
-            ViewBag.DepartmentName = DepartmentModel.Instance.getDeptName(curr_DeptID);
+            ViewBag.DepartmentName = DepartmentModel.Instance.getDeptNameByDeptId(currUserDeptId);
 
             return View(incident);
         }
@@ -278,8 +281,8 @@ namespace Web_IT_HELPDESK.Controllers
         {
             Incident inc = en.Incidents.Find(inc_id);
 
-            ViewBag.plantName = DepartmentModel.Instance.getPlantName(inc.Plant);
-            ViewBag.DepartmentName = DepartmentModel.Instance.getDeptName(inc.DepartmentId);
+            ViewBag.plantName = DepartmentModel.Instance.getPlantNameByDeptId(inc.DepartmentId);
+            ViewBag.DepartmentName = DepartmentModel.Instance.getDeptNameByDeptId(inc.DepartmentId);
             ViewBag.StatusId = new SelectList(en.Status.Where(s => s.StatusId != "ST6" && s.StatusId != "ST2"), "StatusId", "StatusName", inc.StatusId);
             ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", inc.LevelId);
             ViewBag.UserCreateName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.Employee_Name;
@@ -292,9 +295,6 @@ namespace Web_IT_HELPDESK.Controllers
         [CustomAuthorize]
         public ActionResult Edit(Incident inc, HttpPostedFileBase attachment)
         {
-            //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.EDIT, Commons.ModuleConstant.INCIDENT);
-            //if (hasPermission.Value == false)
-            //    return RedirectToAction("Index", "Home");
 
             attachment = attachment ?? Request.Files["attachment"];
             if (ModelState.IsValid)
@@ -323,10 +323,10 @@ namespace Web_IT_HELPDESK.Controllers
                 IncidentViewModel incEx = IncidentModel.Instance.get_Incident(inc.Id);
                 List<string> toMails = new List<string>();
 
-                toMails = IncidentModel.Instance.GetITMemberEmails(curr_PlantID);
+                toMails = IncidentModel.Instance.GetITMemberEmails(currUserPlantId);
 
                 List<string> ccMails = new List<string>();
-                if (curr_PlantID != "V2090" && curr_PlantID != "V2010")
+                if (currUserPlantId != "V2090" && currUserPlantId != "V2010")
                     ccMails.Add("itgroup@cjvina.com");
                 bool resultSend = IncidentHelper.Instance.Send_IncidentEmail(incEx, "EDIT", toMails, ccMails);
                 /*1==================================================================================================================*/
@@ -334,11 +334,10 @@ namespace Web_IT_HELPDESK.Controllers
                 return RedirectToAction("Index", "Incident");
             }
 
-            ViewBag.plantName = DepartmentModel.Instance.getPlantName(inc.Plant);
-            ViewBag.DepartmentName = DepartmentModel.Instance.getDeptName(inc.DepartmentId);
+            ViewBag.plantName = DepartmentModel.Instance.getPlantNameByDeptId(inc.DepartmentId);
+            ViewBag.DepartmentName = DepartmentModel.Instance.getDeptNameByDeptId(inc.DepartmentId);
             ViewBag.StatusId = new SelectList(en.Status.Where(s => s.StatusId != "ST6" && s.StatusId != "ST2"), "StatusId", "StatusName", inc.StatusId);
             ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", inc.LevelId);
-            //ViewBag.UserCreateName = en.Employees.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.EmployeeName;
             ViewBag.UserCreateName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.Employee_Name;
 
             return View(inc);
@@ -348,19 +347,16 @@ namespace Web_IT_HELPDESK.Controllers
         [CustomAuthorize]
         public ActionResult Solve(Guid? inc_id)
         {
-            //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.SOLVE, Commons.ModuleConstant.INCIDENT);
-            //if (hasPermission.Value == false)
-            //    return RedirectToAction("Index", "Home");
 
             Incident inc = en.Incidents.Find(inc_id);
             inc.StatusId = "ST6";
 
-            ViewBag.plantName = DepartmentModel.Instance.getPlantName(inc.Plant);
-            ViewBag.DepartmentName = DepartmentModel.Instance.getDeptName(curr_DeptID);
+            ViewBag.plantName = DepartmentModel.Instance.getPlantNameByDeptId(inc.DepartmentId);
+            ViewBag.DepartmentName = DepartmentModel.Instance.getDeptNameByDeptId(currUserDeptId);
             ViewBag.StatusName = en.Status.FirstOrDefault(s => s.StatusId == "ST6").StatusName;
             ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", inc.LevelId);
             ViewBag.UserCreateName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.Employee_Name;
-            ViewBag.UserResolveName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == curr_EmployeeID)?.Employee_Name;
+            ViewBag.UserResolveName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == currUserId)?.Employee_Name;
 
             return View(inc);
         }
@@ -370,34 +366,30 @@ namespace Web_IT_HELPDESK.Controllers
         [CustomAuthorize]
         public ActionResult Solve(Incident inc)
         {
-            //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.SOLVE, Commons.ModuleConstant.INCIDENT);
-            //if (hasPermission.Value == false)
-            //    return RedirectToAction("Index", "Home");
 
             if (inc.StatusId == "ST6" && ModelState.IsValid)
             {
                 inc.Solved = true;
                 inc.Solve_datetime = DateTime.Now;
-                inc.User_resolve = curr_EmployeeID;
+                inc.User_resolve = currUserId;
 
                 en.Entry(inc).State = EntityState.Modified;
                 en.SaveChanges();
 
                 /*1========== Sending Mail ==========================================================================================*/
                 IncidentViewModel incEx = IncidentModel.Instance.get_Incident(inc.Id);
-                //List<string> toMails = new List<string>() { en.Employees.FirstOrDefault(e => e.Emp_CJ == inc.User_create).Email };
                 List<string> toMails = new List<string>() { en.Employee_New.FirstOrDefault(e => e.Emp_CJ == inc.User_create).Email };
 
                 List<string> ccMails = new List<string>();
 
-                ccMails = IncidentModel.Instance.GetITMemberEmails(curr_PlantID);
+                ccMails = IncidentModel.Instance.GetITMemberEmails(currUserPlantId);
 
-                string managerIdOfUser = en.Departments.Find(curr_DeptID).Manager_ID;
+                string managerIdOfUser = en.Departments.Find(currUserDeptId).Manager_ID;
                 string managerMail = en.Employee_New.Find(managerIdOfUser).Email;
                 if (managerMail != null && !ccMails.Contains(managerMail))
                     ccMails.Add(managerMail);
 
-                if (curr_PlantID != "V2090" && curr_PlantID != "V2010")
+                if (currUserPlantId != "V2090" && currUserPlantId != "V2010")
                     ccMails.Add("itgroup@cjvina.com");
 
                 bool resultSend = IncidentHelper.Instance.Send_IncidentEmail(incEx, "SOLVE", toMails, ccMails);
@@ -406,12 +398,12 @@ namespace Web_IT_HELPDESK.Controllers
                 return RedirectToAction("Index", "Incident");
             }
 
-            ViewBag.plantName = DepartmentModel.Instance.getPlantName(inc.Plant);
-            ViewBag.DepartmentName = DepartmentModel.Instance.getDeptName(curr_DeptID);
+            ViewBag.plantName = DepartmentModel.Instance.getPlantNameByDeptId(inc.DepartmentId);
+            ViewBag.DepartmentName = DepartmentModel.Instance.getDeptNameByDeptId(currUserDeptId);
             ViewBag.StatusName = en.Status.FirstOrDefault(s => s.StatusId == "ST6").StatusName;
             ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", inc.LevelId);
             ViewBag.UserCreateName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.Employee_Name;
-            ViewBag.UserResolveName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == curr_EmployeeID)?.Employee_Name;
+            ViewBag.UserResolveName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == currUserId)?.Employee_Name;
 
             return View(inc);
         }
@@ -420,10 +412,6 @@ namespace Web_IT_HELPDESK.Controllers
         [CustomAuthorize]
         public ActionResult Delete(int id)
         {
-            //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.DELETE, Commons.ModuleConstant.INCIDENT);
-            //if (hasPermission.Value == false)
-            //    return RedirectToAction("Index", "Home");
-
             return View();
         }
 
@@ -432,10 +420,6 @@ namespace Web_IT_HELPDESK.Controllers
         [CustomAuthorize]
         public ActionResult Delete(int id, FormCollection collection)
         {
-            //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.DELETE, Commons.ModuleConstant.INCIDENT);
-            //if (hasPermission.Value == false)
-            //    return RedirectToAction("Index", "Home");
-
             try
             {
 
@@ -448,13 +432,8 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         [HttpGet]
-
         public ActionResult Get_file(Guid? inc_id)
         {
-            //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.DOWNLOAD, Commons.ModuleConstant.INCIDENT);
-            //if (hasPermission.Value == false)
-            //    return RedirectToAction("Index", "Home");
-
             Incident inc = en.Incidents.Find(inc_id);
             string inc_code = inc.Code;
 
@@ -477,9 +456,6 @@ namespace Web_IT_HELPDESK.Controllers
         [CustomAuthorize]
         public ActionResult Download()
         {
-            //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.DOWNLOAD, Commons.ModuleConstant.INCIDENT);
-            //if (hasPermission.Value == false)
-            //    return RedirectToAction("Index", "Home");
 
             Dictionary<string, string> Params = (Dictionary<string, string>)Session["Params"];
 
@@ -489,7 +465,7 @@ namespace Web_IT_HELPDESK.Controllers
             DateTime from_date = Convert.ToDateTime(Params["from_date"]);
             DateTime to_date = Convert.ToDateTime(Params["to_date"]);
 
-            if (curr_EmployeeID != null)
+            if (currUserId != null)
             {
                 IEnumerable<IncidentViewModel> inc = IncidentModel.Instance.get_IEnum_Inc();
                 if (IsAdmin == true)
@@ -500,7 +476,7 @@ namespace Web_IT_HELPDESK.Controllers
 
                     if (plants != "all")
                     {
-                        inc = inc.Where(i => i.Plant == plants).OrderByDescending(i => i.Code);
+                        inc = inc.Where(i => i.plantId == plants).OrderByDescending(i => i.Code);
                     }
                     if (solved != "all")
                     {
@@ -510,10 +486,10 @@ namespace Web_IT_HELPDESK.Controllers
                 else
                 {
                     inc = inc.Where(i => i.Del != true
-                                    && i.User_create == curr_EmployeeID
+                                    && i.User_create == currUserId
                                     && i.datetime >= from_date
                                     && i.datetime <= to_date
-                                    && i.Plant == curr_PlantID);
+                                    && i.plantId == currUserPlantId);
 
                     if (Convert.ToBoolean(solved))
                     {
@@ -525,41 +501,21 @@ namespace Web_IT_HELPDESK.Controllers
                     }
                 }
 
-                var lstInc = from i in inc
-                             join d in en.Departments on i.DepartmentId equals d.Department_ID
-                             join p in en.Plants on d.Plant_ID equals p.Plant_ID
-                             select new
-                             {
-                                 i.Code,
-                                 Date = i.datetime,
-                                 Status = i.statusName,
-                                 Level = i.levelName,
-                                 Creator = i.userCreateName,
-                                 Solver = i.userResolveName,
-                                 i.Note,
-                                 i.Reply,
-                                 File = i.FileName,
-                                 Department = i.departmentName,
-                                 Plant = p.Plant_Name
-                             };
-
-                //var lstInc = inc.Join(en.Departments,
-                //    i => i.DepartmentId ,
-                //    p =>  p.Department_ID ,
-                //    (i, p) => new
-                //    {
-                //        i.Code,
-                //        Date = i.datetime,
-                //        Status = i.statusName,
-                //        Level = i.levelName,
-                //        Creator = i.userCreateName,
-                //        Solver = i.userResolveName,
-                //        i.Note,
-                //        i.Reply,
-                //        File = i.FileName,
-                //        Department = i.departmentName,
-                //        Plant = p.Plant_Name
-                //    }).ToList();
+                var incList = inc.Join(en.Departments, i => i.DepartmentId, d => d.Department_ID, (i, d) => new { i, d })
+                    .Join(en.Plants, grp => grp.d.Plant_ID, p => p.Plant_ID, (grp, p) => new
+                    {
+                        grp.i.Code,
+                        Date = grp.i.datetime,
+                        Status = grp.i.statusName,
+                        Level = grp.i.levelName,
+                        Creator = grp.i.userCreateName,
+                        Solver = grp.i.userResolveName,
+                        grp.i.Note,
+                        grp.i.Reply,
+                        File = grp.i.FileName,
+                        Department = grp.d.Department_Name,
+                        Plant = p.Plant_Name
+                    });
 
                 //Col need format date
                 List<int> colsDate = new List<int>()
@@ -567,9 +523,9 @@ namespace Web_IT_HELPDESK.Controllers
                     2
                 };
 
-                if (lstInc.Count() > 0)
+                if (incList.Count() > 0)
                 {
-                    var stream = ExcelHelper.Instance.CreateExcelFile(null, lstInc.ToList(), ExcelTitle.Instance.Incidents(), colsDate);
+                    var stream = ExcelHelper.Instance.CreateExcelFile(null, incList.ToList(), ExcelTitle.Instance.Incidents(), colsDate);
                     var buffer = stream as MemoryStream;
                     Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                     Response.AddHeader("Content-Disposition", "attachment; filename=IT Order Request.xlsx");

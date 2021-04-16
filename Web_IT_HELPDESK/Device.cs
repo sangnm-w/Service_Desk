@@ -45,9 +45,9 @@ namespace Web_IT_HELPDESK
         public Nullable<System.DateTime> Create_Date { get; set; }
         public string QRCodeFile { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Allocation> Allocations { get; set; }
         public virtual CONTRACT CONTRACT { get; set; }
         public virtual Device_Type Device_Type { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Allocation> Allocations { get; set; }
     }
 }

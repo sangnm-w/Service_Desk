@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Web_IT_HELPDESK.Commons;
 using Web_IT_HELPDESK.Controllers.ObjectManager;
 using Web_IT_HELPDESK.Models;
+using Web_IT_HELPDESK.Models.Extensions;
 using Web_IT_HELPDESK.Properties;
 using Web_IT_HELPDESK.ViewModels;
 using static Web_IT_HELPDESK.Models.AutoCompleteModel;
@@ -15,16 +16,16 @@ using EntityState = System.Data.Entity.EntityState;
 
 namespace Web_IT_HELPDESK.Controllers
 {
+    [CustomAuthorize]
     public class AllocationsController : Controller
     {
         private ServiceDeskEntities en = new ServiceDeskEntities();
-        private string session_emp = System.Web.HttpContext.Current.User.Identity.Name;
+        private string currentEmployeeID = ApplicationUser.Instance.EmployeeID;
 
         // GET: Allocations
-        [Authorize]
         public ActionResult Index()
         {
-            string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == currentEmployeeID).Plant_Id;
             IEnumerable<AllocationViewModel> avm = AllocationModel.Instance.GetLastAllocationOfDeviceByPlantId(curr_plantId);
             return View(avm);
         }
@@ -41,7 +42,7 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 return HttpNotFound();
             }
-            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == currentEmployeeID).Plant_Id;
 
             ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).EmployeeName;
             ViewBag.ReceiverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).EmployeeName;
@@ -54,7 +55,6 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: Allocations/Create
-        [Authorize]
         public ActionResult Create(Guid? id)
         {
             if (id == null)
@@ -70,10 +70,10 @@ namespace Web_IT_HELPDESK.Controllers
 
             ViewBag.Device = device;
 
-            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == currentEmployeeID).Plant_Id;
 
-            ViewBag.Deliver = session_emp;
-            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).EmployeeName;
+            ViewBag.Deliver = currentEmployeeID;
+            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == currentEmployeeID).EmployeeName;
 
             List<EmployeeFieldModel> employeeFields = EmployeeModel.Instance.EmployeeFieldsByPlant(empPlantID);
             List<SelectListItem> SLIEmployee = new List<SelectListItem>();
@@ -82,7 +82,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.Receiver = SLIEmployee;
 
             List<SelectListItem> Department_Id = new List<SelectListItem>();
-            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_Id == empPlantID), "Department_Id", "Department_Name", ""));
+            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_ID == empPlantID), "Department_Id", "Department_Name", ""));
             Department_Id.Insert(0, new SelectListItem { Text = "None", Value = "" });
             ViewBag.Department_Id = Department_Id;
 
@@ -96,7 +96,7 @@ namespace Web_IT_HELPDESK.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Allocation allocation)
         {
-            string empPlantID = CurrentUser.Instance.User.Plant_ID;
+            string empPlantID = ApplicationUser.Instance.GetPlantID();
 
             if (allocation.Return_Date != null)
             {
@@ -113,7 +113,6 @@ namespace Web_IT_HELPDESK.Controllers
                 allocation.Allocation_Id = Guid.NewGuid();
                 allocation.Create_Date = DateTime.Now;
                 allocation.Flag_ReAllocation = true;
-                allocation.Plant_Id = empPlantID;
 
                 string filePath = AllocationHelper.Instance.CreateQRCode(allocation);
                 allocation.QRCodeFile = filePath;
@@ -127,8 +126,8 @@ namespace Web_IT_HELPDESK.Controllers
             Device device = en.Devices.Find(allocation.Device_Id);
             ViewBag.Device = device;
 
-            ViewBag.Deliver = session_emp;
-            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).EmployeeName;
+            ViewBag.Deliver = currentEmployeeID;
+            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == currentEmployeeID).EmployeeName;
 
             List<EmployeeFieldModel> employeeFields = EmployeeModel.Instance.EmployeeFieldsByPlant(empPlantID);
             List<SelectListItem> SLIEmployee = new List<SelectListItem>();
@@ -137,7 +136,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.Receiver = SLIEmployee;
 
             List<SelectListItem> Department_Id = new List<SelectListItem>();
-            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_Id == empPlantID), "Department_Id", "Department_Name", ""));
+            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_ID == empPlantID), "Department_Id", "Department_Name", ""));
             Department_Id.Insert(0, new SelectListItem { Text = "None", Value = "" });
             ViewBag.Department_Id = Department_Id;
 
@@ -147,7 +146,6 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: Allocations/Edit/5
-        [Authorize]
         public ActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -159,7 +157,7 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 return HttpNotFound();
             }
-            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == currentEmployeeID).Plant_Id;
 
             ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).EmployeeName;
 
@@ -172,7 +170,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.Receiver = Receiver;
 
             List<SelectListItem> Department_Id = new List<SelectListItem>();
-            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_Id == empPlantID), "Department_Id", "Department_Name", allocation.Department_Id));
+            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_ID == empPlantID), "Department_Id", "Department_Name", allocation.Department_Id));
             Department_Id.Insert(0, new SelectListItem { Text = "None", Value = "" });
             ViewBag.Department_Id = Department_Id;
 
@@ -199,9 +197,6 @@ namespace Web_IT_HELPDESK.Controllers
             }
             if (ModelState.IsValid)
             {
-                //allocation.Plant_Id = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).Plant_Id;
-                allocation.Plant_Id = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).Plant_ID;
-
                 string filePath = AllocationHelper.Instance.CreateQRCode(allocation);
                 allocation.QRCodeFile = filePath;
 
@@ -209,8 +204,9 @@ namespace Web_IT_HELPDESK.Controllers
                 en.SaveChanges();
                 return RedirectToAction("Index");
             }
-            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
-            ViewBag.Plant_Name = en.Departments.FirstOrDefault(d => d.Plant_Id == empPlantID).Plant_Name;
+
+            string empPlantID = ApplicationUser.Instance.GetPlantID();
+            ViewBag.Plant_Name = ApplicationUser.Instance.GetPlantName();
 
             ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).EmployeeName;
 
@@ -223,7 +219,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.Receiver = Receiver;
 
             List<SelectListItem> Department_Id = new List<SelectListItem>();
-            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_Id == empPlantID), "Department_Id", "Department_Name", allocation.Department_Id));
+            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_ID == empPlantID), "Department_Id", "Department_Name", allocation.Department_Id));
             Department_Id.Insert(0, new SelectListItem { Text = "None", Value = "" });
             ViewBag.Department_Id = Department_Id;
 
@@ -234,7 +230,6 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: Allocations/Revoke/5
-        [Authorize]
         public ActionResult Revoke(Guid? id)
         {
             if (id == null)
@@ -246,7 +241,7 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 return HttpNotFound();
             }
-            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            string empPlantID = ApplicationUser.Instance.GetPlantID();
 
             ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).EmployeeName;
 
@@ -254,7 +249,7 @@ namespace Web_IT_HELPDESK.Controllers
 
             ViewBag.DeviceTypeId = en.Devices.FirstOrDefault(d => d.Device_Id == allocation.Device_Id).Device_Type_Id;
 
-            ViewBag.DepartmentName = DepartmentModel.Instance.getDeptName(allocation.Plant_Id, allocation.Department_Id);
+            ViewBag.DepartmentName = DepartmentModel.Instance.getDeptNameByDeptId(allocation.Department_Id);
 
             List<AllocationViewModel> allocations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
             ViewBag.Allocations = allocations;
@@ -283,9 +278,6 @@ namespace Web_IT_HELPDESK.Controllers
             }
             if (ModelState.IsValid)
             {
-                //allocation.Plant_Id = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).Plant_Id;
-                allocation.Plant_Id = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).Plant_ID;
-
                 string filePath = AllocationHelper.Instance.CreateQRCode(allocation);
                 allocation.QRCodeFile = filePath;
 
@@ -293,20 +285,17 @@ namespace Web_IT_HELPDESK.Controllers
                 en.SaveChanges();
                 return RedirectToAction("Index");
             }
-            //string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
-            string empPlantID = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
+            string empPlantID = ApplicationUser.Instance.GetPlantID();
 
-            ViewBag.Plant_Name = en.Departments.FirstOrDefault(d => d.Plant_Id == empPlantID).Plant_Name;
+            ViewBag.Plant_Name = ApplicationUser.Instance.GetPlantName();
 
-            //ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).EmployeeName;
             ViewBag.DeliverName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).Employee_Name;
 
-            //ViewBag.ReceiverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).EmployeeName;
             ViewBag.ReceiverName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).Employee_Name;
 
             ViewBag.DeviceTypeId = en.Devices.FirstOrDefault(d => d.Device_Id == allocation.Device_Id).Device_Type_Id;
 
-            ViewBag.DepartmentName = DepartmentModel.Instance.getDeptName(allocation.Plant_Id, allocation.Department_Id);
+            ViewBag.DepartmentName = DepartmentModel.Instance.getDeptNameByDeptId(allocation.Department_Id);
 
             List<AllocationViewModel> allocations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
             ViewBag.Allocations = allocations;
@@ -315,7 +304,6 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: Allocations/ReAllocation
-        [Authorize]
         public ActionResult ReAllocation(Guid? id)
         {
             if (id == null)
@@ -330,10 +318,10 @@ namespace Web_IT_HELPDESK.Controllers
 
             ViewBag.Device = device;
 
-            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
+            string empPlantID = ApplicationUser.Instance.GetPlantID();
 
-            ViewBag.Deliver = session_emp;
-            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).EmployeeName;
+            ViewBag.Deliver = currentEmployeeID;
+            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == currentEmployeeID).EmployeeName;
 
             List<EmployeeFieldModel> employeeFields = EmployeeModel.Instance.EmployeeFieldsByPlant(empPlantID);
             List<SelectListItem> SLIEmployee = new List<SelectListItem>();
@@ -342,7 +330,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.Receiver = SLIEmployee;
 
             List<SelectListItem> Department_Id = new List<SelectListItem>();
-            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_Id == empPlantID), "Department_Id", "Department_Name", ""));
+            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_ID == empPlantID), "Department_Id", "Department_Name", ""));
             Department_Id.Insert(0, new SelectListItem { Text = "None", Value = "" });
 
             ViewBag.Department_Id = Department_Id;
@@ -376,8 +364,6 @@ namespace Web_IT_HELPDESK.Controllers
                 allocation.Allocation_Id = Guid.NewGuid();
                 allocation.Create_Date = DateTime.Now;
                 allocation.Flag_ReAllocation = true;
-                //allocation.Plant_Id = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).Plant_Id;
-                allocation.Plant_Id = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).Plant_ID;
 
                 string filePath = AllocationHelper.Instance.CreateQRCode(allocation);
                 allocation.QRCodeFile = filePath;
@@ -386,14 +372,12 @@ namespace Web_IT_HELPDESK.Controllers
                 en.SaveChanges();
                 return RedirectToAction("Index");
             }
-            //string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
-            string empPlantID = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
+            string empPlantID = ApplicationUser.Instance.GetPlantID();
             Device device = en.Devices.Find(allocation.Device_Id);
             ViewBag.Device = device;
 
-            ViewBag.Deliver = session_emp;
-            //ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).EmployeeName;
-            ViewBag.DeliverName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Employee_Name;
+            ViewBag.Deliver = currentEmployeeID;
+            ViewBag.DeliverName = ApplicationUser.Instance.EmployeeName;
 
             List<EmployeeFieldModel> employeeFields = EmployeeModel.Instance.EmployeeFieldsByPlant(empPlantID);
             List<SelectListItem> SLIEmployee = new List<SelectListItem>();
@@ -402,7 +386,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.Receiver = SLIEmployee;
 
             List<SelectListItem> Department_Id = new List<SelectListItem>();
-            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_Id == empPlantID), "Department_Id", "Department_Name", ""));
+            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_ID == empPlantID), "Department_Id", "Department_Name", ""));
             Department_Id.Insert(0, new SelectListItem { Text = "None", Value = "" });
 
             ViewBag.Department_Id = Department_Id;
@@ -419,19 +403,13 @@ namespace Web_IT_HELPDESK.Controllers
         public JsonResult getDeptVal(string receiverId)
         {
             string deptId = null;
-            //deptId = en.Employees.FirstOrDefault(e => e.Emp_CJ == receiverId).Department_Id;
             deptId = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == receiverId).Department_ID;
             return Json(deptId, JsonRequestBehavior.AllowGet);
         }
 
         public FileContentResult Download()
         {
-            //bool? hasPermission = CurrentUser.Instance.hasPermission(Commons.ActionConstant.DOWNLOAD, Commons.ModuleConstant.INCIDENT);
-            //if (hasPermission.Value == false)
-            //    return RedirectToAction("Index", "Home");
-
-            //string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_Id;
-            string curr_plantId = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == session_emp).Plant_ID;
+            string curr_plantId = ApplicationUser.Instance.GetPlantID();
             var devices = AllocationModel.Instance.GetLastAllocationOfDeviceByPlantId(curr_plantId);
 
             // Sort by Code
@@ -440,8 +418,8 @@ namespace Web_IT_HELPDESK.Controllers
             List<AllocationViewModel.ExcelReport> devices_ExcelReport = new List<AllocationViewModel.ExcelReport>();
             foreach (var item in devices)
             {
-                AllocationViewModel.ExcelReport entry = new AllocationViewModel.ExcelReport(item.Device, item.Allocation, item.Device?.Device_Type?.Device_Type_Name, item.Deliver_Name, item.Receiver_Name, item.Deliver_Name, item.Allocation?.Department?.Plant_Name);
-                devices_ExcelReport.Add(entry);
+                //AllocationViewModel.ExcelReport entry = new AllocationViewModel.ExcelReport(item.Device, item.Allocation, item.Device?.Device_Type?.Device_Type_Name, item.Deliver_Name, item.Receiver_Name, item.Deliver_Name, item.Allocation?.Department?.Plant?.Plant_Name);
+                //devices_ExcelReport.Add(entry);
             }
 
             //Col need format date

@@ -24,8 +24,10 @@ namespace Web_IT_HELPDESK
     
         public int Rule_ID { get; set; }
         public string Rule_Name { get; set; }
+        public Nullable<int> Module_ID { get; set; }
         public Nullable<bool> Deactive { get; set; }
     
+        public virtual Module Module { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Role> Roles { get; set; }
     }

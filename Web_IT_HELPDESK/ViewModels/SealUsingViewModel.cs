@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using Web_IT_HELPDESK.Models;
+using Web_IT_HELPDESK.Models.Extensions;
 
 namespace Web_IT_HELPDESK.ViewModels
 {
@@ -25,11 +26,10 @@ namespace Web_IT_HELPDESK.ViewModels
                 Date_signature = DateTime.Now;
                 Del = false;
 
-                Employee_ID = CurrentUser.Instance.User.Emp_CJ;
-                Employee_name = CurrentUser.Instance.User.Employee_Name;
-                Plant = CurrentUser.Instance.User.Plant_ID;
-                DepartmentId = CurrentUser.Instance.User.Department_ID;
-                DeptName = DepartmentModel.Instance.getDeptName(Plant, DepartmentId);
+                Employee_ID = ApplicationUser.Instance.EmployeeID;
+                Employee_name = ApplicationUser.Instance.EmployeeName;
+                DepartmentId = ApplicationUser.Instance.GetDepartmentID();
+                DeptName = ApplicationUser.Instance.GetDepartmentName();
             }
 
             public Seal_Using CreateSealUsing_To_SealUsing(Seal_Using su)
@@ -44,7 +44,6 @@ namespace Web_IT_HELPDESK.ViewModels
                 su.Date_signature = Date_signature;
                 su.Context = Context;
                 su.Place_Recipient = Place_Recipient;
-                su.Plant = Plant;
                 return su;
             }
             [Required(ErrorMessage = "This field can not be empty.")]
@@ -87,7 +86,6 @@ namespace Web_IT_HELPDESK.ViewModels
                 Employee_Seal_keep_note = su.Employee_Seal_keep_note;
                 Date_signature = su.Date_signature;
                 Name_signature = su.Name_signature;
-                Plant = su.Plant;
             }
             public Seal_Using EditSealUsing_To_SealUsing(Seal_Using su)
             {
@@ -128,7 +126,6 @@ namespace Web_IT_HELPDESK.ViewModels
                 Employee_Seal_keep_note = su.Employee_Seal_keep_note;
                 Date_signature = su.Date_signature;
                 Name_signature = su.Name_signature;
-                Plant = su.Plant;
             }
             public Seal_Using ConfirmSealUsing_To_SealUsing(Seal_Using su)
             {
@@ -168,7 +165,6 @@ namespace Web_IT_HELPDESK.ViewModels
                 Employee_Seal_keep_note = su.Employee_Seal_keep_note;
                 Date_signature = su.Date_signature;
                 Name_signature = su.Name_signature;
-                Plant = su.Plant;
             }
             public new DateTime? Employee_Seal_keep { get; set; }
             public new bool Employee_Seal_keep_confrim { get; set; }

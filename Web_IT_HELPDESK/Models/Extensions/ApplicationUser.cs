@@ -11,8 +11,20 @@ namespace Web_IT_HELPDESK.Models.Extensions
         public static ApplicationUser Instance { get { if (_instance == null) _instance = new ApplicationUser(); return _instance; } set => _instance = value; }
 
         public string EmployeeID { get; set; }
+        public string EmployeeName { get; set; }
+        private ServiceDeskEntities en { get; set; }
+
+        private ApplicationUser()
+        {
+            en = new ServiceDeskEntities();
+            EmployeeID = HttpContext.Current.User.Identity.Name;
+            if (!string.IsNullOrWhiteSpace(EmployeeID))
+                EmployeeName = en.Employee_New.Find(EmployeeID).Employee_Name;
+        }
 
         private bool _isAdmin = false;
+
+        private bool _isManager = false;
 
         private bool? _isDeactive = false;
 
@@ -20,13 +32,22 @@ namespace Web_IT_HELPDESK.Models.Extensions
         {
             get
             {
-                _isAdmin = en.Authorizations.FirstOrDefault(x => x.Emp_CJ == EmployeeID).Role_ID == 1 ? true : false;
+                _isAdmin = en.Authorizations.Where(a => a.Emp_CJ == EmployeeID).Select(a => a.Role_ID).Contains(1);
 
                 return _isAdmin;
             }
             set { _isAdmin = value; }
         }
-
+        public bool IsManager
+        {
+            get
+            {
+                string managerIdOfUser = GetManagerIdOfUser();
+                _isManager = string.Equals(managerIdOfUser, EmployeeID);
+                return _isManager;
+            }
+            set { _isManager = value; }
+        }
         public bool? isDeactive
         {
             get
@@ -38,24 +59,6 @@ namespace Web_IT_HELPDESK.Models.Extensions
                 return _isDeactive;
             }
             set { _isDeactive = value; }
-        }
-
-
-
-        private ServiceDeskEntities en = new ServiceDeskEntities();
-
-        private ApplicationUser()
-        {
-            EmployeeID = HttpContext.Current.User.Identity.Name;
-        }
-
-        public string GetEmployeeName()
-        {
-            string result = null;
-
-            result = en.Employee_New.Find(EmployeeID).Employee_Name;
-
-            return result;
         }
 
         public string GetDepartmentID()
@@ -82,7 +85,8 @@ namespace Web_IT_HELPDESK.Models.Extensions
             string result = null;
             string departmentID = GetDepartmentID();
 
-            result = en.Departments.Find(departmentID).Plant_ID;
+            result = en.Employee_New
+                .Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => d.Department_Name).ToString();
 
             return result;
         }
@@ -90,21 +94,24 @@ namespace Web_IT_HELPDESK.Models.Extensions
         public string GetPlantName()
         {
             string result = null;
-            string plantID = GetPlantID();
 
-            result = en.Plants.Find(plantID).Plant_Name;
+            result = en.Employee_New.Where(e => e.Emp_CJ == EmployeeID)
+                .Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d })
+                .Join(en.Plants, grp => grp.d.Plant_ID, p => p.Plant_ID, (grp, p) => p.Plant_Name).ToString();
 
             return result;
         }
 
-        //public bool isAdmin()
-        //{
-        //    bool result = false;
+        public string GetManagerIdOfUser()
+        {
+            string result = null;
 
-        //    result = en.Authorizations.FirstOrDefault(x => x.Emp_CJ == EmployeeID).Role_ID == 1 ? true : false;
+            result = en.Employee_New
+                    .Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d })
+                    .Where(grp => grp.e.Emp_CJ == EmployeeID).Select(grp => grp.d.Manager_ID).ToString();
 
-        //    return result;
-        //}
+            return result;
+        }
 
 
         public List<Authorization> GetAuthorizations()
@@ -128,43 +135,28 @@ namespace Web_IT_HELPDESK.Models.Extensions
             return result;
         }
 
-        //public List<Rule> GetRules(List<Role> roles = null)
-        //{
-        //    List<Rule> result = new List<Rule>();
-        //    if (roles.Count() <= 0)
-        //        roles = GetRoles();
-
-        //    foreach (var role in roles)
-        //    {
-        //        var rulesByRoleId = en.Roles.Where(ro => ro.Role_ID == role.Role_ID).SelectMany(ro => ro.Rules);
-
-        //        rulesByRoleId = rulesByRoleId.Where(ru => ru.Deactive != true);
-
-        //        result.AddRange(rulesByRoleId);
-        //    }
-
-        //    return result.Distinct().ToList();
-        //}
-
         public List<Rule> GetRules(List<Role> roles = null, string moduleName = null)
         {
             List<Rule> result = new List<Rule>();
-            if (roles.Count() <= 0)
+            if (roles == null || roles.Count() <= 0)
                 roles = GetRoles();
 
             foreach (var role in roles)
             {
-                var rulesByRoleId = en.Roles.Where(ro => ro.Role_ID == role.Role_ID).SelectMany(ro => ro.Rules);
-
-                rulesByRoleId = rulesByRoleId.Where(ru => ru.Deactive != true);
+                var rulesByRoleId = en.Roles.Where(ro => ro.Role_ID == role.Role_ID)
+                    .SelectMany(ro => ro.Rules)
+                    .Where(ru => ru.Deactive != true);
 
                 result.AddRange(rulesByRoleId);
             }
 
-            //if (string.IsNullOrEmpty(moduleName))
-            //{
-            //    result = result.Join(en.Modules, ru=>ru.module)
-            //}
+            if (!string.IsNullOrEmpty(moduleName))
+            {
+                result = result.Join(en.Modules, ru => ru.Module_ID, mo => mo.Module_ID, (ru, mo) => new { ru, mo })
+                    .Where(grp => grp.mo.Name.ToUpper() == moduleName.ToUpper())
+                    .Select(grp => grp.ru)
+                    .ToList();
+            }
 
             return result.Distinct().ToList();
         }

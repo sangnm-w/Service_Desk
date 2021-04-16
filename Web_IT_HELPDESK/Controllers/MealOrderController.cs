@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Microsoft.Reporting.WebForms;
+using Web_IT_HELPDESK.Models.Extensions;
 
 namespace Web_IT_HELPDESK.Controllers
 {
@@ -28,7 +29,7 @@ namespace Web_IT_HELPDESK.Controllers
         private string GetPlant_id(string v_emp)
         {
             //string plant_id = en.Employees.Where(f => (f.EmployeeID == v_emp)).Select(f => f.Plant_Id).SingleOrDefault();
-            string plant_id = en.Employee_New.Where(f => (f.Emp_CJ == v_emp)).Select(f => f.Plant_ID).SingleOrDefault();
+            string plant_id = ApplicationUser.Instance.GetPlantID();
             return plant_id;
         }
 
@@ -80,8 +81,8 @@ namespace Web_IT_HELPDESK.Controllers
                     break;
             }
 
-            if (session_emp.ToLower() == "admin" || session_emp == "D83003" || session_emp == "V78157" 
-                || session_emp == "MK78072" || session_emp == "H88768" || session_emp == "HN91185" || session_emp ==  "HN92244")
+            if (session_emp.ToLower() == "admin" || session_emp == "D83003" || session_emp == "V78157"
+                || session_emp == "MK78072" || session_emp == "H88768" || session_emp == "HN91185" || session_emp == "HN92244")
             {
                 return View(en.ORDER_TYPE_VIEW.Where(i => i.OrderDate >= from_date
                                            && i.OrderDate <= to_date
@@ -366,7 +367,7 @@ namespace Web_IT_HELPDESK.Controllers
 
             //int order_id= (int)orderdetails.Distinct().FirstOrDefault().OrderId;
 
-            var dept = from i in en.Departments where i.Department_Id == GetDept_id_by_oder(Convert.ToInt32(Session["OrderId"].ToString())).Single().ToString() select i.Department_Name;
+            var dept = from i in en.Departments where i.Department_ID == GetDept_id_by_oder(Convert.ToInt32(Session["OrderId"].ToString())).Single().ToString() select i.Department_Name;
             subject = "[Thông báo] - Phòng nhân sự điều chỉnh thông tin yêu cầu";
             result = string.Format("Thông báo! <br /> <br />" +
                                               "Đã gởi email xác nhận!  <br />" +
@@ -422,7 +423,7 @@ namespace Web_IT_HELPDESK.Controllers
             }
             string result, status = "";
 
-            var dept = from i in en.Departments where i.Department_Id == GetDept_id_by_oder(v_getoder.OrderId).Single().ToString() select i.Department_Name;
+            var dept = from i in en.Departments where i.Department_ID == GetDept_id_by_oder(v_getoder.OrderId).Single().ToString() select i.Department_Name;
             subject = "[Thông báo] - Duyệt thông tin yêu cầu";
             result = string.Format("Thông báo! <br /> <br />" +
                                               "Đã gởi email xác nhận!  <br />" +
@@ -542,7 +543,7 @@ namespace Web_IT_HELPDESK.Controllers
             GridView gv = new GridView();
             var list =
                  from t in en.OrderDetails
-                 //from j in en.Order_
+                     //from j in en.Order_
                  join j in en.Order_ on t.OrderId equals j.OrderId
                  join ab in en.Albums on t.AlbumId equals ab.AlbumId //into pp
                  where (j.Del != true && t.Quantity != 0 && (j.EmployeeID != "admin" || j.EmployeeID != "D83003" || j.EmployeeID != "V78157")
@@ -668,7 +669,7 @@ namespace Web_IT_HELPDESK.Controllers
             string v_todate = to_date.ToString("s", culture);
             GridView gv = new GridView();
             var list =
-                //en.func_report_detail(v_fromdate, v_todate).ToList();
+                            //en.func_report_detail(v_fromdate, v_todate).ToList();
                             en.func_report_detail(from_date, to_date, GetPlant_id(session_emp)).ToList();
             //.Where(t => t. >= from_date && t.ORDERDATE <= to_date).ToList();
 
@@ -813,8 +814,8 @@ namespace Web_IT_HELPDESK.Controllers
                     //var list = en.OrderDetails.ToList().Where(i => i.OrderId == id);
 
 
-                    string v_department_name = en.Departments.Where(o => o.Department_Id == list.Select(i => i.DepatmentName).FirstOrDefault()
-                                                                        && o.Plant_Id == list.Select(i => i.Plant).FirstOrDefault()).Select(e => e.Department_Name).SingleOrDefault();
+                    string v_department_name = en.Departments.Where(o => o.Department_ID == list.Select(i => i.DepatmentName).FirstOrDefault()
+                                                                        && o.Plant_ID == list.Select(i => i.Plant).FirstOrDefault()).Select(e => e.Department_Name).SingleOrDefault();
 
 
                     //ReportParameter p1 = new ReportParameter("p_department_name", v_department_name);
