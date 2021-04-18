@@ -84,7 +84,7 @@ namespace Web_IT_HELPDESK.Controllers
                 }
             }
             var documents = en.Documents.OrderBy(d => d.Code);
-            ViewBag.Documents = documents;
+            ViewBag.Documents = documents.ToList();
             return View(emp);
         }
 

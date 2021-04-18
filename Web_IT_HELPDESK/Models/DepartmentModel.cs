@@ -33,9 +33,7 @@ namespace Web_IT_HELPDESK.Models
 
             result = en.Departments
                 .Join(en.Plants, d => d.Plant_ID, p => p.Plant_ID, (d, p) => new { d, p })
-                .Where(grp => grp.d.Department_ID == deptId)
-                .Select(grp => grp.p.Plant_Name)
-                .ToString();
+                .FirstOrDefault(grp => grp.d.Department_ID == deptId).p.Plant_Name.ToString();
 
             return result;
         }

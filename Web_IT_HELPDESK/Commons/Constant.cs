@@ -26,9 +26,4 @@ namespace Web_IT_HELPDESK.Commons
         public const string DOWNLOAD = "DOWNLOAD";
         public const string UPLOAD = "UPLOAD";
     }
-
-    public class RoleConstant
-    {
-        public static string Administrator = "Administrator";
-    }
 }

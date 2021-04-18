@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Web_IT_HELPDESK.Commons;
 using Web_IT_HELPDESK.Controllers.ObjectManager;
 using Web_IT_HELPDESK.Models;
 using Web_IT_HELPDESK.Models.Extensions;
@@ -38,7 +39,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: /Incident/Index
-        [CustomAuthorize("End User", "IT Manager", "IT Staff")]
+        [CustomAuthorize]
         public ActionResult Index()
         {
             List<Rule> userRules = new List<Rule>();
@@ -78,12 +79,16 @@ namespace Web_IT_HELPDESK.Controllers
 
                 userPlants = uPlants.Select(p => new PlantViewModel { Plant_Id = p.Plant_ID, Plant_Name = p.Plant_Name }).ToList();
 
-                ivm = ivm.Where(i => userPlants.Select(p => p.Plant_Id).Contains(i.plantId));
-
-                bool isITStaff = userRoles.Where(ro => new[] { 2, 3 }.Contains(ro.Role_ID)).Count() > 0;
-                if (!isITStaff) // not IT Member or IT Manager
+                bool isITManager = userRoles.Any(ro => ro.Role_ID == 2);
+                if (!isITManager)
                 {
-                    ivm = ivm.Where(i => i.User_create == currUserId);
+                    ivm = ivm.Where(i => userPlants.Select(p => p.Plant_Id).Contains(i.plantId));
+                }
+
+                bool isITMember = userRoles.Any(ro => ro.Role_ID == 3);
+                if (!isITMember)
+                {
+                    ivm = ivm.Where(i => i.DepartmentId == currUserDeptId);
                 }
             }
 
@@ -104,7 +109,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         // POST: /Incident/Index
         [HttpPost]
-        [CustomAuthorize("End User", "IT Manager", "IT Staff")]
+        [CustomAuthorize]
         public ActionResult Index(string solved, string _datetime, string plants)
         {
             List<Rule> userRules = new List<Rule>();
@@ -145,12 +150,16 @@ namespace Web_IT_HELPDESK.Controllers
 
                 userPlants = uPlants.Select(p => new PlantViewModel { Plant_Id = p.Plant_ID, Plant_Name = p.Plant_Name }).ToList();
 
-                ivm = ivm.Where(i => userPlants.Select(p => p.Plant_Id).Contains(i.plantId));
-
-                bool isITStaff = userRoles.Where(ro => new[] { 2, 3 }.Contains(ro.Role_ID)).Count() > 0;
-                if (!isITStaff) // not IT Member or IT Manager
+                bool isITManager = userRoles.Any(ro => ro.Role_ID == 2);
+                if (!isITManager)
                 {
-                    ivm = ivm.Where(i => i.User_create == currUserId);
+                    ivm = ivm.Where(i => userPlants.Select(p => p.Plant_Id).Contains(i.plantId));
+                }
+
+                bool isITMember = userRoles.Any(ro => ro.Role_ID == 3);
+                if (!isITMember)
+                {
+                    ivm = ivm.Where(i => i.DepartmentId == currUserDeptId);
                 }
             }
 
@@ -208,7 +217,7 @@ namespace Web_IT_HELPDESK.Controllers
             inc.StatusId = "ST1";
 
             ViewBag.UserCreateName = CurrentUser.Instance.User.Employee_Name;
-            ViewBag.plantName = en.Plants.FirstOrDefault(d => d.Plant_ID == currUserPlantId).Plant_Name;
+            ViewBag.plantName = ApplicationUser.Instance.GetPlantName();
             ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", en.Levels.First().LevelId);
             ViewBag.StatusName = en.Status.FirstOrDefault(s => s.StatusId == "ST1").StatusName;
             ViewBag.DepartmentName = DepartmentModel.Instance.getDeptNameByDeptId(currUserDeptId);
@@ -260,7 +269,7 @@ namespace Web_IT_HELPDESK.Controllers
                 if (currUserPlantId != "V2090" && currUserPlantId != "V2010")
                     ccMails.Add("itgroup@cjvina.com");
 
-                bool resultSend = IncidentHelper.Instance.Send_IncidentEmail(incEx, "CREATE", toMails, ccMails);
+                //bool resultSend = IncidentHelper.Instance.Send_IncidentEmail(incEx, "CREATE", toMails, ccMails);
                 /*1==================================================================================================================*/
 
                 return RedirectToAction("Index", "Incident");
@@ -328,7 +337,7 @@ namespace Web_IT_HELPDESK.Controllers
                 List<string> ccMails = new List<string>();
                 if (currUserPlantId != "V2090" && currUserPlantId != "V2010")
                     ccMails.Add("itgroup@cjvina.com");
-                bool resultSend = IncidentHelper.Instance.Send_IncidentEmail(incEx, "EDIT", toMails, ccMails);
+                //bool resultSend = IncidentHelper.Instance.Send_IncidentEmail(incEx, "EDIT", toMails, ccMails);
                 /*1==================================================================================================================*/
 
                 return RedirectToAction("Index", "Incident");
@@ -392,7 +401,7 @@ namespace Web_IT_HELPDESK.Controllers
                 if (currUserPlantId != "V2090" && currUserPlantId != "V2010")
                     ccMails.Add("itgroup@cjvina.com");
 
-                bool resultSend = IncidentHelper.Instance.Send_IncidentEmail(incEx, "SOLVE", toMails, ccMails);
+                //bool resultSend = IncidentHelper.Instance.Send_IncidentEmail(incEx, "SOLVE", toMails, ccMails);
                 /*1==================================================================================================================*/
 
                 return RedirectToAction("Index", "Incident");

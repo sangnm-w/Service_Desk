@@ -73,9 +73,12 @@ namespace Web_IT_HELPDESK.Models.Extensions
         public string GetDepartmentName()
         {
             string result = null;
-            string departmentID = GetDepartmentID();
 
-            result = en.Departments.Find(departmentID).Department_Name;
+            result = en.Employee_New
+                .Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d })
+                .FirstOrDefault(grp => grp.e.Emp_CJ == EmployeeID)
+                .d.Department_Name
+                .ToString();
 
             return result;
         }
@@ -83,10 +86,12 @@ namespace Web_IT_HELPDESK.Models.Extensions
         public string GetPlantID()
         {
             string result = null;
-            string departmentID = GetDepartmentID();
 
             result = en.Employee_New
-                .Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => d.Department_Name).ToString();
+                .Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d })
+                .FirstOrDefault(grp => grp.e.Emp_CJ == EmployeeID)
+                .d.Plant_ID
+                .ToString();
 
             return result;
         }
@@ -95,9 +100,12 @@ namespace Web_IT_HELPDESK.Models.Extensions
         {
             string result = null;
 
-            result = en.Employee_New.Where(e => e.Emp_CJ == EmployeeID)
+            result = en.Employee_New
                 .Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d })
-                .Join(en.Plants, grp => grp.d.Plant_ID, p => p.Plant_ID, (grp, p) => p.Plant_Name).ToString();
+                .Join(en.Plants, grp => grp.d.Plant_ID, p => p.Plant_ID, (grp, p) => new { grp.e, grp.d, p })
+                .FirstOrDefault(j => j.e.Emp_CJ == EmployeeID)
+                .p.Plant_Name
+                .ToString();
 
             return result;
         }
@@ -108,7 +116,9 @@ namespace Web_IT_HELPDESK.Models.Extensions
 
             result = en.Employee_New
                     .Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d })
-                    .Where(grp => grp.e.Emp_CJ == EmployeeID).Select(grp => grp.d.Manager_ID).ToString();
+                    .FirstOrDefault(grp => grp.e.Emp_CJ == EmployeeID)
+                    .d.Manager_ID
+                    .ToString();
 
             return result;
         }
@@ -128,8 +138,10 @@ namespace Web_IT_HELPDESK.Models.Extensions
             List<Role> result = new List<Role>();
 
             result = en.Authorizations
-                .Join(en.Roles, au => au.Role_ID, ro => ro.Role_ID, (au, ro) => ro)
-                .Where(ro => ro.Deactive != true)
+                .Join(en.Roles, au => au.Role_ID, ro => ro.Role_ID, (au, ro) => new { au, ro })
+                .Where(joinedI => joinedI.ro.Deactive != true && joinedI.au.Emp_CJ == EmployeeID)
+                .Select(joinedI => joinedI.ro)
+                .Distinct()
                 .ToList();
 
             return result;

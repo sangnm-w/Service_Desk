@@ -15,7 +15,7 @@ namespace Web_IT_HELPDESK.Controllers
     {
         ServiceDeskEntities en = new ServiceDeskEntities();
         // GET: Contact
-        [Authorize]
+        [CustomAuthorize]
         public ActionResult Index()
         {
             string curr_PlantID = ApplicationUser.Instance.GetPlantID();
@@ -46,8 +46,8 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // POST: Contact
-        [Authorize]
         [HttpPost]
+        [CustomAuthorize]
         public ActionResult Index(string plantid)
         {
             var contactlist = en.Employee_New
@@ -76,7 +76,7 @@ namespace Web_IT_HELPDESK.Controllers
 
             return View(contactlist);
         }
-
+        [CustomAuthorize]
         public ActionResult Download(string plantid)
         {
             string plantName = en.Plants.FirstOrDefault(d => d.Plant_ID == plantid).Plant_Name;
