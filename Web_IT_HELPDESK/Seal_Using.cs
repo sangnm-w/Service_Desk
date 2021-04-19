@@ -33,6 +33,7 @@ namespace Web_IT_HELPDESK
         public string Employee_Seal_keep_note { get; set; }
         public Nullable<System.DateTime> Date_signature { get; set; }
         public string Name_signature { get; set; }
-        public string Plant { get; set; }
+    
+        public virtual Department Department { get; set; }
     }
 }

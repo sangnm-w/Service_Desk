@@ -17,17 +17,18 @@ namespace Web_IT_HELPDESK
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Rule()
         {
-            this.Rights_Management = new HashSet<Rights_Management>();
+            this.Roles = new HashSet<Role>();
             OnConstructorInit();
         }
         partial void OnConstructorInit();
     
         public int Rule_ID { get; set; }
         public string Rule_Name { get; set; }
+        public Nullable<int> Module_ID { get; set; }
         public Nullable<bool> Deactive { get; set; }
-        public string Module_ID { get; set; }
     
+        public virtual Module Module { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Rights_Management> Rights_Management { get; set; }
+        public virtual ICollection<Role> Roles { get; set; }
     }
 }

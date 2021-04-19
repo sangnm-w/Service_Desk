@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Web_IT_HELPDESK.Models;
+using Web_IT_HELPDESK.Models.Extensions;
 
 namespace Web_IT_HELPDESK.Controllers
 {
@@ -19,7 +20,7 @@ namespace Web_IT_HELPDESK.Controllers
             return View(album_list);
         }
 
-        [Authorize]
+        [CustomAuthorize]
         [HttpPost]
         public ActionResult Index(string searchString)
         {

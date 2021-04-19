@@ -27,8 +27,12 @@ namespace Web_IT_HELPDESK.Models
         {
             ServiceDeskEntities en = new ServiceDeskEntities();
 
-            //var employeeFields = en.Employees.Where(e => e.Plant_Id == PlantId).Select(e => new EmployeeFieldModel { Emp_CJ = e.Emp_CJ, EmployeeName = e.EmployeeName }).Distinct().ToList();
-            var employeeFields = en.Employee_New.Where(e => e.Plant_ID == PlantId).Select(e => new EmployeeFieldModel { Emp_CJ = e.Emp_CJ, EmployeeName = e.Employee_Name }).Distinct().ToList();
+            var employeeFields = en.Employee_New
+                .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
+                .Where(grp => grp.d.Plant_Id == PlantId)
+                .Select(grp => new EmployeeFieldModel { Emp_CJ = grp.e.Emp_CJ, EmployeeName = grp.e.Employee_Name })
+                .Distinct()
+                .ToList();
 
             return employeeFields;
         }

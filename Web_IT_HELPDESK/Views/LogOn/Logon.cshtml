@@ -133,14 +133,14 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in new ServiceDeskEntities().Documents.Select(d => new { d.Code, d.Id, d.FileName }).OrderBy(i => i.Code))
+                @foreach (var doc in (List<Document>)ViewBag.Documents)
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Code)
+                            @Html.Display(doc.Code)
                         </td>
                         <td>
-                            @Html.ActionLink(item.FileName, "Get_file", new { id = item.Id })
+                            @Html.ActionLink(doc.FileName, "Get_file", new { id = doc.Id })
                         </td>
                     </tr>
                 }

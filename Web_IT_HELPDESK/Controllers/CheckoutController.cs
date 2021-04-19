@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Web_IT_HELPDESK.Models;
+using Web_IT_HELPDESK.Models.Extensions;
 
 namespace Web_IT_HELPDESK.Controllers
 {
@@ -31,21 +32,6 @@ namespace Web_IT_HELPDESK.Controllers
             //string emp_name = storeDB.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.EmployeeName).SingleOrDefault();
             return emp_name;
         }
-        //  Get_department_Id
-        private string GetDept_id()
-        {
-            string dept_id = storeDB.Employee_New.Where(f => (f.Emp_CJ == session_emp)).Select(f => f.Department_ID).SingleOrDefault();
-            //string dept_id = storeDB.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.Department_Id).SingleOrDefault();
-            return dept_id;
-        }
-        //GetPlant_id
-        private string GetPlant_id()
-        {
-            string plant_id = storeDB.Employee_New.Where(f => (f.Emp_CJ == session_emp)).Select(f => f.Plant_ID).SingleOrDefault();
-            //string plant_id = storeDB.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.Plant_Id).SingleOrDefault();
-            return plant_id;
-        }
-
         Information inf = new Information();
 
         [HttpPost]
@@ -58,7 +44,7 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 order.EmployeeID = User.Identity.Name;
                 order.Del = false;
-                order.Plant = GetPlant_id();
+                order.Plant = ApplicationUser.Instance.GetPlantID();
                 order.Employee_Name = GetEmp_name();
                 //Save Order
                 storeDB.Order_.Add(order);
@@ -71,7 +57,7 @@ namespace Web_IT_HELPDESK.Controllers
                 //gởi mail đến trưởng phòng
                 string result, status = "";
 
-                var dept = from i in storeDB.Departments where i.Department_Id == GetDept_id() select i.Department_Name;
+                var dept = from i in storeDB.Departments where i.Department_Id == ApplicationUser.Instance.GetDepartmentID() select i.Department_Name;
                 subject = "[Duyệt] - Thông tin yêu cầu văn phòng phẩm";
                 result = string.Format("Thông báo! <br /> <br />" +
                                                   "Đã gởi email xác nhận!  <br />" +
@@ -85,10 +71,10 @@ namespace Web_IT_HELPDESK.Controllers
                         "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";
 
 
-                inf.email_send("user_email", "pass", GetDept_id()  //"0000"
-                                                        , subject, body, status,GetPlant_id());
+                inf.email_send("user_email", "pass", ApplicationUser.Instance.GetDepartmentID()  //"0000"
+                                                        , subject, body, status, ApplicationUser.Instance.GetPlantID());
 
-                return RedirectToAction("Complete", 
+                return RedirectToAction("Complete",
                     new { id = order.OrderId });
             }
             catch

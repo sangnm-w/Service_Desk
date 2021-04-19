@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Web_IT_HELPDESK.Models;
+using Web_IT_HELPDESK.Models.Extensions;
 
 namespace Web_IT_HELPDESK.Controllers
 {
@@ -21,7 +22,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         //http://mail.cjvina.com:3000/WorldClient.dll?View=Main EDIT MULTI ROWS
 
-        [Authorize]
+        [CustomAuthorize]
         [HttpPost]
         public ActionResult Index(string searchString)
         {

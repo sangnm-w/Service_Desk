@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Web_IT_HELPDESK.Controllers.ObjectManager;
+using Web_IT_HELPDESK.Models.Extensions;
 
 namespace Web_IT_HELPDESK.Controllers
 {
@@ -19,8 +20,8 @@ namespace Web_IT_HELPDESK.Controllers
         private string session_emp = System.Web.HttpContext.Current.User.Identity.Name;
         public ActionResult Index()
         {
-            string plant_id = userManager.GetUserPlant(session_emp);
-            string dept_id = Convert.ToString(GetDept_id(plant_id));
+            string plant_id = ApplicationUser.Instance.GetPlantID();
+            string dept_id = ApplicationUser.Instance.GetDepartmentID();
 
             var DepartmentName = from i in en.Departments where i.Deactive != true select i.Department_Name;
             string deptname = DepartmentName.FirstOrDefault().ToString();
@@ -78,7 +79,7 @@ namespace Web_IT_HELPDESK.Controllers
             else return View(en.Drinking_Request.Where(i => i.Del != true && i.Date >= from_date && i.Date <= to_date));
         }
 
-        [Authorize]
+        [CustomAuthorize]
         [HttpPost]
         public ActionResult Index(string searchString, string _datetime)
         {
@@ -147,8 +148,8 @@ namespace Web_IT_HELPDESK.Controllers
 
             var students = from s in en.Drinking_Request.Where(i => i.Del != true && i.Date >= from_date && i.Date <= to_date)
                            select s;
-            string plant_id = userManager.GetUserPlant(session_emp);
-            string dept_id = Convert.ToString(GetDept_id(plant_id));
+            string plant_id = ApplicationUser.Instance.GetPlantID();
+            string dept_id = ApplicationUser.Instance.GetDepartmentID();
 
             if (session_emp != "admin" && String.IsNullOrEmpty(searchString))
                 students = students.Where(s => s.DepartmentId == dept_id);
@@ -164,21 +165,6 @@ namespace Web_IT_HELPDESK.Controllers
             return View(students);
         }
 
-        //  Get_department_Id
-        private string GetDept_id(string v_plant_id)
-        {
-            //string dept_id = en.Employees.Where(f => (f.Emp_CJ == session_emp && f.Plant_Id == v_plant_id)).Select(f => f.Department_Id).SingleOrDefault();
-            string dept_id = en.Employee_New.Where(f => (f.Emp_CJ == session_emp && f.Plant_ID == v_plant_id)).Select(f => f.Department_ID).SingleOrDefault();
-            return dept_id;
-        }
-        //GetPlant_id
-        private string GetPlant_id()
-        {
-            //string plant_id = en.Employees.Where(f => (f.Emp_CJ == session_emp)).Select(f => f.Plant_Id).SingleOrDefault();
-            string plant_id = en.Employee_New.Where(f => (f.Emp_CJ == session_emp)).Select(f => f.Plant_ID).SingleOrDefault();
-            return plant_id;
-        }
-
         //
         // GET: /DrinkingRequest/Details/5
 
@@ -192,9 +178,9 @@ namespace Web_IT_HELPDESK.Controllers
         public UserManager userManager = new UserManager();
         public ActionResult Create()
         {
-            string plant_id = userManager.GetUserPlant(session_emp);
+            string plant_id = ApplicationUser.Instance.GetPlantID();
             Drinking_Request driniking_request = new Drinking_Request();
-            ViewBag.DepartmentId = GetDept_id(plant_id);
+            ViewBag.DepartmentId = ApplicationUser.Instance.GetDepartmentID();
             return View(driniking_request);
         } 
 
@@ -204,7 +190,7 @@ namespace Web_IT_HELPDESK.Controllers
         [HttpPost]
         public string Create(Drinking_Request drinking_request)
         {
-            string plant_id = userManager.GetUserPlant(session_emp);
+            string plant_id = ApplicationUser.Instance.GetPlantID();
             var dept = from i in en.Departments 
                        where i.Department_Id == drinking_request.DepartmentId
                           && i.Plant_Id == plant_id
@@ -255,7 +241,7 @@ namespace Web_IT_HELPDESK.Controllers
 
 
 
-            inf.email_send("user_email", "pass", drinking_request.DepartmentId, subject, body, status, GetPlant_id());
+            inf.email_send("user_email", "pass", drinking_request.DepartmentId, subject, body, status, ApplicationUser.Instance.GetPlantID());
             //~~~~~~~~~~~~~~~~~~~~~
             //return RedirectToAction("Index", "SealUsing");
 
@@ -270,8 +256,8 @@ namespace Web_IT_HELPDESK.Controllers
         {
             Drinking_Request drinking_request = en.Drinking_Request.Find(id);
             ViewBag.Department_confirm_date = DateTime.Now;
-            string plant_id = userManager.GetUserPlant(session_emp);
-            ViewBag.DepartmentId = GetDept_id(plant_id);
+            string plant_id = ApplicationUser.Instance.GetPlantID();
+            ViewBag.DepartmentId = ApplicationUser.Instance.GetDepartmentID();
             return View(drinking_request);
         }
 
@@ -307,7 +293,7 @@ namespace Web_IT_HELPDESK.Controllers
                 //~~~~~~~~~~~~~~~~~~~~~
 
                 confirm_status = "Đồng ý xác nhận";
-                inf.email_send("user_email", "pass", drinking_request.DepartmentId, subject, body, "2", GetPlant_id());
+                inf.email_send("user_email", "pass", drinking_request.DepartmentId, subject, body, "2", ApplicationUser.Instance.GetPlantID());
 
                 result = string.Format("Thông báo! <br /> Trạng thái được duyệt đã chọn: " + confirm_status + " <br />" +
                                                   "Bộ phận: " + dept.FirstOrDefault().ToString()) + " <br />" +
@@ -326,7 +312,7 @@ namespace Web_IT_HELPDESK.Controllers
                    "Trân trọng!" + "\n" + "\n" + "\n" +
 
                    "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";
-                inf.email_send("user_email", "pass", drinking_request.DepartmentId, subject, body, "1",GetPlant_id());
+                inf.email_send("user_email", "pass", drinking_request.DepartmentId, subject, body, "1", ApplicationUser.Instance.GetPlantID());
                 confirm_status = "KHÔNG ĐỒNG Ý XÁC NHẬN";
                 result = string.Format("Thông báo! <br /> Trạng thái được duyệt đã chọn: " + confirm_status + " <br />" +
                                                   "Bộ phận: " + dept.FirstOrDefault().ToString() + " <br />" +
@@ -341,8 +327,8 @@ namespace Web_IT_HELPDESK.Controllers
         {
             Drinking_Request drinking_request = en.Drinking_Request.Find(id);
             ViewBag.HR_confirm_date = DateTime.Now;
-            string plant_id = userManager.GetUserPlant(session_emp);
-            ViewBag.DepartmentId = GetDept_id(plant_id);
+            string plant_id = ApplicationUser.Instance.GetPlantID();
+            ViewBag.DepartmentId = ApplicationUser.Instance.GetDepartmentID();
             return View(drinking_request);
         }
 
@@ -368,8 +354,8 @@ namespace Web_IT_HELPDESK.Controllers
         {
             Drinking_Request drinking_request = en.Drinking_Request.Find(id);
             ViewBag.Department_confirm_date = DateTime.Now;
-            string plant_id = userManager.GetUserPlant(session_emp);
-            ViewBag.DepartmentId = GetDept_id(plant_id);
+            string plant_id = ApplicationUser.Instance.GetPlantID();
+            ViewBag.DepartmentId = ApplicationUser.Instance.GetDepartmentID();
             return View(drinking_request);
         }
 
@@ -442,7 +428,7 @@ namespace Web_IT_HELPDESK.Controllers
         public ActionResult Resend(int? id)
         {
             var drinking_request = en.Drinking_Request.Where(i => i.Id == id).FirstOrDefault();
-            string plantid = userManager.GetUserPlant(session_emp);
+            string plantid = ApplicationUser.Instance.GetPlantID();
             var dept = from i in en.Departments where i.Department_Id == drinking_request.DepartmentId && i.Plant_Id == plantid select i.Department_Name;
             //~~~~~~~~~~~~~~~~~~~~~
             subject = "<<Gấp>> [Cần duyệt] - Phiếu yêu cầu sử dụng: " + drinking_request.Employee_name + " - tạo ngày: " + drinking_request.Date;
@@ -458,7 +444,7 @@ namespace Web_IT_HELPDESK.Controllers
 
 
 
-            inf.email_send("user_email", "pass", drinking_request.DepartmentId, subject, body, "1", userManager.GetUserPlant(session_emp));
+            inf.email_send("user_email", "pass", drinking_request.DepartmentId, subject, body, "1", ApplicationUser.Instance.GetPlantID());
             //~~~~~~~~~~~~~~~~~~~~~
 
             ViewBag.Emp_CJ = drinking_request.Employee_name;
