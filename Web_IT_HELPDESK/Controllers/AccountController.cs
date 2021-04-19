@@ -30,7 +30,7 @@ namespace Web_IT_HELPDESK.Controllers
                 if (logonUser != null)
                 {
                     string curr_deptId = logonUser.Department_ID;
-                    string curr_plantId = en.Departments.Find(curr_deptId).Plant_ID;
+                    string curr_plantId = en.Departments.Find(curr_deptId).Plant_Id;
 
                     FormsAuthentication.SetAuthCookie(emp.Emp_CJ, false);
                     if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")

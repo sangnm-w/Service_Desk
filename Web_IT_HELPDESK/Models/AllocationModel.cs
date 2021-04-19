@@ -97,7 +97,7 @@ namespace Web_IT_HELPDESK.Models
                 })
                 .Join(en.Departments,
                 a => a.allocation.Department_Id,
-                d => d.Department_ID,
+                d => d.Department_Id,
                 (a, d) => new
                 {
                     allocation = a.allocation,
@@ -218,7 +218,7 @@ namespace Web_IT_HELPDESK.Models
                 })
                 .Join(en.Departments,
                 a => a.allocation.Department_Id,
-                d => d.Department_ID,
+                d => d.Department_Id,
                 (a, d) => new
                 {
                     allocation = a.allocation,

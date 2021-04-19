@@ -22,8 +22,8 @@ namespace Web_IT_HELPDESK
         }
         partial void OnConstructorInit();
     
-        public string Plant_ID { get; set; }
         public string Plant_Name { get; set; }
+        public string Plant_Id { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Department> Departments { get; set; }

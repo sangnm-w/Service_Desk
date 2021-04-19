@@ -30,7 +30,7 @@ namespace Web_IT_HELPDESK
         public Nullable<bool> Solved { get; set; }
         public Nullable<System.DateTime> Solve_datetime { get; set; }
     
-        public virtual Department Department { get; set; }
         public virtual Status Status { get; set; }
+        public virtual Department Department { get; set; }
     }
 }

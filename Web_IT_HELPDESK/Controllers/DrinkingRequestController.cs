@@ -79,7 +79,7 @@ namespace Web_IT_HELPDESK.Controllers
             else return View(en.Drinking_Request.Where(i => i.Del != true && i.Date >= from_date && i.Date <= to_date));
         }
 
-        [Authorize]
+        [CustomAuthorize]
         [HttpPost]
         public ActionResult Index(string searchString, string _datetime)
         {
@@ -192,8 +192,8 @@ namespace Web_IT_HELPDESK.Controllers
         {
             string plant_id = ApplicationUser.Instance.GetPlantID();
             var dept = from i in en.Departments 
-                       where i.Department_ID == drinking_request.DepartmentId
-                          && i.Plant_ID == plant_id
+                       where i.Department_Id == drinking_request.DepartmentId
+                          && i.Plant_Id == plant_id
                       select i.Department_Name;
             en.Drinking_Request.Add(drinking_request);
             try
@@ -268,7 +268,7 @@ namespace Web_IT_HELPDESK.Controllers
         public string Edit(Drinking_Request drinking_request)
         {
 
-            var dept = from i in en.Departments where i.Department_ID == drinking_request.DepartmentId select i.Department_Name;
+            var dept = from i in en.Departments where i.Department_Id == drinking_request.DepartmentId select i.Department_Name;
             string result;
 
             en.Entry(drinking_request).State = System.Data.Entity   .EntityState.Modified;
@@ -338,7 +338,7 @@ namespace Web_IT_HELPDESK.Controllers
         [HttpPost]
         public ActionResult Confirm(Drinking_Request drinking_request)
         {
-            var dept = from i in en.Departments where i.Department_ID == drinking_request.DepartmentId select i.Department_Name;
+            var dept = from i in en.Departments where i.Department_Id == drinking_request.DepartmentId select i.Department_Name;
             drinking_request.HR_confirm_date = DateTime.Now;
             en.Entry(drinking_request).State = System.Data.Entity.EntityState.Modified;
             en.SaveChanges();
@@ -429,7 +429,7 @@ namespace Web_IT_HELPDESK.Controllers
         {
             var drinking_request = en.Drinking_Request.Where(i => i.Id == id).FirstOrDefault();
             string plantid = ApplicationUser.Instance.GetPlantID();
-            var dept = from i in en.Departments where i.Department_ID == drinking_request.DepartmentId && i.Plant_ID == plantid select i.Department_Name;
+            var dept = from i in en.Departments where i.Department_Id == drinking_request.DepartmentId && i.Plant_Id == plantid select i.Department_Name;
             //~~~~~~~~~~~~~~~~~~~~~
             subject = "<<Gấp>> [Cần duyệt] - Phiếu yêu cầu sử dụng: " + drinking_request.Employee_name + " - tạo ngày: " + drinking_request.Date;
             body = "Tên người yêu cầu: " + drinking_request.Employee_name + "\n" +

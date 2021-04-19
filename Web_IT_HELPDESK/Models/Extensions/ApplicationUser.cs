@@ -75,7 +75,7 @@ namespace Web_IT_HELPDESK.Models.Extensions
             string result = null;
 
             result = en.Employee_New
-                .Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d })
+                .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                 .FirstOrDefault(grp => grp.e.Emp_CJ == EmployeeID)
                 .d.Department_Name
                 .ToString();
@@ -88,9 +88,9 @@ namespace Web_IT_HELPDESK.Models.Extensions
             string result = null;
 
             result = en.Employee_New
-                .Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d })
+                .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                 .FirstOrDefault(grp => grp.e.Emp_CJ == EmployeeID)
-                .d.Plant_ID
+                .d.Plant_Id
                 .ToString();
 
             return result;
@@ -101,8 +101,8 @@ namespace Web_IT_HELPDESK.Models.Extensions
             string result = null;
 
             result = en.Employee_New
-                .Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d })
-                .Join(en.Plants, grp => grp.d.Plant_ID, p => p.Plant_ID, (grp, p) => new { grp.e, grp.d, p })
+                .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
+                .Join(en.Plants, grp => grp.d.Plant_Id, p => p.Plant_Id, (grp, p) => new { grp.e, grp.d, p })
                 .FirstOrDefault(j => j.e.Emp_CJ == EmployeeID)
                 .p.Plant_Name
                 .ToString();
@@ -115,9 +115,9 @@ namespace Web_IT_HELPDESK.Models.Extensions
             string result = null;
 
             result = en.Employee_New
-                    .Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d })
+                    .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                     .FirstOrDefault(grp => grp.e.Emp_CJ == EmployeeID)
-                    .d.Manager_ID
+                    .d.Manager_Id
                     .ToString();
 
             return result;

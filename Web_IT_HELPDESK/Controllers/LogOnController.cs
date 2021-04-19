@@ -38,9 +38,9 @@ namespace Web_IT_HELPDESK.Controllers
         private string GetPlant_id(string v_emp)
         {
             string plant_id = en.Employee_New
-                .Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d })
+                .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                 .Where(grp => grp.e.Emp_CJ == v_emp)
-                .Select(grp => grp.d.Plant_ID).SingleOrDefault();
+                .Select(grp => grp.d.Plant_Id).SingleOrDefault();
             return plant_id;
         }
 

@@ -113,13 +113,13 @@ namespace Web_IT_HELPDESK.Models
             ServiceDeskEntities en = new ServiceDeskEntities();
             var devices = en.Devices.Include(d => d.CONTRACT).Include(d => d.Device_Type);
 
-            var plants = en.Plants.Select(p => new { p.Plant_ID, p.Plant_Name }).Distinct();
+            var plants = en.Plants.Select(p => new { p.Plant_Id, p.Plant_Name }).Distinct();
 
             var dvm = devices
                 .Join(
                 plants,
                 d => d.Plant_Id,
-                p => p.Plant_ID,
+                p => p.Plant_Id,
                 (d, p) => new DeviceViewModel
                 {
                     Device = d,
@@ -133,13 +133,13 @@ namespace Web_IT_HELPDESK.Models
             ServiceDeskEntities en = new ServiceDeskEntities();
             var devices = en.Devices.Include(d => d.CONTRACT).Include(d => d.Device_Type).Where(d => d.Plant_Id == plantId);
 
-            var plants = en.Plants.Select(p => new { p.Plant_ID, p.Plant_Name }).Distinct();
+            var plants = en.Plants.Select(p => new { p.Plant_Id, p.Plant_Name }).Distinct();
 
             var dvm = devices
                 .Join(
                 plants,
                 d => d.Plant_Id,
-                p => p.Plant_ID,
+                p => p.Plant_Id,
                 (d, p) => new DeviceViewModel
                 {
                     Device = d,

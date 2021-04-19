@@ -64,7 +64,7 @@ namespace Web_IT_HELPDESK.Controllers
                     .ToList();
 
                 userPlants = en.Plants
-                    .Select(p => new PlantViewModel { Plant_Id = p.Plant_ID, Plant_Name = p.Plant_Name })
+                    .Select(p => new PlantViewModel { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name })
                     .ToList();
             }
             else
@@ -75,9 +75,9 @@ namespace Web_IT_HELPDESK.Controllers
                 userRules = ApplicationUser.Instance.GetRules(userRoles, controllerName);
 
                 var uPlants = ApplicationUser.Instance.GetAuthorizations()
-               .Join(en.Plants, au => au.Plant_ID, p => p.Plant_ID, (au, p) => new { au, p }).Select(grp => new { grp.p.Plant_ID, grp.p.Plant_Name }).Distinct();
+               .Join(en.Plants, au => au.Plant_ID, p => p.Plant_Id, (au, p) => new { au, p }).Select(grp => new { grp.p.Plant_Id, grp.p.Plant_Name }).Distinct();
 
-                userPlants = uPlants.Select(p => new PlantViewModel { Plant_Id = p.Plant_ID, Plant_Name = p.Plant_Name }).ToList();
+                userPlants = uPlants.Select(p => new PlantViewModel { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name }).ToList();
 
                 bool isITManager = userRoles.Any(ro => ro.Role_ID == 2);
                 if (!isITManager)
@@ -135,7 +135,7 @@ namespace Web_IT_HELPDESK.Controllers
                     .ToList();
 
                 userPlants = en.Plants
-                    .Select(p => new PlantViewModel { Plant_Id = p.Plant_ID, Plant_Name = p.Plant_Name })
+                    .Select(p => new PlantViewModel { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name })
                     .ToList();
             }
             else
@@ -146,9 +146,9 @@ namespace Web_IT_HELPDESK.Controllers
                 userRules = ApplicationUser.Instance.GetRules(userRoles, controllerName);
 
                 var uPlants = ApplicationUser.Instance.GetAuthorizations()
-               .Join(en.Plants, au => au.Plant_ID, p => p.Plant_ID, (au, p) => new { au, p }).Select(grp => new { grp.p.Plant_ID, grp.p.Plant_Name }).Distinct();
+               .Join(en.Plants, au => au.Plant_ID, p => p.Plant_Id, (au, p) => new { au, p }).Select(grp => new { grp.p.Plant_Id, grp.p.Plant_Name }).Distinct();
 
-                userPlants = uPlants.Select(p => new PlantViewModel { Plant_Id = p.Plant_ID, Plant_Name = p.Plant_Name }).ToList();
+                userPlants = uPlants.Select(p => new PlantViewModel { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name }).ToList();
 
                 bool isITManager = userRoles.Any(ro => ro.Role_ID == 2);
                 if (!isITManager)
@@ -261,7 +261,7 @@ namespace Web_IT_HELPDESK.Controllers
 
                 List<string> ccMails = new List<string>();
 
-                string managerIdOfUser = en.Departments.Find(currUserDeptId).Manager_ID;
+                string managerIdOfUser = en.Departments.Find(currUserDeptId).Manager_Id;
                 string managerMail = en.Employee_New.Find(managerIdOfUser).Email;
                 if (managerMail != null)
                     ccMails.Add(managerMail);
@@ -393,7 +393,7 @@ namespace Web_IT_HELPDESK.Controllers
 
                 ccMails = IncidentModel.Instance.GetITMemberEmails(currUserPlantId);
 
-                string managerIdOfUser = en.Departments.Find(currUserDeptId).Manager_ID;
+                string managerIdOfUser = en.Departments.Find(currUserDeptId).Manager_Id;
                 string managerMail = en.Employee_New.Find(managerIdOfUser).Email;
                 if (managerMail != null && !ccMails.Contains(managerMail))
                     ccMails.Add(managerMail);
@@ -510,8 +510,8 @@ namespace Web_IT_HELPDESK.Controllers
                     }
                 }
 
-                var incList = inc.Join(en.Departments, i => i.DepartmentId, d => d.Department_ID, (i, d) => new { i, d })
-                    .Join(en.Plants, grp => grp.d.Plant_ID, p => p.Plant_ID, (grp, p) => new
+                var incList = inc.Join(en.Departments, i => i.DepartmentId, d => d.Department_Id, (i, d) => new { i, d })
+                    .Join(en.Plants, grp => grp.d.Plant_Id, p => p.Plant_Id, (grp, p) => new
                     {
                         grp.i.Code,
                         Date = grp.i.datetime,

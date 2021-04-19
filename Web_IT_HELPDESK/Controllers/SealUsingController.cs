@@ -29,7 +29,10 @@ namespace Web_IT_HELPDESK.Controllers
 
             bool currUserIsManager = ApplicationUser.Instance.IsManager;
             string deptIdHrSealManager = curr_PlantID + "S0003";
-            bool currUserIsHrSealManager = en.Departments.FirstOrDefault(d => d.Plant_ID == curr_PlantID && d.Department_ID == deptIdHrSealManager && d.Manager_ID == ApplicationUser.Instance.EmployeeID) != null ? true : false;
+            bool currUserIsHrSealManager = en.Departments
+                .FirstOrDefault(d => d.Plant_Id == curr_PlantID 
+                && d.Department_Id == deptIdHrSealManager 
+                && d.Manager_Id == ApplicationUser.Instance.EmployeeID) != null ? true : false;
 
             var suVM = en.Seal_Using
                 .Where(s => s.Del != true
@@ -39,7 +42,7 @@ namespace Web_IT_HELPDESK.Controllers
                       )
                 .Join(en.Departments,
                       s => s.DepartmentId,
-                      d => d.Department_ID,
+                      d => d.Department_Id,
                       (s, d) => new SealUsingViewModel.IndexSealUsing()
                       {
                           SealUsing = s,
@@ -81,7 +84,7 @@ namespace Web_IT_HELPDESK.Controllers
             var suVM = sealusings
               .Join(en.Departments,
                     s => s.DepartmentId,
-                    d => d.Department_ID,
+                    d => d.Department_Id,
                     (s, d) => new SealUsingViewModel.IndexSealUsing()
                     {
                         SealUsing = s,
@@ -91,7 +94,10 @@ namespace Web_IT_HELPDESK.Controllers
 
             bool currUserIsManager = ApplicationUser.Instance.IsManager;
             string deptIdHRSealManager = curr_PlantID + "S0003";
-            bool currUserIsHRSealManager = en.Departments.FirstOrDefault(d => d.Plant_ID == curr_PlantID && d.Department_ID == deptIdHRSealManager && d.Manager_ID == ApplicationUser.Instance.EmployeeID) != null ? true : false;
+            bool currUserIsHRSealManager = en.Departments
+                .FirstOrDefault(d => d.Plant_Id == curr_PlantID 
+                && d.Department_Id == deptIdHRSealManager 
+                && d.Manager_Id == ApplicationUser.Instance.EmployeeID) != null ? true : false;
 
             bool isResend = true;
 
@@ -199,7 +205,7 @@ namespace Web_IT_HELPDESK.Controllers
             return View(csuVM);
         }
 
-        [Authorize]
+        [CustomAuthorize]
         public ActionResult Resend(int? id)
         {
             if (id == null)
@@ -246,7 +252,7 @@ namespace Web_IT_HELPDESK.Controllers
                       )
                 .Join(en.Departments,
                       s => s.DepartmentId,
-                      d => d.Department_ID,
+                      d => d.Department_Id,
                       (s, d) => new SealUsingViewModel.IndexSealUsing()
                       {
                           SealUsing = s,

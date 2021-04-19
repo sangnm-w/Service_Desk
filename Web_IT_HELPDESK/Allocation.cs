@@ -30,7 +30,7 @@ namespace Web_IT_HELPDESK
         public Nullable<bool> Flag_ReAllocation { get; set; }
         public string QRCodeFile { get; set; }
     
-        public virtual Department Department { get; set; }
         public virtual Device Device { get; set; }
+        public virtual Department Department { get; set; }
     }
 }

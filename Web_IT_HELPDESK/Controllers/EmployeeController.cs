@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Web_IT_HELPDESK.Models;
+using Web_IT_HELPDESK.Models.Extensions;
 using Web_IT_HELPDESK.ViewModels;
 
 namespace Web_IT_HELPDESK.Controllers
@@ -52,7 +53,7 @@ namespace Web_IT_HELPDESK.Controllers
         //    return View("EmployeeList", en.Employee_New.Where(i => i.Deactive != true && i.Emp_CJ != "admin"));
         //}
 
-        [Authorize]
+        [CustomAuthorize]
         public ActionResult ChangePasword(string employeeid)
         {
             ViewBag.Emp_CJ = session_emp;
@@ -60,7 +61,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [CustomAuthorize]
         public ActionResult ChangePasword(ChangePasswordViewModel cpVM)
         {
             if (!string.Equals(cpVM.NewPsw, cpVM.NewPsw_Confirm))

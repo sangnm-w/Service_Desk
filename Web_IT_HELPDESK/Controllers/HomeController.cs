@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Web_IT_HELPDESK.Models.Extensions;
 
 namespace Web_IT_HELPDESK.Controllers
 {

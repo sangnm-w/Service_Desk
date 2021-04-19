@@ -25,28 +25,42 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
 
             if (level_confirm == 1) // Level 1: Department Manager
             {
-                string managerIdOfUserRequest = en.Employee_New.Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d }).FirstOrDefault(grp => grp.e.Emp_CJ == userRequestId).d.Manager_ID;
+                string managerIdOfUserRequest = en.Employee_New
+                    .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
+                    .FirstOrDefault(grp => grp.e.Emp_CJ == userRequestId)
+                    .d.Manager_Id;
                 string mangerEmail = en.Employee_New.Find(managerIdOfUserRequest).Email;
                 toMails.Add(mangerEmail);
                 bccMails.Add("it-servicedesk@cjvina.com");
             }
             else if (level_confirm == 2) // Level 2: Resend
             {
-                string managerIdOfUserRequest = en.Employee_New.Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d }).FirstOrDefault(grp => grp.e.Emp_CJ == userRequestId).d.Manager_ID;
+                string managerIdOfUserRequest = en.Employee_New
+                    .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
+                    .FirstOrDefault(grp => grp.e.Emp_CJ == userRequestId)
+                    .d.Manager_Id;
                 string mangerEmail = en.Employee_New.Find(managerIdOfUserRequest).Email;
                 toMails.Add(mangerEmail);
                 bccMails.Add("it-servicedesk@cjvina.com");
             }
             else if (level_confirm == 3) // Level 3: BOD
             {
-                string bodEmailOfUserRequest = en.Employee_New.Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d }).FirstOrDefault(grp => grp.e.Emp_CJ == userRequestId).d.BOD_Email;
+                string bodEmailOfUserRequest = en.Employee_New
+                    .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
+                    .FirstOrDefault(grp => grp.e.Emp_CJ == userRequestId)
+                    .d.BOD_Email;
                 toMails.Add(bodEmailOfUserRequest);
                 bccMails.Add("it-servicedesk@cjvina.com");
             }
             else if (level_confirm == 4) // Level 4: HR Manager
             {
-                string userRequestPlantId = en.Employee_New.Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d }).FirstOrDefault(grp => grp.e.Emp_CJ == userRequestId).d.Plant_ID;
-                string hrMangerIdByPlant = en.Departments.FirstOrDefault(d => (d.Plant_ID == userRequestPlantId && d.Department_Name.Contains(")HR"))).Manager_ID;
+                string userRequestPlantId = en.Employee_New
+                    .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
+                    .FirstOrDefault(grp => grp.e.Emp_CJ == userRequestId)
+                    .d.Plant_Id;
+                string hrMangerIdByPlant = en.Departments
+                    .FirstOrDefault(d => (d.Plant_Id == userRequestPlantId && d.Department_Name.Contains(")HR")))
+                    .Manager_Id;
                 string hrMangerEmail = en.Employee_New.Find(hrMangerIdByPlant).Email;
                 toMails.Add(hrMangerEmail);
                 bccMails.Add("it-servicedesk@cjvina.com");
@@ -54,16 +68,26 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             }
             else if (level_confirm == 5) // Level 5: HR Admin
             {
-                string userRequestPlantId = en.Employee_New.Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d }).FirstOrDefault(grp => grp.e.Emp_CJ == userRequestId).d.Plant_ID;
-                string hrAdminIdByPlant = en.Departments.FirstOrDefault(d => (d.Plant_ID == userRequestPlantId && d.Department_Name.Contains(")HR Admin"))).Manager_ID;
+                string userRequestPlantId = en.Employee_New
+                    .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
+                    .FirstOrDefault(grp => grp.e.Emp_CJ == userRequestId)
+                    .d.Plant_Id;
+                string hrAdminIdByPlant = en.Departments
+                    .FirstOrDefault(d => (d.Plant_Id == userRequestPlantId && d.Department_Name.Contains(")HR Admin")))
+                    .Manager_Id;
                 string hrAdminEmail = en.Employee_New.Find(hrAdminIdByPlant).Email;
                 toMails.Add(hrAdminEmail);
                 bccMails.Add("it-servicedesk@cjvina.com");
             }
             else if (level_confirm == 6) // Level 6: HR Seal Using
             {
-                string userRequestPlantId = en.Employee_New.Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d }).FirstOrDefault(grp => grp.e.Emp_CJ == userRequestId).d.Plant_ID;
-                string hrSealIdByPlant = en.Departments.FirstOrDefault(d => (d.Plant_ID == userRequestPlantId && d.Department_Name.Contains(")HR Seal Manager"))).Manager_ID;
+                string userRequestPlantId = en.Employee_New
+                    .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
+                    .FirstOrDefault(grp => grp.e.Emp_CJ == userRequestId)
+                    .d.Plant_Id;
+                string hrSealIdByPlant = en.Departments
+                    .FirstOrDefault(d => (d.Plant_Id == userRequestPlantId && d.Department_Name.Contains(")HR Seal Manager")))
+                    .Manager_Id;
                 string hrSealEmail = en.Employee_New.Find(hrSealIdByPlant).Email;
                 toMails.Add(hrSealEmail);
                 bccMails.Add("it-servicedesk@cjvina.com");
@@ -73,7 +97,10 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                 string userRequestEmail = en.Employee_New.Find(userRequestId).Email;
                 toMails.Add(userRequestEmail);
 
-                string managerIdOfUserRequest = en.Employee_New.Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d }).FirstOrDefault(grp => grp.e.Emp_CJ == userRequestId).d.Manager_ID;
+                string managerIdOfUserRequest = en.Employee_New
+                    .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
+                    .FirstOrDefault(grp => grp.e.Emp_CJ == userRequestId)
+                    .d.Manager_Id;
                 string mangerEmail = en.Employee_New.Find(managerIdOfUserRequest).Email;
                 ccMails.Add(mangerEmail);
                 bccMails.Add("it-servicedesk@cjvina.com");
@@ -83,7 +110,9 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                 string userRequestEmail = en.Employee_New.Find(userRequestId).Email;
                 toMails.Add(userRequestEmail);
 
-                string managerIdOfUserRequest = en.Employee_New.Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d }).FirstOrDefault(grp => grp.e.Emp_CJ == userRequestId).d.Manager_ID;
+                string managerIdOfUserRequest = en.Employee_New
+                    .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
+                    .FirstOrDefault(grp => grp.e.Emp_CJ == userRequestId).d.Manager_Id;
                 string mangerEmail = en.Employee_New.Find(managerIdOfUserRequest).Email;
                 ccMails.Add(mangerEmail);
                 bccMails.Add("it-servicedesk@cjvina.com");

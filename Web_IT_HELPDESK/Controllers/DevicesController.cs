@@ -24,7 +24,7 @@ namespace Web_IT_HELPDESK.Controllers
         private string currUserPlantId = ApplicationUser.Instance.GetPlantID();
 
         // GET: Devices
-        [Authorize]
+        [CustomAuthorize]
         public ActionResult Index()
         {
             string curr_plantId = ApplicationUser.Instance.GetPlantID();
@@ -33,7 +33,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: Devices/Details/5
-        [Authorize]
+        [CustomAuthorize]
         public ActionResult Details(Guid? id)
         {
             if (id == null)
@@ -54,7 +54,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         #region Create
         // GET: Devices/Create
-        [Authorize]
+        [CustomAuthorize]
         public ActionResult Create()
         {
             ViewBag.Plant_Id = currUserPlantId;
@@ -108,7 +108,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: Devices/CreateOthers
-        [Authorize]
+        [CustomAuthorize]
         public ActionResult CreateOthers()
         {
             string empPlantID = ApplicationUser.Instance.GetPlantID();
@@ -177,7 +177,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         #region Edit
         // GET: Devices/Edit/5
-        [Authorize]
+        [CustomAuthorize]
         public ActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -222,7 +222,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: Devices/EditOthers/5
-        [Authorize]
+        [CustomAuthorize]
         public ActionResult EditOthers(Guid? id)
         {
             if (id == null)
@@ -268,7 +268,7 @@ namespace Web_IT_HELPDESK.Controllers
         #endregion
 
         // GET: Devices/Delete/5
-        [Authorize]
+        [CustomAuthorize]
         public ActionResult Delete(Guid? id)
         {
             if (id == null)
@@ -286,7 +286,7 @@ namespace Web_IT_HELPDESK.Controllers
         // POST: Devices/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize]
+        [CustomAuthorize]
         public ActionResult DeleteConfirmed(Guid id)
         {
             Device device = en.Devices.Find(id);
@@ -297,7 +297,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         // Post: Devices/Upload
         [HttpPost, ActionName("Upload")]
-        [Authorize]
+        [CustomAuthorize]
         public ActionResult UploadDevices(HttpPostedFileBase FileUpload)
         {
             if (FileUpload != null)

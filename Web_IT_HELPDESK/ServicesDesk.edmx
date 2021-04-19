@@ -158,14 +158,14 @@
         </EntityType>
         <EntityType Name="Department">
           <Key>
-            <PropertyRef Name="Department_ID" />
+            <PropertyRef Name="Department_Id" />
           </Key>
-          <Property Name="Department_ID" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Department_Id" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="Department_Name" Type="nvarchar" MaxLength="100" />
-          <Property Name="Plant_ID" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Plant_Id" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="Deactive" Type="bit" />
           <Property Name="Manager_Email" Type="nvarchar" MaxLength="100" />
-          <Property Name="Manager_ID" Type="nvarchar" MaxLength="20" />
+          <Property Name="Manager_Id" Type="nvarchar" MaxLength="20" />
           <Property Name="BOD_Email" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="Device">
@@ -423,9 +423,9 @@
         </EntityType>
         <EntityType Name="Plant">
           <Key>
-            <PropertyRef Name="Plant_ID" />
+            <PropertyRef Name="Plant_Id" />
           </Key>
-          <Property Name="Plant_ID" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Plant_Id" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="Plant_Name" Type="nvarchar" MaxLength="100" Nullable="false" />
         </EntityType>
         <EntityType Name="QUESTION">
@@ -551,7 +551,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <End Role="Allocation" Type="Self.Allocation" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Department">
-              <PropertyRef Name="Department_ID" />
+              <PropertyRef Name="Department_Id" />
             </Principal>
             <Dependent Role="Allocation">
               <PropertyRef Name="Department_Id" />
@@ -719,10 +719,10 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <End Role="Department" Type="Self.Department" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Plant">
-              <PropertyRef Name="Plant_ID" />
+              <PropertyRef Name="Plant_Id" />
             </Principal>
             <Dependent Role="Department">
-              <PropertyRef Name="Plant_ID" />
+              <PropertyRef Name="Plant_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -827,7 +827,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <End Role="Employee_New" Type="Self.Employee_New" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Department">
-              <PropertyRef Name="Department_ID" />
+              <PropertyRef Name="Department_Id" />
             </Principal>
             <Dependent Role="Employee_New">
               <PropertyRef Name="Department_ID" />
@@ -839,7 +839,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <End Role="Incidents" Type="Self.Incidents" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Department">
-              <PropertyRef Name="Department_ID" />
+              <PropertyRef Name="Department_Id" />
             </Principal>
             <Dependent Role="Incidents">
               <PropertyRef Name="DepartmentId" />
@@ -947,7 +947,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <End Role="Seal_Using" Type="Self.Seal_Using" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Department">
-              <PropertyRef Name="Department_ID" />
+              <PropertyRef Name="Department_Id" />
             </Principal>
             <Dependent Role="Seal_Using">
               <PropertyRef Name="DepartmentId" />
@@ -2057,16 +2057,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             <End Role="Role" EntitySet="Roles" />
             <End Role="Authorization" EntitySet="Authorizations" />
           </AssociationSet>
-          <EntitySet Name="Departments" EntityType="ServiceDeskModel.Department" />
-          <AssociationSet Name="FK_Employee_New_Department" Association="ServiceDeskModel.FK_Employee_New_Department">
-            <End Role="Department" EntitySet="Departments" />
-            <End Role="Employee_New" EntitySet="Employee_New" />
-          </AssociationSet>
           <EntitySet Name="Plants" EntityType="ServiceDeskModel.Plant" />
-          <AssociationSet Name="FK_Department_Plant" Association="ServiceDeskModel.FK_Department_Plant">
-            <End Role="Plant" EntitySet="Plants" />
-            <End Role="Department" EntitySet="Departments" />
-          </AssociationSet>
           <EntitySet Name="Modules" EntityType="ServiceDeskModel.Module" />
           <EntitySet Name="Rules" EntityType="ServiceDeskModel.Rule" />
           <AssociationSet Name="FK_Rule_Module" Association="ServiceDeskModel.FK_Rule_Module">
@@ -2078,10 +2069,6 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             <End Role="Rule" EntitySet="Rules" />
           </AssociationSet>
           <EntitySet Name="Allocations" EntityType="ServiceDeskModel.Allocation" />
-          <AssociationSet Name="FK_Allocation_Department" Association="ServiceDeskModel.FK_Allocation_Department">
-            <End Role="Department" EntitySet="Departments" />
-            <End Role="Allocation" EntitySet="Allocations" />
-          </AssociationSet>
           <AssociationSet Name="FK_Allocation_Device" Association="ServiceDeskModel.FK_Allocation_Device">
             <End Role="Device" EntitySet="Devices" />
             <End Role="Allocation" EntitySet="Allocations" />
@@ -2089,6 +2076,23 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <FunctionImport Name="GetLastAllocationOfDevice" IsComposable="true" EntitySet="Allocations" ReturnType="Collection(ServiceDeskModel.Allocation)" />
           <EntitySet Name="Incidents" EntityType="ServiceDeskModel.Incident" />
           <EntitySet Name="Seal_Using" EntityType="ServiceDeskModel.Seal_Using" />
+          <AssociationSet Name="FK_Incidents_Status" Association="ServiceDeskModel.FK_Incidents_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Incident" EntitySet="Incidents" />
+          </AssociationSet>
+          <EntitySet Name="Departments" EntityType="ServiceDeskModel.Department" />
+          <AssociationSet Name="FK_Allocation_Department" Association="ServiceDeskModel.FK_Allocation_Department">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="Allocation" EntitySet="Allocations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Department_Plant" Association="ServiceDeskModel.FK_Department_Plant">
+            <End Role="Plant" EntitySet="Plants" />
+            <End Role="Department" EntitySet="Departments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_New_Department" Association="ServiceDeskModel.FK_Employee_New_Department">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="Employee_New" EntitySet="Employee_New" />
+          </AssociationSet>
           <AssociationSet Name="FK_Incidents_Department" Association="ServiceDeskModel.FK_Incidents_Department">
             <End Role="Department" EntitySet="Departments" />
             <End Role="Incident" EntitySet="Incidents" />
@@ -2097,11 +2101,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             <End Role="Department" EntitySet="Departments" />
             <End Role="Seal_Using" EntitySet="Seal_Using" />
           </AssociationSet>
-          <AssociationSet Name="FK_Incidents_Status" Association="ServiceDeskModel.FK_Incidents_Status">
-            <End Role="Status" EntitySet="Status" />
-            <End Role="Incident" EntitySet="Incidents" />
-          </AssociationSet>
-        </EntityContainer>
+          </EntityContainer>
         <EntityType Name="Employee_New">
           <Key>
             <PropertyRef Name="Emp_CJ" />
@@ -2241,55 +2241,14 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Department">
-          <Key>
-            <PropertyRef Name="Department_ID" />
-          </Key>
-          <Property Name="Department_Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Deactive" Type="Boolean" />
-          <Property Name="Manager_Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="BOD_Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Department_ID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Plant_ID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Manager_ID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Employee_New" Relationship="ServiceDeskModel.FK_Employee_New_Department" FromRole="Department" ToRole="Employee_New" />
-          <NavigationProperty Name="Plant" Relationship="ServiceDeskModel.FK_Department_Plant" FromRole="Department" ToRole="Plant" />
-          <NavigationProperty Name="Allocations" Relationship="ServiceDeskModel.FK_Allocation_Department" FromRole="Department" ToRole="Allocation" />
-          <NavigationProperty Name="Incidents" Relationship="ServiceDeskModel.FK_Incidents_Department" FromRole="Department" ToRole="Incident" />
-          <NavigationProperty Name="Seal_Using" Relationship="ServiceDeskModel.FK_Seal_Using_Department" FromRole="Department" ToRole="Seal_Using" />
-        </EntityType>
-        <Association Name="FK_Employee_New_Department">
-          <End Type="ServiceDeskModel.Department" Role="Department" Multiplicity="0..1" />
-          <End Type="ServiceDeskModel.Employee_New" Role="Employee_New" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Department">
-              <PropertyRef Name="Department_ID" />
-            </Principal>
-            <Dependent Role="Employee_New">
-              <PropertyRef Name="Department_ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="Plant">
           <Key>
-            <PropertyRef Name="Plant_ID" />
+            <PropertyRef Name="Plant_Id" />
           </Key>
-          <Property Name="Plant_ID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Plant_Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Plant_Id" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Departments" Relationship="ServiceDeskModel.FK_Department_Plant" FromRole="Plant" ToRole="Department" />
         </EntityType>
-        <Association Name="FK_Department_Plant">
-          <End Type="ServiceDeskModel.Plant" Role="Plant" Multiplicity="1" />
-          <End Type="ServiceDeskModel.Department" Role="Department" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Plant">
-              <PropertyRef Name="Plant_ID" />
-            </Principal>
-            <Dependent Role="Department">
-              <PropertyRef Name="Plant_ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="Module">
           <Key>
             <PropertyRef Name="Module_ID" />
@@ -2346,21 +2305,9 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="Delete_Date" Type="DateTime" Precision="3" />
           <Property Name="Flag_ReAllocation" Type="Boolean" />
           <Property Name="QRCodeFile" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Department" Relationship="ServiceDeskModel.FK_Allocation_Department" FromRole="Allocation" ToRole="Department" />
           <NavigationProperty Name="Device" Relationship="ServiceDeskModel.FK_Allocation_Device" FromRole="Allocation" ToRole="Device" />
+          <NavigationProperty Name="Department" Relationship="ServiceDeskModel.FK_Allocation_Department" FromRole="Allocation" ToRole="Department" />
         </EntityType>
-        <Association Name="FK_Allocation_Department">
-          <End Type="ServiceDeskModel.Department" Role="Department" Multiplicity="0..1" />
-          <End Type="ServiceDeskModel.Allocation" Role="Allocation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Department">
-              <PropertyRef Name="Department_ID" />
-            </Principal>
-            <Dependent Role="Allocation">
-              <PropertyRef Name="Department_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Allocation_Device">
           <End Type="ServiceDeskModel.Device" Role="Device" Multiplicity="0..1" />
           <End Type="ServiceDeskModel.Allocation" Role="Allocation" Multiplicity="*" />
@@ -2410,8 +2357,8 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="DepartmentId" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Solved" Type="Boolean" />
           <Property Name="Solve_datetime" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Department" Relationship="ServiceDeskModel.FK_Incidents_Department" FromRole="Incident" ToRole="Department" />
           <NavigationProperty Name="Status" Relationship="ServiceDeskModel.FK_Incidents_Status" FromRole="Incident" ToRole="Status" />
+          <NavigationProperty Name="Department" Relationship="ServiceDeskModel.FK_Incidents_Department" FromRole="Incident" ToRole="Department" />
         </EntityType>
         <EntityType Name="Seal_Using">
           <Key>
@@ -2438,30 +2385,6 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Name="Name_signature" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Department" Relationship="ServiceDeskModel.FK_Seal_Using_Department" FromRole="Seal_Using" ToRole="Department" />
         </EntityType>
-        <Association Name="FK_Incidents_Department">
-          <End Type="ServiceDeskModel.Department" Role="Department" Multiplicity="0..1" />
-          <End Type="ServiceDeskModel.Incident" Role="Incident" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Department">
-              <PropertyRef Name="Department_ID" />
-            </Principal>
-            <Dependent Role="Incident">
-              <PropertyRef Name="DepartmentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Seal_Using_Department">
-          <End Type="ServiceDeskModel.Department" Role="Department" Multiplicity="1" />
-          <End Type="ServiceDeskModel.Seal_Using" Role="Seal_Using" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Department">
-              <PropertyRef Name="Department_ID" />
-            </Principal>
-            <Dependent Role="Seal_Using">
-              <PropertyRef Name="DepartmentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Incidents_Status">
           <End Type="ServiceDeskModel.Status" Role="Status" Multiplicity="0..1" />
           <End Type="ServiceDeskModel.Incident" Role="Incident" Multiplicity="*" />
@@ -2474,7 +2397,84 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="Department_Id" />
+          </Key>
+          <Property Name="Department_Id" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Department_Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Plant_Id" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Deactive" Type="Boolean" />
+          <Property Name="Manager_Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Manager_Id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="BOD_Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Allocations" Relationship="ServiceDeskModel.FK_Allocation_Department" FromRole="Department" ToRole="Allocation" />
+          <NavigationProperty Name="Plant" Relationship="ServiceDeskModel.FK_Department_Plant" FromRole="Department" ToRole="Plant" />
+          <NavigationProperty Name="Employee_New" Relationship="ServiceDeskModel.FK_Employee_New_Department" FromRole="Department" ToRole="Employee_New" />
+          <NavigationProperty Name="Incidents" Relationship="ServiceDeskModel.FK_Incidents_Department" FromRole="Department" ToRole="Incident" />
+          <NavigationProperty Name="Seal_Using" Relationship="ServiceDeskModel.FK_Seal_Using_Department" FromRole="Department" ToRole="Seal_Using" />
+        </EntityType>
+        <Association Name="FK_Allocation_Department">
+          <End Type="ServiceDeskModel.Department" Role="Department" Multiplicity="0..1" />
+          <End Type="ServiceDeskModel.Allocation" Role="Allocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="Department_Id" />
+            </Principal>
+            <Dependent Role="Allocation">
+              <PropertyRef Name="Department_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Department_Plant">
+          <End Type="ServiceDeskModel.Plant" Role="Plant" Multiplicity="1" />
+          <End Type="ServiceDeskModel.Department" Role="Department" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Plant">
+              <PropertyRef Name="Plant_Id" />
+            </Principal>
+            <Dependent Role="Department">
+              <PropertyRef Name="Plant_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employee_New_Department">
+          <End Type="ServiceDeskModel.Department" Role="Department" Multiplicity="0..1" />
+          <End Type="ServiceDeskModel.Employee_New" Role="Employee_New" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="Department_Id" />
+            </Principal>
+            <Dependent Role="Employee_New">
+              <PropertyRef Name="Department_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Incidents_Department">
+          <End Type="ServiceDeskModel.Department" Role="Department" Multiplicity="0..1" />
+          <End Type="ServiceDeskModel.Incident" Role="Incident" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="Department_Id" />
+            </Principal>
+            <Dependent Role="Incident">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Seal_Using_Department">
+          <End Type="ServiceDeskModel.Department" Role="Department" Multiplicity="1" />
+          <End Type="ServiceDeskModel.Seal_Using" Role="Seal_Using" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="Department_Id" />
+            </Principal>
+            <Dependent Role="Seal_Using">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -2948,24 +2948,11 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Departments">
-            <EntityTypeMapping TypeName="ServiceDeskModel.Department">
-              <MappingFragment StoreEntitySet="Department">
-                <ScalarProperty Name="Manager_ID" ColumnName="Manager_ID" />
-                <ScalarProperty Name="Plant_ID" ColumnName="Plant_ID" />
-                <ScalarProperty Name="Department_ID" ColumnName="Department_ID" />
-                <ScalarProperty Name="BOD_Email" ColumnName="BOD_Email" />
-                <ScalarProperty Name="Manager_Email" ColumnName="Manager_Email" />
-                <ScalarProperty Name="Deactive" ColumnName="Deactive" />
-                <ScalarProperty Name="Department_Name" ColumnName="Department_Name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Plants">
             <EntityTypeMapping TypeName="ServiceDeskModel.Plant">
               <MappingFragment StoreEntitySet="Plant">
+                <ScalarProperty Name="Plant_Id" ColumnName="Plant_Id" />
                 <ScalarProperty Name="Plant_Name" ColumnName="Plant_Name" />
-                <ScalarProperty Name="Plant_ID" ColumnName="Plant_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3063,6 +3050,19 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
                 <ScalarProperty Name="Employee_ID" ColumnName="Employee_ID" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="ServiceDeskModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="BOD_Email" ColumnName="BOD_Email" />
+                <ScalarProperty Name="Manager_Id" ColumnName="Manager_Id" />
+                <ScalarProperty Name="Manager_Email" ColumnName="Manager_Email" />
+                <ScalarProperty Name="Deactive" ColumnName="Deactive" />
+                <ScalarProperty Name="Plant_Id" ColumnName="Plant_Id" />
+                <ScalarProperty Name="Department_Name" ColumnName="Department_Name" />
+                <ScalarProperty Name="Department_Id" ColumnName="Department_Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

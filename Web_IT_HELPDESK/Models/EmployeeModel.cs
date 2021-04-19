@@ -28,8 +28,8 @@ namespace Web_IT_HELPDESK.Models
             ServiceDeskEntities en = new ServiceDeskEntities();
 
             var employeeFields = en.Employee_New
-                .Join(en.Departments, e => e.Department_ID, d => d.Department_ID, (e, d) => new { e, d })
-                .Where(grp => grp.d.Plant_ID == PlantId)
+                .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
+                .Where(grp => grp.d.Plant_Id == PlantId)
                 .Select(grp => new EmployeeFieldModel { Emp_CJ = grp.e.Emp_CJ, EmployeeName = grp.e.Employee_Name })
                 .Distinct()
                 .ToList();

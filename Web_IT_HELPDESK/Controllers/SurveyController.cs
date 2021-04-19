@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Web.Mvc;
 using Web_IT_HELPDESK.Models;
+using Web_IT_HELPDESK.Models.Extensions;
 
 namespace Web_IT_HELPDESK.Controllers
 {
@@ -18,7 +19,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // POST: Survey/SecuritySurvey
-        [Authorize]
+        [CustomAuthorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult SecuritySurvey(IEnumerable<string> answertexts, IEnumerable<string> answerRadios)
@@ -74,7 +75,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: Survey/CanteenSurvey
-        [Authorize]
+        [CustomAuthorize]
         public ActionResult CanteenSurvey()
         {
             var questions = db.QUESTIONs.Where(i => i.DEL != true && i.NOTE == "CanteenSurvey");
@@ -83,7 +84,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // POST: Survey/CanteenSurvey
-        [Authorize]
+        [CustomAuthorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CanteenSurvey(IEnumerable<string> answertexts, IEnumerable<string> answerRadios)

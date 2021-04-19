@@ -57,7 +57,7 @@ namespace Web_IT_HELPDESK.Controllers
                 //gởi mail đến trưởng phòng
                 string result, status = "";
 
-                var dept = from i in storeDB.Departments where i.Department_ID == ApplicationUser.Instance.GetDepartmentID() select i.Department_Name;
+                var dept = from i in storeDB.Departments where i.Department_Id == ApplicationUser.Instance.GetDepartmentID() select i.Department_Name;
                 subject = "[Duyệt] - Thông tin yêu cầu văn phòng phẩm";
                 result = string.Format("Thông báo! <br /> <br />" +
                                                   "Đã gởi email xác nhận!  <br />" +

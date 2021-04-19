@@ -27,11 +27,14 @@ namespace Web_IT_HELPDESK.Controllers
             bool currUserIsManager = ApplicationUser.Instance.isAdmin;
             ViewBag.currUserIsManager = currUserIsManager;
 
-            var depts = en.Departments.Where(d => d.Plant_ID == currUserPlantId && d.Deactive != true).Select(d => new DepartmentViewModel
-            {
-                Department_Id = d.Department_ID,
-                Department_Name = d.Department_Name
-            }).OrderByDescending(d => d.Department_Name).ToList();
+            var depts = en.Departments
+                .Where(d => d.Plant_Id == currUserPlantId && d.Deactive != true)
+                .Select(d => new DepartmentViewModel
+                {
+                    Department_Id = d.Department_Id,
+                    Department_Name = d.Department_Name
+                })
+                .OrderByDescending(d => d.Department_Name).ToList();
             ViewBag.Departments = depts;
             ViewBag.Selected_depts = new List<string>();
 
@@ -63,7 +66,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // POST: Index
-        [Authorize]
+        [CustomAuthorize]
         [HttpPost]
         public ActionResult Index(string search_, DateTime? date_, ICollection<string> v_depts, string v_contract_type, int daynum_)
         {
@@ -72,10 +75,10 @@ namespace Web_IT_HELPDESK.Controllers
 
             ViewBag.currUserIsManager = currUserIsManager;
 
-            var depts = en.Departments.Where(d => d.Plant_ID == currUserPlantId && d.Deactive == false)
+            var depts = en.Departments.Where(d => d.Plant_Id == currUserPlantId && d.Deactive == false)
                .Select(d => new DepartmentViewModel
                {
-                   Department_Id = d.Department_ID,
+                   Department_Id = d.Department_Id,
                    Department_Name = d.Department_Name
                }
                ).OrderByDescending(d => d.Department_Name).ToList();

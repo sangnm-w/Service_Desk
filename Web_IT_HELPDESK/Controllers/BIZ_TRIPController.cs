@@ -43,7 +43,10 @@ namespace Web_IT_HELPDESK.Controllers
             bool currUserIsManager = ApplicationUser.Instance.isAdmin;
 
             string deptIdHrAdmin = currUserPlantId + "S0002";
-            bool currUserIsHrAdmin = en.Departments.FirstOrDefault(d => d.Plant_ID == currUserPlantId && d.Department_ID == deptIdHrAdmin && d.Manager_ID == currUserID) != null ? true : false;
+            bool currUserIsHrAdmin = en.Departments
+                .FirstOrDefault(d => d.Plant_Id == currUserPlantId 
+                                  && d.Department_Id == deptIdHrAdmin
+                                  && d.Manager_Id == currUserID) != null ? true : false;
 
             var bizz = en.BIZ_TRIP.Where(i => i.DEL != true
                                            && i.DEPT == currUserDeptId
@@ -77,7 +80,10 @@ namespace Web_IT_HELPDESK.Controllers
             bool currUserIsManager = ApplicationUser.Instance.isAdmin;
 
             string deptIdHrAdmin = currUserPlantId + "S0002";
-            bool currUserIsHrAdmin = en.Departments.FirstOrDefault(d => d.Plant_ID == currUserPlantId && d.Department_ID == deptIdHrAdmin && d.Manager_ID == currUserID) != null ? true : false;
+            bool currUserIsHrAdmin = en.Departments
+                .FirstOrDefault(d => d.Plant_Id == currUserPlantId 
+                                  && d.Department_Id == deptIdHrAdmin 
+                                  && d.Manager_Id == currUserID) != null ? true : false;
 
             var bizz = en.BIZ_TRIP.Where(i => i.DEL != true
                                            && i.DEPT == currUserDeptId
@@ -202,8 +208,8 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.EMPNO = currUserID;
             ViewBag.DepartmentId = biz_trip.DEPT;
             ViewBag.PLANT = biz_trip.PLANT;
-            ViewBag.DepartmentName = en.Departments.Where(o => o.Department_ID == biz_trip.DEPT
-                                                         && o.Plant_ID == biz_trip.PLANT).Select(i => i.Department_Name).SingleOrDefault();
+            ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == biz_trip.DEPT
+                                                         && o.Plant_Id == biz_trip.PLANT).Select(i => i.Department_Name).SingleOrDefault();
 
             ViewBag.User_name = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).Employee_Name;
 
@@ -222,8 +228,8 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.EMPNO = currUserID;
             ViewBag.DepartmentId = biz_trip.DEPT;
             ViewBag.PLANT = biz_trip.PLANT;
-            ViewBag.DepartmentName = en.Departments.Where(o => o.Department_ID == biz_trip.DEPT
-                                                         && o.Plant_ID == biz_trip.PLANT).Select(i => i.Department_Name).SingleOrDefault();
+            ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == biz_trip.DEPT
+                                                         && o.Plant_Id == biz_trip.PLANT).Select(i => i.Department_Name).SingleOrDefault();
             ViewBag.User_name = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).Employee_Name;
 
             ViewBag.ModalState = "false";
@@ -234,7 +240,7 @@ namespace Web_IT_HELPDESK.Controllers
         public ActionResult dept_confirm(BIZ_TRIP biz_trip, HttpPostedFileBase signatureimage, bool approved)
         {
             string result = "";
-            var dept = from i in en.Departments where i.Department_ID == biz_trip.DEPT && i.Plant_ID == biz_trip.PLANT select i.Department_Name;
+            var dept = from i in en.Departments where i.Department_Id == biz_trip.DEPT && i.Plant_Id == biz_trip.PLANT select i.Department_Name;
 
             biz_trip.DEPT_CONFIRM = approved;
             var existingCart = en.BIZ_TRIP.Find(biz_trip.ID);
@@ -315,8 +321,8 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.EMPNO = currUserID;
             ViewBag.DepartmentId = biz_trip.DEPT;
             ViewBag.PLANT = biz_trip.PLANT;
-            ViewBag.DepartmentName = en.Departments.Where(o => o.Department_ID == biz_trip.DEPT
-                                                         && o.Plant_ID == biz_trip.PLANT).Select(i => i.Department_Name).SingleOrDefault();
+            ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == biz_trip.DEPT
+                                                         && o.Plant_Id == biz_trip.PLANT).Select(i => i.Department_Name).SingleOrDefault();
             ViewBag.User_name = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).Employee_Name;
 
             ViewBag.ModalState = "false";
@@ -327,7 +333,7 @@ namespace Web_IT_HELPDESK.Controllers
         public ActionResult bod_confirm(BIZ_TRIP biz_trip, HttpPostedFileBase BODsignatureimage, bool BODapproved)
         {
             string result = "";
-            var dept = from i in en.Departments where i.Department_ID == biz_trip.DEPT && i.Plant_ID == biz_trip.PLANT select i.Department_Name;
+            var dept = from i in en.Departments where i.Department_Id == biz_trip.DEPT && i.Plant_Id == biz_trip.PLANT select i.Department_Name;
 
             biz_trip.BOD_CONFIRM = BODapproved;
             var existingCart = en.BIZ_TRIP.Find(biz_trip.ID);
@@ -407,8 +413,8 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.EMPNO = currUserID;
             ViewBag.DepartmentId = biz_trip.DEPT;
             ViewBag.PLANT = biz_trip.PLANT;
-            ViewBag.DepartmentName = en.Departments.Where(o => o.Department_ID == biz_trip.DEPT
-                                                         && o.Plant_ID == biz_trip.PLANT).Select(i => i.Department_Name).SingleOrDefault();
+            ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == biz_trip.DEPT
+                                                         && o.Plant_Id == biz_trip.PLANT).Select(i => i.Department_Name).SingleOrDefault();
             ViewBag.User_name = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).Employee_Name;
 
             ViewBag.ModalState = "false";
@@ -419,7 +425,7 @@ namespace Web_IT_HELPDESK.Controllers
         public ActionResult hr_confirm(BIZ_TRIP biz_trip, HttpPostedFileBase HRsignatureimage, bool HRapproved)
         {
             string result = "";
-            var dept = from i in en.Departments where i.Department_ID == biz_trip.DEPT && i.Plant_ID == biz_trip.PLANT select i.Department_Name;
+            var dept = from i in en.Departments where i.Department_Id == biz_trip.DEPT && i.Plant_Id == biz_trip.PLANT select i.Department_Name;
             biz_trip.HR_CONFIRM = HRapproved;
             var existingCart = en.BIZ_TRIP.Find(biz_trip.ID);
             if (biz_trip.HR_CONFIRM == true)
@@ -497,8 +503,8 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.EMPNO = currUserID;
             ViewBag.DepartmentId = biz_trip.DEPT;
             ViewBag.PLANT = biz_trip.PLANT;
-            ViewBag.DepartmentName = en.Departments.Where(o => o.Department_ID == biz_trip.DEPT
-                                                         && o.Plant_ID == biz_trip.PLANT).Select(i => i.Department_Name).SingleOrDefault();
+            ViewBag.DepartmentName = en.Departments.Where(o => o.Department_Id == biz_trip.DEPT
+                                                         && o.Plant_Id == biz_trip.PLANT).Select(i => i.Department_Name).SingleOrDefault();
             ViewBag.User_name = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).Employee_Name;
 
             ViewBag.ModalState = "false";
@@ -636,7 +642,7 @@ namespace Web_IT_HELPDESK.Controllers
             string linkConfirm = "";
 
             string dept_name = DepartmentModel.Instance.getDeptNameByDeptId(biz_trip.DEPT);
-            bool IsManager = en.Departments.FirstOrDefault(d => d.Plant_ID == biz_trip.PLANT && d.Department_ID == biz_trip.DEPT && d.Manager_ID == biz_trip.EMPNO) != null ? true : false;
+            bool IsManager = en.Departments.FirstOrDefault(d => d.Plant_Id == biz_trip.PLANT && d.Department_Id == biz_trip.DEPT && d.Manager_Id == biz_trip.EMPNO) != null ? true : false;
 
             //Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO);
             Employee_New userRequest = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO);
@@ -733,7 +739,7 @@ namespace Web_IT_HELPDESK.Controllers
                     DEPT_CONFIRM_IMAGE = b.DEPT_CONFIRM_IMAGE,
                     HR_CONFIRM_IMAGE = b.HR_CONFIRM_IMAGE,
                     POSITION = b.Employee.Job,
-                    DEPTNAME = en.Departments.FirstOrDefault(d => d.Plant_ID == b.PLANT && d.Department_ID == b.DEPT).Department_Name
+                    DEPTNAME = en.Departments.FirstOrDefault(d => d.Plant_Id == b.PLANT && d.Department_Id == b.DEPT).Department_Name
                 });
 
                 ReportDataSource rd = new ReportDataSource("DataSetBizTrip", lstBizTrip);

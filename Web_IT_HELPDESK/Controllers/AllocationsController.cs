@@ -82,7 +82,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.Receiver = SLIEmployee;
 
             List<SelectListItem> Department_Id = new List<SelectListItem>();
-            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_ID == empPlantID), "Department_Id", "Department_Name", ""));
+            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_Id == empPlantID), "Department_Id", "Department_Name", ""));
             Department_Id.Insert(0, new SelectListItem { Text = "None", Value = "" });
             ViewBag.Department_Id = Department_Id;
 
@@ -136,7 +136,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.Receiver = SLIEmployee;
 
             List<SelectListItem> Department_Id = new List<SelectListItem>();
-            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_ID == empPlantID), "Department_Id", "Department_Name", ""));
+            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_Id == empPlantID), "Department_Id", "Department_Name", ""));
             Department_Id.Insert(0, new SelectListItem { Text = "None", Value = "" });
             ViewBag.Department_Id = Department_Id;
 
@@ -170,7 +170,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.Receiver = Receiver;
 
             List<SelectListItem> Department_Id = new List<SelectListItem>();
-            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_ID == empPlantID), "Department_Id", "Department_Name", allocation.Department_Id));
+            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_Id == empPlantID), "Department_Id", "Department_Name", allocation.Department_Id));
             Department_Id.Insert(0, new SelectListItem { Text = "None", Value = "" });
             ViewBag.Department_Id = Department_Id;
 
@@ -219,7 +219,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.Receiver = Receiver;
 
             List<SelectListItem> Department_Id = new List<SelectListItem>();
-            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_ID == empPlantID), "Department_Id", "Department_Name", allocation.Department_Id));
+            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_Id == empPlantID), "Department_Id", "Department_Name", allocation.Department_Id));
             Department_Id.Insert(0, new SelectListItem { Text = "None", Value = "" });
             ViewBag.Department_Id = Department_Id;
 
@@ -330,7 +330,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.Receiver = SLIEmployee;
 
             List<SelectListItem> Department_Id = new List<SelectListItem>();
-            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_ID == empPlantID), "Department_Id", "Department_Name", ""));
+            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_Id == empPlantID), "Department_Id", "Department_Name", ""));
             Department_Id.Insert(0, new SelectListItem { Text = "None", Value = "" });
 
             ViewBag.Department_Id = Department_Id;
@@ -386,7 +386,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.Receiver = SLIEmployee;
 
             List<SelectListItem> Department_Id = new List<SelectListItem>();
-            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_ID == empPlantID), "Department_Id", "Department_Name", ""));
+            Department_Id.AddRange(new SelectList(en.Departments.Where(d => d.Plant_Id == empPlantID), "Department_Id", "Department_Name", ""));
             Department_Id.Insert(0, new SelectListItem { Text = "None", Value = "" });
 
             ViewBag.Department_Id = Department_Id;
