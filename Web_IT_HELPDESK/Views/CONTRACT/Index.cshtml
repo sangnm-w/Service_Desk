@@ -84,7 +84,7 @@
                             <label class="control-label">Day number</label>
                             @*<input type="number" id="daynum" name="daynum_" class="form-control" style="background:#A9BCF5;" value="30" max="999999" required>*@
 
-                            @Html.Editor("daynum_", new { htmlAttributes = new { id = "daynum", @type = "number", @min = "0", @max = "365", @class = "form-control", style = "background:#A9BCF5;", required = "required" } })
+                            @Html.Editor("daynum_", new { htmlAttributes = new { id = "daynum", @type = "number", @min = "0", @max = "1095", @class = "form-control", style = "background:#A9BCF5;", required = "required" } })
                         </div>
                     </div>
                 </div>
@@ -131,6 +131,9 @@
                             @Html.DisplayNameFor(model => model.DATE)
                         </th>
                         <th>
+                            @Html.DisplayNameFor(model => model.DATE_MATURITY)
+                        </th>
+                        <th>
                             @Html.DisplayNameFor(model => model.CONTRACTNAME)
                         </th>
                         <th>
@@ -173,13 +176,16 @@
                                 @Html.DisplayFor(modelItem => item.DATE)
                             </td>
                             <td>
+                                @Html.DisplayFor(modelItem => item.DATE_MATURITY)
+                            </td>
+                            <td>
                                 @Html.DisplayFor(modelItem => item.CONTRACTNAME)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.USER_CREATE)
                             </td>
                             <td>
-                                @if (item.CONTENT != null)
+                                @if (!string.IsNullOrWhiteSpace(item.NOTE))
                                 {
                                     @Html.ActionLink("Contract File", "Get_file", new { con_id = item.ID }, new { @class = "button" })
                                 }
@@ -236,7 +242,8 @@
         $('#dp_date').datepicker({
             format: 'dd/mm/yyyy',
             autoclose: true,
-            todayHighlight: true
+            todayHighlight: true,
+            todayBtn: 'linked'
         });
 
         $('#dp_date').on('changeDate', function () {
@@ -251,7 +258,8 @@
             $("#dp_date").datepicker('setDate', new Date(dp_date_val));
         }
         else {
-            $("#dp_date").datepicker('setDate', 'today');
+            var d = moment(new Date()).add(1, 'year');
+            $("#dp_date").datepicker('setDate', new Date(d));
         }
 
         var daynum_val = $("#daynum").val();

@@ -104,8 +104,19 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        bool? department_confirm = item.Solved;
-                        <tr style="@(department_confirm != true ? "Background-color:#99FF99" : "")">
+                        bool department_confirm = (bool)item.Solved;
+                        bool status_isOpen = item.StatusId == "ST1" ? true : false;
+                        <tr style="Background-color:@if (department_confirm == false)
+                        {
+                            if (!status_isOpen)
+                            {
+                                <text>#f7f757</text>
+                            }
+                            else
+                            {
+                                <text>#99FF99</text>
+                            }
+                        }">
                             <td>
                                 @Html.DisplayFor(modelItem => item.Code)
                             </td>
