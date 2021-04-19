@@ -45,7 +45,7 @@ namespace Web_IT_HELPDESK.Controllers
             DateTime maxDate = DateTime.Now.AddYears(1);
 
             var contract_list = en.CONTRACTs.Where(c => c.DEL != true
-                                                 && c.PLANT == curr_PlantId
+                                                 && c.PLANT == currUserPlantId
                                                  && (minDate < c.DATE_MATURITY && c.DATE_MATURITY <= maxDate));
             if (currUserIsManager != true)
             {
@@ -104,7 +104,7 @@ namespace Web_IT_HELPDESK.Controllers
             DateTime maxDate = date_.Value;
 
             var contract_list = en.CONTRACTs.Where(c => c.DEL != true
-                                                 && c.PLANT == curr_PlantId
+                                                 && c.PLANT == currUserPlantId
                                                  && (minDate < c.DATE_MATURITY && c.DATE_MATURITY <= maxDate));
 
             if (currUserIsManager == true)
@@ -171,7 +171,6 @@ namespace Web_IT_HELPDESK.Controllers
                 CONTRACT contract = _contractviewModel.CONTRACT;
                 contract.ID = Guid.NewGuid();
 
-                contract.CONTENT = contentBinary.ToArray();
                 contract.NOTE = Path.GetFileName(contractFile.FileName);
                 contract.DEPARTMENTID = currUserDeptId;
                 contract.USER_CREATE = currUserId;
@@ -189,7 +188,6 @@ namespace Web_IT_HELPDESK.Controllers
                 {
                     item.ContractSub.ID = Guid.NewGuid();
                     item.ContractSub.CONTRACTID = contract_id;
-                    item.ContractSub.CONTENT = subcontentBinary.ToArray();
                     item.ContractSub.NOTE = Path.GetFileName(item.ContentSubFile.FileName);
                     item.ContractSub.USER_CREATE = currUserId;
                     item.ContractSub.PLANT = currUserPlantId;
