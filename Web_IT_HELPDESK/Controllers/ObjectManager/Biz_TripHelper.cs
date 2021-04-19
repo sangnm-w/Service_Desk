@@ -22,7 +22,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             string subject = "";
             string body = "";
             Content_Email(biztrip, level_confirm, linkConfirm, out subject, out body);
-            return InformationHelper.Instance.Send_Mail(level_confirm, subject, body, userRequest);
+            return InformationHelper.Instance.Send_Mail(level_confirm, subject, body, userRequest.Emp_CJ);
         }
 
         private void Content_Email(BIZ_TRIP biztrip, int level, string linkConfirm, out string subject, out string body)
@@ -30,7 +30,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             string domainName = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
             subject = "";
             body = "";
-            string departmentName = DepartmentModel.Instance.getDeptName(biztrip.PLANT, biztrip.DEPT);
+            string departmentName = DepartmentModel.Instance.getDeptNameByDeptId(biztrip.DEPT);
             if (level == 1) // Level 1: Department Manager
             {
                 subject = "[Need Confirm by Department Manager ] - Business Trip Registration: " + biztrip.NAME + " - Date: " + biztrip.DATE;

@@ -18,7 +18,9 @@ namespace Web_IT_HELPDESK
         public Department()
         {
             this.Allocations = new HashSet<Allocation>();
-            this.Rights_Management = new HashSet<Rights_Management>();
+            this.Employee_New = new HashSet<Employee_New>();
+            this.Incidents = new HashSet<Incident>();
+            this.Seal_Using = new HashSet<Seal_Using>();
             OnConstructorInit();
         }
         partial void OnConstructorInit();
@@ -26,7 +28,6 @@ namespace Web_IT_HELPDESK
         public string Department_Id { get; set; }
         public string Department_Name { get; set; }
         public string Plant_Id { get; set; }
-        public string Plant_Name { get; set; }
         public Nullable<bool> Deactive { get; set; }
         public string Manager_Email { get; set; }
         public string Manager_Id { get; set; }
@@ -34,7 +35,12 @@ namespace Web_IT_HELPDESK
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Allocation> Allocations { get; set; }
+        public virtual Plant Plant { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Rights_Management> Rights_Management { get; set; }
+        public virtual ICollection<Employee_New> Employee_New { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Incident> Incidents { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Seal_Using> Seal_Using { get; set; }
     }
 }

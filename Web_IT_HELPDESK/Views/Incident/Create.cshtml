@@ -35,10 +35,8 @@
                         @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-sm-2">
-                        @Html.LabelFor(model => model.Plant, "Plant", htmlAttributes: new { @class = "control-label" })
+                        @Html.Label("Plant", htmlAttributes: new { @class = "control-label" })
                         @Html.Editor("Plant Name", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @Value = ViewBag.plantName } })
-                        @Html.HiddenFor(model => model.Plant)
-                        @Html.ValidationMessageFor(model => model.Plant, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-sm-4">
                         @Html.LabelFor(model => model.DepartmentId, "Department", htmlAttributes: new { @class = "control-label" })

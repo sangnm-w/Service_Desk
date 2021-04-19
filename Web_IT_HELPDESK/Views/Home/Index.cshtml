@@ -18,12 +18,24 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->*@
 
-<script>
-    $(function () {
-        $("#tabs").tabs();
-    });
-</script>
-
+<!-- Modal -->
+<div id="messageModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Warning!!!</h4>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center">
+                    <h4><p id="msgNotify">This is message.</p></h4>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-6">
         <div class="content-box-large">
@@ -89,12 +101,26 @@
     </div>
 </div>
 
-
 @section Script {
     <script type="text/javascript">
-        var msg = '@TempData["message"]';
-        if (msg.length) {
-            alert(msg);
-        }
+        $(function () {
+            $("#tabs").tabs();
+        });
+
+        var unAuthorizedMsg = '@TempData["UnAuthorizedMsg"]';
+        var unAuthorized = unAuthorizedMsg.length > 0;
+        //get result message for modal when it show
+        $('#messageModal').on('shown.bs.modal', function (e) {
+            var modal = $(this);
+            var msgPlace = modal.find('.modal-body p#msgNotify');
+            msgPlace.text(unAuthorizedMsg);
+        });
+
+        //set backdrop and show according to UnAuthorized Value
+        $('#messageModal').modal({
+            //backdrop: 'static',
+            //keyboard: false,
+            show: unAuthorized
+        });
     </script>
 }

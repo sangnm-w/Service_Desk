@@ -19,6 +19,8 @@ namespace Web_IT_HELPDESK.ViewModels
         [DisplayName("Department")]
         public string departmentName { get; set; }
 
+        public string plantId { get; set; }
+
         [DisplayName("Plant")]
         public string plantName { get; set; }
     }

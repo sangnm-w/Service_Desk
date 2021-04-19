@@ -35,68 +35,51 @@ namespace Web_IT_HELPDESK.Models
         }
 
 
-        private List<Rights_Management> _rights;
-        public List<Rights_Management> Rights
-        {
-            get
-            {
-                if (_rights == null)
-                {
-                    _rights = entity.Rights_Management.Where(r => r.Employee_Id == sessionUserID).ToList();
-                }
-                return _rights;
-            }
-            private set => _rights = value;
-        }
+        //private List<Rights_Management> _rights;
+        //public List<Rights_Management> Rights
+        //{
+        //    get
+        //    {
+        //        if (_rights == null)
+        //        {
+        //            _rights = entity.Rights_Management.Where(r => r.Employee_Id == sessionUserID).ToList();
+        //        }
+        //        return _rights;
+        //    }
+        //    private set => _rights = value;
+        //}
 
-        private bool? _isAdministrator = null;
-        public bool? isAdministrator
-        {
-            get
-            {
-                if (_isAdministrator == null)
-                {
-                    _isAdministrator = Rights.FirstOrDefault(r => r.Role_Id == 1) != null;
-                }
-                return _isAdministrator;
-            }
-            private set => _isAdministrator = value;
-        }
-
-
-        public bool? hasPermission(string actionName, string moduleName)
-        {
-            if (isAdministrator == true)
-            {
-                return true;
-            }
-
-            List<Rule> userRules = RulesByModuleName(moduleName);
-
-            if (userRules.Count > 0)
-            {
-                return userRules.FirstOrDefault(r => r.Rule_Name == actionName) != null;
-            }
-
-            return false;
-        }
+        //private bool? _isAdministrator = null;
+        //public bool? isAdministrator
+        //{
+        //    get
+        //    {
+        //        if (_isAdministrator == null)
+        //        {
+        //            _isAdministrator = Rights.FirstOrDefault(r => r.Role_Id == 1) != null;
+        //        }
+        //        return _isAdministrator;
+        //    }
+        //    private set => _isAdministrator = value;
+        //}
 
 
-        public List<Rule> RulesByModuleName(string moduleName)
-        {
-            //return entity.Rights_Management
-            //        .Join
-            //        (
-            //            entity.Rules,
-            //            a => a.Rule_Id,
-            //            b => b.Rule_ID,
-            //            (a, b) => new { a, b }
-            //        )
-            //        .Where(temp0 => temp0.b.Module_Name == moduleName && temp0.a.Employee_Id == sessionUserID)
-            //        .Select(temp0 => temp0.b)
-            //        .ToList();
-            return null;
-        }
+        //public bool? hasPermission(string actionName, string moduleName)
+        //{
+        //    if (isAdministrator == true)
+        //    {
+        //        return true;
+        //    }
+
+        //    List<Rule> userRules = RulesByModuleName(moduleName);
+
+        //    if (userRules.Count > 0)
+        //    {
+        //        return userRules.FirstOrDefault(r => r.Rule_Name == actionName) != null;
+        //    }
+
+        //    return false;
+        //}
 
         private static bool sessionUser_Changed()
         {

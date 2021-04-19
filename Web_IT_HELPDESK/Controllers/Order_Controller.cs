@@ -8,6 +8,7 @@ using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Web_IT_HELPDESK.Models.Extensions;
 
 namespace Web_IT_HELPDESK.Controllers
 {
@@ -16,26 +17,13 @@ namespace Web_IT_HELPDESK.Controllers
         //
         // GET: /Order_/
         ServiceDeskEntities en = new ServiceDeskEntities();
-        private string session_emp = System.Web.HttpContext.Current.User.Identity.Name;
+        private string session_emp = ApplicationUser.Instance.EmployeeID;
         private string v_year = "/" + DateTime.Now.ToString("yyyy");
-        //GetPlant_id
-        private string GetPlant_id(string v_emp)
-        {
-            //string plant_id = en.Employees.Where(f => (f.Emp_CJ == v_emp)).Select(f => f.Plant_Id).SingleOrDefault();
-            string plant_id = en.Employee_New.Where(f => (f.Emp_CJ == v_emp)).Select(f => f.Plant_ID).SingleOrDefault();
-            return plant_id;
-        }
-
-        private string GetDept_id(string v_plant_id)
-        {
-            //string dept_id = en.Employees.Where(f => (f.Emp_CJ == session_emp && f.Plant_Id == v_plant_id)).Select(f => f.Department_Id).SingleOrDefault();
-            string dept_id = en.Employee_New.Where(f => (f.Emp_CJ == session_emp && f.Plant_ID == v_plant_id)).Select(f => f.Department_ID).SingleOrDefault();
-            return dept_id;
-        }
+        private string currUserPlantId = ApplicationUser.Instance.GetPlantID();
 
         public ActionResult OrderList()
         {
-            string v_plant = GetPlant_id(session_emp);
+            string v_plant = currUserPlantId;
             IFormatProvider culture = new CultureInfo("en-US", true);
             //string _datetime = DateTime.Now.ToString("MM/yyyy");
             string _datetime = DateTime.Now.ToString("MM");
@@ -81,34 +69,34 @@ namespace Web_IT_HELPDESK.Controllers
                     break;
             }
 
-            if (session_emp.ToLower() == "admin" || session_emp == "D83003" || session_emp == "V78157" 
+            if (session_emp.ToLower() == "admin" || session_emp == "D83003" || session_emp == "V78157"
                              || session_emp == "MK78072" || session_emp == "H88768" || session_emp == "HN91185" || session_emp == "HN92244")
             {
-               return View(en.ORDER_TYPE_VIEW.Where(i => i.OrderDate >= from_date
-                                              && i.OrderDate <= to_date
-                                              && i.Del != true
-                                              && i.Plant == v_plant
-                                              && i.AlbumTypeId != 2).Distinct().ToList());
+                return View(en.ORDER_TYPE_VIEW.Where(i => i.OrderDate >= from_date
+                                               && i.OrderDate <= to_date
+                                               && i.Del != true
+                                               && i.Plant == v_plant
+                                               && i.AlbumTypeId != 2).Distinct().ToList());
             }
-            else return View(en.ORDER_TYPE_VIEW.Where(i => i.OrderDate >= from_date 
-                                               && i.OrderDate <= to_date 
+            else return View(en.ORDER_TYPE_VIEW.Where(i => i.OrderDate >= from_date
+                                               && i.OrderDate <= to_date
                                                && i.Del != true
                                                && i.EmployeeID == session_emp.ToLower()
                                                && i.Plant == v_plant
                                                && i.AlbumTypeId != 2).Distinct().ToList());
 
         }
-        
+
 
 
         private DateTime to_date { get; set; }
         private DateTime from_date { get; set; }
-        [Authorize]
+        [CustomAuthorize]
         [HttpPost]
         public ActionResult OrderList(string searchString, string _datetime)
         {
             //http://www.asp.net/mvc/overview/getting-started/getting-started-with-ef-using-mvc/sorting-filtering-and-paging-with-the-entity-framework-in-an-asp-net-mvc-application
-            string v_plant = GetPlant_id(session_emp);
+            string v_plant = currUserPlantId;
             //string dept_id = Convert.ToString(GetDept_id(v_plant));
             IFormatProvider culture = new CultureInfo("en-US", true);
             from_date = DateTime.ParseExact("01/" + _datetime + " 00:00:01", "dd/MM/yyyy HH:mm:ss", culture);
@@ -201,7 +189,7 @@ namespace Web_IT_HELPDESK.Controllers
             }*/
 
 
-            if (session_emp.ToLower() != "admin") 
+            if (session_emp.ToLower() != "admin")
             {
                 return View(en.ORDER_TYPE_VIEW.Where(i => i.OrderDate >= from_date
                                                     && i.OrderDate <= to_date
@@ -393,7 +381,7 @@ namespace Web_IT_HELPDESK.Controllers
                     "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";
 
             Information inf = new Information();
-            inf.email_send("user_email", "pass", GetDept_id_by_oder(Convert.ToInt32(Session["OrderId"].ToString())), subject, body, status, GetPlant_id(session_emp));
+            inf.email_send("user_email", "pass", GetDept_id_by_oder(Convert.ToInt32(Session["OrderId"].ToString())), subject, body, status, currUserPlantId);
             //~~~~~~~~~~~~~~~~~~~~~
             //return RedirectToAction("Index", "SealUsing");
 
@@ -450,7 +438,7 @@ namespace Web_IT_HELPDESK.Controllers
                     "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";
 
             Information inf = new Information();
-            inf.email_send("user_email", "pass", GetDept_id_by_oder(v_getoder.OrderId), subject, body, status, GetPlant_id(session_emp));
+            inf.email_send("user_email", "pass", GetDept_id_by_oder(v_getoder.OrderId), subject, body, status, currUserPlantId);
             //~~~~~~~~~~~~~~~~~~~~~
 
             return RedirectToAction("OrderList", "Order_");
@@ -493,7 +481,7 @@ namespace Web_IT_HELPDESK.Controllers
 
                 Information inf = new Information();
                 inf.email_send("user_email", "pass", GetDept_id_by_oder(orderid) //"0000"
-                                                  , subject, body, status, GetPlant_id(session_emp));
+                                                  , subject, body, status, currUserPlantId);
             }
             catch
             {
@@ -555,12 +543,12 @@ namespace Web_IT_HELPDESK.Controllers
             GridView gv = new GridView();
             var list =
                   from t in en.OrderDetails
-                  //from j in en.Order_
+                      //from j in en.Order_
                   join j in en.Order_ on t.OrderId equals j.OrderId
                   join ab in en.Albums on t.AlbumId equals ab.AlbumId //into pp
                   where (j.Del != true && t.Quantity != 0 && (j.EmployeeID != "admin" || j.EmployeeID != "D83003" || j.EmployeeID != "V78157")
                                          && j.OrderDate >= from_date && j.OrderDate <= to_date
-                                         && ab.AlbumTypeId ==1)
+                                         && ab.AlbumTypeId == 1)
                   //where //t.OrderId == j.OrderId && 
                   //       j.Del != true && t.Quantity != 0 && j.Emp_CJ != "admin" && j.OrderDate >= from_date && j.OrderDate <= to_date 
                   group t by new
@@ -682,8 +670,8 @@ namespace Web_IT_HELPDESK.Controllers
             string v_todate = to_date.ToString("s", culture);
             GridView gv = new GridView();
             var list =
-                //en.func_report_detail(v_fromdate, v_todate).ToList();
-                            en.func_report_detail(from_date, to_date, GetPlant_id(session_emp)).ToList();
+                            //en.func_report_detail(v_fromdate, v_todate).ToList();
+                            en.func_report_detail(from_date, to_date, currUserPlantId).ToList();
             //.Where(t => t. >= from_date && t.ORDERDATE <= to_date).ToList();
 
             gv.DataSource = list.ToList();
@@ -786,7 +774,7 @@ namespace Web_IT_HELPDESK.Controllers
 
 
                     var list = from t in en.OrderDetails
-                               join j in en.Order_ on t.OrderId equals j.OrderId 
+                               join j in en.Order_ on t.OrderId equals j.OrderId
                                into pp
                                from j in pp.DefaultIfEmpty()
                                where j.OrderId == id
@@ -827,12 +815,15 @@ namespace Web_IT_HELPDESK.Controllers
                     //var list = en.OrderDetails.ToList().Where(i => i.OrderId == id);
 
 
-                    string v_department_name = en.Departments.Where(o => o.Department_Id == list.Select(i => i.DepatmentName).FirstOrDefault()
-                                                                        && o.Plant_Id == list.Select(i => i.Plant).FirstOrDefault()).Select(e => e.Department_Name).SingleOrDefault();
+                    string v_department_name = en.Departments
+                        .Where(o => o.Department_Id == list.Select(i => i.DepatmentName).FirstOrDefault()
+                                 && o.Plant_Id == list.Select(i => i.Plant).FirstOrDefault())
+                        .Select(e => e.Department_Name)
+                        .SingleOrDefault();
 
 
                     //ReportParameter p1 = new ReportParameter("p_department_name", v_department_name);
-                     
+
 
                     ReportDataSource rd = new ReportDataSource("DataSetReport", list);
                     lr.DataSources.Add(rd);

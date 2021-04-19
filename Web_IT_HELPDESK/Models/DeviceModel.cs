@@ -113,7 +113,7 @@ namespace Web_IT_HELPDESK.Models
             ServiceDeskEntities en = new ServiceDeskEntities();
             var devices = en.Devices.Include(d => d.CONTRACT).Include(d => d.Device_Type);
 
-            var plants = en.Departments.Select(p => new { p.Plant_Id, p.Plant_Name }).Distinct();
+            var plants = en.Plants.Select(p => new { p.Plant_Id, p.Plant_Name }).Distinct();
 
             var dvm = devices
                 .Join(
@@ -133,7 +133,7 @@ namespace Web_IT_HELPDESK.Models
             ServiceDeskEntities en = new ServiceDeskEntities();
             var devices = en.Devices.Include(d => d.CONTRACT).Include(d => d.Device_Type).Where(d => d.Plant_Id == plantId);
 
-            var plants = en.Departments.Select(p => new { p.Plant_Id, p.Plant_Name }).Distinct();
+            var plants = en.Plants.Select(p => new { p.Plant_Id, p.Plant_Name }).Distinct();
 
             var dvm = devices
                 .Join(
@@ -153,7 +153,7 @@ namespace Web_IT_HELPDESK.Models
             ServiceDeskEntities en = new ServiceDeskEntities();
             List<DeviceViewModel.QRDevices> res = new List<DeviceViewModel.QRDevices>();
 
-            string devicePlantName = DepartmentModel.Instance.getPlantName(plantID);
+            string devicePlantName = DepartmentModel.Instance.getPlantNameByPlantId(plantID);
             var devices = en.Devices.Where(model => model.Plant_Id == plantID).OrderBy(model=>model.Device_Code).ToList();
 
             foreach (Device d in devices)
@@ -176,7 +176,7 @@ namespace Web_IT_HELPDESK.Models
                 {
                     //string allocationEmpName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).EmployeeName;
                     string allocationEmpName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).Employee_Name;
-                    string allocationDeptName = DepartmentModel.Instance.getDeptName(allocation.Plant_Id, allocation.Department_Id);
+                    string allocationDeptName = DepartmentModel.Instance.getDeptNameByDeptId(allocation.Department_Id);
                     string allocationDeliveryDate = allocation.Delivery_Date?.ToString("dd/MM/yyyy");
                     QRText = QRText
                          + "- Employee: " + allocationEmpName + " \n"

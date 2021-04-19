@@ -21,7 +21,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
         {
             string deviceQRPath;
 
-            string devicePlantName = DepartmentModel.Instance.getPlantName(device.Plant_Id);
+            string devicePlantName = DepartmentModel.Instance.getPlantNameByPlantId(device.Plant_Id);
 
             string QRText = "- Plant: " + devicePlantName + " \n"
                           + "- Device Code: " + device.Device_Code + " \n"

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
+using Web_IT_HELPDESK.Models.Extensions;
 
 namespace Web_IT_HELPDESK.Controllers
 {
@@ -73,7 +74,7 @@ namespace Web_IT_HELPDESK.Controllers
             else return View();
         }
 
-        [Authorize]
+        [CustomAuthorize]
         [HttpPost]
         public ActionResult LaborContractIndex(string search_, DateTime? fromdate_, DateTime? todate_)//, DateTime fromdate_, DateTime todate_)
         {

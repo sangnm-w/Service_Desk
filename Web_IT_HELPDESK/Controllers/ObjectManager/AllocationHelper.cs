@@ -27,11 +27,11 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             ServiceDeskEntities en = new ServiceDeskEntities();
             Device device = en.Devices.FirstOrDefault(d => d.Device_Id == allocation.Device_Id);
 
-            string devicePlantName = DepartmentModel.Instance.getPlantName(device.Plant_Id);
+            string devicePlantName = DepartmentModel.Instance.getPlantNameByPlantId(device.Plant_Id);
 
             //string allocationEmpName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).EmployeeName;
             string allocationEmpName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).Employee_Name;
-            string allocationDeptName = DepartmentModel.Instance.getDeptName(allocation.Plant_Id, allocation.Department_Id);
+            string allocationDeptName = DepartmentModel.Instance.getDeptNameByDeptId(allocation.Department_Id);
             string allocationDeliveryDate = allocation.Delivery_Date?.ToString("dd/MM/yyyy");
 
             string QRText = "- Plant: " + devicePlantName + " \n"
