@@ -26,10 +26,11 @@ namespace Web_IT_HELPDESK.ViewModels
                 Date_signature = DateTime.Now;
                 Del = false;
 
-                Employee_ID = ApplicationUser.Instance.EmployeeID;
-                Employee_name = ApplicationUser.Instance.EmployeeName;
-                DepartmentId = ApplicationUser.Instance.GetDepartmentID();
-                DeptName = ApplicationUser.Instance.GetDepartmentName();
+                ApplicationUser applicationUser = new ApplicationUser();
+                Employee_ID = applicationUser.EmployeeID;
+                Employee_name = applicationUser.EmployeeName;
+                DepartmentId = applicationUser.GetDepartmentID();
+                DeptName = applicationUser.GetDepartmentName();
             }
 
             public Seal_Using CreateSealUsing_To_SealUsing(Seal_Using su)
