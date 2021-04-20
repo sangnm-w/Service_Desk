@@ -28,8 +28,8 @@ namespace Web_IT_HELPDESK.Controllers
         //GetPlant_id
         private string GetPlant_id(string v_emp)
         {
-            //string plant_id = en.Employees.Where(f => (f.EmployeeID == v_emp)).Select(f => f.Plant_Id).SingleOrDefault();
-            string plant_id = ApplicationUser.Instance.GetPlantID();
+            ApplicationUser _appUser = new ApplicationUser();
+            string plant_id = _appUser.GetPlantID();
             return plant_id;
         }
 

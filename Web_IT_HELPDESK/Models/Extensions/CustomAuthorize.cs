@@ -9,11 +9,15 @@ namespace Web_IT_HELPDESK.Models.Extensions
 {
     public class CustomAuthorizeAttribute : AuthorizeAttribute
     {
-        ServiceDeskEntities en = new ServiceDeskEntities();
+        public ServiceDeskEntities en { get; set; }
+        public ApplicationUser _appUser { get; set; }
+
         private readonly string[] allowedroles;
         public CustomAuthorizeAttribute(params string[] roles)
         {
-            this.allowedroles = roles;
+            en = new ServiceDeskEntities();
+            _appUser = new ApplicationUser();
+            allowedroles = roles;
         }
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
@@ -28,7 +32,7 @@ namespace Web_IT_HELPDESK.Models.Extensions
                 return false;
             }
 
-            bool isAdmin = ApplicationUser.Instance.isAdmin;
+            bool isAdmin = _appUser.isAdmin;
             if (isAdmin)
                 return true;
 
@@ -37,12 +41,12 @@ namespace Web_IT_HELPDESK.Models.Extensions
             string currentController = rd.GetRequiredString("controller");
             string currentArea = rd.Values["area"] as string;
 
-            List<Role> userRoles = ApplicationUser.Instance.GetRoles();
+            List<Role> userRoles = _appUser.GetRoles();
 
             if (userRoles.Count() <= 0)
                 return false;
 
-            List<Rule> validRules = ApplicationUser.Instance.GetRules(userRoles);
+            List<Rule> validRules = _appUser.GetRules(userRoles);
 
             if (validRules.Count() <= 0)
                 return false;

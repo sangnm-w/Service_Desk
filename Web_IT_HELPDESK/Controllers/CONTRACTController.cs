@@ -16,15 +16,26 @@ namespace Web_IT_HELPDESK.Controllers
 {
     public class CONTRACTController : Controller
     {
-        ServiceDeskEntities en = new ServiceDeskEntities();
-        private string currUserId = ApplicationUser.Instance.EmployeeID;
-        private string currUserPlantId = ApplicationUser.Instance.GetPlantID();
-        private string currUserDeptId = ApplicationUser.Instance.GetDepartmentID();
+        public ServiceDeskEntities en { get; set; }
+        public ApplicationUser _appUser { get; set; }
+        public string currUserId { get; set; }
+        public string currUserPlantId { get; set; }
+        public string currUserDeptId { get; set; }
+
+        public CONTRACTController()
+        {
+            en = new ServiceDeskEntities();
+            _appUser = new ApplicationUser();
+            currUserId = _appUser.EmployeeID;
+            currUserPlantId = _appUser.GetPlantID();
+            currUserDeptId = _appUser.GetDepartmentID();
+        }
+
         // GET: Index
         [CustomAuthorize]
         public ActionResult Index()
         {
-            bool currUserIsManager = ApplicationUser.Instance.isAdmin;
+            bool currUserIsManager = _appUser.isAdmin;
             ViewBag.currUserIsManager = currUserIsManager;
 
             var depts = en.Departments
@@ -45,7 +56,7 @@ namespace Web_IT_HELPDESK.Controllers
             DateTime maxDate = DateTime.Now.AddYears(1);
 
             var contract_list = en.CONTRACTs.Where(c => c.DEL != true
-                                                 && c.PLANT == curr_PlantId
+                                                 && c.PLANT == currUserPlantId
                                                  && (minDate < c.DATE_MATURITY && c.DATE_MATURITY <= maxDate));
             if (currUserIsManager != true)
             {
@@ -73,8 +84,7 @@ namespace Web_IT_HELPDESK.Controllers
         [HttpPost]
         public ActionResult Index(string search_, DateTime? date_, ICollection<string> v_depts, string v_contract_type, int daynum_)
         {
-            string currUserPlantId = ApplicationUser.Instance.GetPlantID();
-            bool currUserIsManager = ApplicationUser.Instance.isAdmin;
+            bool currUserIsManager = _appUser.isAdmin;
 
             ViewBag.currUserIsManager = currUserIsManager;
 
@@ -104,7 +114,7 @@ namespace Web_IT_HELPDESK.Controllers
             DateTime maxDate = date_.Value;
 
             var contract_list = en.CONTRACTs.Where(c => c.DEL != true
-                                                 && c.PLANT == curr_PlantId
+                                                 && c.PLANT == currUserPlantId
                                                  && (minDate < c.DATE_MATURITY && c.DATE_MATURITY <= maxDate));
 
             if (currUserIsManager == true)
@@ -171,7 +181,6 @@ namespace Web_IT_HELPDESK.Controllers
                 CONTRACT contract = _contractviewModel.CONTRACT;
                 contract.ID = Guid.NewGuid();
 
-                contract.CONTENT = contentBinary.ToArray();
                 contract.NOTE = Path.GetFileName(contractFile.FileName);
                 contract.DEPARTMENTID = currUserDeptId;
                 contract.USER_CREATE = currUserId;
@@ -189,7 +198,6 @@ namespace Web_IT_HELPDESK.Controllers
                 {
                     item.ContractSub.ID = Guid.NewGuid();
                     item.ContractSub.CONTRACTID = contract_id;
-                    item.ContractSub.CONTENT = subcontentBinary.ToArray();
                     item.ContractSub.NOTE = Path.GetFileName(item.ContentSubFile.FileName);
                     item.ContractSub.USER_CREATE = currUserId;
                     item.ContractSub.PLANT = currUserPlantId;
@@ -355,7 +363,7 @@ namespace Web_IT_HELPDESK.Controllers
             string filter_contractType = filter_Contracts["filter_contractType"] != null ? filter_Contracts["filter_contractType"].ToString() : "ALL";
             int filter_daynum = filter_Contracts["filter_daynum"] != null ? Convert.ToInt32(filter_Contracts["filter_daynum"]) : 365;
 
-            bool currUserIsManager = ApplicationUser.Instance.IsManager;
+            bool currUserIsManager = _appUser.IsManager;
             var contracts = en.CONTRACTs.Where(c => c.DEL != true
                                      && c.PLANT == currUserPlantId
                                      && filter_date <= DbFunctions.AddDays(c.DATE, filter_daynum)).ToList();

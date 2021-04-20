@@ -13,12 +13,18 @@ namespace Web_IT_HELPDESK.Controllers
 {
     public class ContactsController : Controller
     {
-        ServiceDeskEntities en = new ServiceDeskEntities();
+      public ServiceDeskEntities en { get; set; }
+        public ApplicationUser _appUser { get; set; }
+        public ContactsController()
+        {
+            en = new ServiceDeskEntities();
+            _appUser = new ApplicationUser();
+        }
         // GET: Contact
         [CustomAuthorize]
         public ActionResult Index()
         {
-            string curr_PlantID = ApplicationUser.Instance.GetPlantID();
+            string curr_PlantID = _appUser.GetPlantID();
             var contactlist = en.Employee_New
                 .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                 .Where(grp => grp.e.Deactive != true && grp.d.Plant_Id == curr_PlantID)

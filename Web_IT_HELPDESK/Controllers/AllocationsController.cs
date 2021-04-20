@@ -19,8 +19,16 @@ namespace Web_IT_HELPDESK.Controllers
     [CustomAuthorize]
     public class AllocationsController : Controller
     {
-        private ServiceDeskEntities en = new ServiceDeskEntities();
-        private string currentEmployeeID = ApplicationUser.Instance.EmployeeID;
+        public ServiceDeskEntities en { get; set; }
+        public ApplicationUser _appUser { get; set; }
+        public string currentEmployeeID { get; set; }
+
+        public AllocationsController()
+        {
+            en = new ServiceDeskEntities();
+            _appUser = new ApplicationUser();
+            currentEmployeeID = _appUser.EmployeeID;
+        }
 
         // GET: Allocations
         public ActionResult Index()
@@ -96,7 +104,7 @@ namespace Web_IT_HELPDESK.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Allocation allocation)
         {
-            string empPlantID = ApplicationUser.Instance.GetPlantID();
+            string empPlantID = _appUser.GetPlantID();
 
             if (allocation.Return_Date != null)
             {
@@ -205,8 +213,8 @@ namespace Web_IT_HELPDESK.Controllers
                 return RedirectToAction("Index");
             }
 
-            string empPlantID = ApplicationUser.Instance.GetPlantID();
-            ViewBag.Plant_Name = ApplicationUser.Instance.GetPlantName();
+            string empPlantID = _appUser.GetPlantID();
+            ViewBag.Plant_Name = _appUser.GetPlantName();
 
             ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).EmployeeName;
 
@@ -241,7 +249,7 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 return HttpNotFound();
             }
-            string empPlantID = ApplicationUser.Instance.GetPlantID();
+            string empPlantID = _appUser.GetPlantID();
 
             ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).EmployeeName;
 
@@ -285,9 +293,9 @@ namespace Web_IT_HELPDESK.Controllers
                 en.SaveChanges();
                 return RedirectToAction("Index");
             }
-            string empPlantID = ApplicationUser.Instance.GetPlantID();
+            string empPlantID = _appUser.GetPlantID();
 
-            ViewBag.Plant_Name = ApplicationUser.Instance.GetPlantName();
+            ViewBag.Plant_Name = _appUser.GetPlantName();
 
             ViewBag.DeliverName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).Employee_Name;
 
@@ -318,7 +326,7 @@ namespace Web_IT_HELPDESK.Controllers
 
             ViewBag.Device = device;
 
-            string empPlantID = ApplicationUser.Instance.GetPlantID();
+            string empPlantID = _appUser.GetPlantID();
 
             ViewBag.Deliver = currentEmployeeID;
             ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == currentEmployeeID).EmployeeName;
@@ -372,12 +380,12 @@ namespace Web_IT_HELPDESK.Controllers
                 en.SaveChanges();
                 return RedirectToAction("Index");
             }
-            string empPlantID = ApplicationUser.Instance.GetPlantID();
+            string empPlantID = _appUser.GetPlantID();
             Device device = en.Devices.Find(allocation.Device_Id);
             ViewBag.Device = device;
 
             ViewBag.Deliver = currentEmployeeID;
-            ViewBag.DeliverName = ApplicationUser.Instance.EmployeeName;
+            ViewBag.DeliverName = _appUser.EmployeeName;
 
             List<EmployeeFieldModel> employeeFields = EmployeeModel.Instance.EmployeeFieldsByPlant(empPlantID);
             List<SelectListItem> SLIEmployee = new List<SelectListItem>();
@@ -409,7 +417,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         public FileContentResult Download()
         {
-            string curr_plantId = ApplicationUser.Instance.GetPlantID();
+            string curr_plantId = _appUser.GetPlantID();
             var devices = AllocationModel.Instance.GetLastAllocationOfDeviceByPlantId(curr_plantId);
 
             // Sort by Code

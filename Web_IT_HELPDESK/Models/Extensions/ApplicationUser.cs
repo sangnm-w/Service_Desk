@@ -7,14 +7,11 @@ namespace Web_IT_HELPDESK.Models.Extensions
 {
     public class ApplicationUser
     {
-        private static ApplicationUser _instance;
-        public static ApplicationUser Instance { get { if (_instance == null) _instance = new ApplicationUser(); return _instance; } set => _instance = value; }
-
         public string EmployeeID { get; set; }
         public string EmployeeName { get; set; }
         private ServiceDeskEntities en { get; set; }
 
-        private ApplicationUser()
+        public ApplicationUser()
         {
             en = new ServiceDeskEntities();
             EmployeeID = HttpContext.Current.User.Identity.Name;

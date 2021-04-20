@@ -20,6 +20,7 @@ namespace Web_IT_HELPDESK.Controllers
     public class IncidentController : Controller
     {
         public ServiceDeskEntities en { get; set; }
+        public ApplicationUser _appUser { get; set; }
         public string currUserId { get; set; }
         public string currUserDeptId { get; set; }
         public string currUserPlantId { get; set; }
@@ -32,9 +33,10 @@ namespace Web_IT_HELPDESK.Controllers
             if (System.Web.HttpContext.Current.Request.IsAuthenticated)
             {
                 en = new ServiceDeskEntities();
-                currUserId = ApplicationUser.Instance.EmployeeID;
-                currUserDeptId = ApplicationUser.Instance.GetDepartmentID();
-                currUserPlantId = ApplicationUser.Instance.GetPlantID();
+                _appUser = new ApplicationUser();
+                currUserId = _appUser.EmployeeID;
+                currUserDeptId = _appUser.GetDepartmentID();
+                currUserPlantId = _appUser.GetPlantID();
             }
         }
 
@@ -47,7 +49,7 @@ namespace Web_IT_HELPDESK.Controllers
             List<PlantViewModel> userPlants = new List<PlantViewModel>();
             string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
 
-            bool IsAdmin = ApplicationUser.Instance.isAdmin;
+            bool IsAdmin = _appUser.isAdmin;
 
             from_date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             to_date = from_date.AddMonths(1).AddSeconds(-1);
@@ -69,12 +71,12 @@ namespace Web_IT_HELPDESK.Controllers
             }
             else
             {
-                var userAuths = ApplicationUser.Instance.GetAuthorizations();
+                var userAuths = _appUser.GetAuthorizations();
 
                 userRoles = userAuths.Join(en.Roles, au => au.Role_ID, ro => ro.Role_ID, (au, ro) => ro).Distinct().ToList();
-                userRules = ApplicationUser.Instance.GetRules(userRoles, controllerName);
+                userRules = _appUser.GetRules(userRoles, controllerName);
 
-                var uPlants = ApplicationUser.Instance.GetAuthorizations()
+                var uPlants = _appUser.GetAuthorizations()
                .Join(en.Plants, au => au.Plant_ID, p => p.Plant_Id, (au, p) => new { au, p }).Select(grp => new { grp.p.Plant_Id, grp.p.Plant_Name }).Distinct();
 
                 userPlants = uPlants.Select(p => new PlantViewModel { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name }).ToList();
@@ -117,7 +119,7 @@ namespace Web_IT_HELPDESK.Controllers
             List<PlantViewModel> userPlants = new List<PlantViewModel>();
             string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
 
-            bool IsAdmin = ApplicationUser.Instance.isAdmin;
+            bool IsAdmin = _appUser.isAdmin;
 
             IFormatProvider culture = new CultureInfo("en-US", true);
             from_date = DateTime.ParseExact(_datetime, "yyyy-MM", culture);
@@ -140,12 +142,12 @@ namespace Web_IT_HELPDESK.Controllers
             }
             else
             {
-                var userAuths = ApplicationUser.Instance.GetAuthorizations();
+                var userAuths = _appUser.GetAuthorizations();
 
                 userRoles = userAuths.Join(en.Roles, au => au.Role_ID, ro => ro.Role_ID, (au, ro) => ro).Distinct().ToList();
-                userRules = ApplicationUser.Instance.GetRules(userRoles, controllerName);
+                userRules = _appUser.GetRules(userRoles, controllerName);
 
-                var uPlants = ApplicationUser.Instance.GetAuthorizations()
+                var uPlants = _appUser.GetAuthorizations()
                .Join(en.Plants, au => au.Plant_ID, p => p.Plant_Id, (au, p) => new { au, p }).Select(grp => new { grp.p.Plant_Id, grp.p.Plant_Name }).Distinct();
 
                 userPlants = uPlants.Select(p => new PlantViewModel { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name }).ToList();
@@ -217,7 +219,7 @@ namespace Web_IT_HELPDESK.Controllers
             inc.StatusId = "ST1";
 
             ViewBag.UserCreateName = CurrentUser.Instance.User.Employee_Name;
-            ViewBag.plantName = ApplicationUser.Instance.GetPlantName();
+            ViewBag.plantName = _appUser.GetPlantName();
             ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", en.Levels.First().LevelId);
             ViewBag.StatusName = en.Status.FirstOrDefault(s => s.StatusId == "ST1").StatusName;
             ViewBag.DepartmentName = DepartmentModel.Instance.getDeptNameByDeptId(currUserDeptId);
