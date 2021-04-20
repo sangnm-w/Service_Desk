@@ -17,12 +17,23 @@ namespace Web_IT_HELPDESK.Controllers
 {
     public class BIZ_TRIPController : Controller
     {
-        ServiceDeskEntities en = new ServiceDeskEntities();
-        private string currUserID = ApplicationUser.Instance.EmployeeID;
-        private string currUserDeptId = ApplicationUser.Instance.GetDepartmentID();
-        private string currUserPlantId = ApplicationUser.Instance.GetPlantID();
+
+        public ServiceDeskEntities en { get; set; }
+        public ApplicationUser _appUser { get; set; }
+        public string currUserID { get; set; }
+        public string currUserDeptId { get; set; }
+        public string currUserPlantId { get; set; }
         private DateTime to_date { get; set; }
         private DateTime from_date { get; set; }
+
+        public BIZ_TRIPController()
+        {
+            en = new ServiceDeskEntities();
+            _appUser = new ApplicationUser();
+            currUserID = _appUser.EmployeeID;
+            currUserDeptId = _appUser.GetDepartmentID();
+            currUserPlantId = _appUser.GetPlantID();
+        }
 
         [CustomAuthorize]
         public ActionResult Index()
@@ -33,18 +44,18 @@ namespace Web_IT_HELPDESK.Controllers
             SelectList deptlist = new SelectList(departmentNames);
             ViewBag.DepartmentName = deptlist;
 
-            string currUserDeptId = ApplicationUser.Instance.GetDepartmentID();
-            string currUserPlantId = ApplicationUser.Instance.GetPlantID();
+            string currUserDeptId = _appUser.GetDepartmentID();
+            string currUserPlantId = _appUser.GetPlantID();
 
             from_date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             to_date = from_date.AddMonths(1).AddSeconds(-1);
 
 
-            bool currUserIsManager = ApplicationUser.Instance.isAdmin;
+            bool currUserIsManager = _appUser.isAdmin;
 
             string deptIdHrAdmin = currUserPlantId + "S0002";
             bool currUserIsHrAdmin = en.Departments
-                .FirstOrDefault(d => d.Plant_Id == currUserPlantId 
+                .FirstOrDefault(d => d.Plant_Id == currUserPlantId
                                   && d.Department_Id == deptIdHrAdmin
                                   && d.Manager_Id == currUserID) != null ? true : false;
 
@@ -75,14 +86,14 @@ namespace Web_IT_HELPDESK.Controllers
             from_date = DateTime.ParseExact("01/" + _datetime, "dd/MM/yyyy", null);
             to_date = from_date.AddMonths(1).AddSeconds(-1);
 
-            ViewBag.DepartmentNameview = ApplicationUser.Instance.GetDepartmentName();
+            ViewBag.DepartmentNameview = _appUser.GetDepartmentName();
 
-            bool currUserIsManager = ApplicationUser.Instance.isAdmin;
+            bool currUserIsManager = _appUser.isAdmin;
 
             string deptIdHrAdmin = currUserPlantId + "S0002";
             bool currUserIsHrAdmin = en.Departments
-                .FirstOrDefault(d => d.Plant_Id == currUserPlantId 
-                                  && d.Department_Id == deptIdHrAdmin 
+                .FirstOrDefault(d => d.Plant_Id == currUserPlantId
+                                  && d.Department_Id == deptIdHrAdmin
                                   && d.Manager_Id == currUserID) != null ? true : false;
 
             var bizz = en.BIZ_TRIP.Where(i => i.DEL != true
@@ -113,10 +124,10 @@ namespace Web_IT_HELPDESK.Controllers
         {
             BIZ_TRIP biz_trip = new BIZ_TRIP();
             ViewBag.DepartmentId = currUserDeptId;
-            ViewBag.DepartmentName = ApplicationUser.Instance.GetDepartmentName();
+            ViewBag.DepartmentName = _appUser.GetDepartmentName();
 
             ViewBag.EMPNO = currUserID;
-            ViewBag.NAME = ApplicationUser.Instance.EmployeeName;
+            ViewBag.NAME = _appUser.EmployeeName;
             ViewBag.Position = en.Employee_New.Find(currUserID).Position.ToString();
 
             ViewBag.ModalState = "false";
@@ -148,7 +159,7 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 en.SaveChanges();
                 string dept_name = DepartmentModel.Instance.getDeptNameByDeptId(biz_trip.DEPT);
-                bool currUserIsManager = ApplicationUser.Instance.IsManager;
+                bool currUserIsManager = _appUser.IsManager;
 
                 Employee_New userRequest = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO);
                 string domainName = System.Web.HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
@@ -213,7 +224,7 @@ namespace Web_IT_HELPDESK.Controllers
 
             ViewBag.User_name = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == biz_trip.EMPNO).Employee_Name;
 
-            bool currUserIsManager = ApplicationUser.Instance.IsManager;
+            bool currUserIsManager = _appUser.IsManager;
 
             ViewBag.IsManager = currUserIsManager;
 

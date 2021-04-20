@@ -14,6 +14,7 @@ namespace Web_IT_HELPDESK.Controllers
         // GET: /Checkout/
 
         ServiceDeskEntities storeDB = new ServiceDeskEntities();
+        ApplicationUser _appUser = new ApplicationUser();
 
         public ActionResult AddressAndPayment()
         {
@@ -44,7 +45,7 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 order.EmployeeID = User.Identity.Name;
                 order.Del = false;
-                order.Plant = ApplicationUser.Instance.GetPlantID();
+                order.Plant = _appUser.GetPlantID();
                 order.Employee_Name = GetEmp_name();
                 //Save Order
                 storeDB.Order_.Add(order);
@@ -57,7 +58,7 @@ namespace Web_IT_HELPDESK.Controllers
                 //gởi mail đến trưởng phòng
                 string result, status = "";
 
-                var dept = from i in storeDB.Departments where i.Department_Id == ApplicationUser.Instance.GetDepartmentID() select i.Department_Name;
+                var dept = from i in storeDB.Departments where i.Department_Id == _appUser.GetDepartmentID() select i.Department_Name;
                 subject = "[Duyệt] - Thông tin yêu cầu văn phòng phẩm";
                 result = string.Format("Thông báo! <br /> <br />" +
                                                   "Đã gởi email xác nhận!  <br />" +
@@ -71,8 +72,8 @@ namespace Web_IT_HELPDESK.Controllers
                         "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";
 
 
-                inf.email_send("user_email", "pass", ApplicationUser.Instance.GetDepartmentID()  //"0000"
-                                                        , subject, body, status, ApplicationUser.Instance.GetPlantID());
+                inf.email_send("user_email", "pass", _appUser.GetDepartmentID()  //"0000"
+                                                        , subject, body, status, _appUser.GetPlantID());
 
                 return RedirectToAction("Complete",
                     new { id = order.OrderId });

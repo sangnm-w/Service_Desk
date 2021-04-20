@@ -92,7 +92,6 @@ namespace Web_IT_HELPDESK.Controllers
         public ActionResult LogOff()
         {
             FormsAuthentication.SignOut();
-            ApplicationUser.Instance = null;
             return RedirectToAction("Logon", "Logon");
         }
 

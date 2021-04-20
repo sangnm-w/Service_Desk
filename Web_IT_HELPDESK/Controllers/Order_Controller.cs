@@ -14,13 +14,23 @@ namespace Web_IT_HELPDESK.Controllers
 {
     public class Order_Controller : Controller
     {
-        //
-        // GET: /Order_/
-        ServiceDeskEntities en = new ServiceDeskEntities();
-        private string session_emp = ApplicationUser.Instance.EmployeeID;
-        private string v_year = "/" + DateTime.Now.ToString("yyyy");
-        private string currUserPlantId = ApplicationUser.Instance.GetPlantID();
+        public ServiceDeskEntities en { get; set; }
+        public ApplicationUser _appUser { get; set; }
+        public string session_emp { get; set; }
+        public string currUserPlantId { get; set; }
+        public string v_year { get; set; }
 
+
+        public Order_Controller()
+        {
+            en = new ServiceDeskEntities();
+            _appUser = new ApplicationUser();
+            session_emp = _appUser.EmployeeID;
+            v_year = "/" + DateTime.Now.ToString("yyyy");
+            currUserPlantId = _appUser.GetPlantID();
+    }
+
+        // GET: /Order_/
         public ActionResult OrderList()
         {
             string v_plant = currUserPlantId;

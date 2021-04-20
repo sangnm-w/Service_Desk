@@ -19,15 +19,23 @@ namespace Web_IT_HELPDESK.Controllers
 {
     public class DevicesController : Controller
     {
-        private ServiceDeskEntities en = new ServiceDeskEntities();
-        private string currUserId = ApplicationUser.Instance.EmployeeID;
-        private string currUserPlantId = ApplicationUser.Instance.GetPlantID();
+        public ServiceDeskEntities en { get; set; }
+        public ApplicationUser _appUser { get; set; }
+        public string currUserId { get; set; }
+        public string currUserPlantId { get; set; }
 
+
+        public DevicesController()
+        {
+            en = new ServiceDeskEntities();
+            currUserId = _appUser.EmployeeID;
+            currUserPlantId = _appUser.GetPlantID();
+        }
         // GET: Devices
         [CustomAuthorize]
         public ActionResult Index()
         {
-            string curr_plantId = ApplicationUser.Instance.GetPlantID();
+            string curr_plantId = _appUser.GetPlantID();
             IEnumerable<DeviceViewModel> devices = DeviceModel.Instance.GetDevicesByPlantId(curr_plantId);
             return View(devices.ToList());
         }
@@ -111,7 +119,7 @@ namespace Web_IT_HELPDESK.Controllers
         [CustomAuthorize]
         public ActionResult CreateOthers()
         {
-            string empPlantID = ApplicationUser.Instance.GetPlantID();
+            string empPlantID = _appUser.GetPlantID();
 
             ViewBag.Plant_Id = empPlantID;
 
@@ -366,7 +374,7 @@ namespace Web_IT_HELPDESK.Controllers
         public FileContentResult Download()
         {
 
-            string curr_plantId = ApplicationUser.Instance.GetPlantID();
+            string curr_plantId = _appUser.GetPlantID();
             var devices = DeviceModel.Instance.GetQRDevicesByPlantID(curr_plantId);
 
             var stream = ExcelHelper.Instance.CreateQRExcel(null, devices.ToList(), ExcelTitle.Instance.QRDevices(), null);

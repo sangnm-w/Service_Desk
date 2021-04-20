@@ -13,26 +13,32 @@ namespace Web_IT_HELPDESK.Controllers
 {
     public class SealUsingController : Controller
     {
-        //
-        // GET: /SealUsing/
-        ServiceDeskEntities en = new ServiceDeskEntities();
+        public ServiceDeskEntities en { get; set; }
+        public ApplicationUser _appUser { get; set; }
 
+        public SealUsingController()
+        {
+            en = new ServiceDeskEntities();
+            _appUser = new ApplicationUser();
+        }
+
+        // GET: /SealUsing/
         [CustomAuthorize]
         public ActionResult Index()
         {
-            string curr_PlantID = ApplicationUser.Instance.GetPlantID();
-            string curr_DeptID = ApplicationUser.Instance.GetDepartmentID();
+            string curr_PlantID = _appUser.GetPlantID();
+            string curr_DeptID = _appUser.GetDepartmentID();
 
             DateTime now = DateTime.Now;
             DateTime from_date = new DateTime(now.Year, now.Month, 1);
             DateTime to_date = from_date.AddMonths(1).AddSeconds(-1);
 
-            bool currUserIsManager = ApplicationUser.Instance.IsManager;
+            bool currUserIsManager = _appUser.IsManager;
             string deptIdHrSealManager = curr_PlantID + "S0003";
             bool currUserIsHrSealManager = en.Departments
                 .FirstOrDefault(d => d.Plant_Id == curr_PlantID 
                 && d.Department_Id == deptIdHrSealManager 
-                && d.Manager_Id == ApplicationUser.Instance.EmployeeID) != null ? true : false;
+                && d.Manager_Id == _appUser.EmployeeID) != null ? true : false;
 
             var suVM = en.Seal_Using
                 .Where(s => s.Del != true
@@ -55,7 +61,7 @@ namespace Web_IT_HELPDESK.Controllers
 
             if (currUserIsManager == false && currUserIsHrSealManager == false)
             {
-                suVM = suVM.Where(i => i.SealUsing.Employee_ID == ApplicationUser.Instance.EmployeeID).ToList();
+                suVM = suVM.Where(i => i.SealUsing.Employee_ID == _appUser.EmployeeID).ToList();
                 isResend = false;
             }
 
@@ -69,8 +75,8 @@ namespace Web_IT_HELPDESK.Controllers
         [CustomAuthorize]
         public ActionResult Index(string searchString, string _datetime, int? page)
         {
-            string curr_PlantID = ApplicationUser.Instance.GetPlantID();
-            string curr_DeptID = ApplicationUser.Instance.GetDepartmentID();
+            string curr_PlantID = _appUser.GetPlantID();
+            string curr_DeptID = _appUser.GetDepartmentID();
 
             DateTime from_date = DateTime.ParseExact("01/" + _datetime, "dd/MM/yyyy", null);
             DateTime to_date = from_date.AddMonths(1).AddSeconds(-1);
@@ -92,18 +98,18 @@ namespace Web_IT_HELPDESK.Controllers
                     })
               .ToList();
 
-            bool currUserIsManager = ApplicationUser.Instance.IsManager;
+            bool currUserIsManager = _appUser.IsManager;
             string deptIdHRSealManager = curr_PlantID + "S0003";
             bool currUserIsHRSealManager = en.Departments
                 .FirstOrDefault(d => d.Plant_Id == curr_PlantID 
                 && d.Department_Id == deptIdHRSealManager 
-                && d.Manager_Id == ApplicationUser.Instance.EmployeeID) != null ? true : false;
+                && d.Manager_Id == _appUser.EmployeeID) != null ? true : false;
 
             bool isResend = true;
 
             if (currUserIsManager == false && currUserIsHRSealManager == false)
             {
-                suVM = suVM.Where(i => i.SealUsing.Employee_ID == ApplicationUser.Instance.EmployeeID).ToList();
+                suVM = suVM.Where(i => i.SealUsing.Employee_ID == _appUser.EmployeeID).ToList();
                 isResend = false;
             }
 
@@ -236,8 +242,8 @@ namespace Web_IT_HELPDESK.Controllers
                 result = string.Format("Can't send confirm email to Department Manager. Please contact for support: minhsang.it@cjvina.com");
             }
 
-            string curr_PlantID = ApplicationUser.Instance.GetPlantID();
-            string curr_DeptID = ApplicationUser.Instance.GetDepartmentID();
+            string curr_PlantID = _appUser.GetPlantID();
+            string curr_DeptID = _appUser.GetDepartmentID();
 
             DateTime from_date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             DateTime to_date = from_date.AddMonths(1).AddSeconds(-1);
@@ -474,8 +480,8 @@ namespace Web_IT_HELPDESK.Controllers
         {
             Seal_Using seal_using = en.Seal_Using.Find(id);
             ViewBag.Department_confirm_date = DateTime.Now;
-            string plant_id = ApplicationUser.Instance.GetPlantID();
-            ViewBag.DepartmentId = ApplicationUser.Instance.GetDepartmentID();
+            string plant_id = _appUser.GetPlantID();
+            ViewBag.DepartmentId = _appUser.GetDepartmentID();
             return View(seal_using);
         }
 
