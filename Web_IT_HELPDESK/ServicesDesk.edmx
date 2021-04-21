@@ -518,7 +518,7 @@
           <Property Name="Del" Type="bit" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'WEB_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ORDER_TYPE_VIEW">
           <Key>
             <PropertyRef Name="OrderId" />
@@ -1016,8 +1016,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
                 <Property Name="Receiver" Type="nvarchar" MaxLength="50" />
                 <Property Name="Delivery_Date" Type="datetime" />
                 <Property Name="Return_Date" Type="datetime" />
-                <Property Name="Department_Id" Type="nvarchar" MaxLength="50" />
-                <Property Name="Plant_Id" Type="nvarchar" MaxLength="50" />
+                <Property Name="Department_Id" Type="nvarchar" MaxLength="20" />
                 <Property Name="Note" Type="nvarchar(max)" />
                 <Property Name="IP" Type="nvarchar" MaxLength="50" />
                 <Property Name="Create_Date" Type="datetime" />
@@ -1669,21 +1668,6 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <NavigationProperty Name="Employee" Relationship="Self.FK_UserLogon_Employee" FromRole="UserLogon" ToRole="Employee" />
           <NavigationProperty Name="Employee_New" Relationship="ServiceDeskModel.FK_UserLogon_Employee_New" FromRole="UserLogon" ToRole="Employee_New" />
         </EntityType>
-        <EntityType Name="ORDER_TYPE_VIEW">
-          <Key>
-            <PropertyRef Name="OrderId" />
-          </Key>
-          <Property Name="OrderId" Type="Int32" Nullable="false" />
-          <Property Name="OrderDate" Type="DateTime" Precision="3" />
-          <Property Name="Total" Type="Decimal" Precision="10" Scale="2" />
-          <Property Name="Note" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="Confirmed" Type="Boolean" />
-          <Property Name="EmployeeID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Employee_Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="Del" Type="Boolean" />
-          <Property Name="Plant" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
-          <Property Name="AlbumTypeId" Type="Int32" />
-        </EntityType>
         <Association Name="FK_Album_AlbumType">
           <End Role="AlbumType" Type="Self.AlbumType" Multiplicity="0..1" />
           <End Role="Album" Type="Self.Album" Multiplicity="*" />
@@ -1941,7 +1925,6 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <EntitySet Name="Screens" EntityType="Self.Screen" />
           <EntitySet Name="Status" EntityType="Self.Status" />
           <EntitySet Name="UserLogons" EntityType="Self.UserLogon" />
-          <EntitySet Name="ORDER_TYPE_VIEW" EntityType="Self.ORDER_TYPE_VIEW" />
           <AssociationSet Name="FK_Album_AlbumType" Association="Self.FK_Album_AlbumType">
             <End Role="AlbumType" EntitySet="AlbumTypes" />
             <End Role="Album" EntitySet="Albums" />
@@ -2101,6 +2084,7 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             <End Role="Department" EntitySet="Departments" />
             <End Role="Seal_Using" EntitySet="Seal_Using" />
           </AssociationSet>
+          <EntitySet Name="ORDER_TYPE_VIEW" EntityType="ServiceDeskModel.ORDER_TYPE_VIEW" />
           </EntityContainer>
         <EntityType Name="Employee_New">
           <Key>
@@ -2320,24 +2304,6 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <ComplexType Name="GetLastAllocationOfDevice_Result">
-          <Property Type="Guid" Name="Allocation_Id" Nullable="false" />
-          <Property Type="Guid" Name="Device_Id" Nullable="true" />
-          <Property Type="Guid" Name="Memo_Id" Nullable="true" />
-          <Property Type="String" Name="Allocation_Code" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Deliver" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Receiver" Nullable="true" MaxLength="50" />
-          <Property Type="DateTime" Name="Delivery_Date" Nullable="true" Precision="23" />
-          <Property Type="DateTime" Name="Return_Date" Nullable="true" Precision="23" />
-          <Property Type="String" Name="Department_Id" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Plant_Id" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Note" Nullable="true" />
-          <Property Type="String" Name="IP" Nullable="true" MaxLength="50" />
-          <Property Type="DateTime" Name="Create_Date" Nullable="true" Precision="23" />
-          <Property Type="DateTime" Name="Delete_Date" Nullable="true" Precision="23" />
-          <Property Type="Boolean" Name="Flag_ReAllocation" Nullable="true" />
-          <Property Type="String" Name="QRCodeFile" Nullable="true" />
-        </ComplexType>
         <EntityType Name="Incident">
           <Key>
             <PropertyRef Name="Id" />
@@ -2474,6 +2440,21 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ORDER_TYPE_VIEW">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="Int32" Nullable="false" />
+          <Property Name="OrderDate" Type="DateTime" Precision="3" />
+          <Property Name="Total" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Note" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Confirmed" Type="Boolean" />
+          <Property Name="EmployeeID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Employee_Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Del" Type="Boolean" />
+          <Property Name="Plant" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="AlbumTypeId" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2878,22 +2859,6 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ORDER_TYPE_VIEW">
-            <EntityTypeMapping TypeName="ServiceDeskModel.ORDER_TYPE_VIEW">
-              <MappingFragment StoreEntitySet="ORDER_TYPE_VIEW">
-                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
-                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
-                <ScalarProperty Name="Total" ColumnName="Total" />
-                <ScalarProperty Name="Note" ColumnName="Note" />
-                <ScalarProperty Name="Confirmed" ColumnName="Confirmed" />
-                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-                <ScalarProperty Name="Employee_Name" ColumnName="Employee_Name" />
-                <ScalarProperty Name="Del" ColumnName="Del" />
-                <ScalarProperty Name="Plant" ColumnName="Plant" />
-                <ScalarProperty Name="AlbumTypeId" ColumnName="AlbumTypeId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionName="ServiceDeskModel.Store.func_report_detail" FunctionImportName="func_report_detail">
             <ResultMapping>
               <ComplexTypeMapping TypeName="ServiceDeskModel.func_report_detail_Result">
@@ -3063,6 +3028,22 @@ warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
                 <ScalarProperty Name="Plant_Id" ColumnName="Plant_Id" />
                 <ScalarProperty Name="Department_Name" ColumnName="Department_Name" />
                 <ScalarProperty Name="Department_Id" ColumnName="Department_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ORDER_TYPE_VIEW">
+            <EntityTypeMapping TypeName="ServiceDeskModel.ORDER_TYPE_VIEW">
+              <MappingFragment StoreEntitySet="ORDER_TYPE_VIEW">
+                <ScalarProperty Name="AlbumTypeId" ColumnName="AlbumTypeId" />
+                <ScalarProperty Name="Plant" ColumnName="Plant" />
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="Employee_Name" ColumnName="Employee_Name" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="Confirmed" ColumnName="Confirmed" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
