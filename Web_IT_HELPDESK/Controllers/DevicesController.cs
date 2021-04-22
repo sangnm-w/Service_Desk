@@ -28,6 +28,7 @@ namespace Web_IT_HELPDESK.Controllers
         public DevicesController()
         {
             en = new ServiceDeskEntities();
+            _appUser = new ApplicationUser();
             currUserId = _appUser.EmployeeID;
             currUserPlantId = _appUser.GetPlantID();
         }
