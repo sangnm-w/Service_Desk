@@ -264,14 +264,17 @@ namespace Web_IT_HELPDESK.Controllers
                 List<string> ccMails = new List<string>();
 
                 string managerIdOfUser = en.Departments.Find(currUserDeptId).Manager_Id;
-                string managerMail = en.Employee_New.Find(managerIdOfUser).Email;
-                if (managerMail != null)
-                    ccMails.Add(managerMail);
+                if (!string.IsNullOrWhiteSpace(managerIdOfUser))
+                {
+                    string managerMail = en.Employee_New.Find(managerIdOfUser).Email;
+                    if (!string.IsNullOrWhiteSpace(managerMail))
+                        ccMails.Add(managerMail);
+                }
 
                 if (currUserPlantId != "V2090" && currUserPlantId != "V2010")
                     ccMails.Add("itgroup@cjvina.com");
 
-                //bool resultSend = IncidentHelper.Instance.Send_IncidentEmail(incEx, "CREATE", toMails, ccMails);
+                bool resultSend = IncidentHelper.Instance.Send_IncidentEmail(incEx, "CREATE", toMails, ccMails);
                 /*1==================================================================================================================*/
 
                 return RedirectToAction("Index", "Incident");
@@ -341,7 +344,7 @@ namespace Web_IT_HELPDESK.Controllers
                 List<string> ccMails = new List<string>();
                 if (currUserPlantId != "V2090" && currUserPlantId != "V2010")
                     ccMails.Add("itgroup@cjvina.com");
-                //bool resultSend = IncidentHelper.Instance.Send_IncidentEmail(incEx, "EDIT", toMails, ccMails);
+                bool resultSend = IncidentHelper.Instance.Send_IncidentEmail(incEx, "EDIT", toMails, ccMails);
                 /*1==================================================================================================================*/
 
                 return RedirectToAction("Index", "Incident");
@@ -398,14 +401,18 @@ namespace Web_IT_HELPDESK.Controllers
                 ccMails = IncidentModel.Instance.GetITMemberEmails(currUserPlantId);
 
                 string managerIdOfUser = en.Departments.Find(currUserDeptId).Manager_Id;
-                string managerMail = en.Employee_New.Find(managerIdOfUser).Email;
-                if (managerMail != null && !ccMails.Contains(managerMail))
-                    ccMails.Add(managerMail);
+                if (!string.IsNullOrWhiteSpace(managerIdOfUser))
+                {
+                    string managerMail = en.Employee_New.Find(managerIdOfUser).Email;
+                    if (!string.IsNullOrWhiteSpace(managerMail) && !ccMails.Contains(managerMail))
+                        ccMails.Add(managerMail);
+
+                }
 
                 if (currUserPlantId != "V2090" && currUserPlantId != "V2010")
                     ccMails.Add("itgroup@cjvina.com");
 
-                //bool resultSend = IncidentHelper.Instance.Send_IncidentEmail(incEx, "SOLVE", toMails, ccMails);
+                bool resultSend = IncidentHelper.Instance.Send_IncidentEmail(incEx, "SOLVE", toMails, ccMails);
                 /*1==================================================================================================================*/
 
                 return RedirectToAction("Index", "Incident");
