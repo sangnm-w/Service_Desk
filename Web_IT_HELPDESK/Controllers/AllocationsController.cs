@@ -16,7 +16,7 @@ using EntityState = System.Data.Entity.EntityState;
 
 namespace Web_IT_HELPDESK.Controllers
 {
-    [CustomAuthorize]
+    
     public class AllocationsController : Controller
     {
         public ServiceDeskEntities en { get; set; }
@@ -31,6 +31,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: Allocations
+        [CustomAuthorize]
         public ActionResult Index()
         {
             string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == currentEmployeeID).Plant_Id;
@@ -39,6 +40,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: Allocations/Details/5
+        [CustomAuthorize]
         public ActionResult Details(Guid? id)
         {
             if (id == null)
@@ -63,6 +65,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: Allocations/Create
+        [CustomAuthorize]
         public ActionResult Create(Guid? id)
         {
             if (id == null)
@@ -101,6 +104,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         // POST: Allocations/Create
         [HttpPost]
+        [CustomAuthorize]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Allocation allocation)
         {
@@ -154,6 +158,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: Allocations/Edit/5
+        [CustomAuthorize]
         public ActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -190,6 +195,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         // POST: Allocations/Edit/5
         [HttpPost]
+        [CustomAuthorize]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Allocation allocation)
         {
@@ -238,6 +244,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: Allocations/Revoke/5
+        [CustomAuthorize]
         public ActionResult Revoke(Guid? id)
         {
             if (id == null)
@@ -267,6 +274,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         // POST: Allocations/Revoke/5
         [HttpPost]
+        [CustomAuthorize]
         [ValidateAntiForgeryToken]
         public ActionResult Revoke(Allocation allocation)
         {
@@ -312,6 +320,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: Allocations/ReAllocation
+        [CustomAuthorize]
         public ActionResult ReAllocation(Guid? id)
         {
             if (id == null)
@@ -353,6 +362,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         // POST: Allocations/ReAllocation
         [HttpPost]
+        [CustomAuthorize]
         [ValidateAntiForgeryToken]
         public ActionResult ReAllocation(Allocation allocation)
         {
@@ -415,6 +425,7 @@ namespace Web_IT_HELPDESK.Controllers
             return Json(deptId, JsonRequestBehavior.AllowGet);
         }
 
+        [CustomAuthorize]
         public FileContentResult Download()
         {
             string curr_plantId = _appUser.GetPlantID();
@@ -426,8 +437,10 @@ namespace Web_IT_HELPDESK.Controllers
             List<AllocationViewModel.ExcelReport> devices_ExcelReport = new List<AllocationViewModel.ExcelReport>();
             foreach (var item in devices)
             {
-                //AllocationViewModel.ExcelReport entry = new AllocationViewModel.ExcelReport(item.Device, item.Allocation, item.Device?.Device_Type?.Device_Type_Name, item.Deliver_Name, item.Receiver_Name, item.Deliver_Name, item.Allocation?.Department?.Plant?.Plant_Name);
-                //devices_ExcelReport.Add(entry);
+                AllocationViewModel.ExcelReport entry = new AllocationViewModel.ExcelReport(item.Device, item.Allocation,
+                    item.Device?.Device_Type?.Device_Type_Name, item.Deliver_Name, item.Receiver_Name, item.Deliver_Name,
+                    item.Allocation?.Department?.Plant?.Plant_Name);
+                devices_ExcelReport.Add(entry);
             }
 
             //Col need format date
