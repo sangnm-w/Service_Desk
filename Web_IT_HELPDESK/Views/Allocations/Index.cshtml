@@ -59,6 +59,9 @@
                     <thead>
                         <tr>
                             <th>
+                                Action
+                            </th>
+                            <th>
                                 @Html.DisplayNameFor(model => model.Device.Device_Code)
                             </th>
                             <th>
@@ -97,76 +100,74 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.Department_Name)
                             </th>
-                            <th>
-                                Action
-                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Device.Device_Code)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Device.Device_Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Device.Serial_No)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Device.Purchase_Date)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Allocation.Allocation_Code)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Deliver_Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Receiver_Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Allocation.Delivery_Date)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Allocation.Return_Date)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Allocation.Note)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Allocation.IP)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Allocation.Create_Date)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Department_Name)
-                                </td>
-                                <td>
-                                    @if (item.Allocation != null)
+                        <tr>
+                            <td>
+                                @if (item.Allocation != null)
+                                {
+                                    if (!item.Allocation.Return_Date.HasValue)
                                     {
-                                        if (!item.Allocation.Return_Date.HasValue)
-                                        {
-                                            @Html.ActionLink("Edit", "Edit", new { id = item.Allocation.Allocation_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
-                                            @Html.ActionLink("Revoke", "Revoke", new { id = item.Allocation.Allocation_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
-                                        }
-                                        else
-                                        {
-                                            if (item.Allocation.Flag_ReAllocation == true)
-                                            {
-                                                @Html.ActionLink("Re-Providing", "ReAllocation", new { id = item.Device.Device_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
-                                            }
-                                        }
+                                        @Html.ActionLink("Edit", "Edit", new { id = item.Allocation.Allocation_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
+                                        @Html.ActionLink("Revoke", "Revoke", new { id = item.Allocation.Allocation_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
                                     }
                                     else
                                     {
-                                        @Html.ActionLink("Provide", "Create", new { id = item.Device.Device_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
+                                        if (item.Allocation.Flag_ReAllocation == true)
+                                        {
+                                            @Html.ActionLink("Re-Providing", "ReAllocation", new { id = item.Device.Device_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
+                                        }
                                     }
-                                </td>
-                            </tr>
+                                }
+                                else
+                                {
+                                    @Html.ActionLink("Provide", "Create", new { id = item.Device.Device_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Device.Device_Code)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Device.Device_Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Device.Serial_No)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Device.Purchase_Date)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Allocation.Allocation_Code)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Deliver_Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Receiver_Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Allocation.Delivery_Date)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Allocation.Return_Date)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Allocation.Note)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Allocation.IP)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Allocation.Create_Date)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Department_Name)
+                            </td>
+
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -178,10 +179,7 @@
 @section Script {
     <script type="text/javascript">
         $('#allocation').DataTable({
-            aaSorting: [[0, 'desc']],
-            "columnDefs": [
-                { className: "borderlastcol", "targets": [13] }
-            ],
+            aaSorting: [[1, 'desc']],
             "scrollX": true
         });
 

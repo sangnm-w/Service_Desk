@@ -61,7 +61,7 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 userRules = en.Rules
                     .Join(en.Modules, ru => ru.Module_ID, mo => mo.Module_ID, (ru, mo) => new { ru, mo })
-                    .Where(grp => grp.ru.Deactive != true && grp.mo.Name.ToUpper() == controllerName.ToUpper())
+                    .Where(grp => grp.ru.Deactive != true && grp.mo.Module_Name.ToUpper() == controllerName.ToUpper())
                     .Select(grp => grp.ru)
                     .ToList();
 
@@ -132,7 +132,7 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 userRules = en.Rules
                     .Join(en.Modules, ru => ru.Module_ID, mo => mo.Module_ID, (ru, mo) => new { ru, mo })
-                    .Where(grp => grp.ru.Deactive != true && grp.mo.Name.ToUpper() == controllerName.ToUpper())
+                    .Where(grp => grp.ru.Deactive != true && grp.mo.Module_Name.ToUpper() == controllerName.ToUpper())
                     .Select(grp => grp.ru)
                     .ToList();
 
