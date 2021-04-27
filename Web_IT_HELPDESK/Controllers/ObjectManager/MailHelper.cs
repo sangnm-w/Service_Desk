@@ -29,7 +29,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                     SmtpServer.Send(msg);
                     return true;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     return false;
                 }

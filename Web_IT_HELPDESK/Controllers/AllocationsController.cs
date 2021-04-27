@@ -425,7 +425,7 @@ namespace Web_IT_HELPDESK.Controllers
             return Json(deptId, JsonRequestBehavior.AllowGet);
         }
 
-        [CustomAuthorize]
+        //[CustomAuthorize]
         public FileContentResult Download()
         {
             string curr_plantId = _appUser.GetPlantID();
