@@ -30,12 +30,95 @@ namespace Web_IT_HELPDESK.Controllers
             currentEmployeeID = _appUser.EmployeeID;
         }
 
-        // GET: Allocations
+        // GET: Allocations/Index
         [CustomAuthorize]
         public ActionResult Index()
         {
-            string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == currentEmployeeID).Plant_Id;
+            string curr_plantId = _appUser.GetPlantID();
+
+            List<Rule> userRules = new List<Rule>();
+            List<Role> userRoles = new List<Role>();
+            List<PlantViewModel> userPlants = new List<PlantViewModel>();
+            string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
+
+            bool IsAdmin = _appUser.isAdmin;
+
+            if (IsAdmin)
+            {
+                userRules = en.Rules
+                    .Join(en.Modules, ru => ru.Module_ID, mo => mo.Module_ID, (ru, mo) => new { ru, mo })
+                    .Where(grp => grp.ru.Deactive != true && grp.mo.Module_Name.ToUpper() == controllerName.ToUpper())
+                    .Select(grp => grp.ru)
+                    .ToList();
+
+                userPlants = en.Plants
+                    .Select(p => new PlantViewModel { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name })
+                    .ToList();
+            }
+            else
+            {
+                var userAuths = _appUser.GetAuthorizations();
+
+                userRoles = userAuths.Join(en.Roles, au => au.Role_ID, ro => ro.Role_ID, (au, ro) => ro).Distinct().ToList();
+                userRules = _appUser.GetRules(userRoles, controllerName);
+
+                var uPlants = _appUser.GetAuthorizations()
+               .Join(en.Plants, au => au.Plant_ID, p => p.Plant_Id, (au, p) => new { au, p }).Select(grp => new { grp.p.Plant_Id, grp.p.Plant_Name }).Distinct();
+
+                userPlants = uPlants.Select(p => new PlantViewModel { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name }).ToList();
+
+                bool isITManager = userRoles.Any(ro => ro.Role_ID == 2);
+            }
+
+            ViewBag.userRules = userRules.Select(ru => ru.Rule_Name).ToList();
+            ViewBag.userPlants = userPlants;
+
             IEnumerable<AllocationViewModel> avm = AllocationModel.Instance.GetLastAllocationOfDeviceByPlantId(curr_plantId);
+            return View(avm);
+        }
+
+
+        //POST: Allocations/Index
+        [HttpPost]
+        [CustomAuthorize]
+        public ActionResult Index(string plantId)
+        {
+            List<Rule> userRules = new List<Rule>();
+            List<Role> userRoles = new List<Role>();
+            List<PlantViewModel> userPlants = new List<PlantViewModel>();
+            string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
+
+            bool IsAdmin = _appUser.isAdmin;
+
+            if (IsAdmin)
+            {
+                userRules = en.Rules
+                    .Join(en.Modules, ru => ru.Module_ID, mo => mo.Module_ID, (ru, mo) => new { ru, mo })
+                    .Where(grp => grp.ru.Deactive != true && grp.mo.Module_Name.ToUpper() == controllerName.ToUpper())
+                    .Select(grp => grp.ru)
+                    .ToList();
+
+                userPlants = en.Plants
+                    .Select(p => new PlantViewModel { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name })
+                    .ToList();
+            }
+            else
+            {
+                var userAuths = _appUser.GetAuthorizations();
+
+                userRoles = userAuths.Join(en.Roles, au => au.Role_ID, ro => ro.Role_ID, (au, ro) => ro).Distinct().ToList();
+                userRules = _appUser.GetRules(userRoles, controllerName);
+
+                var uPlants = _appUser.GetAuthorizations()
+               .Join(en.Plants, au => au.Plant_ID, p => p.Plant_Id, (au, p) => new { au, p }).Select(grp => new { grp.p.Plant_Id, grp.p.Plant_Name }).Distinct();
+
+                userPlants = uPlants.Select(p => new PlantViewModel { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name }).ToList();
+            }
+
+            ViewBag.userRules = userRules.Select(ru => ru.Rule_Name).ToList();
+            ViewBag.userPlants = userPlants;
+
+            IEnumerable<AllocationViewModel> avm = AllocationModel.Instance.GetLastAllocationOfDeviceByPlantId(plantId);
             return View(avm);
         }
 

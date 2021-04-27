@@ -394,13 +394,21 @@ namespace Web_IT_HELPDESK.Controllers
 
                 /*1========== Sending Mail ==========================================================================================*/
                 IncidentViewModel incEx = IncidentModel.Instance.get_Incident(inc.Id);
-                List<string> toMails = new List<string>() { en.Employee_New.FirstOrDefault(e => e.Emp_CJ == inc.User_create).Email };
+                var requestor_Dept_Plant = en.Employee_New
+                    .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
+                    .Join(en.Plants, grp => grp.d.Plant_Id, p => p.Plant_Id, (grp, p) => new { grp.e, grp.d, p })
+                    .FirstOrDefault(joined => joined.e.Emp_CJ == incEx.User_create);
+                string requestorEmail = requestor_Dept_Plant.e.Email;
+                string requestorDepartmentId = requestor_Dept_Plant.d.Department_Id;
+                string requestorPlantId = requestor_Dept_Plant.p.Plant_Id;
+
+                List<string> toMails = new List<string>() { requestorEmail };
 
                 List<string> ccMails = new List<string>();
 
-                ccMails = IncidentModel.Instance.GetITMemberEmails(currUserPlantId);
+                ccMails = IncidentModel.Instance.GetITMemberEmails(requestorPlantId);
 
-                string managerIdOfUser = en.Departments.Find(currUserDeptId).Manager_Id;
+                string managerIdOfUser = en.Departments.Find(requestorDepartmentId).Manager_Id;
                 if (!string.IsNullOrWhiteSpace(managerIdOfUser))
                 {
                     string managerMail = en.Employee_New.Find(managerIdOfUser).Email;
