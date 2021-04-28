@@ -263,7 +263,6 @@ namespace Web_IT_HELPDESK.Models
         {
             ServiceDeskEntities en = new ServiceDeskEntities();
             var allocations = en.Allocations
-                //.Join(en.Employees,
                 .Join(en.Employee_New,
                 a => a.Deliver,
                 e => e.Emp_CJ,
@@ -272,7 +271,6 @@ namespace Web_IT_HELPDESK.Models
                     Allocation = a,
                     Deliver_Name = e.Employee_Name
                 })
-                //.Join(en.Employees,
                 .Join(en.Employee_New,
                 j1 => j1.Allocation.Receiver,
                 e => e.Emp_CJ,

@@ -16,7 +16,7 @@ using EntityState = System.Data.Entity.EntityState;
 
 namespace Web_IT_HELPDESK.Controllers
 {
-    
+
     public class AllocationsController : Controller
     {
         public ServiceDeskEntities en { get; set; }
@@ -34,7 +34,7 @@ namespace Web_IT_HELPDESK.Controllers
         [CustomAuthorize]
         public ActionResult Index()
         {
-            string curr_plantId = _appUser.GetPlantID();
+            string currentPlantId = _appUser.GetPlantID();
 
             List<Rule> userRules = new List<Rule>();
             List<Role> userRoles = new List<Role>();
@@ -72,8 +72,9 @@ namespace Web_IT_HELPDESK.Controllers
 
             ViewBag.userRules = userRules.Select(ru => ru.Rule_Name).ToList();
             ViewBag.userPlants = userPlants;
+            ViewBag.currentPlantId = currentPlantId;
 
-            IEnumerable<AllocationViewModel> avm = AllocationModel.Instance.GetLastAllocationOfDeviceByPlantId(curr_plantId);
+            IEnumerable<AllocationViewModel> avm = AllocationModel.Instance.GetLastAllocationOfDeviceByPlantId(currentPlantId);
             return View(avm);
         }
 
@@ -83,6 +84,7 @@ namespace Web_IT_HELPDESK.Controllers
         [CustomAuthorize]
         public ActionResult Index(string plantId)
         {
+            string currentPlantId = _appUser.GetPlantID();
             List<Rule> userRules = new List<Rule>();
             List<Role> userRoles = new List<Role>();
             List<PlantViewModel> userPlants = new List<PlantViewModel>();
@@ -117,6 +119,7 @@ namespace Web_IT_HELPDESK.Controllers
 
             ViewBag.userRules = userRules.Select(ru => ru.Rule_Name).ToList();
             ViewBag.userPlants = userPlants;
+            ViewBag.currentPlantId = string.IsNullOrEmpty(plantId) ? currentPlantId : plantId;
 
             IEnumerable<AllocationViewModel> avm = AllocationModel.Instance.GetLastAllocationOfDeviceByPlantId(plantId);
             return View(avm);
@@ -509,10 +512,9 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         //[CustomAuthorize]
-        public FileContentResult Download()
+        public FileContentResult Download(string plantId)
         {
-            string curr_plantId = _appUser.GetPlantID();
-            var devices = AllocationModel.Instance.GetLastAllocationOfDeviceByPlantId(curr_plantId);
+            var devices = AllocationModel.Instance.GetLastAllocationOfDeviceByPlantId(plantId);
 
             // Sort by Code
             devices = devices.OrderBy(model => model.Device.Device_Code);

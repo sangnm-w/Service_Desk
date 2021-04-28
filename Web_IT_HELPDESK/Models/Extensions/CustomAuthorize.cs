@@ -14,14 +14,15 @@ namespace Web_IT_HELPDESK.Models.Extensions
         private string authorizeErr { get; set; } = null;
 
         private readonly string[] allowedroles;
+
         public CustomAuthorizeAttribute(params string[] roles)
         {
-            en = new ServiceDeskEntities();
-            _appUser = new ApplicationUser();
             allowedroles = roles;
         }
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
+            en = new ServiceDeskEntities();
+            _appUser = new ApplicationUser();
 
             if (httpContext == null)
             {

@@ -71,7 +71,7 @@
                         <i class="glyphicon glyphicon glyphicon-upload"></i>
                     </a>*@
 
-                <a href="@Url.Action("Download", "Allocations")">
+                <a href="@Url.Action("Download", "Allocations",new { plantId = ViewBag.currentPlantId })">
                     <i class="glyphicon glyphicon glyphicon-download"></i>
                 </a>
             </div>
