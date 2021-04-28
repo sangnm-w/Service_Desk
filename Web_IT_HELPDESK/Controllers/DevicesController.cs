@@ -305,9 +305,9 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // Post: Devices/Upload
-        [HttpPost, ActionName("Upload")]
+        [HttpPost]
         [CustomAuthorize]
-        public ActionResult UploadDevices(HttpPostedFileBase FileUpload)
+        public ActionResult Upload(HttpPostedFileBase FileUpload)
         {
             if (FileUpload != null)
             {

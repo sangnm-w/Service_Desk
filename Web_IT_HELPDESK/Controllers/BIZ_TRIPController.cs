@@ -710,7 +710,7 @@ namespace Web_IT_HELPDESK.Controllers
 
             return View("Index", bizz);
         }
-        public ActionResult BizTripPrint(Guid v_id)
+        public ActionResult Print(Guid v_id)
         {
             string reportid = "PDF";
             LocalReport lr = new LocalReport();
