@@ -162,7 +162,7 @@ namespace Web_IT_HELPDESK.Models.Extensions
             if (!string.IsNullOrEmpty(moduleName))
             {
                 result = result.Join(en.Modules, ru => ru.Module_ID, mo => mo.Module_ID, (ru, mo) => new { ru, mo })
-                    .Where(grp => grp.mo.Name.ToUpper() == moduleName.ToUpper())
+                    .Where(grp => grp.mo.Module_Name.ToUpper() == moduleName.ToUpper())
                     .Select(grp => grp.ru)
                     .ToList();
             }

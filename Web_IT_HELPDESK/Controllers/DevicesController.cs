@@ -28,6 +28,7 @@ namespace Web_IT_HELPDESK.Controllers
         public DevicesController()
         {
             en = new ServiceDeskEntities();
+            _appUser = new ApplicationUser();
             currUserId = _appUser.EmployeeID;
             currUserPlantId = _appUser.GetPlantID();
         }
@@ -304,9 +305,9 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // Post: Devices/Upload
-        [HttpPost, ActionName("Upload")]
+        [HttpPost]
         [CustomAuthorize]
-        public ActionResult UploadDevices(HttpPostedFileBase FileUpload)
+        public ActionResult Upload(HttpPostedFileBase FileUpload)
         {
             if (FileUpload != null)
             {

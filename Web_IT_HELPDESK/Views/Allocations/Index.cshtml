@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<Web_IT_HELPDESK.ViewModels.AllocationViewModel>
+@using Web_IT_HELPDESK.ViewModels
 
 @{
     ViewBag.Title = "Index";
@@ -38,6 +39,28 @@
 
 <div class="content-box-large">
     <h4>IT Device Providing</h4>
+    <div class="panel-body">
+        @using (Html.BeginForm("Index", "Allocations", FormMethod.Post))
+        {
+            if (((List<PlantViewModel>)ViewBag.userPlants).Count() > 0)
+            {
+                <div class="form-group">
+                    <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Plants :</label>
+                    <div class="row">
+                        @foreach (var item in ViewBag.userPlants)
+                        {
+                            <div class="col-sm-3">
+                                @Html.RadioButton("plantId", (string)item.Plant_Id, false)<label style="vertical-align: middle; margin-left: 7px;">@item.Plant_Name</label>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            <div class="form-group">
+                <button type="submit" class="btn btn-default">Search</button>
+            </div>
+        }
+    </div>
     <div class="panel panel-info">
         <div class="content-box-header panel-heading">
             <div class="panel-title ">Providing Devices List</div>
@@ -58,6 +81,9 @@
                 <table class="display nowrap" id="allocation" style="width:100%">
                     <thead>
                         <tr>
+                            <th>
+                                Action
+                            </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Device.Device_Code)
                             </th>
@@ -97,15 +123,33 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.Department_Name)
                             </th>
-                            <th>
-                                Action
-                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
                             <tr>
+                                <td>
+                                    @if (item.Allocation != null)
+                                    {
+                                        if (!item.Allocation.Return_Date.HasValue)
+                                        {
+                                            @Html.ActionLink("Edit", "Edit", new { id = item.Allocation.Allocation_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
+                                            @Html.ActionLink("Revoke", "Revoke", new { id = item.Allocation.Allocation_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
+                                        }
+                                        else
+                                        {
+                                            if (item.Allocation.Flag_ReAllocation == true)
+                                            {
+                                                @Html.ActionLink("Re-Providing", "ReAllocation", new { id = item.Device.Device_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @Html.ActionLink("Provide", "Create", new { id = item.Device.Device_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
+                                    }
+                                </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Device.Device_Code)
                                 </td>
@@ -145,27 +189,7 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Department_Name)
                                 </td>
-                                <td>
-                                    @if (item.Allocation != null)
-                                    {
-                                        if (!item.Allocation.Return_Date.HasValue)
-                                        {
-                                            @Html.ActionLink("Edit", "Edit", new { id = item.Allocation.Allocation_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
-                                            @Html.ActionLink("Revoke", "Revoke", new { id = item.Allocation.Allocation_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
-                                        }
-                                        else
-                                        {
-                                            if (item.Allocation.Flag_ReAllocation == true)
-                                            {
-                                                @Html.ActionLink("Re-Providing", "ReAllocation", new { id = item.Device.Device_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        @Html.ActionLink("Provide", "Create", new { id = item.Device.Device_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
-                                    }
-                                </td>
+
                             </tr>
                         }
                     </tbody>
@@ -178,10 +202,7 @@
 @section Script {
     <script type="text/javascript">
         $('#allocation').DataTable({
-            aaSorting: [[0, 'desc']],
-            "columnDefs": [
-                { className: "borderlastcol", "targets": [13] }
-            ],
+            aaSorting: [[1, 'desc']],
             "scrollX": true
         });
 

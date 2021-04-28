@@ -228,6 +228,7 @@
     <Compile Include="Controllers\ContactsController.cs" />
     <Compile Include="Controllers\CONTRACTController.cs" />
     <Compile Include="Controllers\DevicesController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ObjectManager\AllocationHelper.cs" />
     <Compile Include="Controllers\ObjectManager\Biz_TripHelper.cs" />
     <Compile Include="Controllers\ObjectManager\ContractHelper.cs" />
@@ -1718,6 +1719,7 @@
     <Content Include="Views\SealUsing\Details.cshtml" />
     <Content Include="Views\BIZ_TRIP\Details.cshtml" />
     <Content Include="Views\Allocations\Details.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

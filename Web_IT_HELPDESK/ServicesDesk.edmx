@@ -384,7 +384,7 @@
             <PropertyRef Name="Module_ID" />
           </Key>
           <Property Name="Module_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Module_Name" Type="nvarchar" MaxLength="100" />
           <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="Deactive" Type="bit" />
         </EntityType>
@@ -2056,7 +2056,6 @@ warning 6002: The table/view 'WEB_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             <End Role="Device" EntitySet="Devices" />
             <End Role="Allocation" EntitySet="Allocations" />
           </AssociationSet>
-          <FunctionImport Name="GetLastAllocationOfDevice" IsComposable="true" EntitySet="Allocations" ReturnType="Collection(ServiceDeskModel.Allocation)" />
           <EntitySet Name="Incidents" EntityType="ServiceDeskModel.Incident" />
           <EntitySet Name="Seal_Using" EntityType="ServiceDeskModel.Seal_Using" />
           <AssociationSet Name="FK_Incidents_Status" Association="ServiceDeskModel.FK_Incidents_Status">
@@ -2084,7 +2083,7 @@ warning 6002: The table/view 'WEB_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             <End Role="Department" EntitySet="Departments" />
             <End Role="Seal_Using" EntitySet="Seal_Using" />
           </AssociationSet>
-          <EntitySet Name="ORDER_TYPE_VIEW" EntityType="ServiceDeskModel.ORDER_TYPE_VIEW" />
+          <FunctionImport Name="GetLastAllocationOfDevice" IsComposable="true" EntitySet="Allocations" ReturnType="Collection(ServiceDeskModel.Allocation)" />
           </EntityContainer>
         <EntityType Name="Employee_New">
           <Key>
@@ -2238,10 +2237,10 @@ warning 6002: The table/view 'WEB_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             <PropertyRef Name="Module_ID" />
           </Key>
           <Property Name="Module_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Deactive" Type="Boolean" />
           <NavigationProperty Name="Rules" Relationship="ServiceDeskModel.FK_Rule_Module" FromRole="Module" ToRole="Rule" />
+          <Property Name="Module_Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Rule">
           <Key>
@@ -2440,21 +2439,23 @@ warning 6002: The table/view 'WEB_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="ORDER_TYPE_VIEW">
-          <Key>
-            <PropertyRef Name="OrderId" />
-          </Key>
-          <Property Name="OrderId" Type="Int32" Nullable="false" />
-          <Property Name="OrderDate" Type="DateTime" Precision="3" />
-          <Property Name="Total" Type="Decimal" Precision="10" Scale="2" />
-          <Property Name="Note" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="Confirmed" Type="Boolean" />
-          <Property Name="EmployeeID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Employee_Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="Del" Type="Boolean" />
-          <Property Name="Plant" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
-          <Property Name="AlbumTypeId" Type="Int32" />
-        </EntityType>
+        <ComplexType Name="GetLastAllocationOfDevice_Result">
+          <Property Type="Guid" Name="Allocation_Id" Nullable="false" />
+          <Property Type="Guid" Name="Device_Id" Nullable="true" />
+          <Property Type="Guid" Name="Memo_Id" Nullable="true" />
+          <Property Type="String" Name="Allocation_Code" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Deliver" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Receiver" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="Delivery_Date" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="Return_Date" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Department_Id" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Note" Nullable="true" />
+          <Property Type="String" Name="IP" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="Create_Date" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="Delete_Date" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="Flag_ReAllocation" Nullable="true" />
+          <Property Type="String" Name="QRCodeFile" Nullable="true" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2924,9 +2925,9 @@ warning 6002: The table/view 'WEB_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <EntitySetMapping Name="Modules">
             <EntityTypeMapping TypeName="ServiceDeskModel.Module">
               <MappingFragment StoreEntitySet="Module">
-                <ScalarProperty Name="Deactive" ColumnName="Deactive" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Module_Name" ColumnName="Module_Name" />
+                <ScalarProperty Name="Deactive" ColumnName="Deactive" />
                 <ScalarProperty Name="Module_ID" ColumnName="Module_ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2970,8 +2971,6 @@ warning 6002: The table/view 'WEB_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="GetLastAllocationOfDevice" FunctionName="ServiceDeskModel.Store.GetLastAllocationOfDevice">
-          </FunctionImportMapping>
           <EntitySetMapping Name="Incidents">
             <EntityTypeMapping TypeName="ServiceDeskModel.Incident">
               <MappingFragment StoreEntitySet="Incidents">
@@ -3031,22 +3030,8 @@ warning 6002: The table/view 'WEB_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ORDER_TYPE_VIEW">
-            <EntityTypeMapping TypeName="ServiceDeskModel.ORDER_TYPE_VIEW">
-              <MappingFragment StoreEntitySet="ORDER_TYPE_VIEW">
-                <ScalarProperty Name="AlbumTypeId" ColumnName="AlbumTypeId" />
-                <ScalarProperty Name="Plant" ColumnName="Plant" />
-                <ScalarProperty Name="Del" ColumnName="Del" />
-                <ScalarProperty Name="Employee_Name" ColumnName="Employee_Name" />
-                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-                <ScalarProperty Name="Confirmed" ColumnName="Confirmed" />
-                <ScalarProperty Name="Note" ColumnName="Note" />
-                <ScalarProperty Name="Total" ColumnName="Total" />
-                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
-                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetLastAllocationOfDevice" FunctionName="ServiceDeskModel.Store.GetLastAllocationOfDevice">
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

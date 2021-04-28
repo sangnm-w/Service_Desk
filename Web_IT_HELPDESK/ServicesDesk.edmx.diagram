@@ -4,35 +4,36 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="0884bc164a6f40c0aef1235492170bb6" Name="Diagram1" ZoomLevel="52">
-        <EntityTypeShape EntityType="ServiceDeskModel.Album" Width="1.5" PointX="16.5" PointY="44.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="ServiceDeskModel.AlbumType" Width="1.5" PointX="14.25" PointY="45.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="ServiceDeskModel.BIZ_TRIP" Width="1.5" PointX="7.5" PointY="32.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ServiceDeskModel.Cart" Width="1.5" PointX="18.75" PointY="44.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ServiceDeskModel.CONTRACT" Width="1.5" PointX="10.5" PointY="38.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="ServiceDeskModel.CONTRACT_SUB" Width="1.5" PointX="15.75" PointY="40.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ServiceDeskModel.CONTRACT_TYPE" Width="1.5" PointX="8.25" PointY="53.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="ServiceDeskModel.CONTRACT_TYPE_DETAIL" Width="1.5" PointX="8.25" PointY="56" IsExpanded="true" />
-        <EntityTypeShape EntityType="ServiceDeskModel.Device" Width="1.5" PointX="12.75" PointY="33.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="ServiceDeskModel.Device_Type" Width="1.5" PointX="10.5" PointY="28.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ServiceDeskModel.Document" Width="1.5" PointX="10.5" PointY="46.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="ServiceDeskModel.DocumentType" Width="1.5" PointX="8.25" PointY="62.125" IsExpanded="true" />
+      <Diagram DiagramId="0884bc164a6f40c0aef1235492170bb6" Name="Diagram1" ZoomLevel="60">
+        <EntityTypeShape EntityType="ServiceDeskModel.Album" Width="1.5" PointX="10.5" PointY="58.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiceDeskModel.AlbumType" Width="1.5" PointX="8.25" PointY="59.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiceDeskModel.BIZ_TRIP" Width="1.5" PointX="7.5" PointY="38.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiceDeskModel.Cart" Width="1.5" PointX="12.75" PointY="58.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiceDeskModel.CONTRACT" Width="1.5" PointX="13.5" PointY="38.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiceDeskModel.CONTRACT_SUB" Width="1.5" PointX="18.75" PointY="40.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiceDeskModel.CONTRACT_TYPE" Width="1.5" PointX="11.25" PointY="50.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiceDeskModel.CONTRACT_TYPE_DETAIL" Width="1.5" PointX="11.25" PointY="53" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiceDeskModel.Device" Width="1.5" PointX="15.75" PointY="39.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiceDeskModel.Device_Type" Width="1.5" PointX="13.5" PointY="34.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiceDeskModel.Document" Width="1.5" PointX="7.5" PointY="46.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiceDeskModel.DocumentType" Width="1.5" PointX="5.25" PointY="49.125" IsExpanded="true" />
         <EntityTypeShape EntityType="ServiceDeskModel.Drinking_Request" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ServiceDeskModel.EMP_ANSWER" Width="1.5" PointX="10.5" PointY="34.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="ServiceDeskModel.Employee" Width="1.5" PointX="8.25" PointY="47.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiceDeskModel.EMP_ANSWER" Width="1.5" PointX="10.5" PointY="40.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiceDeskModel.Employee" Width="1.5" PointX="11.25" PointY="30.5" IsExpanded="true" />
         <EntityTypeShape EntityType="ServiceDeskModel.EmployeeInfo" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ServiceDeskModel.Event" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ServiceDeskModel.hr_emp_infor" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ServiceDeskModel.hr_emp_meal" Width="1.5" PointX="0.75" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ServiceDeskModel.Level" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ServiceDeskModel.Order_" Width="1.5" PointX="13.5" PointY="40.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="ServiceDeskModel.OrderDetail" Width="1.5" PointX="18.75" PointY="40.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ServiceDeskModel.PERIOD" Width="1.5" PointX="8.25" PointY="58.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="ServiceDeskModel.QUESTION" Width="1.5" PointX="8.25" PointY="22.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiceDeskModel.Order_" Width="1.5" PointX="10.5" PointY="44.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiceDeskModel.OrderDetail" Width="1.5" PointX="12.75" PointY="46.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiceDeskModel.PERIOD" Width="1.5" PointX="11.25" PointY="55.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiceDeskModel.QUESTION" Width="1.5" PointX="8.25" PointY="50.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ServiceDeskModel.Role" Width="1.5" PointX="5.25" PointY="45.875" IsExpanded="true" />
         <EntityTypeShape EntityType="ServiceDeskModel.Screen" Width="1.5" PointX="2.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ServiceDeskModel.Status" Width="1.5" PointX="6" PointY="24.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ServiceDeskModel.UserLogon" Width="1.5" PointX="7.5" PointY="40.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiceDeskModel.UserLogon" Width="1.5" PointX="10.5" PointY="36.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiceDeskModel.ORDER_TYPE_VIEW" Width="1.5" PointX="6.75" PointY="3.75" IsExpanded="true" />
         <AssociationConnector Association="ServiceDeskModel.FK_Album_AlbumType" ManuallyRouted="false" />
         <AssociationConnector Association="ServiceDeskModel.FK_Cart_Album" ManuallyRouted="false" />
         <AssociationConnector Association="ServiceDeskModel.FK_OrderDetail_Album" ManuallyRouted="false" />
@@ -59,12 +60,12 @@
         <AssociationConnector Association="ServiceDeskModel.FK_EMP_ANSWER_Employee_New" />
         <AssociationConnector Association="ServiceDeskModel.FK_Order__Employee_New" />
         <AssociationConnector Association="ServiceDeskModel.FK_UserLogon_Employee_New" />
-        <EntityTypeShape EntityType="ServiceDeskModel.Authorization" Width="1.5" PointX="7.5" PointY="43.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiceDeskModel.Authorization" Width="1.5" PointX="7.5" PointY="34.875" IsExpanded="true" />
         <AssociationConnector Association="ServiceDeskModel.FK_Authorization_Employee_New" />
         <AssociationConnector Association="ServiceDeskModel.FK_Authorization_Role" />
         <EntityTypeShape EntityType="ServiceDeskModel.Plant" Width="1.5" PointX="0.75" PointY="28.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ServiceDeskModel.Module" Width="1.5" PointX="8.25" PointY="65" IsExpanded="true" />
-        <EntityTypeShape EntityType="ServiceDeskModel.Rule" Width="1.5" PointX="10.5" PointY="50.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiceDeskModel.Module" Width="1.5" PointX="11.25" PointY="63" IsExpanded="true" />
+        <EntityTypeShape EntityType="ServiceDeskModel.Rule" Width="1.5" PointX="13.5" PointY="49.875" IsExpanded="true" />
         <AssociationConnector Association="ServiceDeskModel.FK_Rule_Module" />
         <AssociationConnector Association="ServiceDeskModel.RoleClaim" />
         <EntityTypeShape EntityType="ServiceDeskModel.Allocation" Width="1.5" PointX="5.25" PointY="27" IsExpanded="true" />

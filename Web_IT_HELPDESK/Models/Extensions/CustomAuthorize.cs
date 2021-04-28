@@ -11,6 +11,7 @@ namespace Web_IT_HELPDESK.Models.Extensions
     {
         public ServiceDeskEntities en { get; set; }
         public ApplicationUser _appUser { get; set; }
+        private string authorizeErr { get; set; } = null;
 
         private readonly string[] allowedroles;
         public CustomAuthorizeAttribute(params string[] roles)
@@ -32,31 +33,43 @@ namespace Web_IT_HELPDESK.Models.Extensions
                 return false;
             }
 
-            bool isAdmin = _appUser.isAdmin;
-            if (isAdmin)
-                return true;
-
             var rd = httpContext.Request.RequestContext.RouteData;
             string currentAction = rd.GetRequiredString("action");
             string currentController = rd.GetRequiredString("controller");
-            string currentArea = rd.Values["area"] as string;
+            //string currentArea = rd.Values["area"] as string;
+
+            Rule acceptedRule = null;
+
+            acceptedRule = en.Rules
+            .Join(en.Modules, ru => ru.Module_ID, mo => mo.Module_ID, (ru, mo) => new { ru, mo })
+            .FirstOrDefault(grp => grp.ru.Rule_Name.ToUpper() == currentAction.ToUpper()
+            && grp.mo.Module_Name.ToUpper() == currentController.ToUpper())?.ru;
+
+            if (acceptedRule == null)
+            {
+                authorizeErr = "This module does not setup into Role and Rule. Please contact Mr. Sang - IT Software, email: minhsang.it@cjvina.com or zalo: 0937199707";
+                return false;
+            }
+
+            bool isAdmin = _appUser.isAdmin;
+            if (isAdmin)
+                return true;
 
             List<Role> userRoles = _appUser.GetRoles();
 
             if (userRoles.Count() <= 0)
                 return false;
 
-            List<Rule> validRules = _appUser.GetRules(userRoles);
+            List<Rule> userRules = _appUser.GetRules(userRoles);
 
-            if (validRules.Count() <= 0)
+            if (userRules.Count() <= 0)
                 return false;
 
-            foreach (var rule in validRules.Distinct())
+            Rule userHasAcceptedRule = userRules.FirstOrDefault(ru => ru.Rule_ID == acceptedRule.Rule_ID && ru.Module_ID == acceptedRule.Module_ID);
+
+            if (userHasAcceptedRule != null)
             {
-                if (rule.Rule_Name.ToUpper() == currentAction.ToUpper())
-                {
-                    return true;
-                }
+                return true;
             }
 
             return false;
@@ -67,6 +80,12 @@ namespace Web_IT_HELPDESK.Models.Extensions
             if (!filterContext.HttpContext.User.Identity.IsAuthenticated)
             {
                 filterContext.Result = new HttpUnauthorizedResult();
+            }
+            else if (!string.IsNullOrWhiteSpace(authorizeErr))
+            {
+                filterContext.Controller.TempData["authorizeErr"] = authorizeErr;
+                filterContext.Result = new RedirectToRouteResult(
+                                    new RouteValueDictionary(new { controller = "Error", action = "Index" }));
             }
             else
             {

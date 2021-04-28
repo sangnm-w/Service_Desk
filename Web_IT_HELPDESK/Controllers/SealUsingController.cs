@@ -212,76 +212,6 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         [CustomAuthorize]
-        public ActionResult Resend(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var seal_Using = en.Seal_Using.FirstOrDefault(s => s.Id == id);
-
-            if (seal_Using == null)
-            {
-                return HttpNotFound();
-            }
-
-            SealUsingViewModel.EditSealUsing esuVM = new SealUsingViewModel.EditSealUsing(seal_Using);
-
-            string result = "";
-
-            //Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == seal_Using.Employee_ID);
-            Employee_New userRequest = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == seal_Using.Employee_ID);
-            bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(seal_Using, 2, userRequest); // Level 2: Resend
-            if (resultMailing)
-            {
-                result = string.Format("Email to confirm The Seal Using Registration has been sent to Department Manager");
-            }
-            else
-            {
-                result = string.Format("Can't send confirm email to Department Manager. Please contact for support: minhsang.it@cjvina.com");
-            }
-
-            string curr_PlantID = _appUser.GetPlantID();
-            string curr_DeptID = _appUser.GetDepartmentID();
-
-            DateTime from_date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            DateTime to_date = from_date.AddMonths(1).AddSeconds(-1);
-
-            ViewBag.IsResend = true;
-
-            var suVM = en.Seal_Using
-                .Where(s => s.Del != true
-                        && s.DepartmentId == curr_DeptID
-                        && s.Date >= from_date
-                        && s.Date <= to_date
-                      )
-                .Join(en.Departments,
-                      s => s.DepartmentId,
-                      d => d.Department_Id,
-                      (s, d) => new SealUsingViewModel.IndexSealUsing()
-                      {
-                          SealUsing = s,
-                          DeptName = d.Department_Name
-                      }
-                      )
-                .ToList();
-
-            if (!string.IsNullOrEmpty(result))
-            {
-                ViewBag.ModalState = "true";
-                ViewBag.Message = result;
-            }
-            else
-            {
-                ViewBag.ModalState = "false";
-                ViewBag.Message = "";
-            }
-
-            return View("Index", suVM);
-        }
-
-        [CustomAuthorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -473,6 +403,75 @@ namespace Web_IT_HELPDESK.Controllers
             return View(model);
         }
 
+        [CustomAuthorize]
+        public ActionResult Resend(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var seal_Using = en.Seal_Using.FirstOrDefault(s => s.Id == id);
+
+            if (seal_Using == null)
+            {
+                return HttpNotFound();
+            }
+
+            SealUsingViewModel.EditSealUsing esuVM = new SealUsingViewModel.EditSealUsing(seal_Using);
+
+            string result = "";
+
+            //Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == seal_Using.Employee_ID);
+            Employee_New userRequest = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == seal_Using.Employee_ID);
+            bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(seal_Using, 2, userRequest); // Level 2: Resend
+            if (resultMailing)
+            {
+                result = string.Format("Email to confirm The Seal Using Registration has been sent to Department Manager");
+            }
+            else
+            {
+                result = string.Format("Can't send confirm email to Department Manager. Please contact for support: minhsang.it@cjvina.com");
+            }
+
+            string curr_PlantID = _appUser.GetPlantID();
+            string curr_DeptID = _appUser.GetDepartmentID();
+
+            DateTime from_date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            DateTime to_date = from_date.AddMonths(1).AddSeconds(-1);
+
+            ViewBag.IsResend = true;
+
+            var suVM = en.Seal_Using
+                .Where(s => s.Del != true
+                        && s.DepartmentId == curr_DeptID
+                        && s.Date >= from_date
+                        && s.Date <= to_date
+                      )
+                .Join(en.Departments,
+                      s => s.DepartmentId,
+                      d => d.Department_Id,
+                      (s, d) => new SealUsingViewModel.IndexSealUsing()
+                      {
+                          SealUsing = s,
+                          DeptName = d.Department_Name
+                      }
+                      )
+                .ToList();
+
+            if (!string.IsNullOrEmpty(result))
+            {
+                ViewBag.ModalState = "true";
+                ViewBag.Message = result;
+            }
+            else
+            {
+                ViewBag.ModalState = "false";
+                ViewBag.Message = "";
+            }
+
+            return View("Index", suVM);
+        }
         //
         // GET: /SealUsing/Delete/5
 
