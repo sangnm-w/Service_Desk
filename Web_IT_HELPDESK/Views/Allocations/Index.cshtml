@@ -149,6 +149,7 @@
                                     {
                                         @Html.ActionLink("Provide", "Create", new { id = item.Device.Device_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
                                     }
+                                    @Html.ActionLink("Details", "Details", new { id = item.Device.Device_Id }, new { @class = "btn btn-default btn-xs", @role = "button", @style = "margin: 0px 5px" })
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Device.Device_Code)

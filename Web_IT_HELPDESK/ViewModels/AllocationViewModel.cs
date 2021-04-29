@@ -88,5 +88,35 @@ namespace Web_IT_HELPDESK.ViewModels
             public string IP { get; set; }
             public string QRCodeFile { get; set; }
         }
+
+        public class Details
+        {
+            public Details()
+            {
+                Device = new Device();
+                Representation = new Representation();
+                Representations = new List<Representation>();
+            }
+
+            public Details(Device device, Representation representation, IEnumerable<Representation> representations)
+            {
+                Device = device;
+                Representation = representation;
+                Representations = representations;
+            }
+
+            public Device Device { get; set; }
+            public Representation Representation { get; set; }
+            public IEnumerable<Representation> Representations { get; set; }
+        }
+
+        public class Representation
+        {
+            public Allocation Allocation { get; set; }
+            public string DeliverName { get; set; }
+            public string ReceiverName { get; set; }
+            public string DepartmentName { get; set; }
+            public string PlantName { get; set; }
+        }
     }
 }

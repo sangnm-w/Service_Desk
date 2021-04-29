@@ -129,25 +129,31 @@ namespace Web_IT_HELPDESK.Controllers
         [CustomAuthorize]
         public ActionResult Details(Guid? id)
         {
+            Device device = null;
+            AllocationViewModel.Representation lastAllocationOfDevice = null;
+            IEnumerable<AllocationViewModel.Representation> allocationsOfDevice = null;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Allocation allocation = en.Allocations.Find(id);
-            if (allocation == null)
+            device = en.Devices.Find(id);
+            if (device == null)
             {
                 return HttpNotFound();
             }
-            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == currentEmployeeID).Plant_Id;
 
-            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).EmployeeName;
-            ViewBag.ReceiverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).EmployeeName;
-            ViewBag.DeviceTypeId = en.Devices.FirstOrDefault(d => d.Device_Id == allocation.Device_Id).Device_Type_Id;
+            allocationsOfDevice = AllocationModel.Instance.get_AllocationsByDeviceId(id);
+            bool hasAllocation = allocationsOfDevice.Any();
+            ViewBag.hasAllocation = hasAllocation;
 
-            List<AllocationViewModel> allocations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
-            ViewBag.Allocations = allocations;
+            if (hasAllocation)
+            {
+                lastAllocationOfDevice = allocationsOfDevice.OrderByDescending(a => a.Allocation.Create_Date).FirstOrDefault();
+            }
 
-            return View(allocation);
+            AllocationViewModel.Details vm = new AllocationViewModel.Details(device, lastAllocationOfDevice, allocationsOfDevice);
+
+            return View(vm);
         }
 
         // GET: Allocations/Create
@@ -273,8 +279,8 @@ namespace Web_IT_HELPDESK.Controllers
             Department_Id.Insert(0, new SelectListItem { Text = "None", Value = "" });
             ViewBag.Department_Id = Department_Id;
 
-            List<AllocationViewModel> allocations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
-            ViewBag.Allocations = allocations;
+            List<AllocationViewModel.Representation> representations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
+            ViewBag.Representations = representations;
 
             return View(allocation);
         }
@@ -299,8 +305,12 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 string filePath = AllocationHelper.Instance.CreateQRCode(allocation);
                 allocation.QRCodeFile = filePath;
-
                 en.Entry(allocation).State = EntityState.Modified;
+
+                Device d = en.Devices.Find(allocation.Device_Id);
+                d.QRCodeFile = filePath;
+                en.Entry(d).State = EntityState.Modified;
+
                 en.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -323,8 +333,8 @@ namespace Web_IT_HELPDESK.Controllers
             Department_Id.Insert(0, new SelectListItem { Text = "None", Value = "" });
             ViewBag.Department_Id = Department_Id;
 
-            List<AllocationViewModel> allocations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
-            ViewBag.Allocations = allocations;
+            List<AllocationViewModel.Representation> representations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
+            ViewBag.Representations= representations;
 
             return View(allocation);
         }
@@ -352,8 +362,8 @@ namespace Web_IT_HELPDESK.Controllers
 
             ViewBag.DepartmentName = DepartmentModel.Instance.getDeptNameByDeptId(allocation.Department_Id);
 
-            List<AllocationViewModel> allocations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
-            ViewBag.Allocations = allocations;
+            List<AllocationViewModel.Representation> representations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
+            ViewBag.Representations = representations;
 
             return View(allocation);
         }
@@ -399,8 +409,8 @@ namespace Web_IT_HELPDESK.Controllers
 
             ViewBag.DepartmentName = DepartmentModel.Instance.getDeptNameByDeptId(allocation.Department_Id);
 
-            List<AllocationViewModel> allocations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
-            ViewBag.Allocations = allocations;
+            List<AllocationViewModel.Representation> representations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
+            ViewBag.Representations = representations;
 
             return View(allocation);
         }
@@ -438,8 +448,8 @@ namespace Web_IT_HELPDESK.Controllers
 
             ViewBag.Department_Id = Department_Id;
 
-            List<AllocationViewModel> allocations = AllocationModel.Instance.get_AllocationsByDeviceId(device.Device_Id);
-            ViewBag.Allocations = allocations;
+            List<AllocationViewModel.Representation> representations = AllocationModel.Instance.get_AllocationsByDeviceId(id);
+            ViewBag.Representations = representations;
 
             ViewBag.Allocation_Code = AllocationModel.Instance.Generate_AllocationCode(device.Device_Id, device.Device_Code);
 
@@ -495,8 +505,8 @@ namespace Web_IT_HELPDESK.Controllers
 
             ViewBag.Department_Id = Department_Id;
 
-            List<AllocationViewModel> allocations = AllocationModel.Instance.get_AllocationsByDeviceId(device.Device_Id);
-            ViewBag.Allocations = allocations;
+            List<AllocationViewModel.Representation> representations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
+            ViewBag.Representations = representations;
 
             ViewBag.Allocation_Code = AllocationModel.Instance.Generate_AllocationCode(device.Device_Id, device.Device_Code);
 

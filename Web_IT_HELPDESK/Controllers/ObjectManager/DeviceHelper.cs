@@ -49,7 +49,17 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                 Directory.CreateDirectory(serverPath);
             }
 
-            string fileName = device.Device_Code + "-" + device.Create_Date?.ToString("dd-MM-yyyy") + ".png";
+            
+            if (!string.IsNullOrWhiteSpace(device.QRCodeFile))
+            {
+                string oldFileName = HostingEnvironment.MapPath(device.QRCodeFile);
+                if (File.Exists(oldFileName))
+                {
+                    File.Delete(oldFileName);
+                }
+            }
+
+            string fileName = device.Device_Code + "-" + DateTime.Now.ToString("dd-MM-yyyy") + ".png";
             string savePath = Path.Combine(serverPath, fileName);
             try
             {
