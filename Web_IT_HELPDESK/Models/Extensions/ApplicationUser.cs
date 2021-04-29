@@ -114,8 +114,7 @@ namespace Web_IT_HELPDESK.Models.Extensions
             result = en.Employee_New
                     .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                     .FirstOrDefault(grp => grp.e.Emp_CJ == EmployeeID)
-                    .d.Manager_Id
-                    .ToString();
+                    .d.Manager_Id;
 
             return result;
         }

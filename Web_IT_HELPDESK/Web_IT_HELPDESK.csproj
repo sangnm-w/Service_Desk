@@ -1729,7 +1729,6 @@
     <Content Include="vendors\Bootstrap-Select-1.13.14\js\i18n\defaults-vi_VN.js.map" />
     <Content Include="vendors\Bootstrap-Select-1.13.14\js\i18n\defaults-zh_CN.js.map" />
     <Content Include="vendors\Bootstrap-Select-1.13.14\js\i18n\defaults-zh_TW.js.map" />
-    <Content Include="Views\SealUsing\Edit - Copy.cshtml" />
     <Content Include="Views\SealUsing\Edit.cshtml" />
     <Content Include="Views\Contacts\Index.cshtml" />
     <Content Include="Views\BIZ_TRIP\hr_admin.cshtml" />

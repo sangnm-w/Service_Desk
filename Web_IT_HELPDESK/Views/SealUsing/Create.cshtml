@@ -41,7 +41,6 @@
             @Html.AntiForgeryToken()
             <div class="form-horizontal">
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @Html.HiddenFor(model => model.Plant)
                 <div class="form-group">
                     <div class="col-md-4">
                         @Html.LabelFor(model => model.Date, "Registration Date", htmlAttributes: new { @class = "control-label" })

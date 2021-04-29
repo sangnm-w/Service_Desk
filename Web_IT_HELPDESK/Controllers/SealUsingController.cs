@@ -61,7 +61,6 @@ namespace Web_IT_HELPDESK.Controllers
 
             if (currUserIsManager == false && currUserIsHrSealManager == false)
             {
-                suVM = suVM.Where(i => i.SealUsing.Employee_ID == _appUser.EmployeeID).ToList();
                 isResend = false;
             }
 
@@ -109,7 +108,6 @@ namespace Web_IT_HELPDESK.Controllers
 
             if (currUserIsManager == false && currUserIsHRSealManager == false)
             {
-                suVM = suVM.Where(i => i.SealUsing.Employee_ID == _appUser.EmployeeID).ToList();
                 isResend = false;
             }
 
@@ -125,7 +123,6 @@ namespace Web_IT_HELPDESK.Controllers
             return View(suVM);
         }
 
-        //
         // GET: /SealUsing/Details/5
         [CustomAuthorize]
         public ActionResult Details(int? id)
@@ -148,7 +145,6 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: /SealUsing/Create
-
         [CustomAuthorize]
         public ActionResult Create()
         {
