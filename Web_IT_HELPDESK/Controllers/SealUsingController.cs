@@ -36,13 +36,12 @@ namespace Web_IT_HELPDESK.Controllers
             bool currUserIsManager = _appUser.IsManager;
             string deptIdHrSealManager = curr_PlantID + "S0003";
             bool currUserIsHrSealManager = en.Departments
-                .FirstOrDefault(d => d.Plant_Id == curr_PlantID 
-                && d.Department_Id == deptIdHrSealManager 
+                .FirstOrDefault(d => d.Plant_Id == curr_PlantID
+                && d.Department_Id == deptIdHrSealManager
                 && d.Manager_Id == _appUser.EmployeeID) != null ? true : false;
 
             var suVM = en.Seal_Using
                 .Where(s => s.Del != true
-                        && s.DepartmentId == curr_DeptID
                         && s.Date >= from_date
                         && s.Date <= to_date
                       )
@@ -53,14 +52,14 @@ namespace Web_IT_HELPDESK.Controllers
                       {
                           SealUsing = s,
                           DeptName = d.Department_Name
-                      }
-                      )
+                      })
                 .ToList();
 
             bool isResend = true;
 
-            if (currUserIsManager == false && currUserIsHrSealManager == false)
+            if (currUserIsHrSealManager != true)
             {
+                suVM = suVM.Where(s => s.SealUsing.DepartmentId == curr_DeptID).ToList();
                 isResend = false;
             }
 
@@ -82,7 +81,6 @@ namespace Web_IT_HELPDESK.Controllers
 
             var sealusings = en.Seal_Using
                 .Where(s => s.Del != true
-                        && s.DepartmentId == curr_DeptID
                         && s.Date >= from_date
                         && s.Date <= to_date
                 ).ToList();
@@ -100,13 +98,13 @@ namespace Web_IT_HELPDESK.Controllers
             bool currUserIsManager = _appUser.IsManager;
             string deptIdHRSealManager = curr_PlantID + "S0003";
             bool currUserIsHRSealManager = en.Departments
-                .FirstOrDefault(d => d.Plant_Id == curr_PlantID 
-                && d.Department_Id == deptIdHRSealManager 
+                .FirstOrDefault(d => d.Plant_Id == curr_PlantID
+                && d.Department_Id == deptIdHRSealManager
                 && d.Manager_Id == _appUser.EmployeeID) != null ? true : false;
 
             bool isResend = true;
 
-            if (currUserIsManager == false && currUserIsHRSealManager == false)
+            if (currUserIsManager != true && currUserIsHRSealManager != true)
             {
                 isResend = false;
             }
