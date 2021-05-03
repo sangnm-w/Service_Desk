@@ -259,11 +259,10 @@ namespace Web_IT_HELPDESK.Models
             return avm.AsEnumerable();
         }
 
-        public List<AllocationViewModel> get_AllocationsByDeviceId(Guid? deviceId)
+        public List<AllocationViewModel.Representation> get_AllocationsByDeviceId(Guid? deviceId)
         {
             ServiceDeskEntities en = new ServiceDeskEntities();
             var allocations = en.Allocations
-                //.Join(en.Employees,
                 .Join(en.Employee_New,
                 a => a.Deliver,
                 e => e.Emp_CJ,
@@ -272,15 +271,16 @@ namespace Web_IT_HELPDESK.Models
                     Allocation = a,
                     Deliver_Name = e.Employee_Name
                 })
-                //.Join(en.Employees,
                 .Join(en.Employee_New,
                 j1 => j1.Allocation.Receiver,
                 e => e.Emp_CJ,
-                (j1, e) => new AllocationViewModel
+                (j1, e) => new AllocationViewModel.Representation
                 {
                     Allocation = j1.Allocation,
-                    Deliver_Name = j1.Deliver_Name,
-                    Receiver_Name = e.Employee_Name
+                    DeliverName = j1.Deliver_Name,
+                    ReceiverName = e.Employee_Name,
+                    DepartmentName = j1.Allocation.Department.Department_Name,
+                    PlantName = j1.Allocation.Department.Plant.Plant_Name
                 })
                 .Where(avm => avm.Allocation.Device_Id == deviceId);
 

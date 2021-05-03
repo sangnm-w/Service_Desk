@@ -28,6 +28,7 @@ namespace Web_IT_HELPDESK.Controllers
         public DevicesController()
         {
             en = new ServiceDeskEntities();
+            _appUser = new ApplicationUser();
             currUserId = _appUser.EmployeeID;
             currUserPlantId = _appUser.GetPlantID();
         }
@@ -44,20 +45,21 @@ namespace Web_IT_HELPDESK.Controllers
         [CustomAuthorize]
         public ActionResult Details(Guid? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Device device = en.Devices.Find(id);
-            if (device == null)
-            {
-                return HttpNotFound();
-            }
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            //Device device = en.Devices.Find(id);
+            //if (device == null)
+            //{
+            //    return HttpNotFound();
+            //}
 
-            List<AllocationViewModel> allocations = AllocationModel.Instance.get_AllocationsByDeviceId(device.Device_Id);
-            ViewBag.Allocations = allocations;
+            //IEnumerable<AllocationViewModel.Representation> allocations = AllocationModel.Instance.get_AllocationsByDeviceId(device.Device_Id);
+            //ViewBag.Allocations = allocations;
 
-            return View(device);
+            //return View(device);
+            return View();
         }
 
         #region Create
@@ -102,7 +104,7 @@ namespace Web_IT_HELPDESK.Controllers
 
                 en.Devices.Add(device);
                 en.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Allocations");
 
             }
 
@@ -163,8 +165,7 @@ namespace Web_IT_HELPDESK.Controllers
 
                 en.Devices.Add(device);
                 en.SaveChanges();
-                return RedirectToAction("Index");
-
+                return RedirectToAction("Index", "Allocations");
             }
 
             List<SelectListItem> Contract_Id = new List<SelectListItem>();
@@ -221,7 +222,7 @@ namespace Web_IT_HELPDESK.Controllers
 
                 en.Entry(device).State = EntityState.Modified;
                 en.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Allocations");
             }
 
             ViewBag.Device_Type_Name = en.Device_Type.FirstOrDefault(t => t.Device_Type_Id == device.Device_Type_Id).Device_Type_Name;
@@ -266,7 +267,7 @@ namespace Web_IT_HELPDESK.Controllers
 
                 en.Entry(device).State = EntityState.Modified;
                 en.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Allocations");
             }
 
             ViewBag.Device_Type_Name = en.Device_Type.FirstOrDefault(t => t.Device_Type_Id == device.Device_Type_Id).Device_Type_Name;
@@ -304,9 +305,9 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // Post: Devices/Upload
-        [HttpPost, ActionName("Upload")]
+        [HttpPost]
         [CustomAuthorize]
-        public ActionResult UploadDevices(HttpPostedFileBase FileUpload)
+        public ActionResult Upload(HttpPostedFileBase FileUpload)
         {
             if (FileUpload != null)
             {

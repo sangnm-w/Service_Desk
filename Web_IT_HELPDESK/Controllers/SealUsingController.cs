@@ -36,13 +36,12 @@ namespace Web_IT_HELPDESK.Controllers
             bool currUserIsManager = _appUser.IsManager;
             string deptIdHrSealManager = curr_PlantID + "S0003";
             bool currUserIsHrSealManager = en.Departments
-                .FirstOrDefault(d => d.Plant_Id == curr_PlantID 
-                && d.Department_Id == deptIdHrSealManager 
+                .FirstOrDefault(d => d.Plant_Id == curr_PlantID
+                && d.Department_Id == deptIdHrSealManager
                 && d.Manager_Id == _appUser.EmployeeID) != null ? true : false;
 
             var suVM = en.Seal_Using
                 .Where(s => s.Del != true
-                        && s.DepartmentId == curr_DeptID
                         && s.Date >= from_date
                         && s.Date <= to_date
                       )
@@ -53,15 +52,14 @@ namespace Web_IT_HELPDESK.Controllers
                       {
                           SealUsing = s,
                           DeptName = d.Department_Name
-                      }
-                      )
+                      })
                 .ToList();
 
             bool isResend = true;
 
-            if (currUserIsManager == false && currUserIsHrSealManager == false)
+            if (currUserIsHrSealManager != true)
             {
-                suVM = suVM.Where(i => i.SealUsing.Employee_ID == _appUser.EmployeeID).ToList();
+                suVM = suVM.Where(s => s.SealUsing.DepartmentId == curr_DeptID).ToList();
                 isResend = false;
             }
 
@@ -83,7 +81,6 @@ namespace Web_IT_HELPDESK.Controllers
 
             var sealusings = en.Seal_Using
                 .Where(s => s.Del != true
-                        && s.DepartmentId == curr_DeptID
                         && s.Date >= from_date
                         && s.Date <= to_date
                 ).ToList();
@@ -101,15 +98,14 @@ namespace Web_IT_HELPDESK.Controllers
             bool currUserIsManager = _appUser.IsManager;
             string deptIdHRSealManager = curr_PlantID + "S0003";
             bool currUserIsHRSealManager = en.Departments
-                .FirstOrDefault(d => d.Plant_Id == curr_PlantID 
-                && d.Department_Id == deptIdHRSealManager 
+                .FirstOrDefault(d => d.Plant_Id == curr_PlantID
+                && d.Department_Id == deptIdHRSealManager
                 && d.Manager_Id == _appUser.EmployeeID) != null ? true : false;
 
             bool isResend = true;
 
-            if (currUserIsManager == false && currUserIsHRSealManager == false)
+            if (currUserIsManager != true && currUserIsHRSealManager != true)
             {
-                suVM = suVM.Where(i => i.SealUsing.Employee_ID == _appUser.EmployeeID).ToList();
                 isResend = false;
             }
 
@@ -125,7 +121,6 @@ namespace Web_IT_HELPDESK.Controllers
             return View(suVM);
         }
 
-        //
         // GET: /SealUsing/Details/5
         [CustomAuthorize]
         public ActionResult Details(int? id)
@@ -148,7 +143,6 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: /SealUsing/Create
-
         [CustomAuthorize]
         public ActionResult Create()
         {
@@ -209,76 +203,6 @@ namespace Web_IT_HELPDESK.Controllers
                 ViewBag.Message = "";
             }
             return View(csuVM);
-        }
-
-        [CustomAuthorize]
-        public ActionResult Resend(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var seal_Using = en.Seal_Using.FirstOrDefault(s => s.Id == id);
-
-            if (seal_Using == null)
-            {
-                return HttpNotFound();
-            }
-
-            SealUsingViewModel.EditSealUsing esuVM = new SealUsingViewModel.EditSealUsing(seal_Using);
-
-            string result = "";
-
-            //Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == seal_Using.Employee_ID);
-            Employee_New userRequest = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == seal_Using.Employee_ID);
-            bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(seal_Using, 2, userRequest); // Level 2: Resend
-            if (resultMailing)
-            {
-                result = string.Format("Email to confirm The Seal Using Registration has been sent to Department Manager");
-            }
-            else
-            {
-                result = string.Format("Can't send confirm email to Department Manager. Please contact for support: minhsang.it@cjvina.com");
-            }
-
-            string curr_PlantID = _appUser.GetPlantID();
-            string curr_DeptID = _appUser.GetDepartmentID();
-
-            DateTime from_date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            DateTime to_date = from_date.AddMonths(1).AddSeconds(-1);
-
-            ViewBag.IsResend = true;
-
-            var suVM = en.Seal_Using
-                .Where(s => s.Del != true
-                        && s.DepartmentId == curr_DeptID
-                        && s.Date >= from_date
-                        && s.Date <= to_date
-                      )
-                .Join(en.Departments,
-                      s => s.DepartmentId,
-                      d => d.Department_Id,
-                      (s, d) => new SealUsingViewModel.IndexSealUsing()
-                      {
-                          SealUsing = s,
-                          DeptName = d.Department_Name
-                      }
-                      )
-                .ToList();
-
-            if (!string.IsNullOrEmpty(result))
-            {
-                ViewBag.ModalState = "true";
-                ViewBag.Message = result;
-            }
-            else
-            {
-                ViewBag.ModalState = "false";
-                ViewBag.Message = "";
-            }
-
-            return View("Index", suVM);
         }
 
         [CustomAuthorize]
@@ -473,6 +397,75 @@ namespace Web_IT_HELPDESK.Controllers
             return View(model);
         }
 
+        [CustomAuthorize]
+        public ActionResult Resend(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var seal_Using = en.Seal_Using.FirstOrDefault(s => s.Id == id);
+
+            if (seal_Using == null)
+            {
+                return HttpNotFound();
+            }
+
+            SealUsingViewModel.EditSealUsing esuVM = new SealUsingViewModel.EditSealUsing(seal_Using);
+
+            string result = "";
+
+            //Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == seal_Using.Employee_ID);
+            Employee_New userRequest = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == seal_Using.Employee_ID);
+            bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(seal_Using, 2, userRequest); // Level 2: Resend
+            if (resultMailing)
+            {
+                result = string.Format("Email to confirm The Seal Using Registration has been sent to Department Manager");
+            }
+            else
+            {
+                result = string.Format("Can't send confirm email to Department Manager. Please contact for support: minhsang.it@cjvina.com");
+            }
+
+            string curr_PlantID = _appUser.GetPlantID();
+            string curr_DeptID = _appUser.GetDepartmentID();
+
+            DateTime from_date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            DateTime to_date = from_date.AddMonths(1).AddSeconds(-1);
+
+            ViewBag.IsResend = true;
+
+            var suVM = en.Seal_Using
+                .Where(s => s.Del != true
+                        && s.DepartmentId == curr_DeptID
+                        && s.Date >= from_date
+                        && s.Date <= to_date
+                      )
+                .Join(en.Departments,
+                      s => s.DepartmentId,
+                      d => d.Department_Id,
+                      (s, d) => new SealUsingViewModel.IndexSealUsing()
+                      {
+                          SealUsing = s,
+                          DeptName = d.Department_Name
+                      }
+                      )
+                .ToList();
+
+            if (!string.IsNullOrEmpty(result))
+            {
+                ViewBag.ModalState = "true";
+                ViewBag.Message = result;
+            }
+            else
+            {
+                ViewBag.ModalState = "false";
+                ViewBag.Message = "";
+            }
+
+            return View("Index", suVM);
+        }
         //
         // GET: /SealUsing/Delete/5
 

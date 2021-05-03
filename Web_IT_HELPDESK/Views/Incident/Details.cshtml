@@ -29,8 +29,8 @@
                 @Html.TextBoxFor(model => model.Code, new { @class = "form-control", @readonly = "readonly" })
             </div>
             <div class="col-sm-2">
-                @Html.LabelFor(model => model.Plant, "Plant", htmlAttributes: new { @class = "control-label" })
-                @Html.TextBoxFor(model => model.Plant, new { @class = "form-control", @readonly = "readonly", @Value = ViewBag.plantName })
+                @Html.Label("Plant", htmlAttributes: new { @class = "control-label" })
+                @Html.TextBox("Plant", (string)ViewBag.plantName, new { @class = "form-control", @readonly = "readonly" })
             </div>
             <div class="col-sm-4">
                 @Html.LabelFor(model => model.DepartmentId, "Department", htmlAttributes: new { @class = "control-label" })

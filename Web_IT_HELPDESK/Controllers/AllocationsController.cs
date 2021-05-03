@@ -16,7 +16,7 @@ using EntityState = System.Data.Entity.EntityState;
 
 namespace Web_IT_HELPDESK.Controllers
 {
-    [CustomAuthorize]
+
     public class AllocationsController : Controller
     {
         public ServiceDeskEntities en { get; set; }
@@ -30,39 +30,134 @@ namespace Web_IT_HELPDESK.Controllers
             currentEmployeeID = _appUser.EmployeeID;
         }
 
-        // GET: Allocations
+        // GET: Allocations/Index
+        [CustomAuthorize]
         public ActionResult Index()
         {
-            string curr_plantId = en.Employees.FirstOrDefault(e => e.Emp_CJ == currentEmployeeID).Plant_Id;
-            IEnumerable<AllocationViewModel> avm = AllocationModel.Instance.GetLastAllocationOfDeviceByPlantId(curr_plantId);
+            string currentPlantId = _appUser.GetPlantID();
+
+            List<Rule> userRules = new List<Rule>();
+            List<Role> userRoles = new List<Role>();
+            List<PlantViewModel> userPlants = new List<PlantViewModel>();
+            string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
+
+            bool IsAdmin = _appUser.isAdmin;
+
+            if (IsAdmin)
+            {
+                userRules = en.Rules
+                    .Join(en.Modules, ru => ru.Module_ID, mo => mo.Module_ID, (ru, mo) => new { ru, mo })
+                    .Where(grp => grp.ru.Deactive != true && grp.mo.Module_Name.ToUpper() == controllerName.ToUpper())
+                    .Select(grp => grp.ru)
+                    .ToList();
+
+                userPlants = en.Plants
+                    .Select(p => new PlantViewModel { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name })
+                    .ToList();
+            }
+            else
+            {
+                var userAuths = _appUser.GetAuthorizations();
+
+                userRoles = userAuths.Join(en.Roles, au => au.Role_ID, ro => ro.Role_ID, (au, ro) => ro).Distinct().ToList();
+                userRules = _appUser.GetRules(userRoles, controllerName);
+
+                var uPlants = _appUser.GetAuthorizations()
+               .Join(en.Plants, au => au.Plant_ID, p => p.Plant_Id, (au, p) => new { au, p }).Select(grp => new { grp.p.Plant_Id, grp.p.Plant_Name }).Distinct();
+
+                userPlants = uPlants.Select(p => new PlantViewModel { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name }).ToList();
+
+                bool isITManager = userRoles.Any(ro => ro.Role_ID == 2);
+            }
+
+            ViewBag.userRules = userRules.Select(ru => ru.Rule_Name).ToList();
+            ViewBag.userPlants = userPlants;
+            ViewBag.currentPlantId = currentPlantId;
+
+            IEnumerable<AllocationViewModel> avm = AllocationModel.Instance.GetLastAllocationOfDeviceByPlantId(currentPlantId);
+            return View(avm);
+        }
+
+
+        //POST: Allocations/Index
+        [HttpPost]
+        [CustomAuthorize]
+        public ActionResult Index(string plantId)
+        {
+            string currentPlantId = _appUser.GetPlantID();
+            List<Rule> userRules = new List<Rule>();
+            List<Role> userRoles = new List<Role>();
+            List<PlantViewModel> userPlants = new List<PlantViewModel>();
+            string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
+
+            bool IsAdmin = _appUser.isAdmin;
+
+            if (IsAdmin)
+            {
+                userRules = en.Rules
+                    .Join(en.Modules, ru => ru.Module_ID, mo => mo.Module_ID, (ru, mo) => new { ru, mo })
+                    .Where(grp => grp.ru.Deactive != true && grp.mo.Module_Name.ToUpper() == controllerName.ToUpper())
+                    .Select(grp => grp.ru)
+                    .ToList();
+
+                userPlants = en.Plants
+                    .Select(p => new PlantViewModel { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name })
+                    .ToList();
+            }
+            else
+            {
+                var userAuths = _appUser.GetAuthorizations();
+
+                userRoles = userAuths.Join(en.Roles, au => au.Role_ID, ro => ro.Role_ID, (au, ro) => ro).Distinct().ToList();
+                userRules = _appUser.GetRules(userRoles, controllerName);
+
+                var uPlants = _appUser.GetAuthorizations()
+               .Join(en.Plants, au => au.Plant_ID, p => p.Plant_Id, (au, p) => new { au, p }).Select(grp => new { grp.p.Plant_Id, grp.p.Plant_Name }).Distinct();
+
+                userPlants = uPlants.Select(p => new PlantViewModel { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name }).ToList();
+            }
+
+            ViewBag.userRules = userRules.Select(ru => ru.Rule_Name).ToList();
+            ViewBag.userPlants = userPlants;
+            ViewBag.currentPlantId = string.IsNullOrEmpty(plantId) ? currentPlantId : plantId;
+
+            IEnumerable<AllocationViewModel> avm = AllocationModel.Instance.GetLastAllocationOfDeviceByPlantId(plantId);
             return View(avm);
         }
 
         // GET: Allocations/Details/5
+        [CustomAuthorize]
         public ActionResult Details(Guid? id)
         {
+            Device device = null;
+            AllocationViewModel.Representation lastAllocationOfDevice = null;
+            IEnumerable<AllocationViewModel.Representation> allocationsOfDevice = null;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Allocation allocation = en.Allocations.Find(id);
-            if (allocation == null)
+            device = en.Devices.Find(id);
+            if (device == null)
             {
                 return HttpNotFound();
             }
-            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == currentEmployeeID).Plant_Id;
 
-            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).EmployeeName;
-            ViewBag.ReceiverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).EmployeeName;
-            ViewBag.DeviceTypeId = en.Devices.FirstOrDefault(d => d.Device_Id == allocation.Device_Id).Device_Type_Id;
+            allocationsOfDevice = AllocationModel.Instance.get_AllocationsByDeviceId(id);
+            bool hasAllocation = allocationsOfDevice.Any();
+            ViewBag.hasAllocation = hasAllocation;
 
-            List<AllocationViewModel> allocations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
-            ViewBag.Allocations = allocations;
+            if (hasAllocation)
+            {
+                lastAllocationOfDevice = allocationsOfDevice.OrderByDescending(a => a.Allocation.Create_Date).FirstOrDefault();
+            }
 
-            return View(allocation);
+            AllocationViewModel.Details vm = new AllocationViewModel.Details(device, lastAllocationOfDevice, allocationsOfDevice);
+
+            return View(vm);
         }
 
         // GET: Allocations/Create
+        [CustomAuthorize]
         public ActionResult Create(Guid? id)
         {
             if (id == null)
@@ -101,6 +196,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         // POST: Allocations/Create
         [HttpPost]
+        [CustomAuthorize]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Allocation allocation)
         {
@@ -154,6 +250,7 @@ namespace Web_IT_HELPDESK.Controllers
         }
 
         // GET: Allocations/Edit/5
+        [CustomAuthorize]
         public ActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -182,14 +279,15 @@ namespace Web_IT_HELPDESK.Controllers
             Department_Id.Insert(0, new SelectListItem { Text = "None", Value = "" });
             ViewBag.Department_Id = Department_Id;
 
-            List<AllocationViewModel> allocations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
-            ViewBag.Allocations = allocations;
+            List<AllocationViewModel.Representation> representations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
+            ViewBag.Representations = representations;
 
             return View(allocation);
         }
 
         // POST: Allocations/Edit/5
         [HttpPost]
+        [CustomAuthorize]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Allocation allocation)
         {
@@ -207,8 +305,12 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 string filePath = AllocationHelper.Instance.CreateQRCode(allocation);
                 allocation.QRCodeFile = filePath;
-
                 en.Entry(allocation).State = EntityState.Modified;
+
+                Device d = en.Devices.Find(allocation.Device_Id);
+                d.QRCodeFile = filePath;
+                en.Entry(d).State = EntityState.Modified;
+
                 en.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -231,13 +333,14 @@ namespace Web_IT_HELPDESK.Controllers
             Department_Id.Insert(0, new SelectListItem { Text = "None", Value = "" });
             ViewBag.Department_Id = Department_Id;
 
-            List<AllocationViewModel> allocations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
-            ViewBag.Allocations = allocations;
+            List<AllocationViewModel.Representation> representations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
+            ViewBag.Representations= representations;
 
             return View(allocation);
         }
 
         // GET: Allocations/Revoke/5
+        [CustomAuthorize]
         public ActionResult Revoke(Guid? id)
         {
             if (id == null)
@@ -259,14 +362,15 @@ namespace Web_IT_HELPDESK.Controllers
 
             ViewBag.DepartmentName = DepartmentModel.Instance.getDeptNameByDeptId(allocation.Department_Id);
 
-            List<AllocationViewModel> allocations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
-            ViewBag.Allocations = allocations;
+            List<AllocationViewModel.Representation> representations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
+            ViewBag.Representations = representations;
 
             return View(allocation);
         }
 
         // POST: Allocations/Revoke/5
         [HttpPost]
+        [CustomAuthorize]
         [ValidateAntiForgeryToken]
         public ActionResult Revoke(Allocation allocation)
         {
@@ -305,13 +409,14 @@ namespace Web_IT_HELPDESK.Controllers
 
             ViewBag.DepartmentName = DepartmentModel.Instance.getDeptNameByDeptId(allocation.Department_Id);
 
-            List<AllocationViewModel> allocations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
-            ViewBag.Allocations = allocations;
+            List<AllocationViewModel.Representation> representations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
+            ViewBag.Representations = representations;
 
             return View(allocation);
         }
 
         // GET: Allocations/ReAllocation
+        [CustomAuthorize]
         public ActionResult ReAllocation(Guid? id)
         {
             if (id == null)
@@ -343,8 +448,8 @@ namespace Web_IT_HELPDESK.Controllers
 
             ViewBag.Department_Id = Department_Id;
 
-            List<AllocationViewModel> allocations = AllocationModel.Instance.get_AllocationsByDeviceId(device.Device_Id);
-            ViewBag.Allocations = allocations;
+            List<AllocationViewModel.Representation> representations = AllocationModel.Instance.get_AllocationsByDeviceId(id);
+            ViewBag.Representations = representations;
 
             ViewBag.Allocation_Code = AllocationModel.Instance.Generate_AllocationCode(device.Device_Id, device.Device_Code);
 
@@ -353,6 +458,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         // POST: Allocations/ReAllocation
         [HttpPost]
+        [CustomAuthorize]
         [ValidateAntiForgeryToken]
         public ActionResult ReAllocation(Allocation allocation)
         {
@@ -399,8 +505,8 @@ namespace Web_IT_HELPDESK.Controllers
 
             ViewBag.Department_Id = Department_Id;
 
-            List<AllocationViewModel> allocations = AllocationModel.Instance.get_AllocationsByDeviceId(device.Device_Id);
-            ViewBag.Allocations = allocations;
+            List<AllocationViewModel.Representation> representations = AllocationModel.Instance.get_AllocationsByDeviceId(allocation.Device_Id);
+            ViewBag.Representations = representations;
 
             ViewBag.Allocation_Code = AllocationModel.Instance.Generate_AllocationCode(device.Device_Id, device.Device_Code);
 
@@ -415,10 +521,10 @@ namespace Web_IT_HELPDESK.Controllers
             return Json(deptId, JsonRequestBehavior.AllowGet);
         }
 
-        public FileContentResult Download()
+        //[CustomAuthorize]
+        public FileContentResult Download(string plantId)
         {
-            string curr_plantId = _appUser.GetPlantID();
-            var devices = AllocationModel.Instance.GetLastAllocationOfDeviceByPlantId(curr_plantId);
+            var devices = AllocationModel.Instance.GetLastAllocationOfDeviceByPlantId(plantId);
 
             // Sort by Code
             devices = devices.OrderBy(model => model.Device.Device_Code);
@@ -426,8 +532,10 @@ namespace Web_IT_HELPDESK.Controllers
             List<AllocationViewModel.ExcelReport> devices_ExcelReport = new List<AllocationViewModel.ExcelReport>();
             foreach (var item in devices)
             {
-                //AllocationViewModel.ExcelReport entry = new AllocationViewModel.ExcelReport(item.Device, item.Allocation, item.Device?.Device_Type?.Device_Type_Name, item.Deliver_Name, item.Receiver_Name, item.Deliver_Name, item.Allocation?.Department?.Plant?.Plant_Name);
-                //devices_ExcelReport.Add(entry);
+                AllocationViewModel.ExcelReport entry = new AllocationViewModel.ExcelReport(item.Device, item.Allocation,
+                    item.Device?.Device_Type?.Device_Type_Name, item.Deliver_Name, item.Receiver_Name, item.Deliver_Name,
+                    item.Allocation?.Department?.Plant?.Plant_Name);
+                devices_ExcelReport.Add(entry);
             }
 
             //Col need format date

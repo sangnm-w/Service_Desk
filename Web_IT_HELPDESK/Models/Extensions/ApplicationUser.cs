@@ -114,8 +114,7 @@ namespace Web_IT_HELPDESK.Models.Extensions
             result = en.Employee_New
                     .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                     .FirstOrDefault(grp => grp.e.Emp_CJ == EmployeeID)
-                    .d.Manager_Id
-                    .ToString();
+                    .d.Manager_Id;
 
             return result;
         }
@@ -162,7 +161,7 @@ namespace Web_IT_HELPDESK.Models.Extensions
             if (!string.IsNullOrEmpty(moduleName))
             {
                 result = result.Join(en.Modules, ru => ru.Module_ID, mo => mo.Module_ID, (ru, mo) => new { ru, mo })
-                    .Where(grp => grp.mo.Name.ToUpper() == moduleName.ToUpper())
+                    .Where(grp => grp.mo.Module_Name.ToUpper() == moduleName.ToUpper())
                     .Select(grp => grp.ru)
                     .ToList();
             }

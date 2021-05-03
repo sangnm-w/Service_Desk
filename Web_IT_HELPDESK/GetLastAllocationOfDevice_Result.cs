@@ -22,7 +22,6 @@ namespace Web_IT_HELPDESK
         public Nullable<System.DateTime> Delivery_Date { get; set; }
         public Nullable<System.DateTime> Return_Date { get; set; }
         public string Department_Id { get; set; }
-        public string Plant_Id { get; set; }
         public string Note { get; set; }
         public string IP { get; set; }
         public Nullable<System.DateTime> Create_Date { get; set; }

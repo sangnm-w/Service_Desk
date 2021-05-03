@@ -35,7 +35,7 @@ namespace Web_IT_HELPDESK.Controllers
         [CustomAuthorize]
         public ActionResult Index()
         {
-            bool currUserIsManager = _appUser.isAdmin;
+            bool currUserIsManager = _appUser.IsManager;
             ViewBag.currUserIsManager = currUserIsManager;
 
             var depts = en.Departments
@@ -60,7 +60,7 @@ namespace Web_IT_HELPDESK.Controllers
                                                  && (minDate < c.DATE_MATURITY && c.DATE_MATURITY <= maxDate));
             if (currUserIsManager != true)
             {
-                contract_list = contract_list.Where(c => c.USER_CREATE == currUserId);
+                contract_list = contract_list.Where(c => c.DEPARTMENTID == currUserDeptId);
             }
 
             //Store value of filter parameters
@@ -74,7 +74,6 @@ namespace Web_IT_HELPDESK.Controllers
 
             Session.Clear();
             Session["filter_Contracts"] = filter_Contracts;
-            //
 
             return View(contract_list);
         }

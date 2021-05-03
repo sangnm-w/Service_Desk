@@ -50,9 +50,6 @@ namespace Web_IT_HELPDESK.Controllers
             from_date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             to_date = from_date.AddMonths(1).AddSeconds(-1);
 
-
-            bool currUserIsManager = _appUser.isAdmin;
-
             string deptIdHrAdmin = currUserPlantId + "S0002";
             bool currUserIsHrAdmin = en.Departments
                 .FirstOrDefault(d => d.Plant_Id == currUserPlantId
@@ -60,16 +57,15 @@ namespace Web_IT_HELPDESK.Controllers
                                   && d.Manager_Id == currUserID) != null ? true : false;
 
             var bizz = en.BIZ_TRIP.Where(i => i.DEL != true
-                                           && i.DEPT == currUserDeptId
                                            && i.DATE >= from_date
                                            && i.DATE <= to_date
                                            && i.PLANT == currUserPlantId);
 
             bool isResend = true;
 
-            if (currUserIsManager == false && currUserIsHrAdmin == false)
+            if (currUserIsHrAdmin != true)
             {
-                bizz = bizz.Where(i => i.EMPNO == currUserID);
+                bizz = bizz.Where(i => i.DEPT == currUserDeptId);
                 isResend = false;
             }
 
@@ -88,8 +84,6 @@ namespace Web_IT_HELPDESK.Controllers
 
             ViewBag.DepartmentNameview = _appUser.GetDepartmentName();
 
-            bool currUserIsManager = _appUser.isAdmin;
-
             string deptIdHrAdmin = currUserPlantId + "S0002";
             bool currUserIsHrAdmin = en.Departments
                 .FirstOrDefault(d => d.Plant_Id == currUserPlantId
@@ -97,22 +91,21 @@ namespace Web_IT_HELPDESK.Controllers
                                   && d.Manager_Id == currUserID) != null ? true : false;
 
             var bizz = en.BIZ_TRIP.Where(i => i.DEL != true
-                                           && i.DEPT == currUserDeptId
                                            && i.DATE >= from_date
                                            && i.DATE <= to_date
                                            && i.PLANT == currUserPlantId);
 
             bool isResend = true;
 
-            if (currUserIsManager == false && currUserIsHrAdmin == false)
+            if (currUserIsHrAdmin != true)
             {
-                bizz = bizz.Where(i => i.EMPNO == currUserID);
+                bizz = bizz.Where(i => i.DEPT == currUserDeptId);
                 isResend = false;
             }
 
             ViewBag.IsResend = isResend;
 
-            if (!String.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchString))
             {
                 bizz = bizz.Where(s => (s.DEPT.Trim().ToUpper().Contains(searchString.Trim().ToUpper())
                                          || s.Employee.EmployeeName.Trim().ToUpper().Contains(searchString.Trim().ToUpper())) && s.PLANT == currUserPlantId);
@@ -710,7 +703,7 @@ namespace Web_IT_HELPDESK.Controllers
 
             return View("Index", bizz);
         }
-        public ActionResult BizTripPrint(Guid v_id)
+        public ActionResult Print(Guid v_id)
         {
             string reportid = "PDF";
             LocalReport lr = new LocalReport();

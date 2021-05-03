@@ -231,6 +231,7 @@
     <Compile Include="Controllers\ContactsController.cs" />
     <Compile Include="Controllers\CONTRACTController.cs" />
     <Compile Include="Controllers\DevicesController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ObjectManager\AllocationHelper.cs" />
     <Compile Include="Controllers\ObjectManager\Biz_TripHelper.cs" />
     <Compile Include="Controllers\ObjectManager\ContractHelper.cs" />
@@ -1728,7 +1729,6 @@
     <Content Include="vendors\Bootstrap-Select-1.13.14\js\i18n\defaults-vi_VN.js.map" />
     <Content Include="vendors\Bootstrap-Select-1.13.14\js\i18n\defaults-zh_CN.js.map" />
     <Content Include="vendors\Bootstrap-Select-1.13.14\js\i18n\defaults-zh_TW.js.map" />
-    <Content Include="Views\SealUsing\Edit - Copy.cshtml" />
     <Content Include="Views\SealUsing\Edit.cshtml" />
     <Content Include="Views\Contacts\Index.cshtml" />
     <Content Include="Views\BIZ_TRIP\hr_admin.cshtml" />
@@ -1738,6 +1738,7 @@
     <Content Include="Views\SealUsing\Details.cshtml" />
     <Content Include="Views\BIZ_TRIP\Details.cshtml" />
     <Content Include="Views\Allocations\Details.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
