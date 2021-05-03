@@ -79,6 +79,7 @@
         <AssociationConnector Association="ServiceDeskModel.FK_Employee_New_Department" />
         <AssociationConnector Association="ServiceDeskModel.FK_Incidents_Department" />
         <AssociationConnector Association="ServiceDeskModel.FK_Seal_Using_Department" />
+        <EntityTypeShape EntityType="ServiceDeskModel.ORDER_TYPE_VIEW" Width="1.5" PointX="5.375" PointY="6.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

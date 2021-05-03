@@ -55,7 +55,6 @@ namespace Web_IT_HELPDESK
         public virtual DbSet<Screen> Screens { get; set; }
         public virtual DbSet<Status> Status { get; set; }
         public virtual DbSet<UserLogon> UserLogons { get; set; }
-        public virtual DbSet<ORDER_TYPE_VIEW> ORDER_TYPE_VIEW { get; set; }
         public virtual DbSet<Employee_New> Employee_New { get; set; }
         public virtual DbSet<Authorization> Authorizations { get; set; }
         public virtual DbSet<Plant> Plants { get; set; }
@@ -65,6 +64,7 @@ namespace Web_IT_HELPDESK
         public virtual DbSet<Incident> Incidents { get; set; }
         public virtual DbSet<Seal_Using> Seal_Using { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
+        public virtual DbSet<ORDER_TYPE_VIEW> ORDER_TYPE_VIEW { get; set; }
     
         [DbFunction("ServiceDeskEntities", "func_report_detail")]
         public virtual IQueryable<func_report_detail_Result> func_report_detail(Nullable<System.DateTime> v_fromdate, Nullable<System.DateTime> v_todate, string v_plant)
