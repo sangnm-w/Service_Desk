@@ -1,0 +1,107 @@
+﻿@model Web_IT_HELPDESK.Mail
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Mail</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.MailTitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MailTitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MailContent)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MailContent)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FromAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FromAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ToAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ToAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CcAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CcAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BccAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BccAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Attachment)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Attachment)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MailPicture)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MailPicture)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SendingDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SendingDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SendingStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SendingStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Employee_New.Emp_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Employee_New.Emp_ID)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.MailID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

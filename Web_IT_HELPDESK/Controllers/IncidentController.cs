@@ -46,7 +46,7 @@ namespace Web_IT_HELPDESK.Controllers
         {
             List<Rule> userRules = new List<Rule>();
             List<Role> userRoles = new List<Role>();
-            List<PlantViewModel> userPlants = new List<PlantViewModel>();
+            List<Plant> userPlants = new List<Plant>();
             string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
 
             bool IsAdmin = _appUser.isAdmin;
@@ -66,20 +66,14 @@ namespace Web_IT_HELPDESK.Controllers
                     .ToList();
 
                 userPlants = en.Plants
-                    .Select(p => new PlantViewModel { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name })
+                    .Select(p => new Plant { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name })
                     .ToList();
             }
             else
             {
-                var userAuths = _appUser.GetAuthorizations();
-
-                userRoles = userAuths.Join(en.Roles, au => au.Role_ID, ro => ro.Role_ID, (au, ro) => ro).Distinct().ToList();
+                userRoles = _appUser.GetRolesByModuleName(controllerName);
                 userRules = _appUser.GetRules(userRoles, controllerName);
-
-                var uPlants = _appUser.GetAuthorizations()
-               .Join(en.Plants, au => au.Plant_ID, p => p.Plant_Id, (au, p) => new { au, p }).Select(grp => new { grp.p.Plant_Id, grp.p.Plant_Name }).Distinct();
-
-                userPlants = uPlants.Select(p => new PlantViewModel { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name }).ToList();
+                userPlants = _appUser.GetAuthoPlantsByModuleName(controllerName);
 
                 bool isITManager = userRoles.Any(ro => ro.Role_ID == 2);
                 if (!isITManager)
@@ -116,7 +110,7 @@ namespace Web_IT_HELPDESK.Controllers
         {
             List<Rule> userRules = new List<Rule>();
             List<Role> userRoles = new List<Role>();
-            List<PlantViewModel> userPlants = new List<PlantViewModel>();
+            List<Plant> userPlants = new List<Plant>();
             string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
 
             bool IsAdmin = _appUser.isAdmin;
@@ -137,20 +131,14 @@ namespace Web_IT_HELPDESK.Controllers
                     .ToList();
 
                 userPlants = en.Plants
-                    .Select(p => new PlantViewModel { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name })
+                    .Select(p => new Plant { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name })
                     .ToList();
             }
             else
             {
-                var userAuths = _appUser.GetAuthorizations();
-
-                userRoles = userAuths.Join(en.Roles, au => au.Role_ID, ro => ro.Role_ID, (au, ro) => ro).Distinct().ToList();
+                userRoles = _appUser.GetRolesByModuleName(controllerName);
                 userRules = _appUser.GetRules(userRoles, controllerName);
-
-                var uPlants = _appUser.GetAuthorizations()
-               .Join(en.Plants, au => au.Plant_ID, p => p.Plant_Id, (au, p) => new { au, p }).Select(grp => new { grp.p.Plant_Id, grp.p.Plant_Name }).Distinct();
-
-                userPlants = uPlants.Select(p => new PlantViewModel { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name }).ToList();
+                userPlants = _appUser.GetAuthoPlantsByModuleName(controllerName);
 
                 bool isITManager = userRoles.Any(ro => ro.Role_ID == 2);
                 if (!isITManager)

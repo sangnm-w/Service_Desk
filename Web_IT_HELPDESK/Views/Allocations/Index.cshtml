@@ -1,5 +1,5 @@
-﻿@model IEnumerable<Web_IT_HELPDESK.ViewModels.AllocationViewModel>
-@using Web_IT_HELPDESK.ViewModels
+﻿@using Web_IT_HELPDESK
+@model IEnumerable<Web_IT_HELPDESK.ViewModels.AllocationViewModel>
 
 @{
     ViewBag.Title = "Index";
@@ -42,7 +42,7 @@
     <div class="panel-body">
         @using (Html.BeginForm("Index", "Allocations", FormMethod.Post))
         {
-            if (((List<PlantViewModel>)ViewBag.userPlants).Count() > 0)
+            if (((List<Plant>)ViewBag.userPlants).Count() > 0)
             {
                 <div class="form-group">
                     <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Plants :</label>

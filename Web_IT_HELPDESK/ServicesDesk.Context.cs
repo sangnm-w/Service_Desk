@@ -64,7 +64,7 @@ namespace Web_IT_HELPDESK
         public virtual DbSet<Incident> Incidents { get; set; }
         public virtual DbSet<Seal_Using> Seal_Using { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
-        public virtual DbSet<ORDER_TYPE_VIEW> ORDER_TYPE_VIEW { get; set; }
+        public virtual DbSet<Mail> Mails { get; set; }
     
         [DbFunction("ServiceDeskEntities", "func_report_detail")]
         public virtual IQueryable<func_report_detail_Result> func_report_detail(Nullable<System.DateTime> v_fromdate, Nullable<System.DateTime> v_todate, string v_plant)

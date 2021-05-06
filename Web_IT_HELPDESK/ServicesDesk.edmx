@@ -379,6 +379,26 @@
           <Property Name="datetime_rate" Type="int" />
           <Property Name="Del" Type="bit" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Web_IT_HELPDESK.dbo.Mail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Mail">
+          <Key>
+            <PropertyRef Name="MailID" />
+          </Key>
+          <Property Name="MailID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="MailTitle" Type="nvarchar" MaxLength="500" />
+          <Property Name="MailContent" Type="nvarchar(max)" />
+          <Property Name="FromAddress" Type="varchar" MaxLength="50" />
+          <Property Name="ToAddress" Type="varchar(max)" />
+          <Property Name="CcAddress" Type="varchar(max)" />
+          <Property Name="BccAddress" Type="varchar(max)" />
+          <Property Name="Attachment" Type="nvarchar(max)" />
+          <Property Name="MailPicture" Type="nvarchar(max)" />
+          <Property Name="EmployeeId" Type="nvarchar" MaxLength="50" />
+          <Property Name="SendingDate" Type="datetime" />
+          <Property Name="SendingStatus" Type="nvarchar" MaxLength="500" />
+          <Property Name="Inactive" Type="bit" />
+        </EntityType>
         <EntityType Name="Module">
           <Key>
             <PropertyRef Name="Module_ID" />
@@ -518,7 +538,7 @@
           <Property Name="Del" Type="bit" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'WEB_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'Web_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ORDER_TYPE_VIEW">
           <Key>
             <PropertyRef Name="OrderId" />
@@ -858,6 +878,18 @@ warning 6002: The table/view 'WEB_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Mail_Employee_New">
+          <End Role="Employee_New" Type="Self.Employee_New" Multiplicity="0..1" />
+          <End Role="Mail" Type="Self.Mail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee_New">
+              <PropertyRef Name="Emp_CJ" />
+            </Principal>
+            <Dependent Role="Mail">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Order__Employee">
           <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
           <End Role="Order_" Type="Self.Order_" Multiplicity="*" />
@@ -1066,6 +1098,23 @@ warning 6002: The table/view 'WEB_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <EntitySet Name="Seal_Using" EntityType="Self.Seal_Using" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Status" EntityType="Self.Status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserLogon" EntityType="Self.UserLogon" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Mail" EntityType="Self.Mail" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Mail].[MailID] AS [MailID], 
+    [Mail].[MailTitle] AS [MailTitle], 
+    [Mail].[MailContent] AS [MailContent], 
+    [Mail].[FromAddress] AS [FromAddress], 
+    [Mail].[ToAddress] AS [ToAddress], 
+    [Mail].[CcAddress] AS [CcAddress], 
+    [Mail].[BccAddress] AS [BccAddress], 
+    [Mail].[Attachment] AS [Attachment], 
+    [Mail].[MailPicture] AS [MailPicture], 
+    [Mail].[EmployeeId] AS [EmployeeId], 
+    [Mail].[SendingDate] AS [SendingDate], 
+    [Mail].[SendingStatus] AS [SendingStatus], 
+    [Mail].[Inactive] AS [Inactive]
+    FROM [dbo].[Mail] AS [Mail]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="ORDER_TYPE_VIEW" EntityType="Self.ORDER_TYPE_VIEW" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [ORDER_TYPE_VIEW].[OrderId] AS [OrderId], 
@@ -1187,6 +1236,10 @@ warning 6002: The table/view 'WEB_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <AssociationSet Name="FK_Incidents_Status" Association="Self.FK_Incidents_Status">
             <End Role="Status" EntitySet="Status" />
             <End Role="Incidents" EntitySet="Incidents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Mail_Employee_New" Association="Self.FK_Mail_Employee_New">
+            <End Role="Employee_New" EntitySet="Employee_New" />
+            <End Role="Mail" EntitySet="Mail" />
           </AssociationSet>
           <AssociationSet Name="FK_Order__Employee" Association="Self.FK_Order__Employee">
             <End Role="Employee" EntitySet="Employee" />
@@ -2084,6 +2137,11 @@ warning 6002: The table/view 'WEB_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
             <End Role="Seal_Using" EntitySet="Seal_Using" />
           </AssociationSet>
           <FunctionImport Name="GetLastAllocationOfDevice" IsComposable="true" EntitySet="Allocations" ReturnType="Collection(ServiceDeskModel.Allocation)" />
+          <EntitySet Name="Mails" EntityType="ServiceDeskModel.Mail" />
+          <AssociationSet Name="FK_Mail_Employee_New" Association="ServiceDeskModel.FK_Mail_Employee_New">
+            <End Role="Employee_New" EntitySet="Employee_New" />
+            <End Role="Mail" EntitySet="Mails" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Employee_New">
           <Key>
@@ -2114,6 +2172,7 @@ warning 6002: The table/view 'WEB_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <NavigationProperty Name="UserLogons" Relationship="ServiceDeskModel.FK_UserLogon_Employee_New" FromRole="Employee_New" ToRole="UserLogon" />
           <NavigationProperty Name="Authorizations" Relationship="ServiceDeskModel.FK_Authorization_Employee_New" FromRole="Employee_New" ToRole="Authorization" />
           <NavigationProperty Name="Department" Relationship="ServiceDeskModel.FK_Employee_New_Department" FromRole="Employee_New" ToRole="Department" />
+          <NavigationProperty Name="Mails" Relationship="ServiceDeskModel.FK_Mail_Employee_New" FromRole="Employee_New" ToRole="Mail" />
         </EntityType>
         <Association Name="FK_BIZ_TRIP_Employee_New">
           <End Type="ServiceDeskModel.Employee_New" Role="Employee_New" Multiplicity="0..1" />
@@ -2456,6 +2515,37 @@ warning 6002: The table/view 'WEB_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           <Property Type="Boolean" Name="Flag_ReAllocation" Nullable="true" />
           <Property Type="String" Name="QRCodeFile" Nullable="true" />
         </ComplexType>
+        <EntityType Name="Mail">
+          <Key>
+            <PropertyRef Name="MailID" />
+          </Key>
+          <Property Name="MailID" Type="Guid" Nullable="false" />
+          <Property Name="MailTitle" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="MailContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FromAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ToAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CcAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="BccAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Attachment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MailPicture" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SendingDate" Type="DateTime" Precision="3" />
+          <Property Name="SendingStatus" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Employee_New" Relationship="ServiceDeskModel.FK_Mail_Employee_New" FromRole="Mail" ToRole="Employee_New" />
+          <Property Name="Inactive" Type="Boolean" />
+        </EntityType>
+        <Association Name="FK_Mail_Employee_New">
+          <End Type="ServiceDeskModel.Employee_New" Role="Employee_New" Multiplicity="0..1" />
+          <End Type="ServiceDeskModel.Mail" Role="Mail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee_New">
+              <PropertyRef Name="Emp_CJ" />
+            </Principal>
+            <Dependent Role="Mail">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3032,6 +3122,25 @@ warning 6002: The table/view 'WEB_IT_HELPDESK.dbo.ORDER_TYPE_VIEW' does not have
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GetLastAllocationOfDevice" FunctionName="ServiceDeskModel.Store.GetLastAllocationOfDevice">
           </FunctionImportMapping>
+          <EntitySetMapping Name="Mails">
+            <EntityTypeMapping TypeName="ServiceDeskModel.Mail">
+              <MappingFragment StoreEntitySet="Mail">
+                <ScalarProperty Name="Inactive" ColumnName="Inactive" />
+                <ScalarProperty Name="SendingStatus" ColumnName="SendingStatus" />
+                <ScalarProperty Name="SendingDate" ColumnName="SendingDate" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="MailPicture" ColumnName="MailPicture" />
+                <ScalarProperty Name="Attachment" ColumnName="Attachment" />
+                <ScalarProperty Name="BccAddress" ColumnName="BccAddress" />
+                <ScalarProperty Name="CcAddress" ColumnName="CcAddress" />
+                <ScalarProperty Name="ToAddress" ColumnName="ToAddress" />
+                <ScalarProperty Name="FromAddress" ColumnName="FromAddress" />
+                <ScalarProperty Name="MailContent" ColumnName="MailContent" />
+                <ScalarProperty Name="MailTitle" ColumnName="MailTitle" />
+                <ScalarProperty Name="MailID" ColumnName="MailID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

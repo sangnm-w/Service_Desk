@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
-  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -72,10 +71,10 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="EPPlus, Version=5.3.1.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.5.3.1\lib\net45\EPPlus.dll</HintPath>
@@ -122,7 +121,6 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
@@ -229,6 +227,7 @@
     <Compile Include="Controllers\CONTRACTController.cs" />
     <Compile Include="Controllers\DevicesController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\MailingController.cs" />
     <Compile Include="Controllers\ObjectManager\AllocationHelper.cs" />
     <Compile Include="Controllers\ObjectManager\Biz_TripHelper.cs" />
     <Compile Include="Controllers\ObjectManager\ContractHelper.cs" />
@@ -242,14 +241,12 @@
     <Compile Include="Controllers\LaborContractController.cs" />
     <Compile Include="Controllers\LogOnController.cs" />
     <Compile Include="Controllers\MealController.cs" />
-    <Compile Include="Controllers\MealOrderController.cs" />
     <Compile Include="Controllers\ObjectManager\ExcelHelper.cs" />
     <Compile Include="Controllers\ObjectManager\IncidentHelper.cs" />
     <Compile Include="Controllers\ObjectManager\InformationHelper.cs" />
     <Compile Include="Controllers\ObjectManager\MailHelper.cs" />
     <Compile Include="Controllers\ObjectManager\SealUsingHelper.cs" />
     <Compile Include="Controllers\ObjectManager\UserManager.cs" />
-    <Compile Include="Controllers\Order_Controller.cs" />
     <Compile Include="Controllers\RulesController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\SealUsingController.cs" />
@@ -296,6 +293,9 @@
     <Compile Include="func_report_detail_Result.cs">
       <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
+    <Compile Include="GetLastAllocationOfDevice_Result.cs">
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -312,6 +312,9 @@
     <Compile Include="Level.cs">
       <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
+    <Compile Include="Mail.cs">
+      <DependentUpon>ServicesDesk.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\AllocationModel.cs" />
     <Compile Include="Models\AutoCompleteModel.cs" />
     <Compile Include="Models\Biz_TripViewModel.cs" />
@@ -319,9 +322,6 @@
     <Compile Include="Models\Extensions\ApplicationUser.cs" />
     <Compile Include="Models\Extensions\CustomAuthorize.cs" />
     <Compile Include="Module.cs">
-      <DependentUpon>ServicesDesk.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ORDER_TYPE_VIEW.cs">
       <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
     <Compile Include="Plant.cs">
@@ -412,7 +412,7 @@
     <Compile Include="ViewModels\DepartmentViewModel.cs" />
     <Compile Include="ViewModels\DeviceViewModel.cs" />
     <Compile Include="ViewModels\IncidentViewModel.cs" />
-    <Compile Include="ViewModels\PlantViewModel.cs" />
+    <Compile Include="ViewModels\MailingViewModel.cs" />
     <Compile Include="ViewModels\SealUsingViewModel.cs" />
     <Compile Include="ViewModels\ShoppingCartViewModel.cs" />
   </ItemGroup>
@@ -1565,8 +1565,6 @@
     <Content Include="Views\ShoppingCart\Index2.cshtml" />
     <Content Include="Views\Checkout\AddressAndPayment.cshtml" />
     <Content Include="Views\Checkout\Complete.cshtml" />
-    <Content Include="Views\Order_\OrderList.cshtml" />
-    <Content Include="Views\Order_\Details.cshtml" />
     <Content Include="Scripts\jquery.validate.min.js.map">
       <DependentUpon>jquery.validate.js</DependentUpon>
     </Content>
@@ -1576,14 +1574,11 @@
     <Content Include="Scripts\modernizr-1.7.min.js.map">
       <DependentUpon>modernizr-1.7.js</DependentUpon>
     </Content>
-    <Content Include="Views\Order_\Edit.cshtml" />
     <Content Include="Views\DrinkingRequest\Index.cshtml" />
     <Content Include="Views\DrinkingRequest\Create.cshtml" />
     <Content Include="Views\DrinkingRequest\Edit.cshtml" />
     <Content Include="Views\DrinkingRequest\Confirm.cshtml" />
     <Content Include="Views\DrinkingRequest\Delete.cshtml" />
-    <Content Include="Views\Order_\Confirm.cshtml" />
-    <Content Include="Views\Order_\Delete.cshtml" />
     <Content Include="Views\Employee\EmployeeList.cshtml" />
     <Content Include="Views\Employee\EditRoleViewModel.cshtml" />
     <Content Include="Views\CONTRACT\Index.cshtml" />
@@ -1592,7 +1587,6 @@
     <Content Include="Views\LaborContract\Approve.cshtml" />
     <Content Include="Views\LaborContract\hr_approve.cshtml" />
     <Content Include="Views\LaborContract\sales_approve.cshtml" />
-    <Content Include="Views\Order_\OrderPrint.cshtml" />
     <Content Include="Views\Employee\ChangePasword.cshtml" />
     <Content Include="Views\DrinkingRequest\Resend.cshtml" />
     <Content Include="Views\BIZ_TRIP\Index.cshtml" />
@@ -1617,8 +1611,6 @@
     <Content Include="vendors\datatables\unit_testing\templates\js_data_mixed_types.php" />
     <Content Include="vendors\datatables\unit_testing\templates\two_tables.php" />
     <Content Include="Views\Meal\Index.cshtml" />
-    <Content Include="Views\MealOrder\MealOrderList.cshtml" />
-    <Content Include="Views\MealOrder\Details.cshtml" />
     <Content Include="vendors\NewDataTables\Buttons-1.6.3\css\common.scss" />
     <Content Include="vendors\NewDataTables\Buttons-1.6.3\css\mixins.scss" />
     <Content Include="Views\Devices\Create.cshtml" />
@@ -1719,6 +1711,11 @@
     <Content Include="Views\BIZ_TRIP\Details.cshtml" />
     <Content Include="Views\Allocations\Details.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\Mailing\Create.cshtml" />
+    <Content Include="Views\Mailing\Delete.cshtml" />
+    <Content Include="Views\Mailing\Details.cshtml" />
+    <Content Include="Views\Mailing\Edit.cshtml" />
+    <Content Include="Views\Mailing\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1785,14 +1782,6 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
-    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
-  </Target>
-  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

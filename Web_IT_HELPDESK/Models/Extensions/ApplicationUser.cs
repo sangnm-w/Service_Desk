@@ -119,12 +119,19 @@ namespace Web_IT_HELPDESK.Models.Extensions
             return result;
         }
 
-
-        public List<Authorization> GetAuthorizations()
+        public IEnumerable<Authorization> GetAuths()
         {
-            List<Authorization> result = new List<Authorization>();
+            var result = en.Authorizations.Where(x => x.Emp_CJ == EmployeeID).ToList();
+            return result;
+        }
 
-            result = en.Authorizations.Where(x => x.Emp_CJ == EmployeeID).ToList();
+        public IEnumerable<Authorization> GetAuthsByModuleName(string moduleName)
+        {
+            var ruleIdByModule = en.Rules.Where(ru => ru.Module.Module_Name.ToUpper() == moduleName.ToUpper()).Select(ru => ru.Rule_ID);
+
+            var roleIdByModule = en.Rules.Where(mm => ruleIdByModule.Contains(mm.Rule_ID)).SelectMany(mm => mm.Roles).Select(ro => ro.Role_ID);
+
+            var result = en.Authorizations.Where(au => roleIdByModule.Contains(au.Role_ID)).Where(au => au.Emp_CJ == EmployeeID);
 
             return result;
         }
@@ -139,6 +146,17 @@ namespace Web_IT_HELPDESK.Models.Extensions
                 .Select(joinedI => joinedI.ro)
                 .Distinct()
                 .ToList();
+
+            return result;
+        }
+
+        public List<Role> GetRolesByModuleName(string moduleName)
+        {
+            List<Role> result = new List<Role>();
+
+            var authsByModuleName = GetAuthsByModuleName(moduleName);
+
+            result = authsByModuleName.Select(au => au.Role).Distinct().ToList();
 
             return result;
         }
@@ -167,6 +185,15 @@ namespace Web_IT_HELPDESK.Models.Extensions
             }
 
             return result.Distinct().ToList();
+        }
+
+        public List<Plant> GetAuthoPlantsByModuleName(string moduleName)
+        {
+            var authsByModuleName = GetAuthsByModuleName(moduleName);
+
+            var result = authsByModuleName.Join(en.Plants, au => au.Plant_ID, p => p.Plant_Id, (au, p) => p).Distinct().ToList();
+
+            return result;
         }
     }
 }

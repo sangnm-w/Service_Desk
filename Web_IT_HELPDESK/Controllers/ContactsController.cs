@@ -30,12 +30,7 @@ namespace Web_IT_HELPDESK.Controllers
                 .Where(grp => grp.e.Deactive != true && grp.d.Plant_Id == curr_PlantID)
                 .Select(grp => grp.e);
 
-            List<PlantViewModel> plants = en.Plants
-                .Select(p => new PlantViewModel
-                {
-                    Plant_Id = p.Plant_Id,
-                    Plant_Name = p.Plant_Name
-                }).Distinct().ToList();
+            List<Plant> plants = en.Plants.Distinct().ToList();
             ViewBag.plants = plants;
 
             List<DepartmentViewModel> departments = en.Departments
@@ -61,12 +56,7 @@ namespace Web_IT_HELPDESK.Controllers
                 .Where(grp => grp.e.Deactive != true && grp.d.Plant_Id == plantid)
                 .Select(grp => grp.e);
 
-            List<PlantViewModel> plants = en.Plants
-              .Select(p => new PlantViewModel
-              {
-                  Plant_Id = p.Plant_Id,
-                  Plant_Name = p.Plant_Name
-              }).Distinct().ToList();
+            List<Plant> plants = en.Plants.Distinct().ToList();
             ViewBag.plants = plants;
 
             List<DepartmentViewModel> departments = en.Departments

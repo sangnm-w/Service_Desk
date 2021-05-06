@@ -24,6 +24,7 @@ namespace Web_IT_HELPDESK
             this.Order_ = new HashSet<Order_>();
             this.UserLogons = new HashSet<UserLogon>();
             this.Authorizations = new HashSet<Authorization>();
+            this.Mails = new HashSet<Mail>();
             OnConstructorInit();
         }
         partial void OnConstructorInit();
@@ -61,5 +62,7 @@ namespace Web_IT_HELPDESK
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Authorization> Authorizations { get; set; }
         public virtual Department Department { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Mail> Mails { get; set; }
     }
 }
