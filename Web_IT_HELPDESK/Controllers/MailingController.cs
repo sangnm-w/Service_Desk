@@ -7,8 +7,10 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Web_IT_HELPDESK;
+using Web_IT_HELPDESK.Models;
 using Web_IT_HELPDESK.Models.Extensions;
 using Web_IT_HELPDESK.ViewModels;
+using Web_IT_HELPDESK.ViewModels.Mailing;
 
 namespace Web_IT_HELPDESK.Controllers
 {
@@ -35,7 +37,7 @@ namespace Web_IT_HELPDESK.Controllers
             List<Rule> userRules = new List<Rule>();
             List<Role> userRoles = new List<Role>();
             List<Plant> userPlants = new List<Plant>();
-            IEnumerable<MailingViewModel.IndexVM> model = null;
+            IEnumerable<MailingIndexViewModel> model = null;
             string controllerName = ControllerContext.RouteData.Values["controller"].ToString();
             bool IsAdmin = _appUser.isAdmin;
             bool IsManager = _appUser.IsManager;
@@ -77,7 +79,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.userRules = userRules.Select(ru => ru.Rule_Name).ToList();
             ViewBag.userPlants = userPlants;
 
-            model = mails.Select(m => new MailingViewModel.IndexVM
+            model = mails.Select(m => new MailingIndexViewModel
             {
                 MailID = m.MailID,
                 MailTitle = m.MailTitle,
@@ -101,7 +103,7 @@ namespace Web_IT_HELPDESK.Controllers
             List<Rule> userRules = new List<Rule>();
             List<Role> userRoles = new List<Role>();
             List<Plant> userPlants = new List<Plant>();
-            IEnumerable<MailingViewModel.IndexVM> model = null;
+            IEnumerable<MailingIndexViewModel> model = null;
             string controllerName = ControllerContext.RouteData.Values["controller"].ToString();
             bool IsAdmin = _appUser.isAdmin;
             bool IsManager = _appUser.IsManager;
@@ -153,7 +155,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.userRules = userRules.Select(ru => ru.Rule_Name).ToList();
             ViewBag.userPlants = userPlants;
 
-            model = mails.Select(m => new MailingViewModel.IndexVM
+            model = mails.Select(m => new MailingIndexViewModel
             {
                 MailID = m.MailID,
                 MailTitle = m.MailTitle,
@@ -188,17 +190,43 @@ namespace Web_IT_HELPDESK.Controllers
         // GET: Mailing/Create
         public ActionResult Create()
         {
-            ViewBag.EmployeeId = new SelectList(en.Employee_New, "Emp_CJ", "Emp_ID");
-            return View();
+            IEnumerable<Plant> plants = en.Plants;
+            IEnumerable<DepartmentViewModel> departmentVMs = en.Departments
+                .Select(d => new DepartmentViewModel()
+                {
+                    Department_Id = d.Department_Id,
+                    Department_Name = d.Department_Name
+                });
+            MailingCreateViewModel model = new MailingCreateViewModel()
+            {
+                Plants = plants,
+                DepartmentVMs = departmentVMs,
+                PlantId = "",
+                DepartmentId = "",
+                EmployeeName = "",
+                Email = "",
+                Position = "",
+                MailTitle = "",
+                MailContent = "",
+                FromAddress = "",
+                ToAddress = "",
+                Attachment = "",
+                MailPicture = "",
+                EmployeeId = "",
+                SenderPW = ""
+            };
+
+            return View(model);
         }
 
         // POST: Mailing/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "MailID,MailTitle,MailContent,FromAddress,ToAddress,CcAddress,BccAddress,Attachment,MailPicture,EmployeeId,SendingDate,SendingStatus")] Mail mail)
+        //[ValidateAntiForgeryToken]
+        public ActionResult Create(MailingCreateViewModel model)
         {
+            Mail mail = new Mail();
             if (ModelState.IsValid)
             {
                 mail.MailID = Guid.NewGuid();
@@ -268,6 +296,31 @@ namespace Web_IT_HELPDESK.Controllers
             en.Mails.Remove(mail);
             en.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public PartialViewResult UpdateDepartmentDropDownListByPlantID(string plantID)
+        {
+            MailingCreateViewModel model = new MailingCreateViewModel();
+            if (!string.IsNullOrWhiteSpace(plantID))
+            {
+                model.DepartmentVMs = en.Departments.Where(d => d.Plant_Id == plantID)
+                    .Select(d => new DepartmentViewModel()
+                    {
+                        Department_Id = d.Department_Id,
+                        Department_Name = d.Department_Name
+                    });
+            }
+            else
+            {
+                model.DepartmentVMs = en.Departments
+                     .Select(d => new DepartmentViewModel()
+                     {
+                         Department_Id = d.Department_Id,
+                         Department_Name = d.Department_Name
+                     });
+            }
+
+            return PartialView("_DepartmentPartialView", model);
         }
 
         protected override void Dispose(bool disposing)

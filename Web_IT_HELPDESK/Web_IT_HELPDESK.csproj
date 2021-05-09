@@ -412,7 +412,9 @@
     <Compile Include="ViewModels\DepartmentViewModel.cs" />
     <Compile Include="ViewModels\DeviceViewModel.cs" />
     <Compile Include="ViewModels\IncidentViewModel.cs" />
-    <Compile Include="ViewModels\MailingViewModel.cs" />
+    <Compile Include="ViewModels\Mailing\MailingCreateViewModel.cs" />
+    <Compile Include="ViewModels\Mailing\MailingEmailsViewModel.cs" />
+    <Compile Include="ViewModels\Mailing\MailingIndexViewModel.cs" />
     <Compile Include="ViewModels\SealUsingViewModel.cs" />
     <Compile Include="ViewModels\ShoppingCartViewModel.cs" />
   </ItemGroup>
@@ -1716,6 +1718,8 @@
     <Content Include="Views\Mailing\Details.cshtml" />
     <Content Include="Views\Mailing\Edit.cshtml" />
     <Content Include="Views\Mailing\Index.cshtml" />
+    <Content Include="Views\Mailing\_EmailsPartialView.cshtml" />
+    <Content Include="Views\Mailing\_DepartmentPartialView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
