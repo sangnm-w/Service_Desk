@@ -32,9 +32,8 @@ namespace Web_IT_HELPDESK
         public Nullable<bool> Del { get; set; }
         public string Plant { get; set; }
     
-        public virtual Employee Employee { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
-        public virtual Employee_New Employee_New { get; set; }
+        public virtual Employee Employee { get; set; }
     }
 }

@@ -47,6 +47,5 @@ namespace Web_IT_HELPDESK
         public Nullable<System.DateTime> BOD_CONFIRM_DATE { get; set; }
     
         public virtual Employee Employee { get; set; }
-        public virtual Employee_New Employee_New { get; set; }
     }
 }

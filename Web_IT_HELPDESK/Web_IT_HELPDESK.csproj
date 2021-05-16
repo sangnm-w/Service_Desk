@@ -281,9 +281,6 @@
     <Compile Include="EmployeeInfo.cs">
       <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>
-    <Compile Include="Employee_New.cs">
-      <DependentUpon>ServicesDesk.tt</DependentUpon>
-    </Compile>
     <Compile Include="EMP_ANSWER.cs">
       <DependentUpon>ServicesDesk.tt</DependentUpon>
     </Compile>

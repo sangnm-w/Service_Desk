@@ -37,7 +37,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         private string GetPlant_id(string v_emp)
         {
-            string plant_id = en.Employee_New
+            string plant_id = en.Employees
                 .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                 .Where(grp => grp.e.Emp_CJ == v_emp)
                 .Select(grp => grp.d.Plant_Id).SingleOrDefault();
@@ -46,12 +46,12 @@ namespace Web_IT_HELPDESK.Controllers
 
         private string GetDept_id(string session_emp)
         {
-            string dept_id = en.Employee_New.Where(f => f.Emp_CJ == session_emp).Select(f => f.Department_ID).SingleOrDefault();
+            string dept_id = en.Employees.Where(f => f.Emp_CJ == session_emp).Select(f => f.Department_ID).SingleOrDefault();
             return dept_id;
         }
 
         [HttpPost]
-        public ActionResult LogOn(Employee_New emp, string returnUrl)
+        public ActionResult LogOn(Employee emp, string returnUrl)
         {
             if (ModelState.IsValid)
             {

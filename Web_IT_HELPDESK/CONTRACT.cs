@@ -46,12 +46,11 @@ namespace Web_IT_HELPDESK
     
         public virtual CONTRACT_TYPE CONTRACT_TYPE { get; set; }
         public virtual CONTRACT_TYPE_DETAIL CONTRACT_TYPE_DETAIL { get; set; }
-        public virtual Employee Employee { get; set; }
         public virtual PERIOD PERIOD { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CONTRACT_SUB> CONTRACT_SUB { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Device> Devices { get; set; }
-        public virtual Employee_New Employee_New { get; set; }
+        public virtual Employee Employee { get; set; }
     }
 }

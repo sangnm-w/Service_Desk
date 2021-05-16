@@ -28,6 +28,6 @@ namespace Web_IT_HELPDESK
         public string SendingStatus { get; set; }
         public Nullable<bool> Inactive { get; set; }
     
-        public virtual Employee_New Employee_New { get; set; }
+        public virtual Employee Employee { get; set; }
     }
 }

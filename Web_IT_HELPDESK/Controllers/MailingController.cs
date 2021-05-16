@@ -45,10 +45,10 @@ namespace Web_IT_HELPDESK.Controllers
             DateTime fromDate = DateTime.Now;
             DateTime toDate = fromDate.AddMonths(1).AddSeconds(-1);
 
-            var mails = en.Mails.Include(m => m.Employee_New)
+            var mails = en.Mails.Include(m => m.Employee)
                 .Where(m => m.Inactive != true)
                 .Where(m => m.SendingDate >= fromDate && m.SendingDate <= toDate)
-                .Where(m => m.Employee_New.Department.Plant_Id == currUserPlantId);
+                .Where(m => m.Employee.Department.Plant_Id == currUserPlantId);
 
             if (IsAdmin)
             {
@@ -68,7 +68,7 @@ namespace Web_IT_HELPDESK.Controllers
                 userRules = _appUser.GetRules(userRoles, controllerName);
                 userPlants = _appUser.GetAuthoPlantsByModuleName(controllerName);
 
-                mails = mails.Where(m => m.Employee_New.Department_ID == currUserDeptId);
+                mails = mails.Where(m => m.Employee.Department_ID == currUserDeptId);
 
                 if (!IsManager)
                 {
@@ -87,10 +87,10 @@ namespace Web_IT_HELPDESK.Controllers
                 ToAddress = m.ToAddress,
                 CcAddress = m.CcAddress,
                 Attachment = m.Attachment,
-                EmployeeName = m.Employee_New.Employee_Name,
+                EmployeeName = m.Employee.Employee_Name,
                 SendingDate = m.SendingDate,
                 SendingStatus = m.SendingStatus,
-                DepartmentName = m.Employee_New.Department.Department_Name
+                DepartmentName = m.Employee.Department.Department_Name
             });
 
             return View(model.ToList());
@@ -108,7 +108,7 @@ namespace Web_IT_HELPDESK.Controllers
             bool IsAdmin = _appUser.isAdmin;
             bool IsManager = _appUser.IsManager;
 
-            var mails = en.Mails.Include(m => m.Employee_New)
+            var mails = en.Mails.Include(m => m.Employee)
                 .Where(m => m.Inactive != true);
 
             if (fromDate != null && toDate != null)
@@ -130,7 +130,7 @@ namespace Web_IT_HELPDESK.Controllers
 
                 if (plants != "all" && plants != null)
                 {
-                    mails = mails.Where(m => m.Employee_New.Department.Plant_Id == plants);
+                    mails = mails.Where(m => m.Employee.Department.Plant_Id == plants);
                 }
             }
             else
@@ -139,7 +139,7 @@ namespace Web_IT_HELPDESK.Controllers
                 userRules = _appUser.GetRules(userRoles, controllerName);
                 userPlants = _appUser.GetAuthoPlantsByModuleName(controllerName);
 
-                mails = mails.Where(m => m.Employee_New.Department_ID == currUserDeptId);
+                mails = mails.Where(m => m.Employee.Department_ID == currUserDeptId);
 
                 if (!IsManager)
                 {
@@ -163,10 +163,10 @@ namespace Web_IT_HELPDESK.Controllers
                 ToAddress = m.ToAddress,
                 CcAddress = m.CcAddress,
                 Attachment = m.Attachment,
-                EmployeeName = m.Employee_New.Employee_Name,
+                EmployeeName = m.Employee.Employee_Name,
                 SendingDate = m.SendingDate,
                 SendingStatus = m.SendingStatus,
-                DepartmentName = m.Employee_New.Department.Department_Name
+                DepartmentName = m.Employee.Department.Department_Name
             });
 
             return View(model.ToList());
@@ -235,7 +235,7 @@ namespace Web_IT_HELPDESK.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.EmployeeId = new SelectList(en.Employee_New, "Emp_CJ", "Emp_ID", mail.EmployeeId);
+            ViewBag.EmployeeId = new SelectList(en.Employees, "Emp_CJ", "Emp_ID", mail.EmployeeId);
             return View(mail);
         }
 
@@ -251,7 +251,7 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.EmployeeId = new SelectList(en.Employee_New, "Emp_CJ", "Emp_ID", mail.EmployeeId);
+            ViewBag.EmployeeId = new SelectList(en.Employees, "Emp_CJ", "Emp_ID", mail.EmployeeId);
             return View(mail);
         }
 
@@ -268,7 +268,7 @@ namespace Web_IT_HELPDESK.Controllers
                 en.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.EmployeeId = new SelectList(en.Employee_New, "Emp_CJ", "Emp_ID", mail.EmployeeId);
+            ViewBag.EmployeeId = new SelectList(en.Employees, "Emp_CJ", "Emp_ID", mail.EmployeeId);
             return View(mail);
         }
 

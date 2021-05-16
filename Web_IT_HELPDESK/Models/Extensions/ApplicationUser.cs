@@ -16,7 +16,7 @@ namespace Web_IT_HELPDESK.Models.Extensions
             en = new ServiceDeskEntities();
             EmployeeID = HttpContext.Current.User.Identity.Name;
             if (!string.IsNullOrWhiteSpace(EmployeeID))
-                EmployeeName = en.Employee_New.Find(EmployeeID).Employee_Name;
+                EmployeeName = en.Employees.Find(EmployeeID).Employee_Name;
         }
 
         private bool _isAdmin = false;
@@ -52,7 +52,7 @@ namespace Web_IT_HELPDESK.Models.Extensions
                 if (isAdmin == true)
                     return _isDeactive;
 
-                _isDeactive = en.Employee_New.Find(EmployeeID).Deactive;
+                _isDeactive = en.Employees.Find(EmployeeID).Deactive;
                 return _isDeactive;
             }
             set { _isDeactive = value; }
@@ -62,7 +62,7 @@ namespace Web_IT_HELPDESK.Models.Extensions
         {
             string result = null;
 
-            result = en.Employee_New.Find(EmployeeID).Department_ID;
+            result = en.Employees.Find(EmployeeID).Department_ID;
 
             return result;
         }
@@ -71,7 +71,7 @@ namespace Web_IT_HELPDESK.Models.Extensions
         {
             string result = null;
 
-            result = en.Employee_New
+            result = en.Employees
                 .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                 .FirstOrDefault(grp => grp.e.Emp_CJ == EmployeeID)
                 .d.Department_Name
@@ -84,7 +84,7 @@ namespace Web_IT_HELPDESK.Models.Extensions
         {
             string result = null;
 
-            result = en.Employee_New
+            result = en.Employees
                 .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                 .FirstOrDefault(grp => grp.e.Emp_CJ == EmployeeID)
                 .d.Plant_Id
@@ -97,7 +97,7 @@ namespace Web_IT_HELPDESK.Models.Extensions
         {
             string result = null;
 
-            result = en.Employee_New
+            result = en.Employees
                 .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                 .Join(en.Plants, grp => grp.d.Plant_Id, p => p.Plant_Id, (grp, p) => new { grp.e, grp.d, p })
                 .FirstOrDefault(j => j.e.Emp_CJ == EmployeeID)
@@ -111,7 +111,7 @@ namespace Web_IT_HELPDESK.Models.Extensions
         {
             string result = null;
 
-            result = en.Employee_New
+            result = en.Employees
                     .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                     .FirstOrDefault(grp => grp.e.Emp_CJ == EmployeeID)
                     .d.Manager_Id;

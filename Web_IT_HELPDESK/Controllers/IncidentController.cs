@@ -76,15 +76,14 @@ namespace Web_IT_HELPDESK.Controllers
                 userPlants = _appUser.GetAuthoPlantsByModuleName(controllerName);
 
                 bool isITManager = userRoles.Any(ro => ro.Role_ID == 2);
+                bool isITMember = userRoles.Any(ro => ro.Role_ID == 3);
                 if (!isITManager)
                 {
                     ivm = ivm.Where(i => userPlants.Select(p => p.Plant_Id).Contains(i.plantId));
-                }
-
-                bool isITMember = userRoles.Any(ro => ro.Role_ID == 3);
-                if (!isITMember)
-                {
-                    ivm = ivm.Where(i => i.DepartmentId == currUserDeptId);
+                    if (!isITMember)
+                    {
+                        ivm = ivm.Where(i => i.DepartmentId == currUserDeptId);
+                    }
                 }
             }
 
@@ -141,15 +140,14 @@ namespace Web_IT_HELPDESK.Controllers
                 userPlants = _appUser.GetAuthoPlantsByModuleName(controllerName);
 
                 bool isITManager = userRoles.Any(ro => ro.Role_ID == 2);
+                bool isITMember = userRoles.Any(ro => ro.Role_ID == 3);
                 if (!isITManager)
                 {
                     ivm = ivm.Where(i => userPlants.Select(p => p.Plant_Id).Contains(i.plantId));
-                }
-
-                bool isITMember = userRoles.Any(ro => ro.Role_ID == 3);
-                if (!isITMember)
-                {
-                    ivm = ivm.Where(i => i.DepartmentId == currUserDeptId);
+                    if (!isITMember)
+                    {
+                        ivm = ivm.Where(i => i.DepartmentId == currUserDeptId);
+                    }
                 }
             }
 
@@ -191,8 +189,8 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.plantName = DepartmentModel.Instance.getPlantNameByDeptId(inc.DepartmentId);
             ViewBag.DepartmentName = DepartmentModel.Instance.getDeptNameByDeptId(inc.DepartmentId);
 
-            ViewBag.User_Create = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.Employee_Name;
-            ViewBag.User_Resolve = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == inc.User_resolve)?.Employee_Name;
+            ViewBag.User_Create = en.Employees.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.Employee_Name;
+            ViewBag.User_Resolve = en.Employees.FirstOrDefault(e => e.Emp_CJ == inc.User_resolve)?.Employee_Name;
             return View(inc);
         }
 
@@ -254,7 +252,7 @@ namespace Web_IT_HELPDESK.Controllers
                 string managerIdOfUser = en.Departments.Find(currUserDeptId).Manager_Id;
                 if (!string.IsNullOrWhiteSpace(managerIdOfUser))
                 {
-                    string managerMail = en.Employee_New.Find(managerIdOfUser).Email;
+                    string managerMail = en.Employees.Find(managerIdOfUser).Email;
                     if (!string.IsNullOrWhiteSpace(managerMail))
                         ccMails.Add(managerMail);
                 }
@@ -268,7 +266,7 @@ namespace Web_IT_HELPDESK.Controllers
                 return RedirectToAction("Index", "Incident");
             }
 
-            ViewBag.UserCreateName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == currUserId).Employee_Name;
+            ViewBag.UserCreateName = en.Employees.FirstOrDefault(e => e.Emp_CJ == currUserId).Employee_Name;
             ViewBag.plantName = DepartmentModel.Instance.getPlantNameByPlantId(currUserPlantId);
             ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", en.Levels.First().LevelId);
             ViewBag.StatusName = en.Status.FirstOrDefault(s => s.StatusId == "ST1").StatusName;
@@ -287,7 +285,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.DepartmentName = DepartmentModel.Instance.getDeptNameByDeptId(inc.DepartmentId);
             ViewBag.StatusId = new SelectList(en.Status.Where(s => s.StatusId != "ST6" && s.StatusId != "ST2"), "StatusId", "StatusName", inc.StatusId);
             ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", inc.LevelId);
-            ViewBag.UserCreateName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.Employee_Name;
+            ViewBag.UserCreateName = en.Employees.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.Employee_Name;
 
             return View(inc);
         }
@@ -325,7 +323,7 @@ namespace Web_IT_HELPDESK.Controllers
 
                 /*1========== Sending Mail ==========================================================================================*/
                 IncidentViewModel incEx = IncidentModel.Instance.get_Incident(inc.Id);
-                var requestor_Dept_Plant = en.Employee_New
+                var requestor_Dept_Plant = en.Employees
                    .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                    .Join(en.Plants, grp => grp.d.Plant_Id, p => p.Plant_Id, (grp, p) => new { grp.e, grp.d, p })
                    .FirstOrDefault(joined => joined.e.Emp_CJ == incEx.User_create);
@@ -347,7 +345,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.DepartmentName = DepartmentModel.Instance.getDeptNameByDeptId(inc.DepartmentId);
             ViewBag.StatusId = new SelectList(en.Status.Where(s => s.StatusId != "ST6" && s.StatusId != "ST2"), "StatusId", "StatusName", inc.StatusId);
             ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", inc.LevelId);
-            ViewBag.UserCreateName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.Employee_Name;
+            ViewBag.UserCreateName = en.Employees.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.Employee_Name;
 
             return View(inc);
         }
@@ -364,8 +362,8 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.DepartmentName = DepartmentModel.Instance.getDeptNameByDeptId(currUserDeptId);
             ViewBag.StatusName = en.Status.FirstOrDefault(s => s.StatusId == "ST6").StatusName;
             ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", inc.LevelId);
-            ViewBag.UserCreateName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.Employee_Name;
-            ViewBag.UserResolveName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == currUserId)?.Employee_Name;
+            ViewBag.UserCreateName = en.Employees.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.Employee_Name;
+            ViewBag.UserResolveName = en.Employees.FirstOrDefault(e => e.Emp_CJ == currUserId)?.Employee_Name;
 
             return View(inc);
         }
@@ -387,7 +385,7 @@ namespace Web_IT_HELPDESK.Controllers
 
                 /*1========== Sending Mail ==========================================================================================*/
                 IncidentViewModel incEx = IncidentModel.Instance.get_Incident(inc.Id);
-                var requestor_Dept_Plant = en.Employee_New
+                var requestor_Dept_Plant = en.Employees
                     .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                     .Join(en.Plants, grp => grp.d.Plant_Id, p => p.Plant_Id, (grp, p) => new { grp.e, grp.d, p })
                     .FirstOrDefault(joined => joined.e.Emp_CJ == incEx.User_create);
@@ -403,7 +401,7 @@ namespace Web_IT_HELPDESK.Controllers
                 string managerIdOfUser = en.Departments.Find(requestorDepartmentId).Manager_Id;
                 if (!string.IsNullOrWhiteSpace(managerIdOfUser))
                 {
-                    string managerMail = en.Employee_New.Find(managerIdOfUser).Email;
+                    string managerMail = en.Employees.Find(managerIdOfUser).Email;
                     if (!string.IsNullOrWhiteSpace(managerMail) && !ccMails.Contains(managerMail))
                         ccMails.Add(managerMail);
 
@@ -422,8 +420,8 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.DepartmentName = DepartmentModel.Instance.getDeptNameByDeptId(currUserDeptId);
             ViewBag.StatusName = en.Status.FirstOrDefault(s => s.StatusId == "ST6").StatusName;
             ViewBag.LevelId = new SelectList(en.Levels, "LevelId", "LevelName", inc.LevelId);
-            ViewBag.UserCreateName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.Employee_Name;
-            ViewBag.UserResolveName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == currUserId)?.Employee_Name;
+            ViewBag.UserCreateName = en.Employees.FirstOrDefault(e => e.Emp_CJ == inc.User_create)?.Employee_Name;
+            ViewBag.UserResolveName = en.Employees.FirstOrDefault(e => e.Emp_CJ == currUserId)?.Employee_Name;
 
             return View(inc);
         }

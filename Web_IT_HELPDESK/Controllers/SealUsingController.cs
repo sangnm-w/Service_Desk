@@ -169,8 +169,7 @@ namespace Web_IT_HELPDESK.Controllers
                 {
                     en.Seal_Using.Add(su);
                     en.SaveChanges();
-                    //Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == su.Employee_ID);
-                    Employee_New userRequest = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == su.Employee_ID);
+                    Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == su.Employee_ID);
                     bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(su, 1, userRequest); // Level 1: Department Manager 
                     if (resultMailing)
                     {
@@ -242,8 +241,7 @@ namespace Web_IT_HELPDESK.Controllers
             string deptName = DepartmentModel.Instance.getDeptNameByDeptId(sealUsing.DepartmentId);
             if (ModelState.IsValid)
             {
-                //Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == sealUsing.Employee_ID);
-                Employee_New userRequest = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == sealUsing.Employee_ID);
+                Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == sealUsing.Employee_ID);
 
                 try
                 {
@@ -337,8 +335,7 @@ namespace Web_IT_HELPDESK.Controllers
             string deptName = DepartmentModel.Instance.getDeptNameByDeptId(sealUsing.DepartmentId);
             if (ModelState.IsValid)
             {
-                //Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == sealUsing.Employee_ID);
-                Employee_New userRequest = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == sealUsing.Employee_ID);
+                Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == sealUsing.Employee_ID);
 
                 try
                 {
@@ -416,8 +413,7 @@ namespace Web_IT_HELPDESK.Controllers
 
             string result = "";
 
-            //Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == seal_Using.Employee_ID);
-            Employee_New userRequest = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == seal_Using.Employee_ID);
+            Employee userRequest = en.Employees.FirstOrDefault(e => e.Emp_CJ == seal_Using.Employee_ID);
             bool resultMailing = SealUsingHelper.Instance.sendSealUsingEmail(seal_Using, 2, userRequest); // Level 2: Resend
             if (resultMailing)
             {

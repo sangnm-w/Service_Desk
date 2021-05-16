@@ -17,7 +17,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
         }
         private Biz_TripHelper() { }
 
-        public bool sendBiz_TripEmail(BIZ_TRIP biztrip, int level_confirm, Employee_New userRequest, string linkConfirm = null)
+        public bool sendBiz_TripEmail(BIZ_TRIP biztrip, int level_confirm, Employee userRequest, string linkConfirm = null)
         {
             string subject = "";
             string body = "";
