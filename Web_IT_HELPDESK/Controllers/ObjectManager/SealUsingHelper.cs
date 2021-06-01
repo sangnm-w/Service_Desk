@@ -44,7 +44,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                         " Nội dung văn bản: " + sealUsing.Context + "\n" +
                         "         Nơi nhận: " + sealUsing.Place_Recipient + "\n" +
                         " Người ký văn bản: " + sealUsing.Name_signature + "\n" +
-                        "   Theo đường dẫn: " + domainName + "/servicedesk/SealUsing/Edit/" + sealUsing.Id + "\n" + "\n" +
+                        "   Theo đường dẫn: " + domainName + "/SealUsing/Edit/" + sealUsing.Id + "\n" + "\n" +
                         "Trân trọng!" + "\n" + "\n" + "\n";
 
             }
@@ -59,7 +59,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                         " Nội dung văn bản: " + sealUsing.Context + "\n" +
                         "         Nơi nhận: " + sealUsing.Place_Recipient + "\n" +
                         " Người ký văn bản: " + sealUsing.Name_signature + "\n" +
-                        "   Theo đường dẫn: " + domainName + "/servicedesk/SealUsing/Edit/" + sealUsing.Id + "\n" + "\n" +
+                        "   Theo đường dẫn: " + domainName + "/SealUsing/Edit/" + sealUsing.Id + "\n" + "\n" +
                         "Trân trọng!" + "\n" + "\n" + "\n";
             }
             else if (level == 6) // Level 6: HR Seal Using
@@ -75,7 +75,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                         " Người ký văn bản: " + sealUsing.Name_signature + "\n" +
                         "-------------------------------------" + "\n" +
                         "Đã được trưởng phòng duyệt" + "\n" +
-                        "   Theo đường dẫn: " + domainName + "/servicedesk/SealUsing/Confirm/" + sealUsing.Id + "\n" +
+                        "   Theo đường dẫn: " + domainName + "/SealUsing/Confirm/" + sealUsing.Id + "\n" +
                         "Trân trọng!" + "\n" + "\n" + "\n";
             }
             else if (level == 7) // Level 7: Return APPROVED

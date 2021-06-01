@@ -20,7 +20,7 @@
             <nav class="navbar navbar-inverse">
                 <div class="container-fluid">
                     <div class="navbar-header">
-                        <a class="navbar-brand" href="/servicedesk/Home/Index">CJ Vina Agri - Service Desk</a>
+                        <a class="navbar-brand" href="/Home/Index">CJ Vina Agri - Service Desk</a>
                     </div>
                     <ul class="nav navbar-nav">
                     </ul>
@@ -48,11 +48,11 @@
 
                         @*@if (Convert.ToString(Session["employee_id"]) == "admin")
                         {
-                            <li><a href="/servicedesk/SealUsing/EmployeeList"><i class="glyphicon glyphicon-calendar"></i> Employee</a></li>
-                            <li><a href="/servicedesk/SealUsing/PortalAdmin"><i class="glyphicon glyphicon-calendar"></i> Portal Ad</a></li>
+                            <li><a href="/SealUsing/EmployeeList"><i class="glyphicon glyphicon-calendar"></i> Employee</a></li>
+                            <li><a href="/SealUsing/PortalAdmin"><i class="glyphicon glyphicon-calendar"></i> Portal Ad</a></li>
                         }*@
 
-                        <li class="current"><a href="/servicedesk/Home/Index"><i class="glyphicon glyphicon-home"></i> Dashboard</a></li>
+                        <li class="current"><a href="/Home/Index"><i class="glyphicon glyphicon-home"></i> Dashboard</a></li>
 
                         <li class="submenu">
                             <a href="#">
@@ -61,8 +61,8 @@
                             </a>
                             <!-- Sub menu -->
                             <ul>
-                                <li><a href="/servicedesk/Incident/Index">Request List</a></li>
-                                <li><a href="/servicedesk/Incident/Create">Create new</a></li>
+                                <li><a href="/Incident/Index">Request List</a></li>
+                                <li><a href="/Incident/Create">Create new</a></li>
                             </ul>
                         </li>
 
@@ -73,7 +73,7 @@
                             </a>
                             <!-- Sub menu -->
                             <ul>
-                                <li><a href="/servicedesk/Allocations/Index">Device List</a></li>
+                                <li><a href="/Allocations/Index">Device List</a></li>
                                 <li class="subsubmenu">
                                     <a href="#">
                                         Create new
@@ -81,8 +81,8 @@
                                     </a>
                                     <!-- Sub menu -->
                                     <ul>
-                                        <li><a href="/servicedesk/Devices/Create">Laptop/Desktop</a></li>
-                                        <li><a href="/servicedesk/Devices/CreateOthers">Others</a></li>
+                                        <li><a href="/Devices/Create">Laptop/Desktop</a></li>
+                                        <li><a href="/Devices/CreateOthers">Others</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -95,17 +95,17 @@
                             </a>
                             <!-- Sub menu -->
                             <ul>
-                                <li><a href="/servicedesk/SealUsing/Index"> Seal Using List</a></li>
-                                <li><a href="/servicedesk/SealUsing/Create">Create new</a></li>
+                                <li><a href="/SealUsing/Index"> Seal Using List</a></li>
+                                <li><a href="/SealUsing/Create">Create new</a></li>
                             </ul>
                         </li>
 
 
-                        <!--li><a href="/servicedesk/SealUsing/Index"><i class="glyphicon glyphicon-calendar"></i> Seal using</a></li-->
-                        @*<li><a href="/servicedesk/DrinkingRequest/Index"><i class="glyphicon glyphicon-tasks"></i> Services </a></li>*@
+                        <!--li><a href="/SealUsing/Index"><i class="glyphicon glyphicon-calendar"></i> Seal using</a></li-->
+                        @*<li><a href="/DrinkingRequest/Index"><i class="glyphicon glyphicon-tasks"></i> Services </a></li>*@
 
 
-                        @*<li><a href="/servicedesk/HumanceResource/Index"><i class="glyphicon glyphicon-shopping-cart"></i> Stationery </a></li>*@
+                        @*<li><a href="/HumanceResource/Index"><i class="glyphicon glyphicon-shopping-cart"></i> Stationery </a></li>*@
                         <!--<li class="submenu">
                             <a href="#">
                                 <i class="glyphicon glyphicon-shopping-cart"></i> HR service
@@ -113,13 +113,13 @@
                             </a>-->
                             <!-- Sub menu -->
                             <!--<ul>
-                                <li><a href="/servicedesk/HumanceResource/Index">Stationery</a></li>
-                                <li><a href="/servicedesk/Meal/Index">Meal</a></li>
+                                <li><a href="/HumanceResource/Index">Stationery</a></li>
+                                <li><a href="/Meal/Index">Meal</a></li>
                             </ul>
                         </li>-->
 
 
-                        <li><a href="/servicedesk/Contacts/Index"><i class="glyphicon glyphicon-list"></i> Contact List </a></li>
+                        <li><a href="/Contacts/Index"><i class="glyphicon glyphicon-list"></i> Contact List </a></li>
                         <li class="submenu">
                             <a href="#">
                                 <i class="glyphicon glyphicon-record"></i> Contract
@@ -127,8 +127,8 @@
                             </a>
                             <!-- Sub menu -->
                             <ul>
-                                <li><a href="/servicedesk/CONTRACT/Index">Contract List</a></li>
-                                <li><a href="/servicedesk/CONTRACT/Create">Create new</a></li>
+                                <li><a href="/CONTRACT/Index">Contract List</a></li>
+                                <li><a href="/CONTRACT/Create">Create new</a></li>
                             </ul>
                         </li>
                         <li class="submenu">
@@ -138,8 +138,8 @@
                             </a>
                             <!-- Sub menu -->
                             <ul>
-                                <li><a href="/servicedesk/BIZ_TRIP/Index">BIZ_TRIP List</a></li>
-                                <li><a href="/servicedesk/BIZ_TRIP/Create">Create new</a></li>
+                                <li><a href="/BIZ_TRIP/Index">BIZ_TRIP List</a></li>
+                                <li><a href="/BIZ_TRIP/Create">Create new</a></li>
                             </ul>
                         </li>
 

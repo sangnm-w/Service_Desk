@@ -66,7 +66,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                       "    Used equipemnt: " + biztrip.USED_EQUIPMENT.ToString() + "\n" +
                       " Equipemnt remarks: " + biztrip.REMARK.ToString() + "\n" +
                       "-------------------------------------" + "\n" +
-                      "   Follow the link to confirm: " + domainName + "/servicedesk/BIZ_TRIP/dept_confirm/" + biztrip.ID + "\n" + "\n" +
+                      "   Follow the link to confirm: " + domainName + "/BIZ_TRIP/dept_confirm/" + biztrip.ID + "\n" + "\n" +
                       "Regards!";
             } 
             else if (level == 3) // Level 3: BOD
@@ -87,7 +87,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                    "-------------------------------------" + "\n" +
                    "Confirmed by Head of Department" + "\n" +
                    "-------------------------------------" + "\n" +
-                   "   Follow the link to confirm: " + domainName + "/servicedesk/BIZ_TRIP/bod_confirm/" + biztrip.ID + "\n" +
+                   "   Follow the link to confirm: " + domainName + "/BIZ_TRIP/bod_confirm/" + biztrip.ID + "\n" +
                    "Regards!";
 
             }
@@ -109,7 +109,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                    "-------------------------------------" + "\n" +
                    "Confirmed by Head of Department" + "\n" +
                    "-------------------------------------" + "\n" +
-                   "   Follow the link to confirm: " + domainName + "/servicedesk/BIZ_TRIP/hr_confirm/" + biztrip.ID + "\n" +
+                   "   Follow the link to confirm: " + domainName + "/BIZ_TRIP/hr_confirm/" + biztrip.ID + "\n" +
                    "Regards!";
 
             }
@@ -131,7 +131,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                    "-------------------------------------" + "\n" +
                    "Confirmed by HR Manager" + "\n" +
                    "-------------------------------------" + "\n" +
-                   "   Follow to add information by link: " + domainName + "/servicedesk/BIZ_TRIP/hr_admin/" + biztrip.ID + "\n" +
+                   "   Follow to add information by link: " + domainName + "/BIZ_TRIP/hr_admin/" + biztrip.ID + "\n" +
                    "Regards!";
 
             }

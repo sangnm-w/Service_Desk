@@ -54,7 +54,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
 
             string domainName = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
 
-            string DetailsLink = "- Details Link: " + domainName + @"/servicedesk/Devices/Details/" + device.Device_Id + " \n";
+            string DetailsLink = "- Details Link: " + domainName + @"/Devices/Details/" + device.Device_Id + " \n";
 
             QRText = QRText + "\n" + DetailsLink;
 

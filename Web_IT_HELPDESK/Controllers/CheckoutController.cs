@@ -66,7 +66,7 @@ namespace Web_IT_HELPDESK.Controllers
                 status = "1";
                 //}
                 body = "Duyệt thông tin yêu cầu \n" +
-                        "   Theo đường dẫn: " + "http://52.213.3.168/servicedesk/Order_/Confirm/" + order.OrderId.ToString() + "\n" + "\n" +
+                        "   Theo đường dẫn: " + "http://52.213.3.168/Order_/Confirm/" + order.OrderId.ToString() + "\n" + "\n" +
                         "Trân trọng!" + "\n" + "\n" + "\n" +
 
                         "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";

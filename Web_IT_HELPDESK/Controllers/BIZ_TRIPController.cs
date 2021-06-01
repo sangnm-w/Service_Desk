@@ -158,7 +158,7 @@ namespace Web_IT_HELPDESK.Controllers
                 string domainName = System.Web.HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
                 if (currUserIsManager)
                 {
-                    linkConfirm = domainName + @"/servicedesk/BIZ_TRIP/bod_confirm/";
+                    linkConfirm = domainName + @"/BIZ_TRIP/bod_confirm/";
                     bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(biz_trip, 3, userRequest, linkConfirm); // Level 3: BOD
                     if (resultMailing)
                     {
@@ -171,7 +171,7 @@ namespace Web_IT_HELPDESK.Controllers
                 }
                 else
                 {
-                    linkConfirm = domainName + @"/servicedesk/BIZ_TRIP/dept_confirm/";
+                    linkConfirm = domainName + @"/BIZ_TRIP/dept_confirm/";
                     bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(biz_trip, 1, userRequest, linkConfirm); // Level 1: Department Manager
                     if (resultMailing)
                     {
@@ -653,7 +653,7 @@ namespace Web_IT_HELPDESK.Controllers
             string domainName = System.Web.HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
             if (IsManager)
             {
-                linkConfirm = domainName + @"/servicedesk/BIZ_TRIP/bod_confirm/";
+                linkConfirm = domainName + @"/BIZ_TRIP/bod_confirm/";
                 bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(biz_trip, 3, userRequest, linkConfirm); // Level 3: BOD
                 if (resultMailing)
                 {
@@ -666,7 +666,7 @@ namespace Web_IT_HELPDESK.Controllers
             }
             else
             {
-                linkConfirm = domainName + @"/servicedesk/BIZ_TRIP/dept_confirm/";
+                linkConfirm = domainName + @"/BIZ_TRIP/dept_confirm/";
                 bool resultMailing = Biz_TripHelper.Instance.sendBiz_TripEmail(biz_trip, 1, userRequest, linkConfirm); // Level 1: Department Manager
                 if (resultMailing)
                 {
