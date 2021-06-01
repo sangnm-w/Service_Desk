@@ -1,5 +1,5 @@
-﻿@model IEnumerable<Web_IT_HELPDESK.ViewModels.IncidentViewModel>
-@using Web_IT_HELPDESK.ViewModels
+﻿@using Web_IT_HELPDESK
+@model IEnumerable<Web_IT_HELPDESK.ViewModels.IncidentViewModel>
 
 @{
     ViewBag.Title = "Index";
@@ -17,7 +17,7 @@
                     <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Month :</label>
                     @Html.TextBox("_datetime", DateTime.Now.ToString("yyyy-MM"), new { @type = "month", @class = "form-control", @style = "width: auto; display: inline-block" })
                 </div>
-                if (((List<PlantViewModel>)ViewBag.userPlants).Count() > 0)
+                if (((List<Plant>)ViewBag.userPlants).Count() > 0)
                 {
                     /*Only admin have this group*/
                     <div class="form-group">
@@ -29,7 +29,7 @@
                                     @Html.RadioButton("plants", (string)item.Plant_Id, false)<label style="vertical-align: middle; margin-left: 7px;">@item.Plant_Name</label>
                                 </div>
                             }
-                            @if (((List<PlantViewModel>)ViewBag.userPlants).Count != 1)
+                            @if (((List<Plant>)ViewBag.userPlants).Count != 1)
                             {
                                 <div class="col-sm-3">
                                     @Html.RadioButton("plants", "all", true)<label style="vertical-align: middle; margin-left: 7px;">All</label>

@@ -38,7 +38,7 @@ namespace Web_IT_HELPDESK.Controllers
 
             List<Rule> userRules = new List<Rule>();
             List<Role> userRoles = new List<Role>();
-            List<PlantViewModel> userPlants = new List<PlantViewModel>();
+            List<Plant> userPlants = new List<Plant>();
             string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
 
             bool IsAdmin = _appUser.isAdmin;
@@ -52,20 +52,14 @@ namespace Web_IT_HELPDESK.Controllers
                     .ToList();
 
                 userPlants = en.Plants
-                    .Select(p => new PlantViewModel { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name })
+                    .Select(p => new Plant { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name })
                     .ToList();
             }
             else
             {
-                var userAuths = _appUser.GetAuthorizations();
-
-                userRoles = userAuths.Join(en.Roles, au => au.Role_ID, ro => ro.Role_ID, (au, ro) => ro).Distinct().ToList();
+                userRoles = _appUser.GetRolesByModuleName(controllerName);
                 userRules = _appUser.GetRules(userRoles, controllerName);
-
-                var uPlants = _appUser.GetAuthorizations()
-               .Join(en.Plants, au => au.Plant_ID, p => p.Plant_Id, (au, p) => new { au, p }).Select(grp => new { grp.p.Plant_Id, grp.p.Plant_Name }).Distinct();
-
-                userPlants = uPlants.Select(p => new PlantViewModel { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name }).ToList();
+                userPlants = _appUser.GetAuthoPlantsByModuleName(controllerName);
 
                 bool isITManager = userRoles.Any(ro => ro.Role_ID == 2);
             }
@@ -87,7 +81,7 @@ namespace Web_IT_HELPDESK.Controllers
             string currentPlantId = _appUser.GetPlantID();
             List<Rule> userRules = new List<Rule>();
             List<Role> userRoles = new List<Role>();
-            List<PlantViewModel> userPlants = new List<PlantViewModel>();
+            List<Plant> userPlants = new List<Plant>();
             string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
 
             bool IsAdmin = _appUser.isAdmin;
@@ -101,20 +95,14 @@ namespace Web_IT_HELPDESK.Controllers
                     .ToList();
 
                 userPlants = en.Plants
-                    .Select(p => new PlantViewModel { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name })
+                    .Select(p => new Plant { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name })
                     .ToList();
             }
             else
             {
-                var userAuths = _appUser.GetAuthorizations();
-
-                userRoles = userAuths.Join(en.Roles, au => au.Role_ID, ro => ro.Role_ID, (au, ro) => ro).Distinct().ToList();
+                userRoles = _appUser.GetRolesByModuleName(controllerName);
                 userRules = _appUser.GetRules(userRoles, controllerName);
-
-                var uPlants = _appUser.GetAuthorizations()
-               .Join(en.Plants, au => au.Plant_ID, p => p.Plant_Id, (au, p) => new { au, p }).Select(grp => new { grp.p.Plant_Id, grp.p.Plant_Name }).Distinct();
-
-                userPlants = uPlants.Select(p => new PlantViewModel { Plant_Id = p.Plant_Id, Plant_Name = p.Plant_Name }).ToList();
+                userPlants = _appUser.GetAuthoPlantsByModuleName(controllerName);
             }
 
             ViewBag.userRules = userRules.Select(ru => ru.Rule_Name).ToList();
@@ -173,10 +161,10 @@ namespace Web_IT_HELPDESK.Controllers
 
             ViewBag.Device = device;
 
-            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == currentEmployeeID).Plant_Id;
+            string empPlantID = _appUser.GetPlantID();
 
             ViewBag.Deliver = currentEmployeeID;
-            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == currentEmployeeID).EmployeeName;
+            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == currentEmployeeID).Employee_Name;
 
             List<EmployeeFieldModel> employeeFields = EmployeeModel.Instance.EmployeeFieldsByPlant(empPlantID);
             List<SelectListItem> SLIEmployee = new List<SelectListItem>();
@@ -231,7 +219,7 @@ namespace Web_IT_HELPDESK.Controllers
             ViewBag.Device = device;
 
             ViewBag.Deliver = currentEmployeeID;
-            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == currentEmployeeID).EmployeeName;
+            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == currentEmployeeID).Employee_Name;
 
             List<EmployeeFieldModel> employeeFields = EmployeeModel.Instance.EmployeeFieldsByPlant(empPlantID);
             List<SelectListItem> SLIEmployee = new List<SelectListItem>();
@@ -262,9 +250,9 @@ namespace Web_IT_HELPDESK.Controllers
             {
                 return HttpNotFound();
             }
-            string empPlantID = en.Employees.FirstOrDefault(e => e.Emp_CJ == currentEmployeeID).Plant_Id;
+            string empPlantID = _appUser.GetPlantID();
 
-            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).EmployeeName;
+            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).Employee_Name;
 
             ViewBag.DeviceTypeId = en.Devices.FirstOrDefault(d => d.Device_Id == allocation.Device_Id).Device_Type_Id;
 
@@ -318,7 +306,7 @@ namespace Web_IT_HELPDESK.Controllers
             string empPlantID = _appUser.GetPlantID();
             ViewBag.Plant_Name = _appUser.GetPlantName();
 
-            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).EmployeeName;
+            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).Employee_Name;
 
             ViewBag.DeviceTypeId = en.Devices.FirstOrDefault(d => d.Device_Id == allocation.Device_Id).Device_Type_Id;
 
@@ -354,9 +342,9 @@ namespace Web_IT_HELPDESK.Controllers
             }
             string empPlantID = _appUser.GetPlantID();
 
-            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).EmployeeName;
+            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).Employee_Name;
 
-            ViewBag.ReceiverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).EmployeeName;
+            ViewBag.ReceiverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).Employee_Name;
 
             ViewBag.DeviceTypeId = en.Devices.FirstOrDefault(d => d.Device_Id == allocation.Device_Id).Device_Type_Id;
 
@@ -401,9 +389,9 @@ namespace Web_IT_HELPDESK.Controllers
 
             ViewBag.Plant_Name = _appUser.GetPlantName();
 
-            ViewBag.DeliverName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).Employee_Name;
+            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Deliver).Employee_Name;
 
-            ViewBag.ReceiverName = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).Employee_Name;
+            ViewBag.ReceiverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == allocation.Receiver).Employee_Name;
 
             ViewBag.DeviceTypeId = en.Devices.FirstOrDefault(d => d.Device_Id == allocation.Device_Id).Device_Type_Id;
 
@@ -434,7 +422,7 @@ namespace Web_IT_HELPDESK.Controllers
             string empPlantID = _appUser.GetPlantID();
 
             ViewBag.Deliver = currentEmployeeID;
-            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == currentEmployeeID).EmployeeName;
+            ViewBag.DeliverName = en.Employees.FirstOrDefault(e => e.Emp_CJ == currentEmployeeID).Employee_Name;
 
             List<EmployeeFieldModel> employeeFields = EmployeeModel.Instance.EmployeeFieldsByPlant(empPlantID);
             List<SelectListItem> SLIEmployee = new List<SelectListItem>();
@@ -517,7 +505,7 @@ namespace Web_IT_HELPDESK.Controllers
         public JsonResult getDeptVal(string receiverId)
         {
             string deptId = null;
-            deptId = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == receiverId).Department_ID;
+            deptId = en.Employees.FirstOrDefault(e => e.Emp_CJ == receiverId).Department_ID;
             return Json(deptId, JsonRequestBehavior.AllowGet);
         }
 

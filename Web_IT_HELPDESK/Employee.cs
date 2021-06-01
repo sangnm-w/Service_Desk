@@ -17,10 +17,12 @@ namespace Web_IT_HELPDESK
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Employee()
         {
+            this.Authorizations = new HashSet<Authorization>();
             this.BIZ_TRIP = new HashSet<BIZ_TRIP>();
             this.CONTRACTs = new HashSet<CONTRACT>();
             this.Documents = new HashSet<Document>();
             this.EMP_ANSWER = new HashSet<EMP_ANSWER>();
+            this.Mails = new HashSet<Mail>();
             this.Order_ = new HashSet<Order_>();
             this.UserLogons = new HashSet<UserLogon>();
             OnConstructorInit();
@@ -28,31 +30,43 @@ namespace Web_IT_HELPDESK
         partial void OnConstructorInit();
     
         public string Emp_CJ { get; set; }
-        public string EmployeeID { get; set; }
-        public string EmployeeName { get; set; }
-        public string ID_Number { get; set; }
+        public string Emp_ID { get; set; }
+        public string Emp_ID_Old { get; set; }
+        public string Employee_Name { get; set; }
+        public string Employee_Name_NoSign { get; set; }
         public Nullable<System.DateTime> Birthday { get; set; }
+        public string BirthPlace { get; set; }
+        public string Gender { get; set; }
+        public string ADDRESS { get; set; }
         public string Marital_Status { get; set; }
-        public string Position { get; set; }
-        public string Job { get; set; }
-        public string Phone { get; set; }
         public string Email { get; set; }
+        public string Other_Email1 { get; set; }
+        public string Other_Email2 { get; set; }
+        public string Phone { get; set; }
+        public string Other_Phone1 { get; set; }
+        public string Other_Phone2 { get; set; }
+        public string Position { get; set; }
+        public string Grade { get; set; }
+        public string Job { get; set; }
+        public string Department_ID { get; set; }
         public Nullable<System.DateTime> Hire_Date { get; set; }
         public Nullable<System.DateTime> Termination_Date { get; set; }
-        public string Department_Id { get; set; }
-        public string Plant_Id { get; set; }
         public Nullable<bool> Deactive { get; set; }
         public string Password { get; set; }
-        public Nullable<bool> Administrator { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Authorization> Authorizations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BIZ_TRIP> BIZ_TRIP { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CONTRACT> CONTRACTs { get; set; }
+        public virtual Department Department { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Document> Documents { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EMP_ANSWER> EMP_ANSWER { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Mail> Mails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order_> Order_ { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

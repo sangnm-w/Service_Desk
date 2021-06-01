@@ -1,0 +1,217 @@
+﻿@model Web_IT_HELPDESK.ViewModels.Mailing.MailingCreateViewModel
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_LayoutMailing.cshtml";
+}
+
+@section Style {
+    <link href="https://cdn.datatables.net/searchpanes/1.2.1/css/searchPanes.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css" rel="stylesheet">
+
+}
+<div class="content-box-large">
+    <h4>Mailing</h4>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row" id="SearchArea">
+                <div class="col-md-2">
+                    <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Filter :</label>
+                    <div class="form-group">
+                        @Html.DropDownListFor(model => model.PlantId, Model.Plants, new { @class = "form-control", @id = "PlantDDL", title = "Plant" })
+                    </div>
+                    <div class="form-group" id="DepartmentPartialView">
+                        @{ Html.RenderPartial("_DepartmentPartialView", Model);}
+                    </div>
+                    <div class="form-group">
+                        @Html.DropDownListFor(model => model.PositionId, Model.Positions, new { @class = "form-control", @id = "PositionDDL", title = "Position" })
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default" id="LoadEmail">Load</button>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <table id="SearchResultTB" class="ui celled table nowrap" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Position</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @* Fill search result here *@
+                            @foreach (var item in Model.InitialEmails)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EmployeeName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Email)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Position)
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Position</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="col-md-2">
+                    @* add - button *@
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="content-box-header panel-heading">
+            <div class="panel-title">Mail List</div>
+            @*<div class="panel-options">
+                    <a href="@Url.Action("Download", "Incident")" data-rel="download">
+                        <i class="glyphicon glyphicon-download-alt"></i>
+                    </a>
+                </div>*@
+        </div>
+        <div class="panel-body">
+            <table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-bordered dataTable" id="mailTable" width="100%">
+                <thead>
+                    <tr>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section Script {
+    <script src="https://cdn.datatables.net/searchpanes/1.2.1/js/dataTables.searchPanes.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
+
+    <script type="text/javascript">
+
+        $.fn.selectpicker.Constructor.DEFAULTS.display = 'static';
+
+        var SearchResultTB = $('#SearchResultTB').DataTable({
+            scrollX: true,
+            scrollY: 192,
+            //scrollCollapse: true,
+            paging: false,
+            ordering: false,
+            info: false,
+            columns: [
+                { data: "EmployeeName", name: "EmployeeName" },
+                { data: "Email", name: "Email" },
+                { data: "Position", name: "Position" }
+            ],
+            columnDefs: [{
+                searchPanes: {
+                    show: true
+                },
+                targets: [0, 1, 2]
+            }],
+
+            buttons: [
+                'searchPanes',
+                'selectAll',
+                'selectNone'
+            ],
+
+            dom: 'Bt',
+
+            select: {
+                style: "multi"
+            }
+        });
+
+        function SetupDepartmentDDL() {
+            $("#DepartmentDDL").selectpicker({
+                liveSearch: true,
+                liveSearchPlaceholder: "Search...",
+                container: 'body'
+            });
+        };
+
+        function LoadDeptByPlant(selectedPlantID) {
+            $.ajax({
+                url: '@Url.Action("UpdateDepartmentDDLByPlant", "Mailing")',
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html',
+                data: { plantID: selectedPlantID },
+                success: function (result) {
+                    $('#DepartmentPartialView').html(result);
+                    SetupDepartmentDDL();
+                },
+                error: function (result) {
+                    alert(status);
+                }
+            })
+        };
+
+        $("#LoadEmail").on("click", function () {
+            var selectedPlantId = $("#PlantDDL").val();
+            var selectedDepartmentId = $("#DepartmentDDL").val();
+            var selectedPositionId = $("#PositionDDL").val();
+
+            console.log("." + selectedPlantId + ".");
+            console.log("." + selectedDepartmentId + ".");
+            console.log("." + selectedPositionId + ".");
+
+            $.ajax({
+                url: '@Url.Action("LoadEmail", "Mailing")',
+                type: "GET",
+                data: { plantId: selectedPlantId, departmentId: selectedDepartmentId, positionId: selectedPositionId },
+                contentType: "application/json; charset=UTF-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result.data);
+                    console.log(JSON.parse(result.data));
+                    var jsonData = JSON.parse(result.data);
+                    console.log(jsonData[1]);
+                    SearchResultTB.clear().draw();
+                    console.log("clear data");
+                    //SearchResultTB.rows.add([{
+                    //    'EmployeeName': result.data['EmployeeName'],
+                    //    'Email': result.data['Email'],
+                    //    'Position': result.data['Position']
+                    //    }]).draw();
+                    SearchResultTB.rows.add(jsonData).draw();
+                    console.log("redraw with new data");
+                },
+                error: function (result) {
+                    alert(status);
+                }
+            });
+        })
+
+        $('#PlantDDL').selectpicker({
+            liveSearch: true,
+            liveSearchPlaceholder: "Search...",
+            container: 'body'
+        });
+
+        var positionDDL = $('#PositionDDL').selectpicker({
+            liveSearch: true,
+            liveSearchPlaceholder: "Search...",
+            container: 'body'
+        });
+
+        SetupDepartmentDDL();
+
+        $('#PlantDDL').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+            LoadDeptByPlant($(this).val());
+        });
+    </script>
+}

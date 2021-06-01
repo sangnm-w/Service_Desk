@@ -16,7 +16,7 @@ namespace Web_IT_HELPDESK.Models.Extensions
             en = new ServiceDeskEntities();
             EmployeeID = HttpContext.Current.User.Identity.Name;
             if (!string.IsNullOrWhiteSpace(EmployeeID))
-                EmployeeName = en.Employee_New.Find(EmployeeID).Employee_Name;
+                EmployeeName = en.Employees.Find(EmployeeID).Employee_Name;
         }
 
         private bool _isAdmin = false;
@@ -52,7 +52,7 @@ namespace Web_IT_HELPDESK.Models.Extensions
                 if (isAdmin == true)
                     return _isDeactive;
 
-                _isDeactive = en.Employee_New.Find(EmployeeID).Deactive;
+                _isDeactive = en.Employees.Find(EmployeeID).Deactive;
                 return _isDeactive;
             }
             set { _isDeactive = value; }
@@ -62,7 +62,7 @@ namespace Web_IT_HELPDESK.Models.Extensions
         {
             string result = null;
 
-            result = en.Employee_New.Find(EmployeeID).Department_ID;
+            result = en.Employees.Find(EmployeeID).Department_ID;
 
             return result;
         }
@@ -71,7 +71,7 @@ namespace Web_IT_HELPDESK.Models.Extensions
         {
             string result = null;
 
-            result = en.Employee_New
+            result = en.Employees
                 .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                 .FirstOrDefault(grp => grp.e.Emp_CJ == EmployeeID)
                 .d.Department_Name
@@ -84,7 +84,7 @@ namespace Web_IT_HELPDESK.Models.Extensions
         {
             string result = null;
 
-            result = en.Employee_New
+            result = en.Employees
                 .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                 .FirstOrDefault(grp => grp.e.Emp_CJ == EmployeeID)
                 .d.Plant_Id
@@ -97,7 +97,7 @@ namespace Web_IT_HELPDESK.Models.Extensions
         {
             string result = null;
 
-            result = en.Employee_New
+            result = en.Employees
                 .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                 .Join(en.Plants, grp => grp.d.Plant_Id, p => p.Plant_Id, (grp, p) => new { grp.e, grp.d, p })
                 .FirstOrDefault(j => j.e.Emp_CJ == EmployeeID)
@@ -111,7 +111,7 @@ namespace Web_IT_HELPDESK.Models.Extensions
         {
             string result = null;
 
-            result = en.Employee_New
+            result = en.Employees
                     .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                     .FirstOrDefault(grp => grp.e.Emp_CJ == EmployeeID)
                     .d.Manager_Id;
@@ -119,12 +119,19 @@ namespace Web_IT_HELPDESK.Models.Extensions
             return result;
         }
 
-
-        public List<Authorization> GetAuthorizations()
+        public IEnumerable<Authorization> GetAuths()
         {
-            List<Authorization> result = new List<Authorization>();
+            var result = en.Authorizations.Where(x => x.Emp_CJ == EmployeeID).ToList();
+            return result;
+        }
 
-            result = en.Authorizations.Where(x => x.Emp_CJ == EmployeeID).ToList();
+        public IEnumerable<Authorization> GetAuthsByModuleName(string moduleName)
+        {
+            var ruleIdByModule = en.Rules.Where(ru => ru.Module.Module_Name.ToUpper() == moduleName.ToUpper()).Select(ru => ru.Rule_ID);
+
+            var roleIdByModule = en.Rules.Where(mm => ruleIdByModule.Contains(mm.Rule_ID)).SelectMany(mm => mm.Roles).Select(ro => ro.Role_ID);
+
+            var result = en.Authorizations.Where(au => roleIdByModule.Contains(au.Role_ID)).Where(au => au.Emp_CJ == EmployeeID);
 
             return result;
         }
@@ -139,6 +146,17 @@ namespace Web_IT_HELPDESK.Models.Extensions
                 .Select(joinedI => joinedI.ro)
                 .Distinct()
                 .ToList();
+
+            return result;
+        }
+
+        public List<Role> GetRolesByModuleName(string moduleName)
+        {
+            List<Role> result = new List<Role>();
+
+            var authsByModuleName = GetAuthsByModuleName(moduleName);
+
+            result = authsByModuleName.Select(au => au.Role).Distinct().ToList();
 
             return result;
         }
@@ -167,6 +185,15 @@ namespace Web_IT_HELPDESK.Models.Extensions
             }
 
             return result.Distinct().ToList();
+        }
+
+        public List<Plant> GetAuthoPlantsByModuleName(string moduleName)
+        {
+            var authsByModuleName = GetAuthsByModuleName(moduleName);
+
+            var result = authsByModuleName.Join(en.Plants, au => au.Plant_ID, p => p.Plant_Id, (au, p) => p).Distinct().ToList();
+
+            return result;
         }
     }
 }

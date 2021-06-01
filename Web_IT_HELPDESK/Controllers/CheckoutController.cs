@@ -29,8 +29,7 @@ namespace Web_IT_HELPDESK.Controllers
         //  Get_department_Id
         private string GetEmp_name()
         {
-            string emp_name = storeDB.Employee_New.Where(f => (f.Emp_CJ == session_emp)).Select(f => f.Employee_Name).SingleOrDefault();
-            //string emp_name = storeDB.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.EmployeeName).SingleOrDefault();
+            string emp_name = storeDB.Employees.Where(f => (f.Emp_CJ == session_emp)).Select(f => f.Employee_Name).SingleOrDefault();
             return emp_name;
         }
         Information inf = new Information();
@@ -66,7 +65,7 @@ namespace Web_IT_HELPDESK.Controllers
                 status = "1";
                 //}
                 body = "Duyệt thông tin yêu cầu \n" +
-                        "   Theo đường dẫn: " + "http://52.213.3.168/servicedesk/Order_/Confirm/" + order.OrderId.ToString() + "\n" + "\n" +
+                        "   Theo đường dẫn: " + "http://52.213.3.168/Order_/Confirm/" + order.OrderId.ToString() + "\n" + "\n" +
                         "Trân trọng!" + "\n" + "\n" + "\n" +
 
                         "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";

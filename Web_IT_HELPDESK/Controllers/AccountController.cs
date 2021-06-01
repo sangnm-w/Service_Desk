@@ -20,12 +20,11 @@ namespace Web_IT_HELPDESK.Controllers
 
         // POST: /LogOn/
         [HttpPost]
-        public ActionResult LogOn(Employee_New emp, string returnUrl)
+        public ActionResult LogOn(Employee emp, string returnUrl)
         {
             if (ModelState.IsValid)
             {
-                //Employee logonUser = en.Employees.FirstOrDefault(e => e.Emp_CJ == emp.Emp_CJ && e.Password == emp.Password);
-                Employee_New logonUser = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == emp.Emp_CJ && e.Password == emp.Password);
+                Employee logonUser = en.Employees.FirstOrDefault(e => e.Emp_CJ == emp.Emp_CJ && e.Password == emp.Password);
 
                 if (logonUser != null)
                 {

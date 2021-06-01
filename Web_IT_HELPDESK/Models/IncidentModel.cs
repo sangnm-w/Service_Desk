@@ -37,14 +37,13 @@ namespace Web_IT_HELPDESK.Models
                     (iwsal, dept) => new { iwsal.inc, iwsal.StatusName, iwsal.LevelName, dept.Department_Name, dept.Plant_Id }
                 )
                 .Join(
-                    //en.Employees,
-                    en.Employee_New,
+                    en.Employees,
                     isld => isld.inc.User_create,
                     e => e.Emp_CJ,
                     (isld, e) => new { isld.inc, isld.StatusName, isld.LevelName, isld.Department_Name, isld.Plant_Id, e.Employee_Name }
                 )
                 .GroupJoin(
-                    en.Employee_New,
+                    en.Employees,
                     i => i.inc.User_resolve,
                     e => e.Emp_CJ,
                     (i, employeesGroup) => new { i, employeesGroup }
@@ -125,7 +124,7 @@ namespace Web_IT_HELPDESK.Models
             if (plantId == "V2010")
             {
                 string departmentId = "V2090S0001";
-                result = en.Employee_New
+                result = en.Employees
                     .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                     .Where(grp => grp.d.Plant_Id == "V2090" && grp.d.Department_Id == departmentId && grp.e.Deactive != true)
                     .Select(grp => grp.e.Email).ToList();
@@ -133,7 +132,7 @@ namespace Web_IT_HELPDESK.Models
             else if (plantId == "V2080")
             {
                 string departmentId = "V2020S0001";
-                result = en.Employee_New
+                result = en.Employees
                     .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                     .Where(grp => grp.d.Plant_Id == "V2020" && grp.d.Department_Id == departmentId && grp.e.Deactive != true)
                     .Select(grp => grp.e.Email).ToList();
@@ -141,7 +140,7 @@ namespace Web_IT_HELPDESK.Models
             else
             {
                 string departmentId = plantId + "S0001";
-                result = en.Employee_New
+                result = en.Employees
                     .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                     .Where(grp => grp.d.Plant_Id == plantId && grp.d.Department_Id == departmentId && grp.e.Deactive != true)
                     .Select(grp => grp.e.Email).ToList();

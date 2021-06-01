@@ -385,7 +385,7 @@ namespace Web_IT_HELPDESK.Controllers
             status = "1";
             //}
             body = "Kiểm tra thông tin đã chỉnh sửa ...\n" +
-                    "   Theo đường dẫn: " + "http://52.213.3.168/servicedesk/Order_/Edit/" + Convert.ToInt32(Session["OrderId"].ToString()) + "\n" + "\n" +
+                    "   Theo đường dẫn: " + "http://52.213.3.168/Order_/Edit/" + Convert.ToInt32(Session["OrderId"].ToString()) + "\n" + "\n" +
                     v_information +
                     "\n \n Trân trọng!" + "\n\n\n" +
                     "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";
@@ -442,7 +442,7 @@ namespace Web_IT_HELPDESK.Controllers
             status = "1";
             //}
             body = "Kiểm tra thông tin đã chỉnh sửa ...\n" +
-                    "   Theo đường dẫn: " + "http://52.213.3.168/servicedesk/Order_/Edit/" + v_getoder.OrderId + "\n" + "\n" +
+                    "   Theo đường dẫn: " + "http://52.213.3.168/Order_/Edit/" + v_getoder.OrderId + "\n" + "\n" +
                     v_information +
                     "\n \n Trân trọng!" + "\n \n \n" +
                     "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";
