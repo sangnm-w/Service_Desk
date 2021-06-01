@@ -1,2 +1,2 @@
 ﻿@model Web_IT_HELPDESK.ViewModels.Mailing.MailingCreateViewModel
-@Html.DropDownListFor(model => model.DepartmentId, new SelectList(Model.DepartmentVMs, "Department_Id", "Department_Name"), new { @class = "form-control", title = "Choose one of Departments" })
+@Html.DropDownListFor(model => model.DepartmentId, new SelectList(Model.DepartmentVMs, "Department_Id", "Department_Name"), new { @class = "form-control", @id = "DepartmentDDL", title = "Department" })

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -190,22 +191,40 @@ namespace Web_IT_HELPDESK.Controllers
         // GET: Mailing/Create
         public ActionResult Create()
         {
-            IEnumerable<Plant> plants = en.Plants;
-            IEnumerable<DepartmentViewModel> departmentVMs = en.Departments
-                .Select(d => new DepartmentViewModel()
+            SelectList plants = new SelectList(en.Plants, "Plant_ID", "Plant_Name");
+            IEnumerable<DepartmentViewModel> departmentVMs = GetDepartmentVMsByPlantId(currUserPlantId);
+            SelectList positions = new SelectList(new List<MailingPositionViewModel>()
+            {
+                new MailingPositionViewModel()
                 {
-                    Department_Id = d.Department_Id,
-                    Department_Name = d.Department_Name
-                });
+                    PositionId = 0,
+                    PositionName = "Head of Department"
+                },
+                new MailingPositionViewModel()
+                {
+                    PositionId = 1,
+                    PositionName = "Manager"
+                },
+                new MailingPositionViewModel()
+                {
+                    PositionId = 2,
+                    PositionName = "Sales"
+                }
+            }, "PositionId", "PositionName");
+
+            IEnumerable<MailingEmailsViewModel> initialEmails = GetInitialEmails(currUserPlantId, null, null);
+
             MailingCreateViewModel model = new MailingCreateViewModel()
             {
                 Plants = plants,
                 DepartmentVMs = departmentVMs,
-                PlantId = "",
+                Positions = positions,
+                PlantId = currUserPlantId,
                 DepartmentId = "",
+                PositionId = null,
+                InitialEmails = initialEmails,
                 EmployeeName = "",
                 Email = "",
-                Position = "",
                 MailTitle = "",
                 MailContent = "",
                 FromAddress = "",
@@ -298,29 +317,85 @@ namespace Web_IT_HELPDESK.Controllers
             return RedirectToAction("Index");
         }
 
-        public PartialViewResult UpdateDepartmentDropDownListByPlantID(string plantID)
+        public PartialViewResult UpdateDepartmentDDLByPlant(string plantID)
         {
             MailingCreateViewModel model = new MailingCreateViewModel();
-            if (!string.IsNullOrWhiteSpace(plantID))
+            model.DepartmentVMs = GetDepartmentVMsByPlantId(plantID);
+            return PartialView("_DepartmentPartialView", model);
+        }
+
+        public JsonResult LoadEmail(string plantId, string departmentId, int? positionId)
+        {
+
+            string jsonResult = JsonConvert.SerializeObject(GetInitialEmails(plantId, departmentId, positionId));
+
+            return Json(new { success = true, data = jsonResult }, JsonRequestBehavior.AllowGet);
+        }
+
+        public IEnumerable<DepartmentViewModel> GetDepartmentVMsByPlantId(string plantId)
+        {
+            IEnumerable<Department> departments = en.Departments.Where(d => d.Deactive != true);
+            if (!string.IsNullOrWhiteSpace(plantId))
             {
-                model.DepartmentVMs = en.Departments.Where(d => d.Plant_Id == plantID)
-                    .Select(d => new DepartmentViewModel()
-                    {
-                        Department_Id = d.Department_Id,
-                        Department_Name = d.Department_Name
-                    });
-            }
-            else
-            {
-                model.DepartmentVMs = en.Departments
-                     .Select(d => new DepartmentViewModel()
-                     {
-                         Department_Id = d.Department_Id,
-                         Department_Name = d.Department_Name
-                     });
+                departments = departments.Where(d => d.Plant_Id == plantId);
             }
 
-            return PartialView("_DepartmentPartialView", model);
+            IEnumerable<DepartmentViewModel> result = departments
+                   .Select(d => new DepartmentViewModel()
+                   {
+                       Department_Id = d.Department_Id,
+                       Department_Name = d.Department_Name
+                   });
+
+            return result;
+        }
+
+        public IEnumerable<MailingEmailsViewModel> GetInitialEmails(string plantId, string departmentId, int? positionId)
+        {
+            var employeeWithDept = en.Employees
+            .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
+            .Where(grp => grp.e.Deactive != true);
+
+            if (!string.IsNullOrEmpty(plantId))
+            {
+                employeeWithDept = employeeWithDept.Where(grp => grp.d.Plant_Id == plantId);
+            }
+
+            if (!string.IsNullOrEmpty(departmentId))
+            {
+                employeeWithDept = employeeWithDept.Where(grp => grp.d.Department_Id == departmentId);
+            }
+
+            if (positionId != null)
+            {
+                string positionKeyword = "";
+                switch (positionId)
+                {
+                    case 0:
+                        positionKeyword = "Head of";
+                        break;
+                    case 1:
+                        positionKeyword = "Manager";
+                        break;
+                    case 2:
+                        positionKeyword = "Sales";
+                        break;
+                    default:
+                        break;
+                }
+
+                employeeWithDept = employeeWithDept.Where(grp => grp.e.Position.Contains(positionKeyword));
+            }
+
+            IEnumerable<MailingEmailsViewModel> emails = employeeWithDept
+                .Select(grp => new MailingEmailsViewModel()
+                {
+                    EmployeeName = grp.e.Employee_Name,
+                    Email = grp.e.Email,
+                    Position = grp.e.Position
+                });
+
+            return emails;
         }
 
         protected override void Dispose(bool disposing)

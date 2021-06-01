@@ -45,12 +45,11 @@
                 <div class="sidebar content-box" style="display: block;">
                     <ul class="nav">
                         <!-- Main menu -->
-
                         @*@if (Convert.ToString(Session["employee_id"]) == "admin")
-                        {
-                            <li><a href="/servicedesk/SealUsing/EmployeeList"><i class="glyphicon glyphicon-calendar"></i> Employee</a></li>
-                            <li><a href="/servicedesk/SealUsing/PortalAdmin"><i class="glyphicon glyphicon-calendar"></i> Portal Ad</a></li>
-                        }*@
+                            {
+                                <li><a href="/servicedesk/SealUsing/EmployeeList"><i class="glyphicon glyphicon-calendar"></i> Employee</a></li>
+                                <li><a href="/servicedesk/SealUsing/PortalAdmin"><i class="glyphicon glyphicon-calendar"></i> Portal Ad</a></li>
+                            }*@
 
                         <li class="current"><a href="/servicedesk/Home/Index"><i class="glyphicon glyphicon-home"></i> Dashboard</a></li>
 
@@ -111,8 +110,8 @@
                                 <i class="glyphicon glyphicon-shopping-cart"></i> HR service
                                 <span class="caret pull-right"></span>
                             </a>-->
-                            <!-- Sub menu -->
-                            <!--<ul>
+                        <!-- Sub menu -->
+                        <!--<ul>
                                 <li><a href="/servicedesk/HumanceResource/Index">Stationery</a></li>
                                 <li><a href="/servicedesk/Meal/Index">Meal</a></li>
                             </ul>
@@ -176,8 +175,7 @@
             </div>
         </div>
     </div>
+    @RenderSection("Script", required: false)
+
 </body>
-
-@RenderSection("Script", required: false)
-
 </html>

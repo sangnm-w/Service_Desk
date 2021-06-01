@@ -2,52 +2,73 @@
 
 @{
     ViewBag.Title = "Create";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LayoutMailing.cshtml";
 }
 
 @section Style {
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+    <link href="https://cdn.datatables.net/searchpanes/1.2.1/css/searchPanes.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css" rel="stylesheet">
+
 }
 <div class="content-box-large">
     <h4>Mailing</h4>
     <div class="panel panel-default">
         <div class="panel-body">
-            <div class="row ">
-                <div class="col-md-4">
-                    @using (Html.BeginForm("Create", "Mailing", FormMethod.Post))
-                    {
-                        <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Filter :</label>
-                        <div class="form-group">
-                            @Html.DropDownListFor(model => model.PlantId, new SelectList(Model.Plants, "Plant_Id", "Plant_Name"), new { @class = "form-control", @id = "plantDDL", title = "Choose one of Plants" })
-                        </div>
-                        <div class="form-group" id="departmentDDL">
-                            @{ Html.RenderPartial("_DepartmentPartialView", Model);}
-                        </div>
-                        <div class="form-group">
-                            @Html.EditorFor(model => model.EmployeeName, "", new { htmlAttributes = new { @class = "form-control", placeholder = "Search by Name" } })
-                        </div>
-                        <div class="form-group">
-                            @Html.EditorFor(model => model.Email, "", new { htmlAttributes = new { @class = "form-control", placeholder = "Search by Email" } })
-                        </div>
-                        <div class="form-group">
-                            @Html.EditorFor(model => model.Position, "", new { htmlAttributes = new { @class = "form-control", placeholder = "Search by Position (Head of, Manager,..." } })
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-default">Search</button>
-                        </div>
-                    }
+            <div class="row" id="SearchArea">
+                <div class="col-md-2">
+                    <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Filter :</label>
+                    <div class="form-group">
+                        @Html.DropDownListFor(model => model.PlantId, Model.Plants, new { @class = "form-control", @id = "PlantDDL", title = "Plant" })
+                    </div>
+                    <div class="form-group" id="DepartmentPartialView">
+                        @{ Html.RenderPartial("_DepartmentPartialView", Model);}
+                    </div>
+                    <div class="form-group">
+                        @Html.DropDownListFor(model => model.PositionId, Model.Positions, new { @class = "form-control", @id = "PositionDDL", title = "Position" })
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default" id="LoadEmail">Load</button>
+                    </div>
                 </div>
                 <div class="col-md-8">
-                    <div class="row">
-                        <div class="col-md-5">
-                            @* search result - datatables *@
+                    <table id="SearchResultTB" class="ui celled table nowrap" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Position</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @* Fill search result here *@
+                            @foreach (var item in Model.InitialEmails)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EmployeeName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Email)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Position)
+                                    </td>
 
-                        </div>
-                        <div class="col-md-3">
-                            @* add - button *@
-                        </div>
-                    </div>
-
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Position</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="col-md-2">
+                    @* add - button *@
                 </div>
             </div>
         </div>
@@ -74,143 +95,123 @@
     </div>
 </div>
 @section Script {
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/1.2.1/js/dataTables.searchPanes.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
 
     <script type="text/javascript">
 
-        $("select").selectpicker({
-            liveSearch: true,
-            liveSearchPlaceholder: "Search...",
-            container: 'body'
+        $.fn.selectpicker.Constructor.DEFAULTS.display = 'static';
+
+        var SearchResultTB = $('#SearchResultTB').DataTable({
+            scrollX: true,
+            scrollY: 192,
+            //scrollCollapse: true,
+            paging: false,
+            ordering: false,
+            info: false,
+            columns: [
+                { data: "EmployeeName", name: "EmployeeName" },
+                { data: "Email", name: "Email" },
+                { data: "Position", name: "Position" }
+            ],
+            columnDefs: [{
+                searchPanes: {
+                    show: true
+                },
+                targets: [0, 1, 2]
+            }],
+
+            buttons: [
+                'searchPanes',
+                'selectAll',
+                'selectNone'
+            ],
+
+            dom: 'Bt',
+
+            select: {
+                style: "multi"
+            }
         });
 
-        $('#plantDDL').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-            alert($(this).val());
+        function SetupDepartmentDDL() {
+            $("#DepartmentDDL").selectpicker({
+                liveSearch: true,
+                liveSearchPlaceholder: "Search...",
+                container: 'body'
+            });
+        };
+
+        function LoadDeptByPlant(selectedPlantID) {
             $.ajax({
-                url: '@Url.Action("UpdateDepartmentDropDownListByPlantID", "Mailing")',
+                url: '@Url.Action("UpdateDepartmentDDLByPlant", "Mailing")',
                 contentType: 'application/html; charset=utf-8',
                 type: 'GET',
                 dataType: 'html',
-                data: { plantID: $(this).val() },
+                data: { plantID: selectedPlantID },
                 success: function (result) {
-                    $('#departmentDDL').html(result);
+                    $('#DepartmentPartialView').html(result);
+                    SetupDepartmentDDL();
                 },
                 error: function (result) {
                     alert(status);
                 }
             })
+        };
+
+        $("#LoadEmail").on("click", function () {
+            var selectedPlantId = $("#PlantDDL").val();
+            var selectedDepartmentId = $("#DepartmentDDL").val();
+            var selectedPositionId = $("#PositionDDL").val();
+
+            console.log("." + selectedPlantId + ".");
+            console.log("." + selectedDepartmentId + ".");
+            console.log("." + selectedPositionId + ".");
+
+            $.ajax({
+                url: '@Url.Action("LoadEmail", "Mailing")',
+                type: "GET",
+                data: { plantId: selectedPlantId, departmentId: selectedDepartmentId, positionId: selectedPositionId },
+                contentType: "application/json; charset=UTF-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result.data);
+                    console.log(JSON.parse(result.data));
+                    var jsonData = JSON.parse(result.data);
+                    console.log(jsonData[1]);
+                    SearchResultTB.clear().draw();
+                    console.log("clear data");
+                    //SearchResultTB.rows.add([{
+                    //    'EmployeeName': result.data['EmployeeName'],
+                    //    'Email': result.data['Email'],
+                    //    'Position': result.data['Position']
+                    //    }]).draw();
+                    SearchResultTB.rows.add(jsonData).draw();
+                    console.log("redraw with new data");
+                },
+                error: function (result) {
+                    alert(status);
+                }
+            });
+        })
+
+        $('#PlantDDL').selectpicker({
+            liveSearch: true,
+            liveSearchPlaceholder: "Search...",
+            container: 'body'
+        });
+
+        var positionDDL = $('#PositionDDL').selectpicker({
+            liveSearch: true,
+            liveSearchPlaceholder: "Search...",
+            container: 'body'
+        });
+
+        SetupDepartmentDDL();
+
+        $('#PlantDDL').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+            LoadDeptByPlant($(this).val());
         });
     </script>
 }
-
-@*<h2>Create</h2>
-
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
-
-        <div class="form-horizontal">
-            <h4>Mail</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                @Html.LabelFor(model => model.MailTitle, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.MailTitle, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.MailTitle, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.MailContent, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.MailContent, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.MailContent, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.FromAddress, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.FromAddress, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.FromAddress, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.ToAddress, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.ToAddress, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.ToAddress, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.CcAddress, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.CcAddress, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.CcAddress, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.BccAddress, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.BccAddress, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.BccAddress, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Attachment, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Attachment, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Attachment, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.MailPicture, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.MailPicture, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.MailPicture, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.EmployeeId, "EmployeeId", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownList("EmployeeId", null, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.EmployeeId, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.SendingDate, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.SendingDate, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.SendingDate, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.SendingStatus, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.SendingStatus, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.SendingStatus, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-default" />
-                </div>
-            </div>
-        </div>
-    }*@
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-

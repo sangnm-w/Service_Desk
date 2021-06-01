@@ -3,19 +3,24 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace Web_IT_HELPDESK.ViewModels.Mailing
 {
     public class MailingCreateViewModel
     {
         //filter part
-        public IEnumerable<Plant> Plants { get; set; }
+        public SelectList Plants { get; set; }
         public IEnumerable<DepartmentViewModel> DepartmentVMs { get; set; }
+        public SelectList Positions { get; set; }
         public string PlantId { get; set; }
         public string DepartmentId { get; set; }
+        public int? PositionId { get; set; }
         public string EmployeeName { get; set; }
         public string Email { get; set; }
-        public string Position { get; set; }
+
+        //search result table
+        public IEnumerable<MailingEmailsViewModel> InitialEmails { get; set; }
 
         //mail model part
         [Display(Name = "Title")]

@@ -412,6 +412,7 @@
     <Compile Include="ViewModels\Mailing\MailingCreateViewModel.cs" />
     <Compile Include="ViewModels\Mailing\MailingEmailsViewModel.cs" />
     <Compile Include="ViewModels\Mailing\MailingIndexViewModel.cs" />
+    <Compile Include="ViewModels\Mailing\MailingPositionViewModel.cs" />
     <Compile Include="ViewModels\SealUsingViewModel.cs" />
     <Compile Include="ViewModels\ShoppingCartViewModel.cs" />
   </ItemGroup>
@@ -557,7 +558,6 @@
     <Content Include="DataSetReport.xss">
       <DependentUpon>DataSetReport.xsd</DependentUpon>
     </Content>
-    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
@@ -1341,6 +1341,8 @@
     <Content Include="vendors\NewDataTables\KeyTable-2.5.2\js\keyTable.semanicui.js" />
     <Content Include="vendors\NewDataTables\KeyTable-2.5.2\js\keyTable.semanticui.js" />
     <Content Include="vendors\NewDataTables\KeyTable-2.5.2\js\keyTable.semanticui.min.js" />
+    <Content Include="vendors\NewDataTables\Plugins\dataTables.scrollResize.js" />
+    <Content Include="vendors\NewDataTables\Plugins\dataTables.scrollResize.min.js" />
     <Content Include="vendors\NewDataTables\Responsive-2.2.5\css\responsive.bootstrap.css" />
     <Content Include="vendors\NewDataTables\Responsive-2.2.5\css\responsive.bootstrap.min.css" />
     <Content Include="vendors\NewDataTables\Responsive-2.2.5\css\responsive.bootstrap4.css" />
@@ -1703,7 +1705,7 @@
     <Content Include="Views\SealUsing\Edit.cshtml" />
     <Content Include="Views\Contacts\Index.cshtml" />
     <Content Include="Views\BIZ_TRIP\hr_admin.cshtml" />
-    <Content Include="Views\Shared\_Layout - Copy.cshtml" />
+    <Content Include="Views\Shared\_LayoutMailing.cshtml" />
     <Content Include="Views\CONTRACT\Edit.cshtml" />
     <Content Include="Views\BIZ_TRIP\bod_confirm.cshtml" />
     <Content Include="Views\SealUsing\Details.cshtml" />
@@ -1720,6 +1722,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
