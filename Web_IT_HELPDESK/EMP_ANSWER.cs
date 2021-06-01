@@ -21,8 +21,7 @@ namespace Web_IT_HELPDESK
         public Nullable<int> ANSWERID { get; set; }
         public string NOTE { get; set; }
     
-        public virtual Employee Employee { get; set; }
         public virtual QUESTION QUESTION { get; set; }
-        public virtual Employee_New Employee_New { get; set; }
+        public virtual Employee Employee { get; set; }
     }
 }

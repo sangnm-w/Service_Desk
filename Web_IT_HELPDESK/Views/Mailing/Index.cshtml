@@ -1,0 +1,154 @@
+﻿@using Web_IT_HELPDESK
+@model IEnumerable<Web_IT_HELPDESK.ViewModels.Mailing.MailingIndexViewModel>
+
+@{
+    ViewBag.Title = "Mail List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-box-large">
+    <h4>Mailing</h4>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            @using (Html.BeginForm("Index", "Mailing", FormMethod.Post))
+            {
+
+                //filter plant
+                if (((List<Plant>)ViewBag.userPlants).Count() > 0)
+                {
+                    /*Only admin have this group*/
+                    <div class="form-group">
+                        <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Plants :</label>
+                        <div class="row">
+                            @foreach (var item in ViewBag.userPlants)
+                            {
+                                <div class="col-sm-3">
+                                    @Html.RadioButton("plants", (string)item.Plant_Id, false, htmlAttributes: new { id="plant"+ (string)item.Plant_Id })<label style="vertical-align: middle; margin-left: 7px;">@item.Plant_Name</label>
+                                </div>
+                            }
+                            @if (((List<Plant>)ViewBag.userPlants).Count > 1)
+                            {
+                                <div class="col-sm-3">
+                                    @Html.RadioButton("plants", "all", true, htmlAttributes: new { id = "AllPlants" })<label style="vertical-align: middle; margin-left: 7px;">All</label>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <div class="form-group">
+                    <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Search :</label>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label">Keyword</label>
+                            @Html.Editor("keyword", "", new { htmlAttributes = new { @class = "form-control", placeholder = "Search..." } })
+                        </div>
+                        <div class="col-md-6">
+                            @Html.Label("Sending date", htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group input-daterange" id="mailDP">
+                                @Html.Editor("Start", new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
+                                <div class="input-group-addon">to</div>
+                                @Html.Editor("End", new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
+                            </div>
+                            @Html.Hidden("fromDate")
+                            @Html.Hidden("toDate")
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-default">Search</button>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="content-box-header panel-heading">
+            <div class="panel-title">Mail List</div>
+            @*<div class="panel-options">
+                    <a href="@Url.Action("Download", "Incident")" data-rel="download">
+                        <i class="glyphicon glyphicon-download-alt"></i>
+                    </a>
+                </div>*@
+        </div>
+        <div class="panel-body">
+            <table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-bordered dataTable" id="mailTable" width="100%">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.MailTitle)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Attachment)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.SendingDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.SendingStatus)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.DepartmentName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.EmployeeName)
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MailTitle)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Attachment)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SendingDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SendingStatus)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DepartmentName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EmployeeName)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Details", "Details", new { mailID = item.MailID }, new { @class = "btn btn-default btn-xs", @role = "button" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section Script {
+    <script type="text/javascript">
+        $('#mailTable').DataTable({
+        });
+        $('#mailDP').datepicker({
+            format: "dd/mm/yyyy",
+            todayHighlight: true
+        });
+        $('#Start').on('changeDate', function () {
+            var d = new Date($('#Start').datepicker('getDate'));
+            $('#fromDate').val(
+                moment(d).format()
+            );
+        });
+        $('#End').on('changeDate', function () {
+            var d = new Date($('#End').datepicker('getDate'));
+            $('#toDate').val(
+                moment(d).format()
+            );
+        });
+    </script>
+}

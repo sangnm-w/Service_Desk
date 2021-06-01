@@ -63,7 +63,7 @@ namespace Web_IT_HELPDESK.Models
             ServiceDeskEntities en = new ServiceDeskEntities();
 
             return en.Departments
-                .Join(en.Employee_New,
+                .Join(en.Employees,
                       d => d.Manager_Id,
                       e => e.Emp_CJ,
                       (d, e) => new

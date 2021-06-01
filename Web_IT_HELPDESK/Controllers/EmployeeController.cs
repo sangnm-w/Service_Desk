@@ -16,7 +16,7 @@ namespace Web_IT_HELPDESK.Controllers
 
         public ActionResult EmployeeList()
         {
-            var v_employee_list = en.Employee_New.Where(i => i.Deactive != true && i.Emp_CJ != "admin");
+            var v_employee_list = en.Employees.Where(i => i.Deactive != true && i.Emp_CJ != "admin");
             return View(v_employee_list);
         }
 
@@ -49,8 +49,7 @@ namespace Web_IT_HELPDESK.Controllers
         //        a.Use = true;
         //        en.SaveChanges();
         //    }
-        //    //return View("EmployeeList", en.Employees.Where(i => i.Deactive != true && i.Emp_CJ != "admin"));
-        //    return View("EmployeeList", en.Employee_New.Where(i => i.Deactive != true && i.Emp_CJ != "admin"));
+        //    return View("EmployeeList", en.Employees.Where(i => i.Deactive != true && i.Emp_CJ != "admin"));
         //}
 
         [CustomAuthorize]
@@ -75,8 +74,7 @@ namespace Web_IT_HELPDESK.Controllers
                 if (cpVM.OldPsw == curr_Psw)
                 {
                     string curr_EmpID = CurrentUser.Instance.User.Emp_CJ;
-                    //Employee emp = en.Employees.FirstOrDefault(e => e.Emp_CJ == curr_EmpID && e.Password == cpVM.OldPsw);
-                    Employee_New emp = en.Employee_New.FirstOrDefault(e => e.Emp_CJ == curr_EmpID && e.Password == cpVM.OldPsw);
+                    Employee emp = en.Employees.FirstOrDefault(e => e.Emp_CJ == curr_EmpID && e.Password == cpVM.OldPsw);
                     emp.Password = cpVM.NewPsw_Confirm;
                     en.Entry(emp).State = System.Data.Entity.EntityState.Modified;
                     en.SaveChanges();

@@ -29,8 +29,7 @@ namespace Web_IT_HELPDESK.Controllers
         //  Get_department_Id
         private string GetEmp_name()
         {
-            string emp_name = storeDB.Employee_New.Where(f => (f.Emp_CJ == session_emp)).Select(f => f.Employee_Name).SingleOrDefault();
-            //string emp_name = storeDB.Employees.Where(f => (f.EmployeeID == session_emp)).Select(f => f.EmployeeName).SingleOrDefault();
+            string emp_name = storeDB.Employees.Where(f => (f.Emp_CJ == session_emp)).Select(f => f.Employee_Name).SingleOrDefault();
             return emp_name;
         }
         Information inf = new Information();

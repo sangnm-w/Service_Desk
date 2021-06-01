@@ -25,17 +25,12 @@ namespace Web_IT_HELPDESK.Controllers
         public ActionResult Index()
         {
             string curr_PlantID = _appUser.GetPlantID();
-            var contactlist = en.Employee_New
+            var contactlist = en.Employees
                 .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                 .Where(grp => grp.e.Deactive != true && grp.d.Plant_Id == curr_PlantID)
                 .Select(grp => grp.e);
 
-            List<PlantViewModel> plants = en.Plants
-                .Select(p => new PlantViewModel
-                {
-                    Plant_Id = p.Plant_Id,
-                    Plant_Name = p.Plant_Name
-                }).Distinct().ToList();
+            List<Plant> plants = en.Plants.Distinct().ToList();
             ViewBag.plants = plants;
 
             List<DepartmentViewModel> departments = en.Departments
@@ -56,17 +51,12 @@ namespace Web_IT_HELPDESK.Controllers
         [CustomAuthorize]
         public ActionResult Index(string plantid)
         {
-            var contactlist = en.Employee_New
+            var contactlist = en.Employees
                 .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                 .Where(grp => grp.e.Deactive != true && grp.d.Plant_Id == plantid)
                 .Select(grp => grp.e);
 
-            List<PlantViewModel> plants = en.Plants
-              .Select(p => new PlantViewModel
-              {
-                  Plant_Id = p.Plant_Id,
-                  Plant_Name = p.Plant_Name
-              }).Distinct().ToList();
+            List<Plant> plants = en.Plants.Distinct().ToList();
             ViewBag.plants = plants;
 
             List<DepartmentViewModel> departments = en.Departments
@@ -86,7 +76,7 @@ namespace Web_IT_HELPDESK.Controllers
         public ActionResult Download(string plantid)
         {
             string plantName = en.Plants.FirstOrDefault(d => d.Plant_Id == plantid).Plant_Name;
-            var contactlist = en.Employee_New
+            var contactlist = en.Employees
                 .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
                 .Where(grp => grp.e.Deactive != true && grp.d.Plant_Id == plantid).OrderBy(grp => grp.d.Department_Id)
                 .Select(grp => new

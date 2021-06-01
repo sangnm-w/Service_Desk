@@ -45,7 +45,6 @@
                 <div class="sidebar content-box" style="display: block;">
                     <ul class="nav">
                         <!-- Main menu -->
-
                         @*@if (Convert.ToString(Session["employee_id"]) == "admin")
                         {
                             <li><a href="/SealUsing/EmployeeList"><i class="glyphicon glyphicon-calendar"></i> Employee</a></li>
@@ -176,8 +175,7 @@
             </div>
         </div>
     </div>
+    @RenderSection("Script", required: false)
+
 </body>
-
-@RenderSection("Script", required: false)
-
 </html>
