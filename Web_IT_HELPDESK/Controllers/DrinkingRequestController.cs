@@ -241,7 +241,7 @@ namespace Web_IT_HELPDESK.Controllers
                     "         Số lượng: " + drinking_request.Quantity + "\n" +
                     "      Đơn vị tính: " + drinking_request.Unit + "\n" +
                     "          Ghi chú: " + drinking_request.Note + "\n" +
-                    "   Theo đường dẫn: " + "http://52.213.3.168/servicedesk/DrinkingRequest/Edit/" + drinking_request.Id + "\n" + "\n" +
+                    "   Theo đường dẫn: " + "http://52.213.3.168/DrinkingRequest/Edit/" + drinking_request.Id + "\n" + "\n" +
                     "Trân trọng!" + "\n" + "\n" + "\n" +
 
                     "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";
@@ -292,7 +292,7 @@ namespace Web_IT_HELPDESK.Controllers
                     "          Ghi chú: " + drinking_request.Note + "\n" +
                         "-------------------------------------" + "\n" +
                         "Đã được trưởng phòng duyệt" + "\n" +
-                        "   Theo đường dẫn: " + "http://52.213.3.168/servicedesk/DrinkingRequest/Confirm/" + drinking_request.Id + "\n" +
+                        "   Theo đường dẫn: " + "http://52.213.3.168/DrinkingRequest/Confirm/" + drinking_request.Id + "\n" +
                         "Trân trọng!" + "\n" + "\n" + "\n" +
 
                         "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";
@@ -315,7 +315,7 @@ namespace Web_IT_HELPDESK.Controllers
                    "         Số lượng: " + drinking_request.Quantity + "\n" +
                    "      Đơn vị tính: " + drinking_request.Unit + "\n" +
                    "          Ghi chú: " + drinking_request.Note + "\n" +
-                   "   Theo đường dẫn: " + "http://52.213.3.168/servicedesk/DrinkingRequest/Edit/" + drinking_request.Id + "\n" + "\n" +
+                   "   Theo đường dẫn: " + "http://52.213.3.168/DrinkingRequest/Edit/" + drinking_request.Id + "\n" + "\n" +
                    "Trân trọng!" + "\n" + "\n" + "\n" +
 
                    "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";
@@ -417,7 +417,7 @@ namespace Web_IT_HELPDESK.Controllers
                     "         Số lượng: " + drinking_request.Quantity + "\n" +
                     "      Đơn vị tính: " + drinking_request.Unit + "\n" +
                     "          Ghi chú: " + drinking_request.Note + "\n" +
-                    "   Theo đường dẫn: " + "http://52.213.3.168/servicedesk/DrinkingRequest/Edit/" + drinking_request.Id + "\n" + "\n" +
+                    "   Theo đường dẫn: " + "http://52.213.3.168/DrinkingRequest/Edit/" + drinking_request.Id + "\n" + "\n" +
                     "Trân trọng!" + "\n" + "\n" + "\n" +
                     "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";
 
@@ -445,7 +445,7 @@ namespace Web_IT_HELPDESK.Controllers
                     "         Số lượng: " + drinking_request.Quantity + "\n" +
                     "      Đơn vị tính: " + drinking_request.Unit + "\n" +
                     "          Ghi chú: " + drinking_request.Note + "\n" +
-                    "   Theo đường dẫn: " + "http://52.213.3.168/servicedesk/DrinkingRequest/Edit/" + drinking_request.Id + "\n" + "\n" +
+                    "   Theo đường dẫn: " + "http://52.213.3.168/DrinkingRequest/Edit/" + drinking_request.Id + "\n" + "\n" +
                     "Trân trọng!" + "\n" + "\n" + "\n" +
                     "Chương trình gởi mail được bởi IT TEAM: liên hệ Nguyen Thai Binh - IT Software khi cần hỗ trợ";
 

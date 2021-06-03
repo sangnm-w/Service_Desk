@@ -386,7 +386,7 @@ namespace Web_IT_HELPDESK.Controllers
                         mail.Subject = "Duyệt báo cáo lương - SALARY REPORT APPROVAL";
 
                         mail.Body = "CADIDATE INFORMATION IN PROBATIONARY CONTRACT: " + "\n" + "\n " +
-                                    "Confirmation link:" + " http://52.213.3.168/servicedesk/LaborContract/" + v_approve_type + "?id_num=" + v_idnumber
+                                    "Confirmation link:" + " http://52.213.3.168/LaborContract/" + v_approve_type + "?id_num=" + v_idnumber
                                     + "\n" + "\n " +
                                     "------------------------***------------------------" + "\n " +
                                     "               NAME: " + source_recruitment.EMP_NAME.ToString().ToUpper() + "\n " +
