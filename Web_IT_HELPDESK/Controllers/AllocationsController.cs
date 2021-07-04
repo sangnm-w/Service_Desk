@@ -190,6 +190,8 @@ namespace Web_IT_HELPDESK.Controllers
         {
             string empPlantID = _appUser.GetPlantID();
 
+            Device device = en.Devices.Find(allocation.Device_Id);
+
             if (allocation.Return_Date != null)
             {
                 DateTime deliveryD = allocation.Delivery_Date.GetValueOrDefault();
@@ -200,6 +202,7 @@ namespace Web_IT_HELPDESK.Controllers
                     ModelState.AddModelError("Return_Date", "Return Date cannot be less than date of purchase");
                 }
             }
+
             if (ModelState.IsValid)
             {
                 allocation.Allocation_Id = Guid.NewGuid();
@@ -212,10 +215,13 @@ namespace Web_IT_HELPDESK.Controllers
                 en.Allocations.Add(allocation);
                 en.SaveChanges();
 
+                device.QRCodeFile = filePath;
+                en.Entry(device).State = EntityState.Modified;
+                en.SaveChanges();
+
                 return RedirectToAction("Index");
             }
 
-            Device device = en.Devices.Find(allocation.Device_Id);
             ViewBag.Device = device;
 
             ViewBag.Deliver = currentEmployeeID;

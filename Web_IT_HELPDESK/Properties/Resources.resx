@@ -126,4 +126,7 @@
   <data name="DeviceQRCodePath" xml:space="preserve">
     <value>~\Library\Picture\Device\</value>
   </data>
+  <data name="MailingLogPath" xml:space="preserve">
+    <value>~\Library\Mailing\Log\</value>
+  </data>
 </root>

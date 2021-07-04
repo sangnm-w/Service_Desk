@@ -13,7 +13,7 @@ namespace Web_IT_HELPDESK.Controllers
 {
     public class ContactsController : Controller
     {
-      public ServiceDeskEntities en { get; set; }
+        public ServiceDeskEntities en { get; set; }
         public ApplicationUser _appUser { get; set; }
         public ContactsController()
         {
@@ -27,8 +27,17 @@ namespace Web_IT_HELPDESK.Controllers
             string curr_PlantID = _appUser.GetPlantID();
             var contactlist = en.Employees
                 .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
-                .Where(grp => grp.e.Deactive != true && grp.d.Plant_Id == curr_PlantID)
+                .Where(grp => grp.e.Deactive != true
+                            && grp.d.Deactive != true
+                            && grp.d.Plant_Id == curr_PlantID)
                 .Select(grp => grp.e);
+
+            if (curr_PlantID == "V2040")
+            {
+                var cl1 = contactlist.Where(c => c.Grade.Contains("VG"));
+                var cl2 = contactlist.Where(c => !c.Grade.Contains("VG") && c.Email != "");
+                contactlist = cl1.Union(cl2);
+            }
 
             List<Plant> plants = en.Plants.Distinct().ToList();
             ViewBag.plants = plants;
@@ -52,9 +61,18 @@ namespace Web_IT_HELPDESK.Controllers
         public ActionResult Index(string plantid)
         {
             var contactlist = en.Employees
-                .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
-                .Where(grp => grp.e.Deactive != true && grp.d.Plant_Id == plantid)
-                .Select(grp => grp.e);
+                 .Join(en.Departments, e => e.Department_ID, d => d.Department_Id, (e, d) => new { e, d })
+                 .Where(grp => grp.e.Deactive != true
+                             && grp.d.Deactive != true
+                             && grp.d.Plant_Id == plantid)
+                 .Select(grp => grp.e);
+
+            if (plantid == "V2040")
+            {
+                var cl1 = contactlist.Where(c => c.Grade.Contains("VG"));
+                var cl2 = contactlist.Where(c => !c.Grade.Contains("VG") && c.Email != "");
+                contactlist = cl1.Union(cl2);
+            }
 
             List<Plant> plants = en.Plants.Distinct().ToList();
             ViewBag.plants = plants;

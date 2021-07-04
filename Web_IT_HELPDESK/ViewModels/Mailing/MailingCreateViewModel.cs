@@ -11,7 +11,7 @@ namespace Web_IT_HELPDESK.ViewModels.Mailing
     {
         //filter part
         public SelectList Plants { get; set; }
-        public IEnumerable<DepartmentViewModel> DepartmentVMs { get; set; }
+        public SelectList Departments { get; set; }
         public SelectList Positions { get; set; }
         public string PlantId { get; set; }
         public string DepartmentId { get; set; }
@@ -20,23 +20,24 @@ namespace Web_IT_HELPDESK.ViewModels.Mailing
         public string Email { get; set; }
 
         //search result table
-        public IEnumerable<MailingEmailsViewModel> InitialEmails { get; set; }
+        public IEnumerable<MailingEmailsViewModel> InitialEmployees { get; set; }
+
+        //receivers table
+        public IEnumerable<MailingEmailsViewModel> Receivers { get; set; }
 
         //mail model part
-        [Display(Name = "Title")]
         public string MailTitle { get; set; }
-        [Display(Name = "Content")]
+        [AllowHtml]
         public string MailContent { get; set; }
-        [Display(Name = "From")]
-        public string FromAddress { get; set; } // SenderEmail: Auto laod currEmployee Email. Can edit to other email.
+        public string FromAddress { get; set; } // SenderEmail: Auto load currEmployee Email. Can edit to other email.
         public string ToAddress { get; set; }
         [Display(Name = "Attachment")]
-        public string Attachment { get; set; }
+        public List<HttpPostedFileBase> Attachments { get; set; }
         public string MailPicture { get; set; }
         public string EmployeeId { get; set; }
 
         //other part
-        [Display(Name = "Password")]
+        [DataType(DataType.Password)]
         public string SenderPW { get; set; }
 
     }

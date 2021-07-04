@@ -7,7 +7,7 @@ namespace Web_IT_HELPDESK.ViewModels.Mailing
 {
     public class MailingPositionViewModel
     {
-        public int PositionId { get; set; }
+        public string PositionId { get; set; }
         public string PositionName { get; set; }
     }
 
