@@ -9,92 +9,204 @@
     <link href="https://cdn.datatables.net/searchpanes/1.2.1/css/searchPanes.dataTables.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css" rel="stylesheet">
-
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <style>
+        div#fileList ul li {
+            margin: 5px;
+        }
+    </style>
 }
-<div class="content-box-large">
-    <h4>Mailing</h4>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="row" id="SearchArea">
-                <div class="col-md-2">
-                    <label class="control-label" style="display: inline-block; margin-right: 20px; font-size: larger">Filter :</label>
-                    <div class="form-group">
-                        @Html.DropDownListFor(model => model.PlantId, Model.Plants, new { @class = "form-control", @id = "PlantDDL", title = "Plant" })
-                    </div>
-                    <div class="form-group" id="DepartmentPartialView">
-                        @{ Html.RenderPartial("_DepartmentPartialView", Model);}
-                    </div>
-                    <div class="form-group">
-                        @Html.DropDownListFor(model => model.PositionId, Model.Positions, new { @class = "form-control", @id = "PositionDDL", title = "Position" })
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-default" id="LoadEmail">Load</button>
-                    </div>
-                </div>
-                <div class="col-md-8">
-                    <table id="SearchResultTB" class="ui celled table nowrap" width="100%">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Position</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @* Fill search result here *@
-                            @foreach (var item in Model.InitialEmails)
-                            {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.EmployeeName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Email)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Position)
-                                    </td>
 
-                                </tr>
-                            }
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Position</th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-                <div class="col-md-2">
-                    @* add - button *@
+<div class="content-box-large">
+    @using (Html.BeginForm("Create", "Mailing", FormMethod.Post, new { enctype = "multipart/form-data", id = "myForm" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="panel panel-default">
+            <div class="content-box-header panel-heading">
+                <div class="panel-title">Filtering</div>
+                @*<div class="panel-options">
+                        <a href="@Url.Action("Download", "Incident")" data-rel="download">
+                            <i class="glyphicon glyphicon-download-alt"></i>
+                        </a>
+                    </div>*@
+            </div>
+            <div class="panel-body">
+                <div class="row" id="SearchArea">
+                    <div class="col-md-6" style="padding-left:30px; padding-right:30px">
+                        <div class="row">
+                            <div class="col-md-3">
+                                @Html.DropDownListFor(model => model.PlantId, Model.Plants, new { @class = "form-control", @id = "PlantDDL", title = "Plant" })
+                            </div>
+                            <div class="col-md-3" id="DepartmentPartialView">
+                                @{ Html.RenderPartial("_DepartmentPartialView", Model);}
+                            </div>
+                            <div class="col-md-3">
+                                @Html.DropDownListFor(model => model.PositionId, Model.Positions, new { @class = "form-control", @id = "PositionDDL", title = "Position" })
+                            </div>
+                            <div class="col-md-3">
+                                <button type="button" class="btn btn-default" id="LoadEmail">Load</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <h4 style="text-align:center">Filter Result Table</h4>
+                            <table id="SearchResultTB" class="ui celled table nowrap" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Position</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @* Fill search result here *@
+                                    @foreach (var item in Model.InitialEmployees)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.EmployeeName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Email)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Position)
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Position</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default" id="SelectAllBtn_SearchResultTB">Select all</button>
+                                </div>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default" id="DeselectAllBtn_SearchResultTB">Deselect all</button>
+                                </div>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default" id="InsertBtn_SearchResultTB">Move selected right</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="padding-left:30px; padding-right:30px">
+                        <div class="row" style="visibility: hidden;">
+                            <div class="col-md-3">
+                                @Html.DropDownListFor(model => model.PlantId, Model.Plants, new { @class = "form-control", @id = "PlantDDL", title = "Plant" })
+                            </div>
+                            <div class="col-md-3" id="DepartmentPartialView">
+                                @{ Html.RenderPartial("_DepartmentPartialView", Model);}
+                            </div>
+                            <div class="col-md-3">
+                                @Html.DropDownListFor(model => model.PositionId, Model.Positions, new { @class = "form-control", @id = "PositionDDL", title = "Position" })
+                            </div>
+                            <div class="col-md-3">
+                                <button type="button" class="btn btn-default" id="LoadEmail">Load</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <h4 style="text-align:center">Receiver Table</h4>
+                            <table id="SendingListTB" class="ui celled table nowrap" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Position</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @* Fill receivers here *@
+
+                                    @foreach (var item in Model.Receivers)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.EmployeeName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Email)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Position)
+                                            </td>
+
+                                        </tr>
+                                    }
+
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Position</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            @Html.HiddenFor(model => model.ToAddress, new { @id = "ToAddress" })
+                            <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default" id="SelectAllBtn_SendingListTB">Select all</button>
+                                </div>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default" id="DeselectAllBtn_SendingListTB">Deselect all</button>
+                                </div>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default" id="DeleteBtn_SendingListTB">Delete selected</button>
+                                </div>
+                            </div>
+                            @Html.ValidationMessage("ReceiverError", "", new { @class = "text-danger" })
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="panel panel-info">
-        <div class="content-box-header panel-heading">
-            <div class="panel-title">Mail List</div>
-            @*<div class="panel-options">
-                    <a href="@Url.Action("Download", "Incident")" data-rel="download">
-                        <i class="glyphicon glyphicon-download-alt"></i>
-                    </a>
-                </div>*@
+        <div class="panel panel-info">
+            <div class="content-box-header panel-heading">
+                <div class="panel-title">Make your mail</div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.FromAddress, new { htmlAttributes = new { @class = "form-control", PlaceHolder = "Sender's email" } })
+                        @Html.ValidationMessage("SenderError", "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.SenderPW, new { htmlAttributes = new { @class = "form-control", PlaceHolder = "Sender's password" } })
+                    </div>
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-default" id="btn-submit">Send</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.MailTitle, new { htmlAttributes = new { @class = "form-control", PlaceHolder = "Subject" } })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        @Html.TextAreaFor(model => model.MailContent)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        @Html.LabelFor(model => model.Attachments)
+                        @Html.TextBoxFor(model => model.Attachments, new { type = "file", multiple = "multiple", onchange = "UpdateList()" })
+                        <div id="fileList"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="panel-body">
-            <table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-bordered dataTable" id="mailTable" width="100%">
-                <thead>
-                    <tr>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    }
 </div>
 @section Script {
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <script src="https://cdn.datatables.net/searchpanes/1.2.1/js/dataTables.searchPanes.min.js"></script>
     <script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
@@ -103,35 +215,161 @@
 
         $.fn.selectpicker.Constructor.DEFAULTS.display = 'static';
 
+        $('#MailContent').summernote({
+            Height: 300,
+            minHeight: 300,
+            maxHeight: 500,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture']],
+                ['view', ['fullscreen', 'help']],
+            ],
+            maximumImageFileSize: 5242880,
+            callbacks: {
+                onImageUploadError: function (error) {
+                    alert(error);
+                }
+            },
+            popover: {
+                image: [
+                    ['remove', ['removeMedia']]
+                ],
+                link: [
+                    ['link', ['linkDialogShow', 'unlink']]
+                ],
+                table: [
+                    ['add', ['addRowDown', 'addRowUp', 'addColLeft', 'addColRight']],
+                    ['delete', ['deleteRow', 'deleteCol', 'deleteTable']],
+                ],
+                air: [
+                    ['color', ['color']],
+                    ['font', ['bold', 'underline', 'clear']],
+                    ['para', ['ul', 'paragraph']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture']]
+                ]
+            }
+        });
+
         var SearchResultTB = $('#SearchResultTB').DataTable({
             scrollX: true,
             scrollY: 192,
             //scrollCollapse: true,
+            searching: true,
             paging: false,
             ordering: false,
-            info: false,
+            info: true,
             columns: [
-                { data: "EmployeeName", name: "EmployeeName" },
-                { data: "Email", name: "Email" },
-                { data: "Position", name: "Position" }
+                { data: "EmployeeName" },
+                { data: "Email" },
+                { data: "Position" }
             ],
-            columnDefs: [{
-                searchPanes: {
-                    show: true
-                },
-                targets: [0, 1, 2]
-            }],
-
-            buttons: [
-                'searchPanes',
-                'selectAll',
-                'selectNone'
-            ],
-
-            dom: 'Bt',
 
             select: {
                 style: "multi"
+            },
+            "dom": '<"top">rt<"bottom"if><"clear">'
+        });
+
+        var SendingListTB = $("#SendingListTB").DataTable({
+            scrollX: true,
+            scrollY: 192,
+            searching: true,
+            paging: false,
+            ordering: false,
+            info: true,
+            columns: [
+                { data: "EmployeeName" },
+                { data: "Email" },
+                { data: "Position" }
+            ],
+            select: {
+                style: "multi"
+            },
+            "dom": '<"top">rt<"bottom"if><"clear">'
+        });
+
+        $('#PlantDDL').selectpicker({
+            liveSearch: true,
+            liveSearchPlaceholder: "Search...",
+            container: 'body'
+        });
+
+        SetupDepartmentDDL();
+
+        $('#PositionDDL').selectpicker({
+            liveSearch: true,
+            liveSearchPlaceholder: "Search...",
+            container: 'body'
+        });
+
+        $('#PlantDDL').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+            LoadDeptByPlant($(this).val());
+            $("#PositionDDL").val(null).selectpicker("refresh");
+        });
+
+        $("#SelectAllBtn_SearchResultTB").click(function () {
+            SearchResultTB.rows().select();
+        });
+
+        $("#DeselectAllBtn_SearchResultTB").click(function () {
+            SearchResultTB.rows().deselect();
+        });
+
+        $('#InsertBtn_SearchResultTB').click(function () {
+            var indexes = SearchResultTB.rows({ selected: true }).indexes();
+            var searchedData = SearchResultTB.rows({ selected: true }).data().toArray();
+            var email_sendingData = SendingListTB.rows().data().toArray().map(e => e.Email);
+            var transferedData = new Array();
+            searchedData.forEach(function (value, index) {
+                var emailValue_searchedData = value["Email"];
+                var isExisted = email_sendingData.includes(emailValue_searchedData);
+                if (emailValue_searchedData.trim().length > 0 && !isExisted) {
+                    transferedData.push(value);
+                }
+            });
+            SendingListTB.rows.add(transferedData).draw();
+            SearchResultTB.rows(indexes).remove().draw();
+        });
+
+        $("#SelectAllBtn_SendingListTB").click(function () {
+            SendingListTB.rows().select();
+        });
+
+        $("#DeselectAllBtn_SendingListTB").click(function () {
+            SendingListTB.rows().deselect();
+        });
+
+        $("#DeleteBtn_SendingListTB").click(function () {
+            var indexes = SendingListTB.rows({ selected: true }).indexes();
+            SendingListTB.rows(indexes).remove().draw();
+        });
+
+
+        $("#LoadEmail").on("click", function () {
+            LoadEmail();
+        });
+
+        SendingListTB.on('draw', function () {
+            var emails = JSON.stringify(SendingListTB.rows().data().toArray());
+            $("#ToAddress").val(emails);
+        });
+
+        $('#btn-submit').on('click', function(e){
+            e.preventDefault();
+
+            var validSender = true;
+
+            if (validSender) {
+                $("#myForm").submit();
+            }
+            else {
+
             }
         });
 
@@ -143,13 +381,13 @@
             });
         };
 
-        function LoadDeptByPlant(selectedPlantID) {
+        function LoadDeptByPlant(selectedPlantId) {
             $.ajax({
                 url: '@Url.Action("UpdateDepartmentDDLByPlant", "Mailing")',
                 contentType: 'application/html; charset=utf-8',
                 type: 'GET',
                 dataType: 'html',
-                data: { plantID: selectedPlantID },
+                data: { plantId: selectedPlantId },
                 success: function (result) {
                     $('#DepartmentPartialView').html(result);
                     SetupDepartmentDDL();
@@ -160,14 +398,10 @@
             })
         };
 
-        $("#LoadEmail").on("click", function () {
+        function LoadEmail() {
             var selectedPlantId = $("#PlantDDL").val();
             var selectedDepartmentId = $("#DepartmentDDL").val();
             var selectedPositionId = $("#PositionDDL").val();
-
-            console.log("." + selectedPlantId + ".");
-            console.log("." + selectedDepartmentId + ".");
-            console.log("." + selectedPositionId + ".");
 
             $.ajax({
                 url: '@Url.Action("LoadEmail", "Mailing")',
@@ -176,42 +410,29 @@
                 contentType: "application/json; charset=UTF-8",
                 dataType: "json",
                 success: function (result) {
-                    console.log(result.data);
-                    console.log(JSON.parse(result.data));
                     var jsonData = JSON.parse(result.data);
-                    console.log(jsonData[1]);
                     SearchResultTB.clear().draw();
-                    console.log("clear data");
-                    //SearchResultTB.rows.add([{
-                    //    'EmployeeName': result.data['EmployeeName'],
-                    //    'Email': result.data['Email'],
-                    //    'Position': result.data['Position']
-                    //    }]).draw();
                     SearchResultTB.rows.add(jsonData).draw();
-                    console.log("redraw with new data");
                 },
                 error: function (result) {
-                    alert(status);
+                    alert(result);
                 }
             });
-        })
+        };
 
-        $('#PlantDDL').selectpicker({
-            liveSearch: true,
-            liveSearchPlaceholder: "Search...",
-            container: 'body'
-        });
+        function UpdateList() {
+            var files = $("input#Attachments").prop("files");
+            var output = $("div#fileList");
+            var result = "";
+            if (files.length > 1) {
+                result += ("<ul>");
+                for (var i = 0; i < files.length; ++i) {
+                    result += "<li>" + files.item(i).name + "</li>";
+                }
+                result += "</ul>";
 
-        var positionDDL = $('#PositionDDL').selectpicker({
-            liveSearch: true,
-            liveSearchPlaceholder: "Search...",
-            container: 'body'
-        });
-
-        SetupDepartmentDDL();
-
-        $('#PlantDDL').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-            LoadDeptByPlant($(this).val());
-        });
+            }
+            output.html(result);
+        }
     </script>
 }

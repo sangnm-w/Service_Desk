@@ -31,7 +31,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                     .d.Manager_Id;
                 string mangerEmail = en.Employees.Find(managerIdOfUserRequest).Email;
                 toMails.Add(mangerEmail);
-                bccMails.Add("it-servicedesk@cjvina.com");
+                //bccMails.Add("it-servicedesk@cjvina.com");
             }
             else if (level_confirm == 2) // Level 2: Resend
             {
@@ -41,7 +41,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                     .d.Manager_Id;
                 string mangerEmail = en.Employees.Find(managerIdOfUserRequest).Email;
                 toMails.Add(mangerEmail);
-                bccMails.Add("it-servicedesk@cjvina.com");
+                //bccMails.Add("it-servicedesk@cjvina.com");
             }
             else if (level_confirm == 3) // Level 3: BOD
             {
@@ -50,7 +50,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                     .FirstOrDefault(grp => grp.e.Emp_CJ == userRequestId)
                     .d.BOD_Email;
                 toMails.Add(bodEmailOfUserRequest);
-                bccMails.Add("it-servicedesk@cjvina.com");
+                //bccMails.Add("it-servicedesk@cjvina.com");
             }
             else if (level_confirm == 4) // Level 4: HR Manager
             {
@@ -63,8 +63,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                     .Manager_Id;
                 string hrMangerEmail = en.Employees.Find(hrMangerIdByPlant).Email;
                 toMails.Add(hrMangerEmail);
-                bccMails.Add("it-servicedesk@cjvina.com");
-
+                //bccMails.Add("it-servicedesk@cjvina.com");
             }
             else if (level_confirm == 5) // Level 5: HR Admin
             {
@@ -77,7 +76,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                     .Manager_Id;
                 string hrAdminEmail = en.Employees.Find(hrAdminIdByPlant).Email;
                 toMails.Add(hrAdminEmail);
-                bccMails.Add("it-servicedesk@cjvina.com");
+                //bccMails.Add("it-servicedesk@cjvina.com");
             }
             else if (level_confirm == 6) // Level 6: HR Seal Using
             {
@@ -90,7 +89,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                     .Manager_Id;
                 string hrSealEmail = en.Employees.Find(hrSealIdByPlant).Email;
                 toMails.Add(hrSealEmail);
-                bccMails.Add("it-servicedesk@cjvina.com");
+                //bccMails.Add("it-servicedesk@cjvina.com");
             }
             else if (level_confirm == 7) // Level 7: Return APPROVED
             {
@@ -103,7 +102,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                     .d.Manager_Id;
                 string mangerEmail = en.Employees.Find(managerIdOfUserRequest).Email;
                 ccMails.Add(mangerEmail);
-                bccMails.Add("it-servicedesk@cjvina.com");
+                //bccMails.Add("it-servicedesk@cjvina.com");
             }
             else if (level_confirm == 8) // Level 8: Return NOT APPROVED
             {
@@ -115,7 +114,7 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                     .FirstOrDefault(grp => grp.e.Emp_CJ == userRequestId).d.Manager_Id;
                 string mangerEmail = en.Employees.Find(managerIdOfUserRequest).Email;
                 ccMails.Add(mangerEmail);
-                bccMails.Add("it-servicedesk@cjvina.com");
+                //bccMails.Add("it-servicedesk@cjvina.com");
             }
 
             // Check duplicate between toMails and ccMails

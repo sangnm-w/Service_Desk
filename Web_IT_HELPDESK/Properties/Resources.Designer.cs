@@ -86,5 +86,14 @@ namespace Web_IT_HELPDESK.Properties {
                 return ResourceManager.GetString("DeviceQRCodePath", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ~\Library\Mailing\Log\.
+        /// </summary>
+        internal static string MailingLogPath {
+            get {
+                return ResourceManager.GetString("MailingLogPath", resourceCulture);
+            }
+        }
     }
 }
