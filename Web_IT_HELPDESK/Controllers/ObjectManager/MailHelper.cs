@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -9,6 +10,7 @@ using System.Net.Mail;
 using System.Resources;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Providers.Entities;
 using Web_IT_HELPDESK.Properties;
 
@@ -38,56 +40,12 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
             }
             mailSent = true;
         }
-        //public static bool SendMail(string sender, string senderPW, string receiver, string subject, string body)
-        //{
-        //    // Command-line argument must be the SMTP host.
-        //    SmtpClient client = new SmtpClient("mail.cjvina.com", 25);
-        //    client.Credentials = new NetworkCredential(sender, senderPW);
-        //    client.EnableSsl = false;
-        //    // Specify the email sender.
-        //    // Create a mailing address that includes a UTF8 character
-        //    // in the display name.
-        //    MailAddress from = new MailAddress("it-servicedesk@cjvina.com",
-        //       "IT " + (char)0xD8 + " Service Desk",
-        //    System.Text.Encoding.UTF8);
-        //    // Set destinations for the email message.
-        //    MailAddress to = new MailAddress(receiver);
-        //    // Specify the message content.
-        //    MailMessage message = new MailMessage(from, to);
-        //    message.Body = body;
-        //    // Include some non-ASCII characters in body and subject.
-        //    string someArrows = new string(new char[] { '\u2190', '\u2191', '\u2192', '\u2193' });
-        //    message.Body += Environment.NewLine + someArrows;
-        //    message.BodyEncoding = System.Text.Encoding.UTF8;
-        //    message.Subject = subject + someArrows;
-        //    message.SubjectEncoding = System.Text.Encoding.UTF8;
 
-        //    // Set the method that is called back when the send operation ends.
-        //    client.SendCompleted += new SendCompletedEventHandler(SendCompletedCallback);
-        //    // The userState can be any object that allows your callback
-        //    // method to identify this send operation.
-        //    // For this example, the userToken is a string constant.
-        //    string userState = "test message1";
-        //    client.SendAsync(message, userState);
-        //    //Console.WriteLine("Sending message... press c to cancel mail. Press any other key to exit.");
-        //    //string answer = Console.ReadLine();
-        //    // If the user canceled the send, and mail hasn't been sent yet,
-        //    // then cancel the pending operation.
-        //    //if (answer.StartsWith("c") && mailSent == false)
-        //    //{
-        //    //    client.SendAsyncCancel();
-        //    //}
-        //    // Clean up.
-        //    message.Dispose();
-        //    return received;
-        //}
-
-        public static async Task SendEmail(string sender, string senderPW, string receiver, string subject, string body, List<HttpPostedFileBase> attachments)
+        public static async Task SendEmail(string sender, string senderPW, List<string> receivers, string subject, string body, List<HttpPostedFileBase> attachments)
         {
             MailAddress from = new MailAddress(sender);
-
-            MailAddress to = new MailAddress(receiver);
-            MailMessage message = new MailMessage(from, to);
+            MailMessage message = new MailMessage();
+            message.From = from;
             message.Body = body;
             message.IsBodyHtml = true;
             message.BodyEncoding = System.Text.Encoding.UTF8;
@@ -96,23 +54,46 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
 
             for (int i = 0; i < attachments?.Count; i++)
             {
-                string fileName = Path.GetFileName(attachments[i].FileName);
-                message.Attachments.Add(new Attachment(attachments[i].InputStream, fileName));
-            }
-
-            try
-            {
-                using (var smtpClient = new SmtpClient("mail.cjvina.com", 25))
+                if (attachments[i]?.ContentLength > 0)
                 {
-                    smtpClient.Credentials = new NetworkCredential(sender, senderPW);
-                    smtpClient.EnableSsl = false;
-                    await smtpClient.SendMailAsync(message);
+                    string fileName = Path.GetFileName(attachments[i].FileName);
+                    message.Attachments.Add(new Attachment(attachments[i].InputStream, fileName));
                 }
             }
-            catch (Exception ex)
+
+            DataTable loggingTb = new DataTable();
+            loggingTb.Columns.Add("receiver", typeof(string));
+            loggingTb.Columns.Add("Feedback", typeof(string));
+            int countSended = 0;
+            int countFailed = 0;
+            foreach (var receiver in receivers)
             {
-                throw ex;
+                MailAddress to = new MailAddress(receiver);
+                message.To.Add(to);
+                try
+                {
+                    using (var smtpClient = new SmtpClient("mail.cjvina.com", 25))
+                    {
+                        smtpClient.Credentials = new NetworkCredential(sender, senderPW);
+                        smtpClient.EnableSsl = false;
+                        await smtpClient.SendMailAsync(message);
+                        countSended++;
+                        loggingTb.Rows.Add(message.To.ToString(), "Email sent successfully.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    countFailed++;
+                    loggingTb.Rows.Add(message.To.ToString(), ex.Message);
+                    if (ex.Message.Contains("5.7.0 Authentication required. The account is disable by Spam Filter. Please contact Mr. Sang for support."))
+                    {
+                        break;
+                    }
+                }
+                message.To.Clear();
             }
+            logging(loggingTb, countSended, countFailed);
+            loggingTb.Rows.Clear();
         }
 
 
@@ -135,6 +116,35 @@ namespace Web_IT_HELPDESK.Controllers.ObjectManager
                 catch (Exception ex)
                 {
                     return false;
+                }
+            }
+        }
+
+        public static void logging(DataTable loggingTb, int countSended, int countFailed)
+        {
+            string serverPath = HostingEnvironment.MapPath(Resources.MailingLogPath);
+            if (!Directory.Exists(serverPath))
+            {
+                Directory.CreateDirectory(serverPath);
+            }
+            string logPath = Path.Combine(serverPath, DateTime.Now.ToString("yyyy'-'MM'-'dd'_'HH''mm''ss") + "_Mailing_log.txt");
+            if (loggingTb.Rows[0]["receiver"].ToString().Equals("it-servicedesk@cjvina.com"))
+                logPath = Path.Combine(serverPath, DateTime.Now.ToString("yyyy'-'MM'-'dd'_'HH''mm''ss") + "_CheckSender_log.txt");
+
+            using (StreamWriter sw = new StreamWriter(logPath, true))
+            {
+                sw.WriteLine(new string('=', 30));
+                sw.WriteLine(DateTime.Now.ToShortDateString());
+                sw.WriteLine("Logging");
+                sw.WriteLine($"Total: {loggingTb.Rows.Count}");
+                sw.WriteLine($"Success: {countSended} and Failure: {countFailed}");
+                sw.WriteLine(new string('=', 30));
+                foreach (DataRow row in loggingTb.Rows)
+                {
+                    sw.WriteLine(row["receiver"].ToString());
+                    sw.WriteLine(row["Feedback"].ToString());
+                    sw.WriteLine(new string('-', row["Feedback"].ToString().Length));
+                    sw.WriteLine();
                 }
             }
         }

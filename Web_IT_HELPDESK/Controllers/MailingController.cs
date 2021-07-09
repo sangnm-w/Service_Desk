@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Hosting;
@@ -18,6 +20,7 @@ using Web_IT_HELPDESK.Models.Extensions;
 using Web_IT_HELPDESK.Properties;
 using Web_IT_HELPDESK.ViewModels;
 using Web_IT_HELPDESK.ViewModels.Mailing;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Web_IT_HELPDESK.Controllers
 {
@@ -222,7 +225,7 @@ namespace Web_IT_HELPDESK.Controllers
                 }
             }, "PositionId", "PositionName");
 
-            IEnumerable<MailingEmailsViewModel> initialEmails = GetEmails(currUserPlantId, null, null);
+            IEnumerable<MailingEmailsViewModel> initialEmails = GetEmail(currUserPlantId, null, null);
             //IEnumerable<MailingEmailsViewModel> initialEmails = new List<MailingEmailsViewModel>();
 
             MailingCreateViewModel model = new MailingCreateViewModel()
@@ -259,7 +262,7 @@ namespace Web_IT_HELPDESK.Controllers
         {
             string sender = model.FromAddress;
             string senderPW = model.SenderPW;
-            string receiver = "minhsang.it@cjvina.com";
+            string receiver = "it-servicedesk@cjvina.com";
             string subject = "Async Subject for testing";
             string body = "Async Body for testing";
             List<MailingEmailsViewModel> receivers = new List<MailingEmailsViewModel>();
@@ -275,15 +278,12 @@ namespace Web_IT_HELPDESK.Controllers
 
             try
             {
-                await MailHelper.SendEmail(sender, senderPW, receiver, subject, body, null);
+                await MailHelper.SendEmail(sender, senderPW, new List<string>() { receiver }, subject, body, null);
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError("SenderError", ex.Message);
             }
-
-            //int countSended = 0;
-            int countFailed = 0;
 
             if (ModelState.IsValid)
             {
@@ -294,24 +294,7 @@ namespace Web_IT_HELPDESK.Controllers
                 List<string> receiverEmails = new List<string>();
                 receiverEmails.AddRange(receivers.Select(x => x.Email).ToList());
 
-                foreach (var receiverEmail in receiverEmails)
-                {
-                    try
-                    {
-                        await MailHelper.SendEmail(sender, senderPW, receiverEmail, model.MailTitle, model.MailContent, model.Attachments);
-                    }
-                    catch (Exception ex)
-                    {
-                        countFailed++;
-                        errTb.Rows.Add(receiverEmail, ex.Message);
-                        if (ex.Message.Contains("5.7.0 Authentication required"))
-                        {
-                            break;
-                        }
-                    }
-                }
-                logging(errTb, countFailed);
-                errTb.Rows.Clear();
+                await MailHelper.SendEmail(sender, senderPW, receiverEmails, model.MailTitle, model.MailContent, model.Attachments);
             }
 
             List<Plant> plants = new List<Plant>();
@@ -479,9 +462,23 @@ namespace Web_IT_HELPDESK.Controllers
 
         public JsonResult LoadEmail(string plantId, string departmentId, string positionId)
         {
-            var data = JsonConvert.SerializeObject(GetEmails(plantId, departmentId, positionId));
+            var data = JsonConvert.SerializeObject(GetEmail(plantId, departmentId, positionId));
 
             return Json(new { data = data }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult LoadEmailFromFile()
+        {
+            List<MailingEmailsViewModel> result = new List<MailingEmailsViewModel>();
+            if (Request.Files["MailListFile"].ContentLength > 0)
+            {
+                HttpPostedFileBase file = Request.Files["MailListFile"];
+                result = GetEmailFromFile(file);
+            }
+
+            var data = JsonConvert.SerializeObject(result);
+            return Json(new { data = data });
         }
 
         public IEnumerable<DepartmentViewModel> GetDepartmentVMsByPlantId(string plantId)
@@ -502,7 +499,7 @@ namespace Web_IT_HELPDESK.Controllers
             return result;
         }
 
-        public IEnumerable<MailingEmailsViewModel> GetEmails(string plantId, string departmentId, string positionId)
+        public IEnumerable<MailingEmailsViewModel> GetEmail(string plantId, string departmentId, string positionId)
         {
             if (plantId == "BOD")
             {
@@ -569,14 +566,14 @@ namespace Web_IT_HELPDESK.Controllers
             }
 
             employeeWithDept = employeeWithDept.Where(grp => grp.e.Deactive != true);
-
+            var emails = employeeWithDept;
             if (plantId == "V2040")
             {
-                employeeWithDept = employeeWithDept.Where(grp => grp.e.Deactive != true && grp.e.Grade.Contains("VG"))
+                emails = employeeWithDept.Where(grp => grp.e.Deactive != true && grp.e.Grade.Contains("VG"))
                     .Union(employeeWithDept.Where(grp => grp.e.Deactive != true && !grp.e.Grade.Contains("VG") && grp.e.Email != ""));
             }
 
-            IEnumerable<MailingEmailsViewModel> emails = employeeWithDept
+            IEnumerable<MailingEmailsViewModel> result = emails
                 .Select(grp => new MailingEmailsViewModel()
                 {
                     EmployeeName = grp.e.Employee_Name,
@@ -584,7 +581,35 @@ namespace Web_IT_HELPDESK.Controllers
                     Position = grp.e.Position
                 });
 
-            return emails;
+            return result;
+        }
+
+        public List<MailingEmailsViewModel> GetEmailFromFile(HttpPostedFileBase mailListFile)
+        {
+            List<MailingEmailsViewModel> emailVMs = new List<MailingEmailsViewModel>();
+
+            if (mailListFile.ContentType == "application/vnd.ms-excel" || mailListFile.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            {
+                using (ExcelPackage package = new ExcelPackage(mailListFile.InputStream))
+                {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+                    var table = worksheet.Tables.First();
+                    int startRow = table.Address.Start.Row;
+                    int endRow = table.Address.End.Row;
+
+                    for (int rowNo = startRow + 1; rowNo <= endRow; rowNo++)
+                    {
+                        MailingEmailsViewModel emailVM = new MailingEmailsViewModel()
+                        {
+                            EmployeeName = worksheet.Cells[rowNo, 1].Value?.ToString(),
+                            Email = worksheet.Cells[rowNo, 2].Value?.ToString(),
+                            Position = worksheet.Cells[rowNo, 3].Value?.ToString()
+                        };
+                        emailVMs.Add(emailVM);
+                    }
+                }
+            }
+            return emailVMs;
         }
 
         public List<MailingEmailsViewModel> GetContactBODs()

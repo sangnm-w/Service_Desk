@@ -26,7 +26,9 @@ namespace Web_IT_HELPDESK.ViewModels.Mailing
         public IEnumerable<MailingEmailsViewModel> Receivers { get; set; }
 
         //mail model part
+        [Required]
         public string MailTitle { get; set; }
+        [Required]
         [AllowHtml]
         public string MailContent { get; set; }
         public string FromAddress { get; set; } // SenderEmail: Auto load currEmployee Email. Can edit to other email.
